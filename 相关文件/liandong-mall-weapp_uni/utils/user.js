@@ -1,0 +1,215 @@
+/**
+ * 用户工具类
+ * 封装用户登录状态检查、用户信息获取等功能
+ */
+/**
+ * 检查用户是否已登录
+ * @returns {boolean} 是否已登录
+ */
+const isLogin = () => {
+    const token = uni.getStorageSync('token');
+    const userInfo = uni.getStorageSync('userInfo');
+    return !!(token && userInfo);
+};
+
+/**
+ * 获取当前登录用户信息
+ * @returns {object|null} 用户信息
+ */
+const getUserInfo = () => {
+    return uni.getStorageSync('userInfo') || null;
+};
+
+/**
+ * 获取当前登录 Token
+ * @returns {string} Token
+ */
+const getToken = () => {
+    return uni.getStorageSync('token') || '';
+};
+
+/**
+ * 保存用户信息
+ * @param {object} userInfo 用户信息
+ */
+const setUserInfo = (userInfo) => {
+    uni.setStorageSync('userInfo', userInfo);
+};
+
+/**
+ * 保存 Token
+ * @param {string} token Token
+ */
+const setToken = (token) => {
+    uni.setStorageSync('token', token);
+};
+
+/**
+ * 清除登录信息
+ */
+const clearLoginInfo = () => {
+    uni.removeStorageSync('token');
+    uni.removeStorageSync('userInfo');
+};
+
+/**
+ * 检查登录状态，未登录则跳转到登录页
+ * @param {string} redirect 登录成功后的跳转地址
+ * @returns {boolean} 是否已登录
+ */
+const checkLogin = (redirect = '') => {
+    if (!isLogin()) {
+        let url = '/pages/login/index';
+        if (redirect) {
+            url += `?redirect=${encodeURIComponent(redirect)}`;
+        }
+        uni.navigateTo({
+            url: url
+        });
+        return false;
+    }
+    return true;
+};
+
+/**
+ * 带参数的登录检查
+ * @param {string} redirect 登录成功后的跳转地址
+ * @param {object} params 登录成功跳转时传递的参数
+ * @returns {boolean} 是否已登录
+ */
+const checkLoginWithParams = (redirect = '', params = {}) => {
+    if (!isLogin()) {
+        let url = '/pages/login/index';
+        let queryParts = [];
+        if (redirect) {
+            queryParts.push(`redirect=${encodeURIComponent(redirect)}`);
+        }
+        for (let key in params) {
+            if (params.hasOwnProperty(key)) {
+                queryParts.push(`${key}=${encodeURIComponent(params[key])}`);
+            }
+        }
+        if (queryParts.length > 0) {
+            url += '?' + queryParts.join('&');
+        }
+        uni.navigateTo({
+            url: url
+        });
+        return false;
+    }
+    return true;
+};
+
+/**
+ * 登录成功后跳转
+ * @param {string} url 跳转地址
+ * @param {object} params 传递的参数
+ */
+const loginSuccessRedirect = (url, params = {}) => {
+    if (!url) {
+        return;
+    }
+    let fullUrl = url;
+    let queryParts = [];
+    for (let key in params) {
+        if (params.hasOwnProperty(key)) {
+            queryParts.push(`${key}=${encodeURIComponent(params[key])}`);
+        }
+    }
+    if (queryParts.length > 0) {
+        fullUrl += '?' + queryParts.join('&');
+    }
+    if (url.startsWith('/pages/') && url.includes('/index')) {
+        uni.switchTab({
+            url: fullUrl
+        });
+    } else if (url.startsWith('/pages/')) {
+        uni.redirectTo({
+            url: fullUrl
+        });
+    } else {
+        uni.navigateTo({
+            url: fullUrl
+        });
+    }
+};
+
+/**
+ * 退出登录
+ * @param {function} callback 退出后的回调函数
+ */
+const logout = (callback) => {
+    uni.showModal({
+        title: '提示',
+        content: '确定要退出登录吗？',
+        success: (res) => {
+            if (res.confirm) {
+                clearLoginInfo();
+                uni.showToast({
+                    title: '已退出登录',
+                    icon: 'success'
+                });
+                setTimeout(() => {
+                    uni.switchTab({
+                        url: '/pages/index/index'
+                    });
+                    if (callback && typeof callback === 'function') {
+                        callback();
+                    }
+                }, 1500);
+            }
+        }
+    });
+};
+
+/**
+ * 检查是否为 VIP 会员
+ * @returns {boolean} 是否为 VIP
+ */
+const isVIP = () => {
+    const userInfo = getUserInfo();
+    return userInfo && userInfo.isMember;
+};
+
+/**
+ * 检查是否为达人
+ * @returns {boolean} 是否为达人
+ */
+const isTalent = () => {
+    const userInfo = getUserInfo();
+    return userInfo && userInfo.isTalent;
+};
+
+/**
+ * 获取会员等级
+ * @returns {string|null} 会员等级
+ */
+const getMemberLevel = () => {
+    const userInfo = getUserInfo();
+    return userInfo ? userInfo.memberLevel : null;
+};
+
+/**
+ * 获取达人状态
+ * @returns {string|null} 达人状态
+ */
+const getTalentStatus = () => {
+    const userInfo = getUserInfo();
+    return userInfo ? userInfo.talentStatus : null;
+};
+module.exports = {
+    isLogin,
+    getUserInfo,
+    getToken,
+    setUserInfo,
+    setToken,
+    clearLoginInfo,
+    checkLogin,
+    checkLoginWithParams,
+    loginSuccessRedirect,
+    logout,
+    isVIP,
+    isTalent,
+    getMemberLevel,
+    getTalentStatus
+};
