@@ -1,5 +1,5 @@
 <template>
-  <view class="page">
+  <view class="page" style="padding-bottom: calc(100rpx + env(safe-area-inset-bottom));">
     <view class="header">
       <view class="search-bar" @tap="goToSearch">
         <view class="search-input-box">
@@ -192,6 +192,9 @@
       <text>没有更多了</text>
     </view>
   </view>
+
+  <!-- 自定义tabbar -->
+  <diy-tabbar :current-index="2" />
 </template>
 
 <script setup>

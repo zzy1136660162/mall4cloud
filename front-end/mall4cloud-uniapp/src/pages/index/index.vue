@@ -353,6 +353,9 @@
       </view>
     </view>
   </view>
+
+  <!-- 自定义tabbar -->
+  <diy-tabbar :current-index="0" />
 </template>
 
 <script setup>

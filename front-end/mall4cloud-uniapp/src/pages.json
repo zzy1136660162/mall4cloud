@@ -98,19 +98,19 @@
     {
 			"path": "pages/shop-index/shop-index",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "店铺首页"
 			}
 		},
     {
 			"path": "pages/shop-prods/shop-prods",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "店铺商品"
 			}
 		},
     {
 			"path": "pages/shop-category/shop-category",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "店铺分类"
 			}
 		},
     {
@@ -197,6 +197,7 @@
   ],
   "tabBar": {
     "selectedColor": "#fc1b35",
+ "custom": true,
     "color": "#333333",
     "list": [
       {

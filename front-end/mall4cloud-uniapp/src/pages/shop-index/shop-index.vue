@@ -85,40 +85,12 @@
     </view>
 
     <!-- 自定义tabbar -->
-    <diy-tabbar
-      :tabs="shopTabs"
-      :current-index="currentTab"
-      @switch="onTabSwitch"
-    />
+    <diy-tabbar :current-index="0" @change="handleTabChange" />
   </view>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import diyTabbar from '@/components/diy-tabbar/diy-tabbar.vue'
-
-const currentTab = ref(0)
-
-const shopTabs = [
-  {
-    text: '首页',
-    path: '/pages/shop-index/shop-index',
-    icon: '/static/images/shop-index.png',
-    selectedIcon: '/static/images/shop-index-r.png'
-  },
-  {
-    text: '商品',
-    path: '/pages/shop-prods/shop-prods',
-    icon: '/static/images/shop-prods.png',
-    selectedIcon: '/static/images/shop-prods-r.png'
-  },
-  {
-    text: '分类',
-    path: '/pages/shop-category/shop-category',
-    icon: '/static/images/shop-category.png',
-    selectedIcon: '/static/images/shop-category-r.png'
-  }
-]
+import { reactive } from 'vue'
 
 const Data = reactive({
   isCollect: false, // 是否收藏
@@ -197,10 +169,9 @@ const getProd = () => {
   })
 }
 
-function onTabSwitch(tab) {
-  uni.navigateTo({
-    url: `${tab.path}?shopId=${Data.shopId}`
-  })
+// 切换tabbar
+const handleTabChange = ({ index }) => {
+  console.log('切换到tab:', index)
 }
 </script>
 
