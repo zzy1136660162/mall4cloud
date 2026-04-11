@@ -199,24 +199,18 @@ page {
 
 .content-area {
   padding: 0 40rpx 40rpx;
-  min-height: 800rpx;
   margin-top: 0;
 }
 
 .content-panel {
-  display: none;
   background: $white;
-  border-radius: 0 0 24rpx 24rpx;
+  border-radius: 24rpx;
   padding: 40rpx;
   box-shadow: 0 8rpx 40rpx rgba(13, 45, 90, 0.08);
   border: none;
-  margin-top: -2rpx;
+  margin-bottom: 32rpx;
   position: relative;
   z-index: 1;
-
-  &.active {
-    display: block;
-  }
 }
 
 .panel-header {
