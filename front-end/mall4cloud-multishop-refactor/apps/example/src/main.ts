@@ -1,3 +1,4 @@
+import { createApp } from 'vue'
 import VxeUI from 'vxe-pc-ui'
 import VxeUITable from 'vxe-table'
 

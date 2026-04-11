@@ -1,25 +1,15 @@
 import api from '../index'
 
 export default {
-  // 后端获取路由数据
-  routeList: () => api.get('app/route/list', {
-    fake: true,
-  }),
+  routeList: () => api.get({ url: '/mall4cloud_rbac/menu/route' }),
 
-  // 登录
-  login: (data: {
+  login: (params: {
     account: string
     password: string
-  }) => api.post('app/account/login', data, {
-    fake: true,
-  }),
+  }) => api.post('/mall4cloud_auth/ua/login', params),
 
-  // 获取权限
-  permission: () => api.get('app/account/permission', {
-    fake: true,
-  }),
+  permission: () => Promise.resolve({ data: { permissions: [] } }),
 
-  // 修改密码
   passwordEdit: (data: {
     password: string
     newPassword: string

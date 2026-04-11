@@ -2,8 +2,9 @@ import { setSettings } from '@fantastic-admin/settings'
 
 export default setSettings({
   app: {
+    routeBaseOn: 'backend',
     account: {
-      auth: true,
+      auth: false,
     },
     dynamicTitle: true,
     copyright: {

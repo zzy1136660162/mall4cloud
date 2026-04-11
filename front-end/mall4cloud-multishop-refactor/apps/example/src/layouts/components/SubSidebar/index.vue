@@ -16,6 +16,10 @@ const route = useRoute()
 const appSettingsStore = useAppSettingsStore()
 const appMenuStore = useAppMenuStore()
 
+console.log('[DEBUG SubSidebar] appMenuStore.allMenus:', appMenuStore.allMenus)
+console.log('[DEBUG SubSidebar] appMenuStore.actived:', appMenuStore.actived)
+console.log('[DEBUG SubSidebar] route.path:', route.path)
+
 const isCollapse = computed(() => appSettingsStore.settings.menu.subMenuCollapse)
 
 const transitionName = ref('')

@@ -2,6 +2,13 @@ import type { Router } from 'vue-router'
 import { useNProgress } from '@vueuse/integrations/useNProgress'
 import { warnKeepAliveComponentNameMissing } from 'virtual:fantastic-admin/turbo-console'
 import { asyncRoutes } from './routes'
+import { useAppSettingsStore } from '@/store/modules/app/settings'
+import { useAppAccountStore } from '@/store/modules/app/account'
+import { useAppRouteStore } from '@/store/modules/app/route'
+import { useAppMenuStore } from '@/store/modules/app/menu'
+import { useAppKeepAliveStore } from '@/store/modules/app/keepAlive'
+import { useAppAuth } from '@/composables/app/auth'
+import { nextTick } from 'vue'
 import '@/assets/styles/nprogress.css'
 
 function setupRoutes(router: Router) {
@@ -32,17 +39,22 @@ function setupRoutes(router: Router) {
         }
       }
       else {
+        console.log('[DEBUG guards] isLogin:', appAccountStore.isLogin, 'isGenerate:', appRouteStore.isGenerate)
         try {
           // 获取用户权限
           appSettingsStore.settings.app.account.auth && await appAccountStore.getPermissions()
           // 生成动态路由
-          switch (appSettingsStore.settings.app.routeBaseOn) {
+          const routeBaseOn = appSettingsStore.settings.app.routeBaseOn || 'frontend'
+          console.log('[DEBUG guards] routeBaseOn:', routeBaseOn)
+          switch (routeBaseOn) {
             case 'frontend':
               appRouteStore.generateRoutesAtFront(asyncRoutes)
               break
             case 'backend':
               await appRouteStore.generateRoutesAtBack()
               break
+            default:
+              appRouteStore.generateRoutesAtFront(asyncRoutes)
           }
           // 注册并记录路由数据
           // 记录的数据会在登出时会使用到，不使用 router.removeRoute 是考虑配置的路由可能不一定有设置 name ，则通过调用 router.addRoute() 返回的回调进行删除
@@ -59,10 +71,13 @@ function setupRoutes(router: Router) {
         }
         catch {}
         // 动态路由生成并注册后，重新进入当前路由
-        return {
-          path: to.path,
-          query: to.query,
-          replace: true,
+        // 只有当路由生成成功时才重新进入，否则会无限重定向
+        if (appRouteStore.isGenerate) {
+          return {
+            path: to.path,
+            query: to.query,
+            replace: true,
+          }
         }
       }
     }

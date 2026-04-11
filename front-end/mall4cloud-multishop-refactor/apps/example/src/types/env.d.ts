@@ -12,6 +12,10 @@ interface ImportMetaEnv {
    */
   readonly VITE_APP_DEBUG_TOOL: string
   /**
+   * 访问文件存储资源的url 对应阿里云的Bucket域名
+   */
+  readonly VITE_APP_RESOURCES_URL: string
+  /**
    * 应用配置面板
    * Application configuration panel
    */
