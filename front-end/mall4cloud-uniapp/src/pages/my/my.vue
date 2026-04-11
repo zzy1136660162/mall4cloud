@@ -129,17 +129,6 @@
         </view>
         <view
           class="item"
-          @tap="notOpen('分销')"
-        >
-          <view class="img">
-            <image src="/static/images/my-share.png" />
-          </view>
-          <view class="text">
-            分销中心
-          </view>
-        </view>
-        <view
-          class="item"
           @tap="toSampleList"
         >
           <view class="img">
@@ -147,28 +136,6 @@
           </view>
           <view class="text">
             我的样品
-          </view>
-        </view>
-        <view
-          class="item"
-          @tap="notOpen('领券中心')"
-        >
-          <view class="img">
-            <image src="/static/images/my-coupon.png" />
-          </view>
-          <view class="text">
-            领券中心
-          </view>
-        </view>
-        <view
-          class="item"
-          @tap="notOpen('我的收藏')"
-        >
-          <view class="img">
-            <image src="/static/images/my-collection.png" />
-          </view>
-          <view class="text">
-            我的收藏
           </view>
         </view>
         <view
@@ -191,17 +158,6 @@
           </view>
           <view class="text">
             地址管理
-          </view>
-        </view>
-        <view
-          class="item"
-          @tap="notOpen('我的足迹')"
-        >
-          <view class="img">
-            <image src="/static/images/my-history.png" />
-          </view>
-          <view class="text">
-            我的足迹
           </view>
         </view>
         <view
@@ -342,15 +298,6 @@ const toFreeShop = () => {
       })
     }, 2000)
   }
-}
-
-const notOpen = (title) => {
-  uni.showModal({
-    title: '提示',
-    content: `${title}暂未开源`,
-    showCancel: false
-
-  })
 }
 
 // 去我的样品

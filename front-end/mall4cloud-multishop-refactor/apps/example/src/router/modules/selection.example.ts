@@ -8,7 +8,7 @@ const selectionRoutes: RouteRecordRaw[] = [
     meta: { title: '选品管理', icon: 'eos-icons:product-selection-outlined' },
     children: [
       {
-        path: 'list',
+        path: 'selection',
         name: 'SelectionList',
         component: () => import('@/views/selection/index.vue'),
         meta: { title: '选品申请列表' },
@@ -17,7 +17,7 @@ const selectionRoutes: RouteRecordRaw[] = [
         path: 'detail/:applyId',
         name: 'SelectionDetail',
         component: () => import('@/views/selection/detail.vue'),
-        meta: { title: '申请详情', activeMenu: '/selection/list' },
+        meta: { title: '申请详情', activeMenu: '/selection/selection' },
       },
     ],
   },

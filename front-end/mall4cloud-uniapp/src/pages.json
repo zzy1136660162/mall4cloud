@@ -1,7 +1,7 @@
 {
   "easycom": {
 		"custom":{
-    	"^w-(.*)": "@uni-ui/code-ui/components/w-$1/index.vue"//二维码条形码的配置
+    	"^w-(.*)": "@uni-ui/code-ui/components/w-$1/index.vue"
 		}
   },
   "pages": [
@@ -153,6 +153,14 @@
 			"path": "pages/demand-detail/demand-detail",
 			"style": {
 				"navigationBarTitleText": "需求详情"
+			}
+		},
+    {
+			"path": "pages/demand-list/demand-list",
+			"style": {
+				"navigationBarTitleText": "我的需求",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
 			}
 		},
     {

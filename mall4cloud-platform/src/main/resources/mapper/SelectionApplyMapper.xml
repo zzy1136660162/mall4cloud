@@ -162,4 +162,33 @@
           AND is_deleted = 0
     </select>
 
+    <select id="countTotal" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+    </select>
+
+    <select id="countPending" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+          AND audit_status = 1
+    </select>
+
+    <select id="countApproved" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+          AND audit_status = 2
+    </select>
+
+    <select id="countRejected" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+          AND audit_status = 3
+    </select>
+
+    <select id="countToday" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+          AND DATE(apply_time) = CURDATE()
+    </select>
+
 </mapper>

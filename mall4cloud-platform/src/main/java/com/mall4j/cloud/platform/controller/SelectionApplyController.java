@@ -69,7 +69,7 @@ public class SelectionApplyController {
     /**
      * 获取申请列表（管理端）
      */
-    @GetMapping("/admin/selection/list")
+    @GetMapping("/admin/selection/applies")
     @Operation(summary = "获取选品申请列表")
     public ServerResponseEntity<PageVO<SelectionApplyVO>> getApplyList(SelectionApplyPageDTO pageDTO) {
         PageVO<SelectionApplyVO> page = selectionApplyService.getApplyList(pageDTO);

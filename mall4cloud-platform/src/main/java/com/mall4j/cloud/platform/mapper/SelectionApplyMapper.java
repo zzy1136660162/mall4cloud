@@ -82,4 +82,39 @@ public interface SelectionApplyMapper {
      * @return 数量
      */
     int countByUserId(@Param("userId") Long userId);
+
+    /**
+     * 统计总申请数量
+     *
+     * @return 总数
+     */
+    int countTotal();
+
+    /**
+     * 统计待审核数量
+     *
+     * @return 待审核数量
+     */
+    int countPending();
+
+    /**
+     * 统计已通过数量
+     *
+     * @return 已通过数量
+     */
+    int countApproved();
+
+    /**
+     * 统计已拒绝数量
+     *
+     * @return 已拒绝数量
+     */
+    int countRejected();
+
+    /**
+     * 统计今日申请数量
+     *
+     * @return 今日申请数量
+     */
+    int countToday();
 }

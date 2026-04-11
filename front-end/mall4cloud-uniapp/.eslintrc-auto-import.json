@@ -103,6 +103,7 @@
     "watchEffect": true,
     "watchPostEffect": true,
     "watchSyncEffect": true,
-    "wechat": true
+    "wechat": true,
+    "chatService": true
   }
 }

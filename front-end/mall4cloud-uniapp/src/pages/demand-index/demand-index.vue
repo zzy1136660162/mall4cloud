@@ -169,7 +169,7 @@ const goToList = () => {
     return
   }
   uni.navigateTo({
-    url: '/pages/demand-index/demand-index'
+    url: '/pages/demand-list/demand-list'
   })
 }
 

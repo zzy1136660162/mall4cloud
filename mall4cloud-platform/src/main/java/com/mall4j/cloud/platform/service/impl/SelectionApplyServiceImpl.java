@@ -167,11 +167,11 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
     @Override
     public SelectionStatisticsVO getStatistics() {
         SelectionStatisticsVO vo = new SelectionStatisticsVO();
-        vo.setTotalApplies(0);
-        vo.setPendingApplies(0);
-        vo.setApprovedApplies(0);
-        vo.setRejectedApplies(0);
-        vo.setTodayApplies(0);
+        vo.setTotalApplies(selectionApplyMapper.countTotal());
+        vo.setPendingApplies(selectionApplyMapper.countPending());
+        vo.setApprovedApplies(selectionApplyMapper.countApproved());
+        vo.setRejectedApplies(selectionApplyMapper.countRejected());
+        vo.setTodayApplies(selectionApplyMapper.countToday());
         return vo;
     }
 

@@ -309,49 +309,6 @@
 
       <view class="bottom-spacer" />
     </scroll-view>
-
-    <view class="bottom-nav">
-      <view
-        class="nav-item"
-        :class="{ active: currentNav === 0 }"
-        @tap="switchNav(0)"
-      >
-        <view class="nav-icon">
-          <image src="/static/images/homepage/icon-nav-home.svg" mode="aspectFit" />
-        </view>
-        <view class="nav-text">首页</view>
-      </view>
-      <view
-        class="nav-item"
-        :class="{ active: currentNav === 1 }"
-        @tap="switchNav(1)"
-      >
-        <view class="nav-icon">
-          <image src="/static/images/homepage/icon-nav-product.svg" mode="aspectFit" />
-        </view>
-        <view class="nav-text">产品</view>
-      </view>
-      <view
-        class="nav-item"
-        :class="{ active: currentNav === 2 }"
-        @tap="switchNav(2)"
-      >
-        <view class="nav-icon">
-          <image src="/static/images/homepage/icon-nav-consult.svg" mode="aspectFit" />
-        </view>
-        <view class="nav-text">咨询</view>
-      </view>
-      <view
-        class="nav-item"
-        :class="{ active: currentNav === 3 }"
-        @tap="switchNav(3)"
-      >
-        <view class="nav-icon">
-          <image src="/static/images/homepage/icon-nav-my.svg" mode="aspectFit" />
-        </view>
-        <view class="nav-text">我的</view>
-      </view>
-    </view>
   </view>
 
   <!-- 自定义tabbar -->
