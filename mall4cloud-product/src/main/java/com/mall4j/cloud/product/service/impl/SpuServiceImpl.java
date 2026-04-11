@@ -20,6 +20,7 @@ import com.mall4j.cloud.common.response.ServerResponseEntity;
 import com.mall4j.cloud.common.security.AuthUserContext;
 import com.mall4j.cloud.product.dto.SpuDTO;
 import com.mall4j.cloud.product.dto.SpuPageSearchDTO;
+import com.mall4j.cloud.product.dto.SelectionTagDTO;
 import com.mall4j.cloud.product.mapper.SpuMapper;
 import com.mall4j.cloud.product.service.*;
 import com.mall4j.cloud.api.product.vo.SpuVO;
@@ -308,5 +309,25 @@ public class SpuServiceImpl implements SpuService {
         }
         spuMapper.batchChangeSpuStatusBySpuIdsAndStatus(spuIdList, status);
         this.batchRemoveSpuCacheBySpuId(spuIdList);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void batchSetSelection(List<Long> spuIds, Integer isSelection) {
+        if (CollUtil.isEmpty(spuIds)) {
+            return;
+        }
+        spuMapper.batchSetSelection(spuIds, isSelection);
+        this.batchRemoveSpuCacheBySpuId(spuIds);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void batchSetTags(SelectionTagDTO tagDTO) {
+        if (CollUtil.isEmpty(tagDTO.getSpuIds())) {
+            return;
+        }
+        spuMapper.batchSetTags(tagDTO);
+        this.batchRemoveSpuCacheBySpuId(tagDTO.getSpuIds());
     }
 }

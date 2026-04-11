@@ -6,6 +6,7 @@ import com.mall4j.cloud.common.database.vo.PageVO;
 import com.mall4j.cloud.api.product.vo.SpuVO;
 import com.mall4j.cloud.product.dto.SpuDTO;
 import com.mall4j.cloud.product.dto.SpuPageSearchDTO;
+import com.mall4j.cloud.product.dto.SelectionTagDTO;
 import com.mall4j.cloud.product.model.SpuExtension;
 
 import java.util.List;
@@ -142,4 +143,17 @@ public interface SpuService {
 	 * @param status
 	 */
     void batchChangeSpuStatusByCids(List<Long> cidList, Long shopId, Integer status);
+
+	/**
+	 * 批量设置选品状态
+	 * @param spuIds 商品ID列表
+	 * @param isSelection 是否选品
+	 */
+	void batchSetSelection(List<Long> spuIds, Integer isSelection);
+
+	/**
+	 * 批量设置商品标签
+	 * @param tagDTO 标签信息
+	 */
+	void batchSetTags(SelectionTagDTO tagDTO);
 }

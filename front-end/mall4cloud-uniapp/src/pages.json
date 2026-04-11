@@ -154,6 +154,45 @@
 			"style": {
 				"navigationBarTitleText": "需求详情"
 			}
+		},
+    {
+			"path": "pages/sample/selection/selection",
+			"style": {
+				"navigationBarTitleText": "选品中心",
+				"navigationBarBackgroundColor": "#ffffff",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+    {
+			"path": "pages/sample/product/product",
+			"style": {
+				"navigationBarTitleText": "商品详情",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+    {
+			"path": "pages/sample/apply/apply",
+			"style": {
+				"navigationBarTitleText": "申请样品",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+    {
+			"path": "pages/sample/list/list",
+			"style": {
+				"navigationBarTitleText": "我的样品",
+				"navigationBarBackgroundColor": "#ffffff",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+    {
+			"path": "pages/sample/detail/detail",
+			"style": {
+				"navigationBarTitleText": "样品详情",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
 		}
   ],
   "tabBar": {
@@ -167,16 +206,22 @@
         "selectedIconPath": "/static/tabbar/index-r.png"
       },
       {
-        "pagePath": "pages/category/category",
-        "text": "分类",
-        "iconPath": "/static/tabbar/category.png",
-        "selectedIconPath": "/static/tabbar/category-r.png"
+        "pagePath": "pages/index/index",
+        "text": "研发",
+        "iconPath": "/static/tabbar/dev.png",
+        "selectedIconPath": "/static/tabbar/dev-r.png"
       },
       {
-        "pagePath": "pages/cart/cart",
-        "text": "购物车",
-        "iconPath": "/static/tabbar/cart.png",
-        "selectedIconPath": "/static/tabbar/cart-r.png"
+        "pagePath": "pages/sample/selection/selection",
+        "text": "选品",
+        "iconPath": "/static/tabbar/selection.png",
+        "selectedIconPath": "/static/tabbar/selection-r.png"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "text": "商城",
+        "iconPath": "/static/tabbar/mall.png",
+        "selectedIconPath": "/static/tabbar/mall-r.png"
       },
       {
         "pagePath": "pages/my/my",

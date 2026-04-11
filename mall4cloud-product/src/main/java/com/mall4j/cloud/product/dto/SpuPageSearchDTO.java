@@ -1,6 +1,8 @@
 package com.mall4j.cloud.product.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -65,6 +67,29 @@ public class SpuPageSearchDTO {
 	@Schema(description = "创建时间排序 0：倒序 1：顺序" )
 	private Integer createTimeSort;
 
+	@Schema(description = "是否选品 0-否 1-是" )
+	private Integer isSelection;
+
+	@Schema(description = "是否热销 0-否 1-是" )
+	private Integer isHot;
+
+	@Schema(description = "是否新品 0-否 1-是" )
+	private Integer isNew;
+
+	@Schema(description = "是否推荐 0-否 1-是" )
+	private Integer isRecommend;
+
+	@Schema(description = "是否精选 0-否 1-是" )
+	private Integer isSelectionBest;
+
+	@Schema(description = "最低佣金比例" )
+	private BigDecimal minCommissionRate;
+
+	@Schema(description = "最低评分" )
+	private BigDecimal minRating;
+
+	@Schema(description = "排序字段" )
+	private String orderBy;
 
 	public Long getSpuId() {
 		return spuId;
@@ -208,6 +233,70 @@ public class SpuPageSearchDTO {
 
 	public void setCreateTimeSort(Integer createTimeSort) {
 		this.createTimeSort = createTimeSort;
+	}
+
+	public Integer getIsSelection() {
+		return isSelection;
+	}
+
+	public void setIsSelection(Integer isSelection) {
+		this.isSelection = isSelection;
+	}
+
+	public Integer getIsHot() {
+		return isHot;
+	}
+
+	public void setIsHot(Integer isHot) {
+		this.isHot = isHot;
+	}
+
+	public Integer getIsNew() {
+		return isNew;
+	}
+
+	public void setIsNew(Integer isNew) {
+		this.isNew = isNew;
+	}
+
+	public Integer getIsRecommend() {
+		return isRecommend;
+	}
+
+	public void setIsRecommend(Integer isRecommend) {
+		this.isRecommend = isRecommend;
+	}
+
+	public Integer getIsSelectionBest() {
+		return isSelectionBest;
+	}
+
+	public void setIsSelectionBest(Integer isSelectionBest) {
+		this.isSelectionBest = isSelectionBest;
+	}
+
+	public BigDecimal getMinCommissionRate() {
+		return minCommissionRate;
+	}
+
+	public void setMinCommissionRate(BigDecimal minCommissionRate) {
+		this.minCommissionRate = minCommissionRate;
+	}
+
+	public BigDecimal getMinRating() {
+		return minRating;
+	}
+
+	public void setMinRating(BigDecimal minRating) {
+		this.minRating = minRating;
+	}
+
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
 	}
 
 	@Override

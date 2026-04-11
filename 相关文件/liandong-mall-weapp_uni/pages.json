@@ -7,16 +7,8 @@
 					"sp-home-recommend": "../../components/sp_HomeRecommend/sp_HomeRecommend",
 					"home-talent-pool": "../../components/home_talent_pool/home_talent_pool",
 					"sp-home-xuanpin": "../../components/sp_HomeXuanpin/sp_HomeXuanpin",
-					"sp-category-tab": "../../components/sp_CategoryTab/sp_CategoryTab",
-					"sp-category-list": "../../components/sp_CategoryList/sp_CategoryList"
+					"sp-category-tab": "../../components/sp_CategoryTab/sp_CategoryTab"
 				}
-			}
-		},
-		{
-			"path": "pages/categoryList/categoryList",
-			"style": {
-				"navigationBarTitleText": "分类列表",
-				"usingComponents": {}
 			}
 		},
 		{
@@ -132,14 +124,7 @@
 				}
 			}
 		},
-		{
-			"path": "pages/category/category",
-			"style": {
-				"navigationBarTitleText": "选品",
-				"usingComponents": {},
-				"navigationStyle": "custom"
-			}
-		},
+
 		{
 			"path": "pages/activity/hot",
 			"style": {

@@ -21,6 +21,7 @@ import ProductExample from './modules/product.example'
 import OrderExample from './modules/order.example'
 import RbacExample from './modules/rbac.example'
 import DemandExample from './modules/demand.example'
+import SelectionExample from './modules/selection.example'
 
 // 固定路由（默认路由）
 const constantRoutes: RouteRecordRaw[] = [
@@ -156,6 +157,15 @@ const asyncRoutes: RouteRecordMainRaw[] = [
     },
     children: [
       ...DemandExample,
+    ],
+  },
+  {
+    meta: {
+      title: '选品管理',
+      icon: 'i-ant-design:shopping-twotone',
+    },
+    children: [
+      ...SelectionExample,
     ],
   },
 ]
