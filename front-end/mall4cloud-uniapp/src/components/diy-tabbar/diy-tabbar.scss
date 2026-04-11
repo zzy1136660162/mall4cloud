@@ -1,0 +1,73 @@
+.diy-tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 750rpx;
+  margin: auto;
+  height: 100rpx;
+  background: #fff;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 999;
+}
+
+.diy-tabbar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1rpx;
+  background: #e5e5e5;
+}
+
+.diy-tabbar .item {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.diy-tabbar .item::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.diy-tabbar .item .icon {
+  width: 48rpx;
+  height: 48rpx;
+  font-size: 0;
+  margin: 0 auto 4rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.diy-tabbar .item .icon image {
+  width: 100%;
+  height: 100%;
+}
+
+.diy-tabbar .item .text {
+  font-size: 22rpx;
+  color: #666;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.diy-tabbar .item.active .text {
+  color: #f6bd5f;
+  font-weight: 600;
+}
+
+.diy-tabbar .item.active .icon image {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}

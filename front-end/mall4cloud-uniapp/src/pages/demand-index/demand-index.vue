@@ -75,6 +75,9 @@
       <text>专业定制 · 品质保障 · 全程跟踪</text>
     </view>
   </view>
+
+  <!-- 自定义tabbar -->
+  <diy-tabbar :current-index="1" />
 </template>
 
 <script setup>

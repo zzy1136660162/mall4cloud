@@ -1,5 +1,5 @@
 <template>
-  <view class="page">
+  <view class="page" style="padding-bottom: calc(100rpx + env(safe-area-inset-bottom));">
     <view class="header">
       <view class="search-bar" @tap="goToSearch">
         <view class="search-input-box">
@@ -192,6 +192,9 @@
       <text>没有更多了</text>
     </view>
   </view>
+
+  <!-- 自定义tabbar -->
+  <diy-tabbar :current-index="2" />
 </template>
 
 <script setup>
@@ -255,14 +258,14 @@ onMounted(() => {
 function loadProducts() {
   if (loading.value) return
   loading.value = true
-  
+
   const mockProducts = generateMockProducts(page.value, pageSize)
   if (page.value === 1) {
     products.value = mockProducts
   } else {
     products.value = [...products.value, ...mockProducts]
   }
-  
+
   hasMore.value = mockProducts.length === pageSize
   page.value++
   loading.value = false

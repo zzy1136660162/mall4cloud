@@ -82,47 +82,10 @@
           没有更多了，看看别的吧
         </view>
       </view>
-
-      <!-- 店铺tabbar -->
-      <view class="shop-tabbar">
-        <view
-          class="item active"
-          @tap="goShopIndex"
-        >
-          <view class="icon">
-            <image src="/static/images/shop-index-r.png" />
-            <!-- <image src="/static/images/shop-index.png" /> -->
-          </view>
-          <view class="text">
-            首页
-          </view>
-        </view>
-        <view
-          class="item"
-          @tap="goShopProds"
-        >
-          <view class="icon">
-            <!-- <image src="/static/images/shop-prods-r.png" /> -->
-            <image src="/static/images/shop-prods.png" />
-          </view>
-          <view class="text">
-            商品
-          </view>
-        </view>
-        <view
-          class="item"
-          @tap="goShopCategory"
-        >
-          <view class="icon">
-            <!-- <image src="/static/images/shop-category-r.png" /> -->
-            <image src="/static/images/shop-category.png" />
-          </view>
-          <view class="text">
-            分类
-          </view>
-        </view>
-      </view>
     </view>
+
+    <!-- 自定义tabbar -->
+    <diy-tabbar :current-index="0" @change="handleTabChange" />
   </view>
 </template>
 
@@ -207,22 +170,8 @@ const getProd = () => {
 }
 
 // 切换tabbar
-const goShopIndex = () => {
-  uni.navigateTo({
-    url: `/pages/shop-index/shop-index?shopId=${Data.shopId}`
-  })
-}
-
-const goShopProds = () => {
-  uni.navigateTo({
-    url: `/pages/shop-prods/shop-prods?shopId=${Data.shopId}`
-  })
-}
-
-const goShopCategory = () => {
-  uni.navigateTo({
-    url: `/pages/shop-category/shop-category?shopId=${Data.shopId}`
-  })
+const handleTabChange = ({ index }) => {
+  console.log('切换到tab:', index)
 }
 </script>
 

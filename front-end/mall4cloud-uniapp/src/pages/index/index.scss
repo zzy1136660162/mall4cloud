@@ -17,6 +17,7 @@ page {
 .page-jiedong {
   min-height: 100vh;
   background: $bg-color;
+  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
 }
 
 .banner-wrapper {

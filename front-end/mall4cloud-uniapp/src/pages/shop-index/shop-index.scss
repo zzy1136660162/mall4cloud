@@ -341,41 +341,4 @@ page {
   .shop-category .category .main {
     height: calc(100% - 100rpx - env(safe-area-inset-bottom));
   }
-
-  /* 店铺tabbar */
-  .shop-tabbar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: env(safe-area-inset-bottom);
-    max-width: 750rpx;
-    margin: auto;
-    height: 100rpx;
-    background: #fff;
-    border-radius: 10rpx 10rpx 0 0;
-    box-shadow: 0 -6rpx 6rpx rgba(0, 0, 0, .01);
-    display: flex;
-    align-items: center;
-  }
-
-  .shop-tabbar .item {
-    flex: 1;
-    text-align: center;
-  }
-
-  .shop-tabbar .item .icon {
-    width: 36rpx;
-    height: 36rpx;
-    font-size: 0;
-    margin: auto;
-  }
-
-  .shop-tabbar .item .text {
-    font-size: 20rpx;
-    margin-top: 6rpx;
-  }
-
-  .shop-tabbar .item.active .text {
-    color: #fc1b35;
-  }
 }

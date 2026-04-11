@@ -187,7 +187,7 @@ onMounted(() => {
   const pages = getCurrentPages()
   const currentPage = pages[pages.length - 1]
   const options = currentPage.options || currentPage.$page?.options || {}
-  
+
   const productId = options.productId
   if (productId) {
     loadProductInfo(productId)
@@ -268,7 +268,7 @@ function doSubmit() {
   uni.showLoading({
     title: '提交中...'
   })
-  
+
   setTimeout(() => {
     uni.hideLoading()
     uni.showToast({

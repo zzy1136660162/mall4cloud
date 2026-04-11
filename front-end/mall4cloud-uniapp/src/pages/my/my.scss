@@ -3,6 +3,7 @@ page {
 }
 
 .page-my {
+  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
 
   /* 用户资料 */
   .user-box {

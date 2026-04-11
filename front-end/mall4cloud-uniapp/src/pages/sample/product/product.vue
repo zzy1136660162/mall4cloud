@@ -221,7 +221,7 @@ onMounted(() => {
   const pages = getCurrentPages()
   const currentPage = pages[pages.length - 1]
   const options = currentPage.options || currentPage.$page?.options || {}
-  
+
   const productId = options.id || 1
   loadProductDetail(productId)
 })
@@ -257,7 +257,7 @@ function loadProductDetail(productId) {
       ]
     }
   }
-  
+
   product.value = mockProduct
   totalPrice.value = parseFloat(mockProduct.price)
 }

@@ -1,5 +1,5 @@
 <template>
-  <view class="page-shop-prods">
+  <view class="page-shop-prods" style="padding-bottom: calc(100rpx + env(safe-area-inset-bottom));">
     <view class="shop-prods">
       <!-- 头部 -->
       <view class="header">
@@ -133,6 +133,9 @@
       </view>
     </view>
   </view>
+
+  <!-- 自定义tabbar -->
+  <diy-tabbar :current-index="3" />
 </template>
 
 <script setup>

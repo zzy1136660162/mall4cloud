@@ -206,7 +206,7 @@ onMounted(() => {
   const pages = getCurrentPages()
   const currentPage = pages[pages.length - 1]
   const options = currentPage.options || currentPage.$page?.options || {}
-  
+
   const applicationId = options.id || 'SA1773469050337'
   loadApplicationDetail(applicationId)
 })
