@@ -88,31 +88,12 @@
             <span class="part-tit-name">商品销售属性与库存</span>
           </div>
 
-          <div class="part-form-div">
-            <div class="part-form-item-tit">销售属性</div>
-            <div class="part-form-item">
-              <div class="part-tips">最多添加两个商品属性，第一个商品属性可添加属性图片</div>
-              <div class="sku-block-placeholder">SKU组件 - 待完整实现</div>
-            </div>
-          </div>
-
-          <div class="part-form-div">
-            <div class="part-form-item-tit">价格及库存</div>
-            <div class="setup-spec">
-              <div class="imp-tips">请如实填写库存信息，以确保商品可以在承诺发货时间内发出</div>
-              <div class="sku-table-placeholder">SKU表格 - 待完整实现</div>
-            </div>
-          </div>
-
-          <div class="part-form-div">
-            <div class="part-form-item-tit">
-              总库存
-              <el-tooltip content="每个属性库存的总和" placement="top">
-                <el-icon><QuestionFilled /></el-icon>
-              </el-tooltip>
-            </div>
-            <el-input v-model="dataForm.totalStock" readonly style="width: 150px" />
-          </div>
+          <SkuSelector
+            ref="skuSelectorRef"
+            v-model="dataForm.skuList"
+            :category-id="dataForm.categoryId"
+            @change="handleSkuChange"
+          />
         </div>
 
         <div class="part-content">
@@ -142,13 +123,13 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage, ElIcon } from 'element-plus'
-import { QuestionFilled } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { productApi } from '@/api/modules/product'
 import ImgUpload from '@/components/ImgUpload/index.vue'
 import ImgsUpload from '@/components/ImgsUpload/index.vue'
 import CategorySelector from '@/components/CategorySelector/index.vue'
 import BrandSelector from '@/components/BrandSelector/index.vue'
+import SkuSelector from '@/components/SkuSelector/index.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -158,6 +139,7 @@ const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const dataFormRef = ref()
 const categorySelectorRef = ref()
 const brandSelectRef = ref()
+const skuSelectorRef = ref()
 
 const dataForm = reactive({
   spuId: route.query.spuId || null,
@@ -238,15 +220,15 @@ const changeSkuGroupData = (data: any[]) => {
   salesAttrs.value = data
 }
 
-const handleChangeData = (data: any[]) => {
+const handleSkuChange = (skuList: any[]) => {
   let totalStock = 0
-  data.forEach((sku: any) => {
+  skuList.forEach((sku: any) => {
     if (sku.stock) {
       totalStock += Number(sku.stock)
     }
   })
   dataForm.totalStock = totalStock
-  flatten.value = data
+  flatten.value = skuList
 }
 
 const changeFormatOfFormData = () => {
@@ -266,9 +248,14 @@ const changeFormatOfFormData = () => {
       return
     }
 
+    if (dataForm.skuList.length === 0) {
+      ElMessage.warning('请添加销售属性！')
+      return
+    }
+
     const submitData = {
       ...dataForm,
-      skuList: flatten.value,
+      skuList: dataForm.skuList,
     }
 
     const request = dataForm.spuId
@@ -387,48 +374,6 @@ onMounted(() => {
         margin-top: 10px;
         font-size: 13px;
         color: #999;
-      }
-
-      .part-form-div {
-        display: flex;
-        align-items: top;
-        font-size: 14px;
-        margin-bottom: 22px;
-
-        .part-form-item-tit {
-          width: 120px;
-          min-width: 120px;
-          text-align: right;
-          padding-right: 14px;
-          line-height: 36px;
-        }
-
-        .part-tips {
-          color: #999;
-          font-size: 13px;
-          line-height: 36px;
-        }
-
-        .part-form-item {
-          width: 100%;
-
-          .classify-show {
-            line-height: 36px;
-          }
-        }
-
-        .setup-spec {
-          width: 100%;
-          box-sizing: border-box;
-          background: #fafafa;
-          padding: 15px;
-
-          .imp-tips {
-            font-size: 13px;
-            color: #ec6b01;
-            margin-bottom: 5px;
-          }
-        }
       }
     }
 

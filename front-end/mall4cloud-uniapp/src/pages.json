@@ -193,6 +193,13 @@
 				"navigationBarTitleText": "样品详情",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
+		},
+    {
+			"path": "pages/chat/chat",
+			"style": {
+				"navigationBarTitleText": "智能客服",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
 		}
   ],
   "tabBar": {

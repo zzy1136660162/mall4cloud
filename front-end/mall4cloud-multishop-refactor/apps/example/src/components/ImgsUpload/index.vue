@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import ImgBox from '@/components/ImgBox/index.vue'
 
 interface ImageItem {
@@ -108,6 +108,9 @@ const elxImgboxHandle = () => {
     return
   }
   elxImgboxVisible.value = true
+  nextTick(() => {
+    elxImgboxRef.value?.init(0, num)
+  })
 }
 
 const refreshPic = (imagePath: string) => {

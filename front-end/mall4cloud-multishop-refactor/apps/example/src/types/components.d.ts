@@ -104,6 +104,7 @@ declare module 'vue' {
     ImgUpload: typeof import('./../components/ImgUpload/index.vue')['default']
     Pagination: typeof import('./../components/Pagination/index.vue')['default']
     PicturePreview: typeof import('./../components/PicturePreview/index.vue')['default']
+    SkuSelector: typeof import('./../components/SkuSelector/index.vue')['default']
   }
 }
 
@@ -201,4 +202,5 @@ declare global {
   const ImgUpload: typeof import('./../components/ImgUpload/index.vue')['default']
   const Pagination: typeof import('./../components/Pagination/index.vue')['default']
   const PicturePreview: typeof import('./../components/PicturePreview/index.vue')['default']
+  const SkuSelector: typeof import('./../components/SkuSelector/index.vue')['default']
 }

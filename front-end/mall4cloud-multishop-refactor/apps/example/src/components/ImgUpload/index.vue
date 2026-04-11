@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import ImgBox from '@/components/ImgBox/index.vue'
 
 const props = defineProps({
@@ -49,6 +49,9 @@ const elxImgboxHandle = () => {
     return
   }
   elxImgboxVisible.value = true
+  nextTick(() => {
+    elxImgboxRef.value?.init(1, 1)
+  })
 }
 
 const getImgSrc = () => {
