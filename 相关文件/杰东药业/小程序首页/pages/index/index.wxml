@@ -1,0 +1,363 @@
+<view class="container">
+  <!-- 顶部Banner -->
+  <view class="banner">
+    <view class="banner-content">
+      <text class="banner-title">共创医健产业创新生态圈</text>
+      <text class="banner-subtitle">大道至简 · 实干为要</text>
+    </view>
+  </view>
+
+  <!-- 核心数据展示 -->
+  <view class="stats-bar">
+    <view class="stat-item">
+      <text class="stat-num">13</text>
+      <text class="stat-unit">年</text>
+      <text class="stat-label">行业深耕</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-num">3万+</text>
+      <text class="stat-label">服务企业</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-num">1000+</text>
+      <text class="stat-label">精选产品</text>
+    </view>
+  </view>
+
+  <!-- 三个切换按钮 -->
+  <view class="tab-section">
+    <view class="tab-wrapper">
+      <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
+        <view class="tab-icon">🏆</view>
+        <text class="tab-text">杰东认证</text>
+        <view class="tab-line" wx:if="{{currentTab === 0}}"></view>
+      </view>
+      <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
+        <view class="tab-icon">🏭</view>
+        <text class="tab-text">杰东生产</text>
+        <view class="tab-line" wx:if="{{currentTab === 1}}"></view>
+      </view>
+      <view class="tab-item {{currentTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">
+        <view class="tab-icon">🚀</view>
+        <text class="tab-text">杰东营销</text>
+        <view class="tab-line" wx:if="{{currentTab === 2}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <scroll-view class="content-area" scroll-y="true">
+    <!-- 认证板块 -->
+    <view class="content-panel" wx:if="{{currentTab === 0}}">
+      <view class="panel-header">
+        <view class="panel-title">破解产品全生命周期中的复杂课题</view>
+        <view class="panel-subtitle">打造全球大健康产业合规智造领航者</view>
+      </view>
+
+      <!-- 认证类别卡片 -->
+      <view class="card-grid">
+        <view class="cert-card">
+          <view class="cert-icon" style="background: linear-gradient(135deg, #134585, #1a5aa0);">🏥</view>
+          <text class="cert-name">医疗器械</text>
+          <text class="cert-desc">一类/二类/三类注册</text>
+        </view>
+        <view class="cert-card">
+          <view class="cert-icon" style="background: linear-gradient(135deg, #134585, #1a5aa0);">💄</view>
+          <text class="cert-name">化妆品</text>
+          <text class="cert-desc">普通/特殊化妆品</text>
+        </view>
+        <view class="cert-card">
+          <view class="cert-icon" style="background: linear-gradient(135deg, #134585, #1a5aa0);">🧴</view>
+          <text class="cert-name">消毒用品</text>
+          <text class="cert-desc">消字号产品备案</text>
+        </view>
+        <view class="cert-card">
+          <view class="cert-icon" style="background: linear-gradient(135deg, #134585, #1a5aa0);">🌿</view>
+          <text class="cert-name">保健用品</text>
+          <text class="cert-desc">吉林保健用品批件</text>
+        </view>
+        <view class="cert-card">
+          <view class="cert-icon" style="background: linear-gradient(135deg, #134585, #1a5aa0);">🍵</view>
+          <text class="cert-name">功能性食品</text>
+          <text class="cert-desc">食字号/特膳/特医</text>
+        </view>
+        <view class="cert-card">
+          <view class="cert-icon" style="background: linear-gradient(135deg, #134585, #1a5aa0);">⚕️</view>
+          <text class="cert-name">院内制剂</text>
+          <text class="cert-desc">医疗机构制剂备案</text>
+        </view>
+      </view>
+
+      <!-- 服务优势 -->
+      <view class="advantage-section">
+        <view class="section-title">服务优势</view>
+        <view class="advantage-list">
+          <view class="advantage-item">
+            <view class="advantage-dot"></view>
+            <text class="advantage-text">主力团队 40+ 人，交付团队 100 人</text>
+          </view>
+          <view class="advantage-item">
+            <view class="advantage-dot"></view>
+            <text class="advantage-text">深耕大健康产业 13 年</text>
+          </view>
+          <view class="advantage-item">
+            <view class="advantage-dot"></view>
+            <text class="advantage-text">成功服务 3万+ 企业</text>
+          </view>
+          <view class="advantage-item">
+            <view class="advantage-dot"></view>
+            <text class="advantage-text">精准货盘矩阵 1075 个 SKU</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- CTA按钮 -->
+      <view class="cta-section">
+        <button class="cta-btn primary">立即咨询认证</button>
+      </view>
+    </view>
+
+    <!-- 生产板块 -->
+    <view class="content-panel" wx:if="{{currentTab === 1}}">
+      <view class="panel-header">
+        <view class="panel-title">OEM/ODM 贴牌加工</view>
+        <view class="panel-subtitle">从产品设计、研发到量产的全链条解决方案</view>
+      </view>
+
+      <!-- 剂型类型 -->
+      <view class="section-block">
+        <view class="section-title">剂型类型</view>
+        <view class="dosage-tags">
+          <view class="dosage-tag">膏剂</view>
+          <view class="dosage-tag">粉剂</view>
+          <view class="dosage-tag">片剂</view>
+          <view class="dosage-tag">液体</view>
+          <view class="dosage-tag">颗粒</view>
+          <view class="dosage-tag">凝胶</view>
+        </view>
+      </view>
+
+      <!-- 产品类别 -->
+      <view class="section-block">
+        <view class="section-title">产品类别</view>
+        <view class="category-grid">
+          <view class="category-item">
+            <text class="category-name">纤体瘦身贴</text>
+            <text class="category-tag">辅助减肥</text>
+          </view>
+          <view class="category-item">
+            <text class="category-name">疏通活络液</text>
+            <text class="category-tag">缓解疼痛</text>
+          </view>
+          <view class="category-item">
+            <text class="category-name">通络透骨喷剂</text>
+            <text class="category-tag">改善微循环</text>
+          </view>
+          <view class="category-item">
+            <text class="category-name">舒筋活络膏</text>
+            <text class="category-tag">舒筋活络</text>
+          </view>
+          <view class="category-item">
+            <text class="category-name">舒缓通鼻膏</text>
+            <text class="category-tag">改善鼻部</text>
+          </view>
+          <view class="category-item">
+            <text class="category-name">净肤康乳膏</text>
+            <text class="category-tag">改善皮肤</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 保健用品功效 -->
+      <view class="section-block">
+        <view class="section-title">保健用品功效覆盖（15大类）</view>
+        <view class="function-tags">
+          <view class="function-tag">鼻部护理</view>
+          <view class="function-tag">狐臭产品</view>
+          <view class="function-tag">美肤护肤</view>
+          <view class="function-tag">调理亚健康</view>
+          <view class="function-tag">护目</view>
+          <view class="function-tag">面瘫康复</view>
+          <view class="function-tag">固肾养肾</view>
+          <view class="function-tag">缓解疼痛</view>
+          <view class="function-tag">女性调理</view>
+          <view class="function-tag">泡浴养生</view>
+          <view class="function-tag">润肠通便</view>
+          <view class="function-tag">小儿系列</view>
+          <view class="function-tag">前列腺养护</view>
+          <view class="function-tag">烧烫褥疮</view>
+          <view class="function-tag">养发护发</view>
+          <view class="function-tag">祛痘祛斑</view>
+          <view class="function-tag">纤体瘦身</view>
+          <view class="function-tag">正骨理疗</view>
+        </view>
+      </view>
+
+      <!-- 生产优势 -->
+      <view class="section-block">
+        <view class="section-title">生产优势</view>
+        <view class="advantage-list">
+          <view class="advantage-item">
+            <view class="advantage-dot"></view>
+            <text class="advantage-text">安评评价全套手续类目 200+</text>
+          </view>
+          <view class="advantage-item">
+            <view class="advantage-dot"></view>
+            <text class="advantage-text">满足市场 95% 产品贴牌需求</text>
+          </view>
+          <view class="advantage-item">
+            <view class="advantage-dot"></view>
+            <text class="advantage-text">涵盖贴剂、粉剂、颗粒、液体、膏剂等多种剂型</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- CTA按钮 -->
+      <view class="cta-section">
+        <button class="cta-btn primary">获取贴牌方案</button>
+      </view>
+    </view>
+
+    <!-- 营销板块 -->
+    <view class="content-panel" wx:if="{{currentTab === 2}}">
+      <view class="panel-header">
+        <view class="panel-title">垂直供应链智能中台</view>
+        <view class="panel-subtitle">重构产业价值链，打造产业级供应链协同平台</view>
+      </view>
+
+      <!-- 核心模式 -->
+      <view class="section-block">
+        <view class="section-title">核心模式</view>
+        <view class="model-cards">
+          <view class="model-card">
+            <view class="model-icon">📦</view>
+            <text class="model-name">上游·深度整合</text>
+            <text class="model-desc">直连源头，构建数字化、柔性化供应池</text>
+          </view>
+          <view class="model-card">
+            <view class="model-icon">⚙️</view>
+            <text class="model-name">中台·智能枢纽</text>
+            <text class="model-desc">沉淀核心能力，一站式赋能上下游</text>
+          </view>
+          <view class="model-card">
+            <view class="model-icon">🌐</view>
+            <text class="model-name">下游·无限裂变</text>
+            <text class="model-desc">独创无限合伙人生态体系</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 资源优势 -->
+      <view class="section-block">
+        <view class="section-title">资源优势</view>
+        <view class="resource-cards">
+          <view class="resource-card">
+            <text class="resource-num">1000+</text>
+            <text class="resource-label">精选产品库</text>
+            <text class="resource-desc">涵盖15大核心品类</text>
+          </view>
+          <view class="resource-card">
+            <text class="resource-num">1000+</text>
+            <text class="resource-label">配方数据库</text>
+            <text class="resource-desc">成熟配方快速定制</text>
+          </view>
+          <view class="resource-card">
+            <text class="resource-num">72h</text>
+            <text class="resource-label">响应速度</text>
+            <text class="resource-desc">快速响应配方需求</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 货盘矩阵 -->
+      <view class="section-block">
+        <view class="section-title">货盘矩阵</view>
+        <view class="product-matrix">
+          <view class="matrix-item">
+            <text class="matrix-num">45款</text>
+            <text class="matrix-name">医疗器械</text>
+            <text class="matrix-channel">电商渠道</text>
+          </view>
+          <view class="matrix-item">
+            <text class="matrix-num">210款</text>
+            <text class="matrix-name">功能性食品</text>
+            <text class="matrix-channel">OTC渠道</text>
+          </view>
+          <view class="matrix-item">
+            <text class="matrix-num">168款</text>
+            <text class="matrix-name">消字号产品</text>
+            <text class="matrix-channel">院线渠道</text>
+          </view>
+          <view class="matrix-item">
+            <text class="matrix-num">132款</text>
+            <text class="matrix-name">妆字号产品</text>
+            <text class="matrix-channel">CS渠道</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 特色产品 -->
+      <view class="section-block">
+        <view class="section-title">特色产品</view>
+        <view class="product-list">
+          <view class="product-item">
+            <view class="product-info">
+              <text class="product-name">巴克宁疤痕膏</text>
+              <text class="product-desc">平滑增生、祛除色素</text>
+            </view>
+            <view class="product-arrow">›</view>
+          </view>
+          <view class="product-item">
+            <view class="product-info">
+              <text class="product-name">屁屁黄金</text>
+              <text class="product-desc">减少红肿、滋润保湿</text>
+            </view>
+            <view class="product-arrow">›</view>
+          </view>
+          <view class="product-item">
+            <view class="product-info">
+              <text class="product-name">舒痛通络贴</text>
+              <text class="product-desc">消炎镇痛，适用于肩颈腰腿</text>
+            </view>
+            <view class="product-arrow">›</view>
+          </view>
+          <view class="product-item">
+            <view class="product-info">
+              <text class="product-name">男性抑菌喷剂</text>
+              <text class="product-desc">对多种细菌、真菌有抑制作用</text>
+            </view>
+            <view class="product-arrow">›</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- CTA按钮 -->
+      <view class="cta-section">
+        <button class="cta-btn primary">浏览产品库</button>
+        <button class="cta-btn secondary">成为合伙人</button>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部服务导航 -->
+  <view class="bottom-nav">
+    <view class="nav-item active">
+      <view class="nav-icon">🏠</view>
+      <text class="nav-text">首页</text>
+    </view>
+    <view class="nav-item">
+      <view class="nav-icon">📋</view>
+      <text class="nav-text">产品</text>
+    </view>
+    <view class="nav-item">
+      <view class="nav-icon">💬</view>
+      <text class="nav-text">咨询</text>
+    </view>
+    <view class="nav-item">
+      <view class="nav-icon">👤</view>
+      <text class="nav-text">我的</text>
+    </view>
+  </view>
+</view>
