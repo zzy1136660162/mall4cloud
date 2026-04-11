@@ -35,6 +35,10 @@ public class SelectionApplyDTO implements Serializable {
     @Schema(description = "商品价格（分）（冗余）")
     private Long priceFee;
 
+    @NotBlank(message = "联系人姓名不能为空")
+    @Schema(description = "联系人姓名")
+    private String userName;
+
     @NotBlank(message = "联系电话不能为空")
     @Schema(description = "联系电话")
     private String contactPhone;
@@ -94,6 +98,14 @@ public class SelectionApplyDTO implements Serializable {
         this.priceFee = priceFee;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public String getContactPhone() {
         return contactPhone;
     }
@@ -125,6 +137,7 @@ public class SelectionApplyDTO implements Serializable {
                 ", spuName='" + spuName + '\'' +
                 ", shopId=" + shopId +
                 ", shopName='" + shopName + '\'' +
+                ", userName='" + userName + '\'' +
                 ", contactPhone='" + contactPhone + '\'' +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", applyRemark='" + applyRemark + '\'' +

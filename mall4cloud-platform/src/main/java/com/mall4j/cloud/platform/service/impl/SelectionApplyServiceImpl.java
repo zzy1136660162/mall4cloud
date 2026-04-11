@@ -1,8 +1,8 @@
 package com.mall4j.cloud.platform.service.impl;
 
-import com.mall4j.cloud.common.constant.AuthConstant;
 import com.mall4j.cloud.common.database.vo.PageVO;
 import com.mall4j.cloud.common.exception.Mall4cloudException;
+import com.mall4j.cloud.common.security.AuthUserContext;
 import com.mall4j.cloud.common.util.BeanUtil;
 import com.mall4j.cloud.platform.dto.SelectionApplyDTO;
 import com.mall4j.cloud.platform.dto.SelectionApplyPageDTO;
@@ -11,6 +11,7 @@ import com.mall4j.cloud.platform.mapper.SelectionApplyMapper;
 import com.mall4j.cloud.platform.model.SelectionApply;
 import com.mall4j.cloud.platform.service.SelectionApplyService;
 import com.mall4j.cloud.platform.vo.admin.SelectionApplyVO;
+import com.mall4j.cloud.platform.vo.admin.SelectionStatisticsVO;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +42,7 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long applySelection(SelectionApplyDTO dto) {
-        Long userId = getUserId();
+        Long userId = AuthUserContext.get().getUserId();
         
         // 1. 校验用户是否是达人（这里简化处理，实际需要查询角色表）
         // if (!hasTalentRole(userId)) {
@@ -62,7 +62,7 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
         // 3. 创建申请记录
         SelectionApply apply = new SelectionApply();
         apply.setUserId(userId);
-        apply.setUserName(getUserName(userId));
+        apply.setUserName(dto.getUserName());
         apply.setSpuId(dto.getSpuId());
         apply.setSpuName(dto.getSpuName());
         apply.setShopId(dto.getShopId());
@@ -81,7 +81,7 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
 
     @Override
     public PageVO<SelectionApplyVO> getMyApplies(Integer pageNum, Integer pageSize) {
-        Long userId = getUserId();
+        Long userId = AuthUserContext.get().getUserId();
         
         List<SelectionApply> list = selectionApplyMapper.listByUserId(userId, (pageNum - 1) * pageSize, pageSize);
         int total = selectionApplyMapper.countByUserId(userId);
@@ -90,9 +90,7 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
         
         PageVO<SelectionApplyVO> pageVO = new PageVO<>();
         pageVO.setList(voList);
-        pageVO.setTotal(total);
-        pageVO.setPageNum(pageNum);
-        pageVO.setPageSize(pageSize);
+        pageVO.setTotal((long) total);
         
         return pageVO;
     }
@@ -116,9 +114,7 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
         
         PageVO<SelectionApplyVO> pageVO = new PageVO<>();
         pageVO.setList(voList);
-        pageVO.setTotal(total);
-        pageVO.setPageNum(pageDTO.getPageNum());
-        pageVO.setPageSize(pageDTO.getPageSize());
+        pageVO.setTotal((long) total);
         
         return pageVO;
     }
@@ -135,7 +131,7 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
             throw new Mall4cloudException("该申请已审核，无法重复审核");
         }
         
-        Long auditorId = getUserId();
+        Long auditorId = AuthUserContext.get().getUserId();
         
         apply.setAuditStatus(dto.getAuditStatus());
         apply.setAuditTime(new Date());
@@ -170,7 +166,6 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
 
     @Override
     public SelectionStatisticsVO getStatistics() {
-        // 简化实现，实际需要统计查询
         SelectionStatisticsVO vo = new SelectionStatisticsVO();
         vo.setTotalApplies(0);
         vo.setPendingApplies(0);
@@ -193,7 +188,7 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
             return null;
         }
         
-        SelectionApplyVO vo = BeanUtil.copy(apply, SelectionApplyVO.class);
+        SelectionApplyVO vo = BeanUtil.map(apply, SelectionApplyVO.class);
         
         // 设置审核状态文本
         if (apply.getAuditStatus() != null) {
@@ -216,68 +211,6 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
                 return "已拒绝";
             default:
                 return "未知";
-        }
-    }
-
-    private Long getUserId() {
-        // 实际从上下文获取用户ID
-        // 这里简化处理，返回1L
-        return 1L;
-    }
-
-    private String getUserName(Long userId) {
-        // 实际从服务获取用户名
-        return "用户" + userId;
-    }
-
-    /**
-     * 选品统计数据VO
-     */
-    public static class SelectionStatisticsVO {
-        private Integer totalApplies;
-        private Integer pendingApplies;
-        private Integer approvedApplies;
-        private Integer rejectedApplies;
-        private Integer todayApplies;
-
-        public Integer getTotalApplies() {
-            return totalApplies;
-        }
-
-        public void setTotalApplies(Integer totalApplies) {
-            this.totalApplies = totalApplies;
-        }
-
-        public Integer getPendingApplies() {
-            return pendingApplies;
-        }
-
-        public void setPendingApplies(Integer pendingApplies) {
-            this.pendingApplies = pendingApplies;
-        }
-
-        public Integer getApprovedApplies() {
-            return approvedApplies;
-        }
-
-        public void setApprovedApplies(Integer approvedApplies) {
-            this.approvedApplies = approvedApplies;
-        }
-
-        public Integer getRejectedApplies() {
-            return rejectedApplies;
-        }
-
-        public void setRejectedApplies(Integer rejectedApplies) {
-            this.rejectedApplies = rejectedApplies;
-        }
-
-        public Integer getTodayApplies() {
-            return todayApplies;
-        }
-
-        public void setTodayApplies(Integer todayApplies) {
-            this.todayApplies = todayApplies;
         }
     }
 }

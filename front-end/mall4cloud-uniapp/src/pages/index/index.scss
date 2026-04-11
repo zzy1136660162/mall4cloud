@@ -1,4 +1,4 @@
-$primary-color: #0d2d5a;
+$primary-color: #134585;
 $secondary-color: #194276;
 $accent-color: #1a5aa0;
 $gold-color: #cda360;
@@ -16,7 +16,6 @@ page {
 
 .page-jiedong {
   min-height: 100vh;
-  padding-bottom: 120rpx;
   background: $bg-color;
 }
 
@@ -24,6 +23,8 @@ page {
   position: relative;
   height: 400rpx;
   overflow: hidden;
+  background: linear-gradient(145deg, #0d2d5a 0%, #194276 40%, #1a5aa0 100%);
+  border-radius: 0 0 24rpx 24rpx;
 }
 
 .banner-swiper {
@@ -42,9 +43,11 @@ page {
   left: 24rpx;
   height: 56rpx;
   z-index: 10;
+
   image {
     height: 100%;
     width: auto;
+    filter: drop-shadow(0 4rpx 8rpx rgba(0, 0, 0, 0.4));
   }
 }
 
@@ -181,24 +184,12 @@ page {
   }
 }
 
-.tab-icon {
-  width: 36rpx;
-  height: 36rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  image {
-    width: 100%;
-    height: 100%;
-  }
-}
-
 .tab-text {
   font-size: 28rpx;
   color: $text-medium;
   font-weight: 500;
   transition: all 0.3s;
+  text-align: center;
 }
 
 .tab-item.active .tab-text {
@@ -223,10 +214,7 @@ page {
   position: relative;
   z-index: 1;
 
-  &.active,
-  &.cert-panel,
-  &.cdmo-panel,
-  &.marketing-panel {
+  &.active {
     display: block;
   }
 }
@@ -239,6 +227,7 @@ page {
   padding: 40rpx 32rpx !important;
   margin-bottom: 32rpx;
   border-bottom: none !important;
+  text-align: center;
 }
 
 .panel-header.production-header {
@@ -351,20 +340,6 @@ page {
 .cert-content {
   position: relative;
   z-index: 1;
-}
-
-.cert-icon {
-  width: 80rpx;
-  height: 80rpx;
-  margin: 0 auto 20rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  image {
-    width: 56rpx;
-    height: 56rpx;
-  }
 }
 
 .cert-name {
@@ -498,20 +473,6 @@ page {
   border: 1px solid $border-color;
 }
 
-.dosage-icon {
-  width: 56rpx;
-  height: 56rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-
-  image {
-    width: 40rpx;
-    height: 40rpx;
-  }
-}
-
 .dosage-text {
   font-size: 26rpx;
   font-weight: 500;
@@ -602,20 +563,6 @@ page {
   border: 1px solid $border-color;
   width: 140rpx;
   flex-shrink: 0;
-}
-
-.effect-icon {
-  width: 64rpx;
-  height: 64rpx;
-  margin-bottom: 12rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  image {
-    width: 44rpx;
-    height: 44rpx;
-  }
 }
 
 .effect-name {
@@ -711,22 +658,6 @@ page {
   display: flex;
   align-items: flex-start;
   gap: 28rpx;
-}
-
-.model-icon {
-  width: 80rpx;
-  height: 80rpx;
-  background: #f5f7fa;
-  border-radius: 16rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-
-  image {
-    width: 44rpx;
-    height: 44rpx;
-  }
 }
 
 .model-content {
@@ -872,39 +803,13 @@ page {
   overflow: hidden;
 }
 
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120rpx;
-  background: $white;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-top: 1px solid $border-color;
-  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.04);
-  z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  cursor: pointer;
-  padding: 16rpx 0;
-  transition: all 0.2s;
-}
-
-.nav-icon {
-  width: 48rpx;
-  height: 48rpx;
-  margin-bottom: 4rpx;
+.tab-icon {
+  width: 36rpx;
+  height: 36rpx;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 
   image {
     width: 100%;
@@ -912,13 +817,62 @@ page {
   }
 }
 
-.nav-text {
-  font-size: 22rpx;
-  color: $text-medium;
-  font-weight: 500;
+.cert-icon {
+  width: 80rpx;
+  height: 80rpx;
+  margin: 0 auto 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  image {
+    width: 56rpx;
+    height: 56rpx;
+  }
 }
 
-.nav-item.active .nav-text {
-  color: $secondary-color;
-  font-weight: 600;
+.dosage-icon {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  image {
+    width: 40rpx;
+    height: 40rpx;
+  }
 }
+
+.effect-icon {
+  width: 64rpx;
+  height: 64rpx;
+  margin-bottom: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  image {
+    width: 44rpx;
+    height: 44rpx;
+  }
+}
+
+.model-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: #f5f7fa;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  image {
+    width: 44rpx;
+    height: 44rpx;
+  }
+}
+
+

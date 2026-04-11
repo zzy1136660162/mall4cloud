@@ -1,11 +1,11 @@
 package com.mall4j.cloud.platform.controller.admin;
 
 import com.mall4j.cloud.common.database.vo.PageVO;
+import com.mall4j.cloud.platform.vo.admin.SelectionStatisticsVO;
 import com.mall4j.cloud.common.response.ServerResponseEntity;
 import com.mall4j.cloud.platform.dto.SelectionApplyPageDTO;
 import com.mall4j.cloud.platform.dto.SelectionAuditDTO;
 import com.mall4j.cloud.platform.service.SelectionApplyService;
-import com.mall4j.cloud.platform.service.impl.SelectionApplyServiceImpl.SelectionStatisticsVO;
 import com.mall4j.cloud.platform.vo.admin.SelectionApplyVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,7 +47,7 @@ public class SelectionApplyController {
             @Parameter(description = "申请ID") @PathVariable Long applyId,
             @Valid @RequestBody SelectionAuditDTO dto) {
         selectionApplyService.auditSelection(applyId, dto);
-        return ServerResponseEntity.success("审核成功");
+        return ServerResponseEntity.success();
     }
 
     /**
@@ -60,7 +60,7 @@ public class SelectionApplyController {
             @Parameter(description = "快递公司") @RequestParam String expressCompany,
             @Parameter(description = "快递单号") @RequestParam String expressNo) {
         selectionApplyService.fillLogistics(applyId, expressCompany, expressNo);
-        return ServerResponseEntity.success("发货信息已填写");
+        return ServerResponseEntity.success();
     }
 
     /**

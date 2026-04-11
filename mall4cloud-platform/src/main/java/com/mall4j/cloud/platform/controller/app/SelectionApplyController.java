@@ -4,7 +4,7 @@ import com.mall4j.cloud.common.database.vo.PageVO;
 import com.mall4j.cloud.common.response.ServerResponseEntity;
 import com.mall4j.cloud.platform.dto.SelectionApplyDTO;
 import com.mall4j.cloud.platform.service.SelectionApplyService;
-import com.mall4j.cloud.platform.vo.app.SelectionApplyVO;
+import com.mall4j.cloud.platform.vo.admin.SelectionApplyVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,7 +33,7 @@ public class SelectionApplyController {
     @Operation(summary = "申请选品商品")
     public ServerResponseEntity<Long> applySelection(@Valid @RequestBody SelectionApplyDTO dto) {
         Long applyId = selectionApplyService.applySelection(dto);
-        return ServerResponseEntity.success(applyId, "申请成功，请等待审核");
+        return ServerResponseEntity.success(applyId);
     }
 
     /**

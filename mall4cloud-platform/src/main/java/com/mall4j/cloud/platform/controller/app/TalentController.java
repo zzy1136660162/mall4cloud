@@ -31,7 +31,7 @@ public class TalentController {
     @Operation(summary = "申请成为达人（自动通过）")
     public ServerResponseEntity<Void> applyToBeTalent() {
         talentService.applyToBeTalent();
-        return ServerResponseEntity.success("申请成功，您已成为达人");
+        return ServerResponseEntity.success();
     }
 
     /**

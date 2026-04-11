@@ -57,18 +57,34 @@
       <view class="tab-section">
         <view class="tab-wrapper">
           <view
-            v-for="(tab, index) in tabs"
-            :key="index"
             class="tab-item"
-            :class="{ active: currentTab === index }"
-            @tap="switchTab(index)"
+            :class="{ active: currentTab === 0 }"
+            @tap="switchTab(0)"
           >
             <view class="tab-icon">
-              <image v-if="index === 0" src="/static/images/homepage/tab-cert.png" mode="aspectFit" />
-              <image v-else-if="index === 1" src="/static/images/homepage/tab-cdmo.png" mode="aspectFit" />
-              <image v-else src="/static/images/homepage/tab-prod.png" mode="aspectFit" />
+              <image src="/static/images/homepage/icon-tab-cert.svg" mode="aspectFit" />
             </view>
-            <view class="tab-text">{{ tab }}</view>
+            <view class="tab-text">认证</view>
+          </view>
+          <view
+            class="tab-item"
+            :class="{ active: currentTab === 1 }"
+            @tap="switchTab(1)"
+          >
+            <view class="tab-icon">
+              <image src="/static/images/homepage/icon-tab-cdmo.svg" mode="aspectFit" />
+            </view>
+            <view class="tab-text">CDMO</view>
+          </view>
+          <view
+            class="tab-item"
+            :class="{ active: currentTab === 2 }"
+            @tap="switchTab(2)"
+          >
+            <view class="tab-icon">
+              <image src="/static/images/homepage/icon-tab-prod.svg" mode="aspectFit" />
+            </view>
+            <view class="tab-text">生产</view>
           </view>
         </view>
       </view>
@@ -88,7 +104,7 @@
               <image class="cert-bg" :src="'/static/images/homepage/cert-bg-' + (index + 1) + '.jpg'" mode="aspectFill" />
               <view class="cert-content">
                 <view class="cert-icon">
-                  <image :src="'/static/images/homepage/cert-icon-' + (index + 1) + '.png'" mode="aspectFit" />
+                  <image :src="'/static/images/homepage/icon-cert-' + (index + 1) + '.svg'" mode="aspectFit" />
                 </view>
                 <view class="cert-name">{{ cert.name }}</view>
                 <view class="cert-desc">{{ cert.desc }}</view>
@@ -142,7 +158,7 @@
             <view class="dosage-grid">
               <view class="dosage-item" v-for="(dosage, index) in dosages" :key="index">
                 <view class="dosage-icon">
-                  <image :src="'/static/images/homepage/dosage-' + (index + 1) + '.png'" mode="aspectFit" />
+                  <image :src="'/static/images/homepage/icon-dosage-' + (index + 1) + '.svg'" mode="aspectFit" />
                 </view>
                 <view class="dosage-text">{{ dosage }}</view>
               </view>
@@ -172,7 +188,7 @@
               <view class="effect-grid">
                 <view class="effect-item" v-for="(effect, index) in effects" :key="index">
                   <view class="effect-icon">
-                    <image :src="'/static/images/homepage/effect-' + (index + 1) + '.png'" mode="aspectFit" />
+                    <image :src="'/static/images/homepage/icon-effect-' + ((index % 6) + 1) + '.svg'" mode="aspectFit" />
                   </view>
                   <view class="effect-name">{{ effect }}</view>
                 </view>
@@ -233,7 +249,7 @@
             <view class="model-cards">
               <view class="model-card" v-for="(model, index) in coreModels" :key="index">
                 <view class="model-icon">
-                  <image :src="'/static/images/homepage/model-' + (index + 1) + '.png'" mode="aspectFit" />
+                  <image :src="'/static/images/homepage/icon-model-' + (index + 1) + '.svg'" mode="aspectFit" />
                 </view>
                 <view class="model-content">
                   <view class="model-name">{{ model.name }}</view>
@@ -282,49 +298,6 @@
         </view>
       </view>
     </view>
-
-    <view class="bottom-nav">
-      <view
-        class="nav-item"
-        :class="{ active: currentNav === 0 }"
-        @tap="switchNav(0)"
-      >
-        <view class="nav-icon">
-          <image src="/static/images/homepage/nav-home.png" mode="aspectFit" />
-        </view>
-        <view class="nav-text">首页</view>
-      </view>
-      <view
-        class="nav-item"
-        :class="{ active: currentNav === 1 }"
-        @tap="switchNav(1)"
-      >
-        <view class="nav-icon">
-          <image src="/static/images/homepage/nav-product.png" mode="aspectFit" />
-        </view>
-        <view class="nav-text">产品</view>
-      </view>
-      <view
-        class="nav-item"
-        :class="{ active: currentNav === 2 }"
-        @tap="switchNav(2)"
-      >
-        <view class="nav-icon">
-          <image src="/static/images/homepage/nav-consult.png" mode="aspectFit" />
-        </view>
-        <view class="nav-text">咨询</view>
-      </view>
-      <view
-        class="nav-item"
-        :class="{ active: currentNav === 3 }"
-        @tap="switchNav(3)"
-      >
-        <view class="nav-icon">
-          <image src="/static/images/homepage/nav-my.png" mode="aspectFit" />
-        </view>
-        <view class="nav-text">我的</view>
-      </view>
-    </view>
   </view>
 </template>
 
@@ -333,9 +306,6 @@ import { ref, reactive } from 'vue'
 
 const currentBanner = ref(0)
 const currentTab = ref(0)
-const currentNav = ref(0)
-
-const tabs = ['认证', 'CDMO', '生产']
 
 const certTypes = reactive([
   { name: '械字号', desc: '一类/二类/三类注册' },
@@ -424,14 +394,6 @@ const onBannerChange = (e) => {
 
 const switchTab = (index) => {
   currentTab.value = index
-}
-
-const switchNav = (index) => {
-  if (index === 0) return
-  uni.showToast({
-    title: ['首页', '产品', '咨询', '我的'][index] + '页面开发中',
-    icon: 'none'
-  })
 }
 
 const onConsult = () => {
