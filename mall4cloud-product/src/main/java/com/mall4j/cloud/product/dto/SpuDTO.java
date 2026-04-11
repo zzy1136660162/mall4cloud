@@ -1,8 +1,12 @@
 package com.mall4j.cloud.product.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -52,6 +56,39 @@ public class SpuDTO{
 
 	@Schema(description = "状态 1:enable, 0:disable, -1:deleted" )
 	private Integer status;
+
+	@Schema(description = "是否选品 0-否 1-是" )
+	private Integer isSelection;
+
+	@DecimalMin(value = "0.00", message = "佣金比例不能为负数")
+	@DecimalMax(value = "100.00", message = "佣金比例不能超过100%")
+	@Schema(description = "佣金比例（%）" )
+	private BigDecimal commissionRate;
+
+	@Schema(description = "是否热销 0-否 1-是" )
+	private Integer isHot;
+
+	@Schema(description = "是否新品 0-否 1-是" )
+	private Integer isNew;
+
+	@Schema(description = "是否推荐 0-否 1-是" )
+	private Integer isRecommend;
+
+	@Schema(description = "是否精选 0-否 1-是" )
+	private Integer isSelectionBest;
+
+	@DecimalMin(value = "0.0", message = "评分不能为负数")
+	@DecimalMax(value = "5.0", message = "评分不能超过5.0")
+	@Schema(description = "推荐评分 0.0-5.0" )
+	private BigDecimal rating;
+
+	@Min(value = 0, message = "销量不能为负数")
+	@Schema(description = "累计销量" )
+	private Integer totalSales;
+
+	@Min(value = 0, message = "月销量不能为负数")
+	@Schema(description = "月销量" )
+	private Integer monthSales;
 
 	@Schema(description = "商品属性值列表" )
 	private List<SpuAttrValueDTO> spuAttrValues;
@@ -262,6 +299,78 @@ public class SpuDTO{
 
 	public void setSpuIds(List<Long> spuIds) {
 		this.spuIds = spuIds;
+	}
+
+	public Integer getIsSelection() {
+		return isSelection;
+	}
+
+	public void setIsSelection(Integer isSelection) {
+		this.isSelection = isSelection;
+	}
+
+	public BigDecimal getCommissionRate() {
+		return commissionRate;
+	}
+
+	public void setCommissionRate(BigDecimal commissionRate) {
+		this.commissionRate = commissionRate;
+	}
+
+	public Integer getIsHot() {
+		return isHot;
+	}
+
+	public void setIsHot(Integer isHot) {
+		this.isHot = isHot;
+	}
+
+	public Integer getIsNew() {
+		return isNew;
+	}
+
+	public void setIsNew(Integer isNew) {
+		this.isNew = isNew;
+	}
+
+	public Integer getIsRecommend() {
+		return isRecommend;
+	}
+
+	public void setIsRecommend(Integer isRecommend) {
+		this.isRecommend = isRecommend;
+	}
+
+	public Integer getIsSelectionBest() {
+		return isSelectionBest;
+	}
+
+	public void setIsSelectionBest(Integer isSelectionBest) {
+		this.isSelectionBest = isSelectionBest;
+	}
+
+	public BigDecimal getRating() {
+		return rating;
+	}
+
+	public void setRating(BigDecimal rating) {
+		this.rating = rating;
+	}
+
+	public Integer getTotalSales() {
+		return totalSales;
+	}
+
+	public void setTotalSales(Integer totalSales) {
+		this.totalSales = totalSales;
+	}
+
+	public Integer getMonthSales() {
+		return monthSales;
+	}
+
+	public void setMonthSales(Integer monthSales) {
+		this.monthSales = monthSales;
 	}
 
 	@Override

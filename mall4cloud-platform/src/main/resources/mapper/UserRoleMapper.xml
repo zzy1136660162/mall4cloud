@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall4j.cloud.platform.mapper.UserRoleMapper">
+
+    <resultMap id="userRoleMap" type="com.mall4j.cloud.platform.model.UserRole">
+        <id column="user_id" property="userId"/>
+        <result column="role_id" property="roleId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.mall4j.cloud.platform.model.UserRole">
+        INSERT INTO user_role (
+            user_id,
+            role_id,
+            create_time,
+            update_time
+        ) VALUES (
+            #{userRole.userId},
+            #{userRole.roleId},
+            NOW(),
+            NOW()
+        )
+    </insert>
+
+    <select id="existsByUserIdAndRoleId" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM user_role
+        WHERE user_id = #{userId}
+          AND role_id = #{roleId}
+          AND is_deleted = 0
+    </select>
+
+</mapper>

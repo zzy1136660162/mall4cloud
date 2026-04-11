@@ -140,6 +140,17 @@
         </view>
         <view
           class="item"
+          @tap="toSampleList"
+        >
+          <view class="img">
+            <image src="/static/images/my-sample.png" />
+          </view>
+          <view class="text">
+            我的样品
+          </view>
+        </view>
+        <view
+          class="item"
           @tap="notOpen('领券中心')"
         >
           <view class="img">
@@ -336,6 +347,13 @@ const notOpen = (title) => {
     content: `${title}暂未开源`,
     showCancel: false
 
+  })
+}
+
+// 去我的样品
+const toSampleList = () => {
+  uni.navigateTo({
+    url: '/pages/sample/list/list'
   })
 }
 </script>

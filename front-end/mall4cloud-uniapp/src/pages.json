@@ -1,7 +1,7 @@
 {
   "easycom": {
 		"custom":{
-    	"^w-(.*)": "@uni-ui/code-ui/components/w-$1/index.vue"//二维码条形码的配置
+    	"^w-(.*)": "@uni-ui/code-ui/components/w-$1/index.vue"
 		}
   },
   "pages": [
@@ -136,6 +136,45 @@
 			"style": {
 				"navigationBarTitleText": "免费开店"
 			}
+		},
+    {
+			"path": "pages/sample/selection/selection",
+			"style": {
+				"navigationBarTitleText": "选品中心",
+				"navigationBarBackgroundColor": "#ffffff",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+    {
+			"path": "pages/sample/product/product",
+			"style": {
+				"navigationBarTitleText": "商品详情",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+    {
+			"path": "pages/sample/apply/apply",
+			"style": {
+				"navigationBarTitleText": "申请样品",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+    {
+			"path": "pages/sample/list/list",
+			"style": {
+				"navigationBarTitleText": "我的样品",
+				"navigationBarBackgroundColor": "#ffffff",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+    {
+			"path": "pages/sample/detail/detail",
+			"style": {
+				"navigationBarTitleText": "样品详情",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
 		}
   ],
   "tabBar": {
@@ -153,6 +192,12 @@
         "text": "分类",
         "iconPath": "/static/tabbar/category.png",
         "selectedIconPath": "/static/tabbar/category-r.png"
+      },
+      {
+        "pagePath": "pages/sample/selection/selection",
+        "text": "选品",
+        "iconPath": "/static/tabbar/selection.png",
+        "selectedIconPath": "/static/tabbar/selection-r.png"
       },
       {
         "pagePath": "pages/cart/cart",

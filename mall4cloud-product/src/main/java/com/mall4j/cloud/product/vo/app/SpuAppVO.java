@@ -5,6 +5,7 @@ import com.mall4j.cloud.api.product.vo.SpuAttrValueVO;
 import com.mall4j.cloud.common.serializer.ImgJsonSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -56,6 +57,36 @@ public class SpuAppVO {
 
 	@Schema(description = "商品销量" )
 	private Integer saleNum;
+
+	@Schema(description = "是否选品 0-否 1-是" )
+	private Integer isSelection;
+
+	@Schema(description = "佣金比例（%）" )
+	private BigDecimal commissionRate;
+
+	@Schema(description = "预计佣金金额" )
+	private BigDecimal commissionAmount;
+
+	@Schema(description = "是否热销 0-否 1-是" )
+	private Integer isHot;
+
+	@Schema(description = "是否新品 0-否 1-是" )
+	private Integer isNew;
+
+	@Schema(description = "是否推荐 0-否 1-是" )
+	private Integer isRecommend;
+
+	@Schema(description = "是否精选 0-否 1-是" )
+	private Integer isSelectionBest;
+
+	@Schema(description = "推荐评分 0.0-5.0" )
+	private BigDecimal rating;
+
+	@Schema(description = "累计销量" )
+	private Integer totalSales;
+
+	@Schema(description = "月销量" )
+	private Integer monthSales;
 
 	public String getMainImgUrl() {
 		return mainImgUrl;
@@ -159,6 +190,86 @@ public class SpuAppVO {
 
 	public void setSaleNum(Integer saleNum) {
 		this.saleNum = saleNum;
+	}
+
+	public Integer getIsSelection() {
+		return isSelection;
+	}
+
+	public void setIsSelection(Integer isSelection) {
+		this.isSelection = isSelection;
+	}
+
+	public BigDecimal getCommissionRate() {
+		return commissionRate;
+	}
+
+	public void setCommissionRate(BigDecimal commissionRate) {
+		this.commissionRate = commissionRate;
+	}
+
+	public BigDecimal getCommissionAmount() {
+		return commissionAmount;
+	}
+
+	public void setCommissionAmount(BigDecimal commissionAmount) {
+		this.commissionAmount = commissionAmount;
+	}
+
+	public Integer getIsHot() {
+		return isHot;
+	}
+
+	public void setIsHot(Integer isHot) {
+		this.isHot = isHot;
+	}
+
+	public Integer getIsNew() {
+		return isNew;
+	}
+
+	public void setIsNew(Integer isNew) {
+		this.isNew = isNew;
+	}
+
+	public Integer getIsRecommend() {
+		return isRecommend;
+	}
+
+	public void setIsRecommend(Integer isRecommend) {
+		this.isRecommend = isRecommend;
+	}
+
+	public Integer getIsSelectionBest() {
+		return isSelectionBest;
+	}
+
+	public void setIsSelectionBest(Integer isSelectionBest) {
+		this.isSelectionBest = isSelectionBest;
+	}
+
+	public BigDecimal getRating() {
+		return rating;
+	}
+
+	public void setRating(BigDecimal rating) {
+		this.rating = rating;
+	}
+
+	public Integer getTotalSales() {
+		return totalSales;
+	}
+
+	public void setTotalSales(Integer totalSales) {
+		this.totalSales = totalSales;
+	}
+
+	public Integer getMonthSales() {
+		return monthSales;
+	}
+
+	public void setMonthSales(Integer monthSales) {
+		this.monthSales = monthSales;
 	}
 
 	@Override

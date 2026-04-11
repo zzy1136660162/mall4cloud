@@ -23,8 +23,6 @@ const breadcrumbList = computed<BreadcrumbRecord[]>(() => {
   if (route.name === 'reload') {
     return breadcrumbListBackup
   }
-  // DEBUG
-  console.log('[Breadcrumb] route.matched:', route.matched.map(r => ({ path: r.path, name: r.name, title: r.meta?.title })))
   const list: BreadcrumbRecord[] = []
   if (appSettingsStore.settings.app.home.enable) {
     list.push({
