@@ -136,6 +136,24 @@
 			"style": {
 				"navigationBarTitleText": "免费开店"
 			}
+		},
+    {
+			"path": "pages/demand-index/demand-index",
+			"style": {
+				"navigationBarTitleText": "需求中心"
+			}
+		},
+    {
+			"path": "pages/demand-submit/demand-submit",
+			"style": {
+				"navigationBarTitleText": "提交需求"
+			}
+		},
+    {
+			"path": "pages/demand-detail/demand-detail",
+			"style": {
+				"navigationBarTitleText": "需求详情"
+			}
 		}
   ],
   "tabBar": {
