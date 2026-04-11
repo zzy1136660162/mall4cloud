@@ -241,6 +241,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'ProdInfo' })
 import * as api from '@/api/product/prod-info'
 import { categoryPage, shopCategoryPage, getShopAttrs } from '@/api/product/category'
 import { onMounted, reactive } from 'vue'

@@ -34,15 +34,15 @@
       </FaSearchBar>
 
       <!-- 表格 -->
-      <el-table
-        v-loading="pageLoading"
-        :data="pageVO.list"
-        border
-        stripe
-        highlight-current-row
-        height="100%"
-        style="width: 100%;"
-      >
+      <div class="flex-1 overflow-hidden">
+        <el-table
+          v-loading="pageLoading"
+          :data="pageVO.list"
+          border
+          stripe
+          highlight-current-row
+          style="width: 100%;"
+        >
         <!-- 品牌名称 -->
         <el-table-column
           label="品牌名称"
@@ -155,6 +155,7 @@
           </template>
         </el-table-column>
       </el-table>
+      </div>
 
       <!-- 分页 -->
       <div class="flex-none border-t px-5 py-3">

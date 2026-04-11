@@ -170,7 +170,7 @@ const enableAppSetting = import.meta.env.VITE_APP_SETTING
         </div>
         <div id="app-content" class="main">
           <RouterView v-slot="{ Component, route }">
-            <Transition :name="!appSettingsStore.isReloading ? 'fade' : ''" mode="out-in">
+            <Transition :name="!appSettingsStore.isReloading ? 'fade' : ''">
               <KeepAlive :include="appKeepAliveStore.list">
                 <Component :is="Component" v-show="!isLink" :key="route.fullPath" />
               </KeepAlive>
