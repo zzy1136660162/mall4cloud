@@ -188,10 +188,10 @@
         "selectedIconPath": "/static/tabbar/index-r.png"
       },
       {
-        "pagePath": "pages/category/category",
-        "text": "分类",
-        "iconPath": "/static/tabbar/category.png",
-        "selectedIconPath": "/static/tabbar/category-r.png"
+        "pagePath": "pages/index/index",
+        "text": "研发",
+        "iconPath": "/static/tabbar/dev.png",
+        "selectedIconPath": "/static/tabbar/dev-r.png"
       },
       {
         "pagePath": "pages/sample/selection/selection",
@@ -200,10 +200,10 @@
         "selectedIconPath": "/static/tabbar/selection-r.png"
       },
       {
-        "pagePath": "pages/cart/cart",
-        "text": "购物车",
-        "iconPath": "/static/tabbar/cart.png",
-        "selectedIconPath": "/static/tabbar/cart-r.png"
+        "pagePath": "pages/index/index",
+        "text": "商城",
+        "iconPath": "/static/tabbar/mall.png",
+        "selectedIconPath": "/static/tabbar/mall-r.png"
       },
       {
         "pagePath": "pages/my/my",
