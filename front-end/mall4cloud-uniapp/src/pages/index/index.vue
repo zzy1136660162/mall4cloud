@@ -1,12 +1,5 @@
 <template>
-  <scroll-view
-    class="page-jiedong"
-    scroll-y
-    enable-back-to-top
-    :scroll-top="scrollTop"
-    :scroll-with-animation="true"
-    :scroll-into-view="scrollIntoView"
-  >
+  <view class="page-jiedong">
     <view class="page-content">
       <view class="banner-wrapper">
         <swiper
@@ -60,8 +53,10 @@
           <view class="stat-label">精选产品</view>
         </view>
       </view>
+    </view>
 
-      <view class="tab-section" id="tab-section">
+    <view class="tab-sticky">
+      <view class="tab-section">
         <view class="tab-wrapper">
           <view
             class="tab-item"
@@ -95,260 +90,269 @@
           </view>
         </view>
       </view>
+    </view>
 
-      <view class="content-area" id="content-area">
-        <view id="panel-cert" class="content-panel cert-panel">
-          <view class="panel-header cert-header">
-            <image class="header-bg" src="/static/images/homepage/cert-header-bg.jpg" mode="aspectFill" />
-            <view class="header-content">
-              <view class="header-title">破解产品全生命周期中的复杂课题</view>
-              <view class="header-subtitle">打造全球大健康产业合规智造领航者</view>
-            </view>
-          </view>
-
-          <view class="card-grid">
-            <view class="cert-card" v-for="(cert, index) in certTypes" :key="index">
-              <image class="cert-bg" :src="'/static/images/homepage/cert-bg-' + (index + 1) + '.jpg'" mode="aspectFill" />
-              <view class="cert-content">
-                <view class="cert-icon">
-                  <image :src="'/static/images/homepage/icon-cert-' + (index + 1) + '.svg'" mode="aspectFit" />
-                </view>
-                <view class="cert-name">{{ cert.name }}</view>
-                <view class="cert-desc">{{ cert.desc }}</view>
-              </view>
-            </view>
-          </view>
-
-          <view class="section-block">
-            <view class="section-title">资质证书</view>
-            <scroll-view class="cert-scroll" scroll-x enable-flex>
-              <view class="cert-gallery">
-                <view class="cert-image-item" v-for="(license, index) in licenses" :key="index">
-                  <image :src="license" mode="aspectFit" />
-                </view>
-              </view>
-            </scroll-view>
-          </view>
-
-          <view class="section-block">
-            <view class="section-title">服务优势</view>
-            <view class="advantage-list">
-              <view class="advantage-item">
-                <view class="advantage-number">140+</view>
-                <view class="advantage-text">专业团队</view>
-                <view class="advantage-desc">主力40+人，交付100人</view>
-              </view>
-              <view class="advantage-item">
-                <view class="advantage-number">1075</view>
-                <view class="advantage-text">货盘矩阵</view>
-                <view class="advantage-desc">SKU覆盖多品类</view>
-              </view>
-            </view>
-          </view>
-
-          <view class="cta-section">
-            <view class="cta-btn primary" @tap="onConsult">立即咨询认证</view>
+    <scroll-view
+      class="content-scroll"
+      scroll-y
+      :scroll-top="scrollTop"
+      :scroll-with-animation="true"
+      :scroll-into-view="scrollIntoView"
+      @scroll="onScroll"
+    >
+      <view id="panel-cert" class="content-panel cert-panel">
+        <view class="panel-header cert-header">
+          <image class="header-bg" src="/static/images/homepage/cert-header-bg.jpg" mode="aspectFill" />
+          <view class="header-content">
+            <view class="header-title">破解产品全生命周期中的复杂课题</view>
+            <view class="header-subtitle">打造全球大健康产业合规智造领航者</view>
           </view>
         </view>
 
-        <view id="panel-cdmo" class="content-panel cdmo-panel">
-          <view class="panel-header production-header">
-            <image class="header-bg" src="/static/images/homepage/production-bg-1.png" mode="aspectFill" />
-            <view class="header-content">
-              <view class="header-title">OEM/ODM 贴牌加工</view>
-              <view class="header-subtitle">从产品设计、研发到量产的全链条解决方案</view>
+        <view class="card-grid">
+          <view class="cert-card" v-for="(cert, index) in certTypes" :key="index">
+            <image class="cert-bg" :src="'/static/images/homepage/cert-bg-' + (index + 1) + '.jpg'" mode="aspectFill" />
+            <view class="cert-content">
+              <view class="cert-icon">
+                <image :src="'/static/images/homepage/icon-cert-' + (index + 1) + '.svg'" mode="aspectFit" />
+              </view>
+              <view class="cert-name">{{ cert.name }}</view>
+              <view class="cert-desc">{{ cert.desc }}</view>
             </view>
-          </view>
-
-          <view class="section-block">
-            <view class="section-title">剂型类型</view>
-            <view class="dosage-grid">
-              <view class="dosage-item" v-for="(dosage, index) in dosages" :key="index">
-                <view class="dosage-icon">
-                  <image :src="'/static/images/homepage/icon-dosage-' + (index + 1) + '.svg'" mode="aspectFit" />
-                </view>
-                <view class="dosage-text">{{ dosage }}</view>
-              </view>
-            </view>
-          </view>
-
-          <view class="section-block">
-            <view class="section-title">产品类别</view>
-            <scroll-view class="category-scroll" scroll-x>
-              <view class="category-grid">
-                <view class="category-item" v-for="(product, index) in products" :key="index">
-                  <view class="category-img">
-                    <image :src="product.img" mode="aspectFit" />
-                  </view>
-                  <view class="category-info">
-                    <view class="category-name">{{ product.name }}</view>
-                    <view class="category-tag">{{ product.tag }}</view>
-                  </view>
-                </view>
-              </view>
-            </scroll-view>
-          </view>
-
-          <view class="section-block">
-            <view class="section-title">保健用品功效覆盖（15大类）</view>
-            <scroll-view class="effect-scroll" scroll-x>
-              <view class="effect-grid">
-                <view class="effect-item" v-for="(effect, index) in effects" :key="index">
-                  <view class="effect-icon">
-                    <image :src="'/static/images/homepage/icon-effect-' + ((index % 6) + 1) + '.svg'" mode="aspectFit" />
-                  </view>
-                  <view class="effect-name">{{ effect }}</view>
-                </view>
-              </view>
-            </scroll-view>
-          </view>
-
-          <view class="section-block">
-            <view class="section-title">生产优势</view>
-            <view class="prod-advantage-list">
-              <view class="prod-advantage-item item-1">
-                <image src="/static/images/homepage/production-img-1.png" mode="aspectFill" />
-                <view class="prod-advantage-overlay">
-                  <view class="prod-advantage-number">200+</view>
-                  <view class="prod-advantage-text">安评类目 · 合规无忧</view>
-                </view>
-              </view>
-              <view class="prod-advantage-item item-2">
-                <image src="/static/images/homepage/production-img-2.png" mode="aspectFill" />
-                <view class="prod-advantage-overlay">
-                  <view class="prod-advantage-number">95%</view>
-                  <view class="prod-advantage-text">市场覆盖</view>
-                </view>
-              </view>
-              <view class="prod-advantage-item item-3">
-                <image src="/static/images/homepage/production-img-3.png" mode="aspectFill" />
-                <view class="prod-advantage-overlay">
-                  <view class="prod-advantage-number">多剂型</view>
-                  <view class="prod-advantage-text">一站式生产</view>
-                </view>
-              </view>
-              <view class="prod-advantage-item item-4">
-                <image src="/static/images/homepage/production-img-4.jpeg" mode="aspectFill" />
-                <view class="prod-advantage-overlay">
-                  <view class="prod-advantage-number">高品质</view>
-                  <view class="prod-advantage-text">严格质控</view>
-                </view>
-              </view>
-            </view>
-          </view>
-
-          <view class="cta-section">
-            <view class="cta-btn primary" @tap="onOEMConsult">获取贴牌方案</view>
           </view>
         </view>
 
-        <view id="panel-prod" class="content-panel marketing-panel">
-          <view class="panel-header marketing-header">
-            <image class="header-bg" src="/static/images/homepage/marketing-bg.png" mode="aspectFill" />
-            <view class="header-content">
-              <view class="header-title">垂直供应链智能中台</view>
-              <view class="header-subtitle">重构产业价值链，打造产业级供应链协同平台</view>
-            </view>
-          </view>
-
-          <view class="section-block">
-            <view class="section-title">核心模式</view>
-            <view class="model-cards">
-              <view class="model-card" v-for="(model, index) in coreModels" :key="index">
-                <view class="model-icon">
-                  <image :src="'/static/images/homepage/icon-model-' + (index + 1) + '.svg'" mode="aspectFit" />
-                </view>
-                <view class="model-content">
-                  <view class="model-name">{{ model.name }}</view>
-                  <view class="model-desc">{{ model.desc }}</view>
-                </view>
+        <view class="section-block">
+          <view class="section-title">资质证书</view>
+          <scroll-view class="cert-scroll" scroll-x enable-flex>
+            <view class="cert-gallery">
+              <view class="cert-image-item" v-for="(license, index) in licenses" :key="index">
+                <image :src="license" mode="aspectFit" />
               </view>
             </view>
-          </view>
+          </scroll-view>
+        </view>
 
-          <view class="section-block">
-            <view class="section-title">资源优势</view>
-            <view class="resource-cards">
-              <view class="resource-card" v-for="(resource, index) in resources" :key="index">
-                <view class="resource-num">{{ resource.num }}</view>
-                <view class="resource-label">{{ resource.label }}</view>
-              </view>
+        <view class="section-block">
+          <view class="section-title">服务优势</view>
+          <view class="advantage-list">
+            <view class="advantage-item">
+              <view class="advantage-number">140+</view>
+              <view class="advantage-text">专业团队</view>
+              <view class="advantage-desc">主力40+人，交付100人</view>
+            </view>
+            <view class="advantage-item">
+              <view class="advantage-number">1075</view>
+              <view class="advantage-text">货盘矩阵</view>
+              <view class="advantage-desc">SKU覆盖多品类</view>
             </view>
           </view>
+        </view>
 
-          <view class="section-block">
-            <view class="section-title">特色产品</view>
-            <view class="product-matrix-compact">
-              <view class="matrix-stat" v-for="(stat, index) in productStats" :key="index">
-                <view class="matrix-stat-num">{{ stat.num }}</view>
-                <view class="matrix-stat-label">{{ stat.label }}</view>
-              </view>
-            </view>
-            <view class="featured-products">
-              <view class="featured-product-card" v-for="(item, index) in featuredProducts" :key="index" @tap="onProductTap(item)">
-                <view class="featured-product-img">
-                  <image :src="item.img" mode="aspectFit" />
-                </view>
-                <view class="featured-product-info">
-                  <view class="featured-product-name">{{ item.name }}</view>
-                  <view class="featured-product-spec">{{ item.spec }}</view>
-                  <view class="featured-product-effect">{{ item.effect }}</view>
-                </view>
-              </view>
-            </view>
-          </view>
-
-          <view class="cta-section">
-            <view class="cta-btn primary" @tap="onBrowseProducts">浏览产品库</view>
-            <view class="cta-btn secondary" @tap="onPartner">成为合伙人</view>
-          </view>
+        <view class="cta-section">
+          <view class="cta-btn primary" @tap="onConsult">立即咨询认证</view>
         </view>
       </view>
 
-      <view class="bottom-nav">
-        <view
-          class="nav-item"
-          :class="{ active: currentNav === 0 }"
-          @tap="switchNav(0)"
-        >
-          <view class="nav-icon">
-            <image src="/static/images/homepage/icon-nav-home.svg" mode="aspectFit" />
+      <view id="panel-cdmo" class="content-panel cdmo-panel">
+        <view class="panel-header production-header">
+          <image class="header-bg" src="/static/images/homepage/production-bg-1.png" mode="aspectFill" />
+          <view class="header-content">
+            <view class="header-title">OEM/ODM 贴牌加工</view>
+            <view class="header-subtitle">从产品设计、研发到量产的全链条解决方案</view>
           </view>
-          <view class="nav-text">首页</view>
         </view>
-        <view
-          class="nav-item"
-          :class="{ active: currentNav === 1 }"
-          @tap="switchNav(1)"
-        >
-          <view class="nav-icon">
-            <image src="/static/images/homepage/icon-nav-product.svg" mode="aspectFit" />
+
+        <view class="section-block">
+          <view class="section-title">剂型类型</view>
+          <view class="dosage-grid">
+            <view class="dosage-item" v-for="(dosage, index) in dosages" :key="index">
+              <view class="dosage-icon">
+                <image :src="'/static/images/homepage/icon-dosage-' + (index + 1) + '.svg'" mode="aspectFit" />
+              </view>
+              <view class="dosage-text">{{ dosage }}</view>
+            </view>
           </view>
-          <view class="nav-text">产品</view>
         </view>
-        <view
-          class="nav-item"
-          :class="{ active: currentNav === 2 }"
-          @tap="switchNav(2)"
-        >
-          <view class="nav-icon">
-            <image src="/static/images/homepage/icon-nav-consult.svg" mode="aspectFit" />
+
+        <view class="section-block">
+          <view class="section-title">产品类别</view>
+          <scroll-view class="category-scroll" scroll-x>
+            <view class="category-grid">
+              <view class="category-item" v-for="(product, index) in products" :key="index">
+                <view class="category-img">
+                  <image :src="product.img" mode="aspectFit" />
+                </view>
+                <view class="category-info">
+                  <view class="category-name">{{ product.name }}</view>
+                  <view class="category-tag">{{ product.tag }}</view>
+                </view>
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+
+        <view class="section-block">
+          <view class="section-title">保健用品功效覆盖（15大类）</view>
+          <scroll-view class="effect-scroll" scroll-x>
+            <view class="effect-grid">
+              <view class="effect-item" v-for="(effect, index) in effects" :key="index">
+                <view class="effect-icon">
+                  <image :src="'/static/images/homepage/icon-effect-' + ((index % 6) + 1) + '.svg'" mode="aspectFit" />
+                </view>
+                <view class="effect-name">{{ effect }}</view>
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+
+        <view class="section-block">
+          <view class="section-title">生产优势</view>
+          <view class="prod-advantage-list">
+            <view class="prod-advantage-item item-1">
+              <image src="/static/images/homepage/production-img-1.png" mode="aspectFill" />
+              <view class="prod-advantage-overlay">
+                <view class="prod-advantage-number">200+</view>
+                <view class="prod-advantage-text">安评类目 · 合规无忧</view>
+              </view>
+            </view>
+            <view class="prod-advantage-item item-2">
+              <image src="/static/images/homepage/production-img-2.png" mode="aspectFill" />
+              <view class="prod-advantage-overlay">
+                <view class="prod-advantage-number">95%</view>
+                <view class="prod-advantage-text">市场覆盖</view>
+              </view>
+            </view>
+            <view class="prod-advantage-item item-3">
+              <image src="/static/images/homepage/production-img-3.png" mode="aspectFill" />
+              <view class="prod-advantage-overlay">
+                <view class="prod-advantage-number">多剂型</view>
+                <view class="prod-advantage-text">一站式生产</view>
+              </view>
+            </view>
+            <view class="prod-advantage-item item-4">
+              <image src="/static/images/homepage/production-img-4.jpeg" mode="aspectFill" />
+              <view class="prod-advantage-overlay">
+                <view class="prod-advantage-number">高品质</view>
+                <view class="prod-advantage-text">严格质控</view>
+              </view>
+            </view>
           </view>
-          <view class="nav-text">咨询</view>
         </view>
-        <view
-          class="nav-item"
-          :class="{ active: currentNav === 3 }"
-          @tap="switchNav(3)"
-        >
-          <view class="nav-icon">
-            <image src="/static/images/homepage/icon-nav-my.svg" mode="aspectFit" />
+
+        <view class="cta-section">
+          <view class="cta-btn primary" @tap="onOEMConsult">获取贴牌方案</view>
+        </view>
+      </view>
+
+      <view id="panel-prod" class="content-panel marketing-panel">
+        <view class="panel-header marketing-header">
+          <image class="header-bg" src="/static/images/homepage/marketing-bg.png" mode="aspectFill" />
+          <view class="header-content">
+            <view class="header-title">垂直供应链智能中台</view>
+            <view class="header-subtitle">重构产业价值链，打造产业级供应链协同平台</view>
           </view>
-          <view class="nav-text">我的</view>
         </view>
+
+        <view class="section-block">
+          <view class="section-title">核心模式</view>
+          <view class="model-cards">
+            <view class="model-card" v-for="(model, index) in coreModels" :key="index">
+              <view class="model-icon">
+                <image :src="'/static/images/homepage/icon-model-' + (index + 1) + '.svg'" mode="aspectFit" />
+              </view>
+              <view class="model-content">
+                <view class="model-name">{{ model.name }}</view>
+                <view class="model-desc">{{ model.desc }}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="section-block">
+          <view class="section-title">资源优势</view>
+          <view class="resource-cards">
+            <view class="resource-card" v-for="(resource, index) in resources" :key="index">
+              <view class="resource-num">{{ resource.num }}</view>
+              <view class="resource-label">{{ resource.label }}</view>
+            </view>
+          </view>
+        </view>
+
+        <view class="section-block">
+          <view class="section-title">特色产品</view>
+          <view class="product-matrix-compact">
+            <view class="matrix-stat" v-for="(stat, index) in productStats" :key="index">
+              <view class="matrix-stat-num">{{ stat.num }}</view>
+              <view class="matrix-stat-label">{{ stat.label }}</view>
+            </view>
+          </view>
+          <view class="featured-products">
+            <view class="featured-product-card" v-for="(item, index) in featuredProducts" :key="index" @tap="onProductTap(item)">
+              <view class="featured-product-img">
+                <image :src="item.img" mode="aspectFit" />
+              </view>
+              <view class="featured-product-info">
+                <view class="featured-product-name">{{ item.name }}</view>
+                <view class="featured-product-spec">{{ item.spec }}</view>
+                <view class="featured-product-effect">{{ item.effect }}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="cta-section">
+          <view class="cta-btn primary" @tap="onBrowseProducts">浏览产品库</view>
+          <view class="cta-btn secondary" @tap="onPartner">成为合伙人</view>
+        </view>
+      </view>
+
+      <view class="bottom-spacer" />
+    </scroll-view>
+
+    <view class="bottom-nav">
+      <view
+        class="nav-item"
+        :class="{ active: currentNav === 0 }"
+        @tap="switchNav(0)"
+      >
+        <view class="nav-icon">
+          <image src="/static/images/homepage/icon-nav-home.svg" mode="aspectFit" />
+        </view>
+        <view class="nav-text">首页</view>
+      </view>
+      <view
+        class="nav-item"
+        :class="{ active: currentNav === 1 }"
+        @tap="switchNav(1)"
+      >
+        <view class="nav-icon">
+          <image src="/static/images/homepage/icon-nav-product.svg" mode="aspectFit" />
+        </view>
+        <view class="nav-text">产品</view>
+      </view>
+      <view
+        class="nav-item"
+        :class="{ active: currentNav === 2 }"
+        @tap="switchNav(2)"
+      >
+        <view class="nav-icon">
+          <image src="/static/images/homepage/icon-nav-consult.svg" mode="aspectFit" />
+        </view>
+        <view class="nav-text">咨询</view>
+      </view>
+      <view
+        class="nav-item"
+        :class="{ active: currentNav === 3 }"
+        @tap="switchNav(3)"
+      >
+        <view class="nav-icon">
+          <image src="/static/images/homepage/icon-nav-my.svg" mode="aspectFit" />
+        </view>
+        <view class="nav-text">我的</view>
       </view>
     </view>
-  </scroll-view>
+  </view>
 </template>
 
 <script setup>
@@ -357,7 +361,9 @@ import { ref, reactive, nextTick } from 'vue'
 const currentBanner = ref(0)
 const currentTab = ref(0)
 const currentNav = ref(0)
+const scrollTop = ref(0)
 const scrollIntoView = ref('')
+const tabOffsetTop = ref(0)
 
 const panelIds = ['panel-cert', 'panel-cdmo', 'panel-prod']
 
@@ -431,7 +437,7 @@ const featuredProducts = reactive([
   {
     name: '男性抑菌喷剂',
     spec: '规格：5ml/瓶',
-    effect: '对金黄色葡萄球菌、大肠杆菌、白色念珠菌、真菌有抑制作用',
+    effect: '对金黄色葡萄球菌、大肠杆菌、白色念珠菌，真菌有抑制作用',
     img: '/static/images/homepage/product-men.png'
   },
   {
@@ -452,6 +458,9 @@ const switchTab = (index) => {
   nextTick(() => {
     scrollIntoView.value = ''
   })
+}
+
+const onScroll = (e) => {
 }
 
 const switchNav = (index) => {

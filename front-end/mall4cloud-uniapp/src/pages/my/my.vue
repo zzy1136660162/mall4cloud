@@ -184,17 +184,6 @@
         </view>
         <view
           class="item"
-          @tap="toDemandIndex"
-        >
-          <view class="img">
-            <image src="/static/images/my-news.png" />
-          </view>
-          <view class="text">
-            我的需求
-          </view>
-        </view>
-        <view
-          class="item"
           @tap="toAddressList"
         >
           <view class="img">
@@ -347,26 +336,6 @@ const toFreeShop = () => {
     setTimeout(() => {
       uni.navigateTo({
         url: '/'
-      })
-    }, 2000)
-  }
-}
-
-// 去需求中心
-const toDemandIndex = () => {
-  if (uni.getStorageSync('cloudToken')) {
-    uni.navigateTo({
-      url: '/pages/demand-index/demand-index'
-    })
-  } else {
-    uni.showToast({
-      title: '请登录账号',
-      duration: 2000,
-      icon: 'error'
-    })
-    setTimeout(() => {
-      uni.navigateTo({
-        url: '/pages/login/login'
       })
     }, 2000)
   }

@@ -98,19 +98,19 @@
     {
 			"path": "pages/shop-index/shop-index",
 			"style": {
-				"navigationBarTitleText": "店铺首页"
+				"navigationStyle": "custom"
 			}
 		},
     {
 			"path": "pages/shop-prods/shop-prods",
 			"style": {
-				"navigationBarTitleText": "店铺商品"
+				"navigationStyle": "custom"
 			}
 		},
     {
 			"path": "pages/shop-category/shop-category",
 			"style": {
-				"navigationBarTitleText": "店铺分类"
+				"navigationStyle": "custom"
 			}
 		},
     {
@@ -206,7 +206,7 @@
         "selectedIconPath": "/static/tabbar/index-r.png"
       },
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/demand-index/demand-index",
         "text": "研发",
         "iconPath": "/static/tabbar/dev.png",
         "selectedIconPath": "/static/tabbar/dev-r.png"
@@ -218,7 +218,7 @@
         "selectedIconPath": "/static/tabbar/selection-r.png"
       },
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/shop-prods/shop-prods",
         "text": "商城",
         "iconPath": "/static/tabbar/mall.png",
         "selectedIconPath": "/static/tabbar/mall-r.png"
