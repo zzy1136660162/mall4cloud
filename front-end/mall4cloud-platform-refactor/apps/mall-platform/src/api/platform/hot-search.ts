@@ -1,0 +1,41 @@
+import api from '@/api'
+
+export function page(pageParam) {
+  return api({
+    url: '/mall4cloud_multishop/admin/hot_search/page',
+    method: 'get',
+    params: pageParam,
+  })
+}
+
+export function get(hotSearchId) {
+  return api({
+    url: '/mall4cloud_multishop/admin/hot_search',
+    method: 'get',
+    params: { hotSearchId },
+  })
+}
+
+export function save(data) {
+  return api({
+    url: '/mall4cloud_multishop/admin/hot_search',
+    method: 'post',
+    data,
+  })
+}
+
+export function update(data) {
+  return api({
+    url: '/mall4cloud_multishop/admin/hot_search',
+    method: 'put',
+    data,
+  })
+}
+
+export function deleteById(hotSearchId) {
+  return api({
+    url: '/mall4cloud_multishop/admin/hot_search',
+    method: 'delete',
+    params: { hotSearchId },
+  })
+}

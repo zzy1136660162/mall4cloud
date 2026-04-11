@@ -1,15 +1,7 @@
-autoInstallPeers: true
-catalogMode: prefer
-cleanupUnusedCatalogs: true
-engineStrict: true
-ignoreWorkspaceRootCheck: true
-shamefullyHoist: true
-shellEmulator: true
-verifyDepsBeforeRun: prompt
-
 packages:
   - apps/*
   - packages/*
+autoInstallPeers: true
 
 catalog:
   '@antfu/eslint-config': ^7.7.3
@@ -18,7 +10,7 @@ catalog:
   '@bytemd/vue-next': ^1.22.0
   '@clack/prompts': ^1.1.0
   '@faker-js/faker': ^10.4.0
-  '@iconify/json': ^2.2.458
+  '@iconify/json': ^2.2.460
   '@iconify/vue': ^5.0.0
   '@spiriit/vite-plugin-svg-spritemap': ^6.0.0
   '@stylistic/stylelint-config': ^5.0.0
@@ -43,6 +35,7 @@ catalog:
   animate.css: ^4.1.1
   autoprefixer: ^10.4.27
   axios: ^1.14.0
+  big.js: ^7.0.1
   boxen: ^8.0.1
   bumpp: ^11.0.1
   bytemd: ^1.22.0
@@ -112,11 +105,14 @@ catalog:
   vite-plugin-fake-server: ^2.2.3
   vite-plugin-vue-devtools: ^8.1.1
   vue: v3.5.29
+  'vue-cookies': ^1.8.3
   vue-currency-input: ^3.2.2
   vue-data-ui: ^3.17.2
   vue-esign: ^1.1.4
   vue-hooks-plus: ^2.4.3
+  'vue-i18n': ^9.2.2
   vue-input-otp: ^0.3.2
+  vue-draggable-next: ^2.2.1
   vue-router: ^5.0.4
   vue-sonner: ^2.0.9
   vue-tsc: ^3.2.6
@@ -124,3 +120,10 @@ catalog:
   vxe-table: ^4.18.10
   xe-utils: ^4.0.4
   zod: ^4.3.6
+catalogMode: prefer
+cleanupUnusedCatalogs: true
+engineStrict: true
+ignoreWorkspaceRootCheck: true
+shamefullyHoist: true
+shellEmulator: true
+verifyDepsBeforeRun: prompt

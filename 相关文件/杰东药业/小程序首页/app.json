@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#134585",
+    "navigationBarTitleText": "杰东药业",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f7fa"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#134585",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/icon_home.png",
+        "selectedIconPath": "images/icon_home_active.png"
+      },
+      {
+        "pagePath": "pages/products/products",
+        "text": "产品",
+        "iconPath": "images/icon_product.png",
+        "selectedIconPath": "images/icon_product_active.png"
+      },
+      {
+        "pagePath": "pages/consult/consult",
+        "text": "咨询",
+        "iconPath": "images/icon_consult.png",
+        "selectedIconPath": "images/icon_consult_active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/icon_profile.png",
+        "selectedIconPath": "images/icon_profile_active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}
