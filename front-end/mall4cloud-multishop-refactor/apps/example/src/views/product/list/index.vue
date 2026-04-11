@@ -10,6 +10,21 @@
           <el-option label="下架" :value="0" />
         </el-select>
       </el-form-item>
+      <el-form-item label="选品状态">
+        <el-select v-model="pageQuery.isSelection" placeholder="是否选品" clearable>
+          <el-option label="全部" :value="null" />
+          <el-option label="选品" :value="1" />
+          <el-option label="非选品" :value="0" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="商品标签">
+        <el-select v-model="pageQuery.tagType" placeholder="商品标签" clearable>
+          <el-option label="全部" :value="null" />
+          <el-option label="热销" :value="1" />
+          <el-option label="新品" :value="2" />
+          <el-option label="精选" :value="3" />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getPage()">查询</el-button>
         <el-button @click="clearSearchInfo()">清空</el-button>
@@ -39,6 +54,31 @@
           <el-tag :type="row.status === 1 ? 'success' : 'danger'">
             {{ row.status === 1 ? '上架' : '下架' }}
           </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="选品信息" align="center" width="180">
+        <template #default="{ row }">
+          <div class="selection-info">
+            <el-tag v-if="row.isSelection === 1" type="warning" size="small" class="mb-5">选品</el-tag>
+            <div v-if="row.commissionRate" class="commission">佣金: {{ row.commissionRate }}%</div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="商品标签" align="center" width="150">
+        <template #default="{ row }">
+          <div class="product-tags">
+            <el-tag v-if="row.isHot === 1" type="danger" size="small" class="mr-5">热销</el-tag>
+            <el-tag v-if="row.isNew === 1" type="success" size="small" class="mr-5">新品</el-tag>
+            <el-tag v-if="row.isSelectionBest === 1" type="warning" size="small">精选</el-tag>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="销量" align="center" width="120">
+        <template #default="{ row }">
+          <div class="sales-info">
+            <div>累计: {{ row.totalSales || 0 }}</div>
+            <div class="text-gray">月销: {{ row.monthSales || 0 }}</div>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
@@ -79,6 +119,8 @@ const pageQuery = reactive({
   pageSize: 10,
   name: '',
   status: null as number | null,
+  isSelection: null as number | null,
+  tagType: null as number | null,
 })
 
 const pageVO = reactive<PageVO>({
@@ -106,6 +148,8 @@ function getPage() {
     ...pageQuery,
     name: pageQuery.name || undefined,
     status: pageQuery.status || undefined,
+    isSelection: pageQuery.isSelection || undefined,
+    tagType: pageQuery.tagType || undefined,
   }
   productApi.spu.page(params).then((res: any) => {
     pageVO.list = res.list || []
@@ -130,6 +174,8 @@ function deleteHandle(spuId: number) {
 function clearSearchInfo() {
   pageQuery.name = ''
   pageQuery.status = null
+  pageQuery.isSelection = null
+  pageQuery.tagType = null
   getPage()
 }
 
@@ -168,5 +214,39 @@ onMounted(() => {
 .product-price {
   color: #ff4d4f;
   margin-top: 5px;
+}
+
+.selection-info {
+  text-align: left;
+}
+
+.selection-info .commission {
+  color: #909399;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.product-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.sales-info {
+  text-align: left;
+  font-size: 13px;
+}
+
+.sales-info .text-gray {
+  color: #909399;
+  font-size: 12px;
+}
+
+.mb-5 {
+  margin-bottom: 5px;
+}
+
+.mr-5 {
+  margin-right: 5px;
 }
 </style>

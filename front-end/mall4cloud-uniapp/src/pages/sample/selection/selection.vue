@@ -10,18 +10,18 @@
       <scroll-view class="category-scroll" scroll-x :show-scrollbar="false">
         <view class="category-list">
           <view
-            :class="['category-item', { active: currentCategory === 'all' }]"
-            @tap="switchCategory('all')"
+            :class="['category-item', { active: currentCategory === 0 }]"
+            @tap="switchCategory(0)"
           >
             <text class="category-text">首页</text>
           </view>
           <view
             v-for="cat in categories"
-            :key="cat"
-            :class="['category-item', { active: currentCategory === cat }]"
-            @tap="switchCategory(cat)"
+            :key="cat.categoryId"
+            :class="['category-item', { active: currentCategory === cat.categoryId }]"
+            @tap="switchCategory(cat.categoryId)"
           >
-            <text class="category-text">{{ cat }}</text>
+            <text class="category-text">{{ cat.name }}</text>
           </view>
         </view>
       </scroll-view>
@@ -44,42 +44,7 @@
       </swiper>
     </view>
 
-    <view class="quick-entry">
-      <view class="entry-list">
-        <view class="entry-item" @tap="onEntryTap('hot')">
-          <image
-            class="entry-icon"
-            src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260313142047334_666195650315.png"
-            mode="aspectFit"
-          />
-          <text class="entry-name">超级爆品</text>
-        </view>
-        <view class="entry-item" @tap="onEntryTap('video')">
-          <image
-            class="entry-icon"
-            src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260313142605000_666195967983.png"
-            mode="aspectFit"
-          />
-          <text class="entry-name">视频热卖</text>
-        </view>
-        <view class="entry-item" @tap="onEntryTap('merchant')">
-          <image
-            class="entry-icon"
-            src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260313142853275_666196136259.png"
-            mode="aspectFit"
-          />
-          <text class="entry-name">商家优选</text>
-        </view>
-        <view class="entry-item" @tap="onEntryTap('cheap')">
-          <image
-            class="entry-icon"
-            src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260313145940320_666197983305.png"
-            mode="aspectFit"
-          />
-          <text class="entry-name">低价好卖</text>
-        </view>
-      </view>
-    </view>
+
 
     <view class="filter-section">
       <view class="filter-bar">
@@ -199,8 +164,9 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import selectionApi from '@/utils/api/selection.js'
 
-const currentCategory = ref('all')
+const currentCategory = ref(0)
 const currentFilter = ref('all')
 const products = ref([])
 const page = ref(1)
@@ -208,12 +174,7 @@ const pageSize = 10
 const loading = ref(false)
 const hasMore = ref(true)
 const showFilterPanel = ref(false)
-
-const categories = [
-  '疼痛舒缓', '鼻部护理', '眼部护理', '皮肤护理', '女性调理', '男性养护',
-  '小儿护理', '纤体瘦身', '养发护发', '泡浴养生', '人参滋补', '阿胶膏滋',
-  '草本茶饮', '固体饮料', '压片糖果', '营养颗粒', '植物饮品', '配制酒'
-]
+const categories = ref([])
 
 const banners = ref([
   {
@@ -248,51 +209,98 @@ const filterOptions = {
 
 const currentFilters = reactive({
   commission: 'all',
-  price: 'all'
+  price: 'all',
+  priceMin: null,
+  priceMax: null
 })
 
 onMounted(() => {
+  loadCategories()
   loadProducts()
 })
 
-function loadProducts() {
+async function loadCategories() {
+  try {
+    const res = await selectionApi.getCategories(0, 0)
+    if (res && res.length) {
+      categories.value = res
+    }
+  } catch (error) {
+    console.error('加载分类失败', error)
+  }
+}
+
+async function loadProducts() {
   if (loading.value) return
   loading.value = true
 
-  const mockProducts = generateMockProducts(page.value, pageSize)
-  if (page.value === 1) {
-    products.value = mockProducts
-  } else {
-    products.value = [...products.value, ...mockProducts]
+  try {
+    const params = {
+      pageNum: page.value,
+      pageSize: pageSize,
+      categoryId: currentCategory.value || null
+    }
+
+    if (currentFilters.commission && currentFilters.commission !== 'all') {
+      params.minCommissionRate = parseFloat(currentFilters.commission)
+    }
+
+    if (currentFilters.priceMin) {
+      params.minPrice = currentFilters.priceMin * 100
+    }
+    if (currentFilters.priceMax) {
+      params.maxPrice = currentFilters.priceMax * 100
+    }
+
+    if (currentFilter.value === 'hot') {
+      params.saleNumSort = 0
+    } else if (currentFilter.value === 'new') {
+      params.createTimeSort = 0
+    } else if (currentFilter.value === 'commission') {
+      params.commissionSort = 0
+    }
+
+    const res = await selectionApi.getSelectionProducts(params)
+
+    if (res && res.list) {
+      const formattedProducts = res.list.map(item => ({
+        ...item,
+        id: item.spuId,
+        image: item.mainImgUrl,
+        title: item.name,
+        price: (item.priceFee / 100).toFixed(2),
+        originalPrice: item.marketPriceFee ? (item.marketPriceFee / 100).toFixed(2) : null,
+        commissionRate: item.commissionRate,
+        commissionAmount: item.commissionAmount ? (item.commissionAmount / 100).toFixed(2) : '0.00',
+        salesText: `${Math.floor((item.totalSales || 0) / 10000)}万+`,
+        shop: item.shopName || '旗舰店',
+        shopScore: item.rating || '4.9',
+        location: item.location || '',
+        tag: item.isSelectionBest ? '精选' : ''
+      }))
+
+      if (page.value === 1) {
+        products.value = formattedProducts
+      } else {
+        products.value = [...products.value, ...formattedProducts]
+      }
+      hasMore.value = products.value.length < res.total
+    } else {
+      if (page.value === 1) {
+        products.value = []
+      }
+      hasMore.value = false
+    }
+  } catch (error) {
+    uni.showToast({ title: '加载失败', icon: 'none' })
+    console.error('加载商品失败', error)
+  } finally {
+    loading.value = false
   }
-
-  hasMore.value = mockProducts.length === pageSize
-  page.value++
-  loading.value = false
 }
 
-function generateMockProducts(pageNum, size) {
-  const startId = (pageNum - 1) * size
-  return Array.from({ length: size }, (_, i) => ({
-    id: startId + i + 1,
-    image: `https://picsum.photos/350/350?random=${startId + i + 10}`,
-    title: `精选商品 ${startId + i + 1} 限时特惠品质保证`,
-    price: (Math.random() * 200 + 9.9).toFixed(2),
-    originalPrice: (Math.random() * 300 + 50).toFixed(2),
-    commissionRate: Math.floor(Math.random() * 30 + 5),
-    commissionAmount: (Math.random() * 30 + 1).toFixed(2),
-    sales: Math.floor(Math.random() * 10000),
-    salesText: `${Math.floor(Math.random() * 5 + 0.1)}万+`,
-    tags: ['七天退货', '极速发货'],
-    shop: '旗舰店',
-    shopScore: '4.9',
-    location: '广州',
-    tag: Math.random() > 0.7 ? '精选' : ''
-  }))
-}
-
-function switchCategory(category) {
-  currentCategory.value = category
+function switchCategory(categoryId) {
+  currentCategory.value = categoryId === 'all' ? 0 : categoryId
   page.value = 1
   loadProducts()
 }
@@ -308,9 +316,29 @@ function toggleFilterPanel() {
 }
 
 function selectSubFilter(type, value) {
-  currentFilters[type] = value
-  page.value = 1
-  loadProducts()
+  if (type === 'commission') {
+    currentFilters.commission = value
+    page.value = 1
+    loadProducts()
+  } else if (type === 'price') {
+    currentFilters.price = value
+    if (value === 'all') {
+      currentFilters.priceMin = null
+      currentFilters.priceMax = null
+    } else if (value === '50') {
+      currentFilters.priceMax = 50
+      currentFilters.priceMin = null
+    } else if (value === '500') {
+      currentFilters.priceMin = 500
+      currentFilters.priceMax = null
+    } else if (value.includes('-')) {
+      const [min, max] = value.split('-')
+      currentFilters.priceMin = parseInt(min)
+      currentFilters.priceMax = parseInt(max)
+    }
+    page.value = 1
+    loadProducts()
+  }
 }
 
 function goToSearch() {
@@ -319,15 +347,15 @@ function goToSearch() {
   })
 }
 
-function goToProductDetail(id) {
+function goToProductDetail(spuId) {
   uni.navigateTo({
-    url: `/pages/sample/product/product?id=${id}`
+    url: `/pages/sample/product/product?spuId=${spuId}`
   })
 }
 
-function applySample(id) {
+function applySample(spuId) {
   uni.navigateTo({
-    url: `/pages/sample/apply/apply?productId=${id}`
+    url: `/pages/sample/apply/apply?spuId=${spuId}`
   })
 }
 
@@ -347,12 +375,14 @@ function onEntryTap(type) {
 
 function onPullDownRefresh() {
   page.value = 1
-  loadProducts()
-  uni.stopPullDownRefresh()
+  loadProducts().finally(() => {
+    uni.stopPullDownRefresh()
+  })
 }
 
 function onReachBottom() {
   if (hasMore.value && !loading.value) {
+    page.value++
     loadProducts()
   }
 }

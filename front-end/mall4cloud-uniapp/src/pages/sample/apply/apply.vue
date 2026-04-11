@@ -147,8 +147,11 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
+import selectionApi from '@/utils/api/selection.js'
 
 const selectedProducts = ref([])
+const spuId = ref(null)
+const submitting = ref(false)
 const formData = reactive({
   name: '',
   phone: '',
@@ -178,7 +181,6 @@ const canSubmit = computed(() => {
     selectedProducts.value.length > 0 &&
     formData.name.trim() !== '' &&
     formData.phone.trim() !== '' &&
-    formData.region.length > 0 &&
     formData.address.trim() !== ''
   )
 })
@@ -188,22 +190,44 @@ onMounted(() => {
   const currentPage = pages[pages.length - 1]
   const options = currentPage.options || currentPage.$page?.options || {}
 
-  const productId = options.productId
-  if (productId) {
-    loadProductInfo(productId)
+  const productSpuId = options.spuId
+  if (productSpuId) {
+    spuId.value = productSpuId
+    loadProductInfo(productSpuId)
   }
+
+  loadDefaultAddress()
 })
 
-function loadProductInfo(productId) {
-  const mockProduct = {
-    id: productId,
-    image: `https://picsum.photos/120/120?random=${productId}`,
-    name: '立白大师香氛洗衣液持久留香护色护衣天然酵素家庭装大容量装',
-    price: '39.90',
-    commissionRate: 20,
-    commissionAmount: '8.00'
+async function loadProductInfo(productSpuId) {
+  try {
+    const res = await selectionApi.getSelectionDetail(productSpuId)
+    if (res) {
+      const product = {
+        id: res.spuId,
+        image: res.mainImgUrl,
+        name: res.name,
+        price: res.priceFee ? (res.priceFee / 100).toFixed(2) : '0.00',
+        commissionRate: res.commissionRate || 0,
+        commissionAmount: res.commissionAmount ? (res.commissionAmount / 100).toFixed(2) : '0.00'
+      }
+      selectedProducts.value = [product]
+    }
+  } catch (error) {
+    uni.showToast({ title: '加载商品信息失败', icon: 'none' })
+    console.error('加载商品信息失败', error)
   }
-  selectedProducts.value = [mockProduct]
+}
+
+function loadDefaultAddress() {
+  const address = uni.getStorageSync('cloudDeliveryAddrInfo')
+  if (address) {
+    formData.name = address.consignee || ''
+    formData.phone = address.mobile || ''
+    formData.regionText = `${address.province || ''} ${address.city || ''} ${address.district || ''}`
+    formData.region = [address.province, address.city, address.district].filter(Boolean)
+    formData.address = address.addrDetails || ''
+  }
 }
 
 function removeProduct(id) {
@@ -217,13 +241,16 @@ function addProduct() {
 }
 
 function selectAddress() {
-  uni.chooseAddress({
-    success: (res) => {
-      formData.name = res.userName
-      formData.phone = res.telNumber
-      formData.region = [res.provinceName, res.cityName, res.countyName]
-      formData.regionText = `${res.provinceName} ${res.cityName} ${res.countyName}`
-      formData.address = res.detailInfo
+  uni.navigateTo({
+    url: '/pages/address-list/address-list?type=select',
+    events: {
+      selectAddress: (address) => {
+        formData.name = address.consignee || ''
+        formData.phone = address.mobile || ''
+        formData.regionText = `${address.province || ''} ${address.city || ''} ${address.district || ''}`
+        formData.region = [address.province, address.city, address.district].filter(Boolean)
+        formData.address = address.addrDetails || ''
+      }
     }
   })
 }
@@ -235,21 +262,32 @@ function showRegionPicker() {
   })
 }
 
-function submitApplication() {
-  if (!canSubmit.value) {
-    uni.showToast({
-      title: '请填写完整信息',
-      icon: 'none'
-    })
-    return
+function validateForm() {
+  if (selectedProducts.value.length === 0) {
+    uni.showToast({ title: '请选择商品', icon: 'none' })
+    return false
   }
+  if (!formData.name.trim()) {
+    uni.showToast({ title: '请填写收件人', icon: 'none' })
+    return false
+  }
+  if (!formData.phone.trim()) {
+    uni.showToast({ title: '请填写手机号', icon: 'none' })
+    return false
+  }
+  if (!/^1[3-9]\d{9}$/.test(formData.phone)) {
+    uni.showToast({ title: '手机号格式不正确', icon: 'none' })
+    return false
+  }
+  if (!formData.address.trim()) {
+    uni.showToast({ title: '请填写收货地址', icon: 'none' })
+    return false
+  }
+  return true
+}
 
-  const phoneRegex = /^1[3-9]\d{9}$/
-  if (!phoneRegex.test(formData.phone)) {
-    uni.showToast({
-      title: '请输入正确的手机号',
-      icon: 'none'
-    })
+function submitApplication() {
+  if (!validateForm()) {
     return
   }
 
@@ -264,26 +302,49 @@ function submitApplication() {
   })
 }
 
-function doSubmit() {
+async function doSubmit() {
+  if (submitting.value) return
+  submitting.value = true
+
   uni.showLoading({
     title: '提交中...'
   })
 
-  setTimeout(() => {
+  try {
+    const deliveryAddress = formData.regionText ? `${formData.regionText} ${formData.address}` : formData.address
+
+    const res = await selectionApi.submitSelectionApply({
+      spuId: spuId.value,
+      contactName: formData.name,
+      contactPhone: formData.phone,
+      deliveryAddress: deliveryAddress,
+      remark: formData.remark
+    })
+
+    uni.hideLoading()
+
+    if (res && res.applyId) {
+      uni.showToast({
+        title: '申请成功',
+        icon: 'success',
+        duration: 1500,
+        success: () => {
+          setTimeout(() => {
+            uni.navigateBack()
+          }, 1500)
+        }
+      })
+    }
+  } catch (error) {
     uni.hideLoading()
     uni.showToast({
-      title: '申请成功',
-      icon: 'success',
-      duration: 1500,
-      success: () => {
-        setTimeout(() => {
-          uni.switchTab({
-            url: '/pages/sample/selection/selection'
-          })
-        }, 1500)
-      }
+      title: error.msg || '申请失败',
+      icon: 'none'
     })
-  }, 1000)
+    console.error('提交申请失败', error)
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 

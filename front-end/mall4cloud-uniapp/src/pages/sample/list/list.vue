@@ -110,10 +110,14 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import selectionApi from '@/utils/api/selection.js'
 
 const currentFilter = ref('all')
 const sampleList = ref([])
 const hasMore = ref(false)
+const page = ref(1)
+const pageSize = 10
+const loading = ref(false)
 
 const filters = [
   { label: '全部', value: 'all' },
@@ -143,112 +147,77 @@ const filteredList = computed(() => {
   return sampleList.value.filter(item => item.status === currentFilter.value)
 })
 
+const statusMap = {
+  0: '待审核',
+  1: '已通过',
+  2: '已拒绝',
+  3: '已发货',
+  4: '已完成'
+}
+
 onMounted(() => {
-  loadSampleList()
+  loadApplies()
 })
 
-function loadSampleList() {
-  sampleList.value = [
-    {
-      id: 'SA1773469050335',
-      applyTime: '2026-03-14 06:17',
-      status: 'pending',
-      statusText: '待审核',
-      shipStatus: 'not_shipped',
-      shipStatusText: '未寄出',
-      products: [
-        {
-          id: 1,
-          image: 'https://picsum.photos/140/140?random=1',
-          name: '立白大师香氛洗衣液持久留香护色护衣',
-          price: '39.9',
-          commission: '20%'
-        }
-      ]
-    },
-    {
-      id: 'SA1773469050336',
-      applyTime: '2026-03-13 15:20',
-      status: 'approved',
-      statusText: '审核通过',
-      shipStatus: 'not_shipped',
-      shipStatusText: '未寄出',
-      products: [
-        {
-          id: 2,
-          image: 'https://picsum.photos/140/140?random=2',
-          name: '漫花悬挂式抽纸整箱批发家用实惠装',
-          price: '29.9',
-          commission: '15%'
-        }
-      ]
-    },
-    {
-      id: 'SA1773469050337',
-      applyTime: '2026-03-12 09:15',
-      status: 'approved',
-      statusText: '审核通过',
-      shipStatus: 'shipped',
-      shipStatusText: '已寄出',
-      logisticsCompany: '顺丰速运',
-      trackingNo: 'SF1234567890',
-      products: [
-        {
-          id: 3,
-          image: 'https://picsum.photos/140/140?random=3',
-          name: '维达超韧抽纸3层130抽24包整箱',
-          price: '45.9',
-          commission: '18%'
-        }
-      ]
-    },
-    {
-      id: 'SA1773469050338',
-      applyTime: '2026-03-10 14:30',
-      status: 'approved',
-      statusText: '审核通过',
-      shipStatus: 'received',
-      shipStatusText: '已签收',
-      logisticsCompany: '圆通快递',
-      trackingNo: 'YT9876543210',
-      receiveTime: '2026-03-12 10:30',
-      products: [
-        {
-          id: 4,
-          image: 'https://picsum.photos/140/140?random=4',
-          name: '心相印茶语系列抽纸3层100抽',
-          price: '35.9',
-          commission: '12%'
-        }
-      ]
-    },
-    {
-      id: 'SA1773469050339',
-      applyTime: '2026-03-08 11:20',
-      status: 'rejected',
-      statusText: '已拒绝',
-      shipStatus: 'not_shipped',
-      shipStatusText: '未寄出',
-      products: [
-        {
-          id: 5,
-          image: 'https://picsum.photos/140/140?random=5',
-          name: '洁柔纸巾抽纸整箱家用实惠装',
-          price: '28.9',
-          commission: '8%'
-        }
-      ]
+async function loadApplies() {
+  if (loading.value) return
+  loading.value = true
+
+  try {
+    const res = await selectionApi.getMySelectionApplies({
+      pageNum: page.value,
+      pageSize: pageSize
+    })
+
+    if (res && res.list) {
+      const formattedList = res.list.map(item => ({
+        id: item.applyId,
+        applyId: item.applyId,
+        applyTime: item.createTime,
+        status: item.status === 0 ? 'pending' : item.status === 1 ? 'approved' : item.status === 2 ? 'rejected' : item.status === 3 ? 'approved' : 'approved',
+        statusText: statusMap[item.status] || '未知',
+        shipStatus: item.status === 3 ? 'shipped' : item.status === 4 ? 'received' : 'not_shipped',
+        shipStatusText: item.status === 3 ? '已寄出' : item.status === 4 ? '已签收' : '未寄出',
+        logisticsCompany: item.expressCompany,
+        trackingNo: item.expressNo,
+        products: [
+          {
+            id: item.spuId,
+            image: item.spuImg,
+            name: item.spuName,
+            price: '0.00',
+            commission: '0%'
+          }
+        ]
+      }))
+
+      if (page.value === 1) {
+        sampleList.value = formattedList
+      } else {
+        sampleList.value = [...sampleList.value, ...formattedList]
+      }
+      hasMore.value = sampleList.value.length < res.total
+    } else {
+      if (page.value === 1) {
+        sampleList.value = []
+      }
+      hasMore.value = false
     }
-  ]
+  } catch (error) {
+    uni.showToast({ title: '加载失败', icon: 'none' })
+    console.error('加载申请列表失败', error)
+  } finally {
+    loading.value = false
+  }
 }
 
 function switchFilter(filter) {
   currentFilter.value = filter
 }
 
-function goToDetail(id) {
+function goToDetail(applyId) {
   uni.navigateTo({
-    url: `/pages/sample/detail/detail?id=${id}`
+    url: `/pages/sample/detail/detail?applyId=${applyId}`
   })
 }
 
@@ -292,12 +261,17 @@ function goToApply() {
 }
 
 function onPullDownRefresh() {
-  loadSampleList()
-  uni.stopPullDownRefresh()
+  page.value = 1
+  loadApplies().finally(() => {
+    uni.stopPullDownRefresh()
+  })
 }
 
 function onReachBottom() {
-  console.log('加载更多')
+  if (hasMore.value && !loading.value) {
+    page.value++
+    loadApplies()
+  }
 }
 </script>
 

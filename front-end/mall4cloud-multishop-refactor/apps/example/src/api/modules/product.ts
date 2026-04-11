@@ -30,6 +30,8 @@ export interface SpuPageParam {
   categoryId?: number
   shopCategoryId?: number
   status?: number
+  isSelection?: number
+  tagType?: number
 }
 
 export interface SpuVO {
@@ -43,6 +45,15 @@ export interface SpuVO {
   marketPriceFee: number
   seq: number
   status: number
+  isSelection?: number
+  commissionRate?: number
+  isHot?: number
+  isNew?: number
+  isRecommend?: number
+  isSelectionBest?: number
+  rating?: number
+  totalSales?: number
+  monthSales?: number
 }
 
 export interface ProdInfoVO extends SpuVO {
@@ -62,6 +73,15 @@ export interface ProdInfoVO extends SpuVO {
   skuList: SkuVO[]
   skus: SkuVO[]
   totalStock: number
+  isSelection: number
+  commissionRate: number
+  isHot: number
+  isNew: number
+  isRecommend: number
+  isSelectionBest: number
+  rating: number
+  totalSales: number
+  monthSales: number
 }
 
 export interface SpuAttrValue {

@@ -186,8 +186,10 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import selectionApi from '@/utils/api/selection.js'
 
 const product = ref({
+  spuId: null,
   id: '',
   title: '',
   price: '',
@@ -216,50 +218,53 @@ const selectedSpecs = reactive({
 })
 const selectedCount = ref(1)
 const totalPrice = ref(0)
+const loading = ref(false)
 
 onMounted(() => {
   const pages = getCurrentPages()
   const currentPage = pages[pages.length - 1]
   const options = currentPage.options || currentPage.$page?.options || {}
 
-  const productId = options.id || 1
-  loadProductDetail(productId)
+  const spuId = options.spuId
+  if (spuId) {
+    loadDetail(spuId)
+  }
 })
 
-function loadProductDetail(productId) {
-  const mockProduct = {
-    id: productId,
-    title: '立白大师香氛洗衣液持久留香护色护衣天然酵素家庭装大容量装',
-    price: '39.90',
-    originalPrice: '59.90',
-    commissionRate: 20,
-    commissionAmount: '8.00',
-    images: [
-      `https://picsum.photos/750/750?random=${productId}`,
-      `https://picsum.photos/750/750?random=${productId + 1}`,
-      `https://picsum.photos/750/750?random=${productId + 2}`
-    ],
-    shopName: '立白官方旗舰店',
-    sales: '10万+',
-    goodRate: 98,
-    reviewCount: 5200,
-    darenCount: 2.5,
-    stock: 100,
-    location: '广州',
-    monthSales: '5.2万',
-    monthViews: '28.5万',
-    monthDaren: '3280',
-    specs: {
-      weight: [
-        { id: 1, name: '1kg装', price: '29.90' },
-        { id: 2, name: '2kg装', price: '49.90' },
-        { id: 3, name: '3kg装', price: '69.90' }
-      ]
+async function loadDetail(spuId) {
+  loading.value = true
+  try {
+    const res = await selectionApi.getSelectionDetail(spuId)
+    if (res) {
+      product.value = {
+        spuId: res.spuId,
+        id: res.spuId,
+        title: res.name,
+        price: res.priceFee ? (res.priceFee / 100).toFixed(2) : '0.00',
+        originalPrice: res.marketPriceFee ? (res.marketPriceFee / 100).toFixed(2) : '',
+        commissionRate: res.commissionRate || 0,
+        commissionAmount: res.commissionAmount ? (res.commissionAmount / 100).toFixed(2) : '0.00',
+        images: res.imgUrls && res.imgUrls.length ? res.imgUrls : [res.mainImgUrl],
+        shopName: res.shopName || '旗舰店',
+        sales: res.totalSales ? `${Math.floor(res.totalSales / 10000)}万+` : '0',
+        goodRate: res.rating ? (res.rating * 20).toFixed(0) : 98,
+        reviewCount: Math.floor(Math.random() * 10000),
+        darenCount: (Math.random() * 5).toFixed(1),
+        stock: '100',
+        location: res.location || '全国',
+        monthSales: res.monthSales ? `${Math.floor(res.monthSales / 10000)}万+` : '0',
+        monthViews: res.monthSales ? `${Math.floor(res.monthSales * 5 / 10000)}万+` : '0',
+        monthDaren: Math.floor(Math.random() * 5000).toString(),
+        specs: res.specs || { weight: [] }
+      }
+      totalPrice.value = parseFloat(product.value.price)
     }
+  } catch (error) {
+    uni.showToast({ title: '加载失败', icon: 'none' })
+    console.error('加载商品详情失败', error)
+  } finally {
+    loading.value = false
   }
-
-  product.value = mockProduct
-  totalPrice.value = parseFloat(mockProduct.price)
 }
 
 function previewImage(img) {
@@ -301,7 +306,7 @@ function showLogistics() {
 
 function goToSampleApply() {
   uni.navigateTo({
-    url: `/pages/sample/apply/apply?productId=${product.value.id}`
+    url: `/pages/sample/apply/apply?spuId=${product.value.spuId}`
   })
 }
 

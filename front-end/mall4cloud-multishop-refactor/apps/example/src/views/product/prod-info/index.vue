@@ -110,6 +110,64 @@
             />
           </div>
         </div>
+
+        <div class="part-content">
+          <div class="part-tit">
+            <span class="part-tit-num">4</span>
+            <span class="part-tit-name">选品设置</span>
+          </div>
+
+          <el-form-item label="是否选品">
+            <el-switch
+              v-model="dataForm.isSelection"
+              :active-value="1"
+              :inactive-value="0"
+              active-text="是"
+              inactive-text="否"
+            />
+            <div class="form-tip">开启后商品将在选品中心展示</div>
+          </el-form-item>
+
+          <el-form-item v-if="dataForm.isSelection === 1" label="佣金比例">
+            <el-input-number
+              v-model="dataForm.commissionRate"
+              :min="0"
+              :max="100"
+              :precision="2"
+              controls-position="right"
+            />
+            <span class="unit">%</span>
+            <div class="form-tip">设置分销佣金比例，范围0-100%</div>
+          </el-form-item>
+
+          <el-form-item label="商品标签">
+            <div class="tag-group">
+              <el-checkbox v-model="dataForm.isHot" :true-label="1" :false-label="0">热销</el-checkbox>
+              <el-checkbox v-model="dataForm.isNew" :true-label="1" :false-label="0">新品</el-checkbox>
+              <el-checkbox v-model="dataForm.isRecommend" :true-label="1" :false-label="0">推荐</el-checkbox>
+              <el-checkbox v-model="dataForm.isSelectionBest" :true-label="1" :false-label="0">精选</el-checkbox>
+            </div>
+          </el-form-item>
+
+          <el-form-item label="推荐评分">
+            <el-rate v-model="dataForm.rating" :max="5" show-text :texts="['极差', '失望', '一般', '满意', '惊喜']" />
+            <div class="form-tip">0.0-5.0分，影响商品推荐权重</div>
+          </el-form-item>
+
+          <el-form-item label="销量设置">
+            <div class="sales-inputs">
+              <div class="input-item">
+                <label>累计销量：</label>
+                <el-input-number v-model="dataForm.totalSales" :min="0" :max="99999999" controls-position="right" />
+              </div>
+              <div class="input-item">
+                <label>月销量：</label>
+                <el-input-number v-model="dataForm.monthSales" :min="0" :max="99999999" controls-position="right" />
+              </div>
+            </div>
+            <div class="form-tip">销量数据可在选品中心展示，手动设置可快速提升商品曝光</div>
+          </el-form-item>
+        </div>
       </div>
 
       <div class="foot-btn">
@@ -154,6 +212,15 @@ const dataForm = reactive({
   detail: '',
   totalStock: 0,
   skuList: [] as any[],
+  isSelection: 0,
+  commissionRate: 0,
+  isHot: 0,
+  isNew: 0,
+  isRecommend: 0,
+  isSelectionBest: 0,
+  rating: 0,
+  totalSales: 0,
+  monthSales: 0,
 })
 
 const brandName = ref('')
@@ -416,5 +483,41 @@ onMounted(() => {
   :deep(.el-textarea) {
     width: 90%;
   }
+}
+
+.form-tip {
+  color: #909399;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 12px;
+}
+
+.unit {
+  margin-left: 8px;
+  color: #606266;
+}
+
+.tag-group {
+  display: flex;
+  gap: 20px;
+}
+
+.tag-group .el-checkbox {
+  margin-right: 0;
+}
+
+.sales-inputs {
+  display: flex;
+  gap: 20px;
+}
+
+.sales-inputs .input-item {
+  display: flex;
+  align-items: center;
+}
+
+.sales-inputs .input-item label {
+  white-space: nowrap;
+  margin-right: 8px;
 }
 </style>

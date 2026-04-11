@@ -145,6 +145,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import selectionApi from '@/utils/api/selection.js'
 
 const application = ref({
   status: '',
@@ -170,6 +171,8 @@ const application = ref({
   shipTime: '',
   receiveTime: ''
 })
+
+const loading = ref(false)
 
 const statusIcon = computed(() => {
   const map = {
@@ -202,64 +205,69 @@ const statusDesc = computed(() => {
   return ''
 })
 
+const statusMap = {
+  0: { status: 'pending', statusText: '待审核' },
+  1: { status: 'approved', statusText: '审核通过' },
+  2: { status: 'rejected', statusText: '已拒绝' },
+  3: { status: 'approved', statusText: '已发货' },
+  4: { status: 'approved', statusText: '已完成' }
+}
+
 onMounted(() => {
   const pages = getCurrentPages()
   const currentPage = pages[pages.length - 1]
   const options = currentPage.options || currentPage.$page?.options || {}
 
-  const applicationId = options.id || 'SA1773469050337'
-  loadApplicationDetail(applicationId)
+  const applyId = options.applyId
+  if (applyId) {
+    loadDetail(applyId)
+  }
 })
 
-function loadApplicationDetail(applicationId) {
-  application.value = {
-    id: applicationId,
-    applyTime: '2026-03-14 06:17:00',
-    reviewTime: '2026-03-14 08:30:00',
-    shipTime: '2026-03-14 10:00:00',
-    receiveTime: '',
-    status: 'approved',
-    statusText: '审核通过',
-    shipStatus: 'shipped',
-    shipStatusText: '已寄出',
-    logisticsCompany: '顺丰速运',
-    trackingNo: 'SF1234567890',
-    reviewRemark: '审核通过，样品质量优良，适合推广',
-    recipient: {
-      name: '张三',
-      phone: '138****8000',
-      province: '广东省',
-      city: '深圳市',
-      district: '南山区',
-      address: '科技园南路88号'
-    },
-    products: [
-      {
-        id: 1,
-        image: 'https://picsum.photos/160/160?random=10',
-        name: '立白大师香氛洗衣液持久留香护色护衣天然酵素',
-        price: '39.9',
-        commission: '20%'
+async function loadDetail(applyId) {
+  loading.value = true
+  try {
+    const res = await selectionApi.getApplyDetail(applyId)
+    if (res) {
+      const statusInfo = statusMap[res.status] || { status: 'pending', statusText: '未知' }
+      application.value = {
+        id: res.applyId,
+        applyTime: res.createTime,
+        reviewTime: res.reviewTime || '',
+        shipTime: res.shipTime || '',
+        receiveTime: res.receiveTime || '',
+        status: statusInfo.status,
+        statusText: statusInfo.statusText,
+        shipStatus: res.status === 3 ? 'shipped' : res.status === 4 ? 'received' : 'not_shipped',
+        shipStatusText: res.status === 3 ? '已寄出' : res.status === 4 ? '已签收' : '未寄出',
+        logisticsCompany: res.expressCompany || '',
+        trackingNo: res.expressNo || '',
+        reviewRemark: res.reviewRemark || '',
+        recipient: {
+          name: res.contactName || '',
+          phone: res.contactPhone || '',
+          province: '',
+          city: '',
+          district: '',
+          address: res.deliveryAddress || ''
+        },
+        products: [
+          {
+            id: res.spuId,
+            image: res.spuImg || '',
+            name: res.spuName || '',
+            price: '0.00',
+            commission: '0%'
+          }
+        ],
+        trackingList: res.trackingList || []
       }
-    ],
-    trackingList: [
-      {
-        content: '快件已签收，感谢您使用顺丰速运，期待再次为您服务',
-        time: '2026-03-15 14:30:00'
-      },
-      {
-        content: '【深圳市】快件已送达【深圳南山营业点】，正在派送中',
-        time: '2026-03-15 08:20:00'
-      },
-      {
-        content: '【深圳市】快件已发车，下一站【深圳南山营业点】',
-        time: '2026-03-14 22:15:00'
-      },
-      {
-        content: '【深圳市】顺丰速运 已收取快件',
-        time: '2026-03-14 18:30:00'
-      }
-    ]
+    }
+  } catch (error) {
+    uni.showToast({ title: '加载失败', icon: 'none' })
+    console.error('加载申请详情失败', error)
+  } finally {
+    loading.value = false
   }
 }
 
