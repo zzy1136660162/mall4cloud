@@ -4,8 +4,8 @@ import com.mall4j.cloud.common.database.vo.PageVO;
 import com.mall4j.cloud.platform.dto.SelectionApplyDTO;
 import com.mall4j.cloud.platform.dto.SelectionApplyPageDTO;
 import com.mall4j.cloud.platform.dto.SelectionAuditDTO;
-import com.mall4j.cloud.platform.vo.admin.SelectionApplyVO;
-import com.mall4j.cloud.platform.vo.admin.SelectionStatisticsVO;
+import com.mall4j.cloud.platform.vo.SelectionApplyVO;
+import com.mall4j.cloud.platform.vo.SelectionStatisticsVO;
 
 /**
  * 选品申请服务接口
