@@ -1,6 +1,7 @@
 import type { RouteRecordMainRaw } from '@fantastic-admin/types'
 import type { RouteRecordRaw } from 'vue-router'
 import pinia from '@/store'
+import { useAppSettingsStore } from '@/store/modules/app/settings'
 import AuthExample from './modules/auth.example'
 import BreadcrumbExample from './modules/breadcrumb.example'
 import ComponentExample from './modules/component.example'
@@ -15,6 +16,10 @@ import KeepAliveExample from './modules/keep.alive.example'
 import MultilevelMenuExample from './modules/multilevel.menu.example'
 import PluginExample from './modules/plugin.example'
 import TabbarExample from './modules/tabbar.example'
+import ShopExample from './modules/shop.example'
+import ProductExample from './modules/product.example'
+import OrderExample from './modules/order.example'
+import RbacExample from './modules/rbac.example'
 
 // 固定路由（默认路由）
 const constantRoutes: RouteRecordRaw[] = [
@@ -105,6 +110,42 @@ const asyncRoutes: RouteRecordMainRaw[] = [
     },
     children: [
       ...EcologyExample,
+    ],
+  },
+  {
+    meta: {
+      title: '店铺管理',
+      icon: 'i-ant-design:shop-twotone',
+    },
+    children: [
+      ...ShopExample,
+    ],
+  },
+  {
+    meta: {
+      title: '商品管理',
+      icon: 'i-ant-design:product-twotone',
+    },
+    children: [
+      ...ProductExample,
+    ],
+  },
+  {
+    meta: {
+      title: '订单管理',
+      icon: 'i-ant-design:order-twotone',
+    },
+    children: [
+      ...OrderExample,
+    ],
+  },
+  {
+    meta: {
+      title: '权限管理',
+      icon: 'i-ant-design:safety-certificate-twotone',
+    },
+    children: [
+      ...RbacExample,
     ],
   },
 ]

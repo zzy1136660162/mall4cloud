@@ -2,6 +2,9 @@ import type { MenuRecordMainRaw, MenuRecordRaw, RouteRecordMainRaw } from '@fant
 import type { RouteRecordRaw } from 'vue-router'
 import { cloneDeep } from 'es-toolkit'
 import { resolveRoutePath } from '@/utils'
+import { useAppSettingsStore } from './settings'
+import { useAppRouteStore } from './route'
+import { useAppAuth } from '@/composables/app/auth'
 
 export const useAppMenuStore = defineStore(
   'appMenu',
@@ -12,14 +15,16 @@ export const useAppMenuStore = defineStore(
     // 将原始路由转换成导航菜单
     function convertRouteToMenu(routes: RouteRecordMainRaw[]): MenuRecordMainRaw[] {
       const returnMenus: MenuRecordMainRaw[] = []
+      console.log('[DEBUG convertRouteToMenu] routes.length:', routes?.length, 'menu.mode:', appSettingsStore.settings.menu.mode)
       routes.forEach((item) => {
-        if (item.children.length > 0) {
+        console.log('[DEBUG convertRouteToMenu] item:', JSON.stringify(item), 'item.children:', item?.children)
+        if (item.children && item.children.length > 0) {
           if (appSettingsStore.settings.menu.mode === 'single') {
             returnMenus.length === 0 && returnMenus.push({
               meta: {},
               children: [],
             })
-            returnMenus[0].children.push(...convertRouteToMenuRecursive(item.children))
+            returnMenus[0].children.push(...convertRouteToMenuRecursive(item.children, item.path))
           }
           else {
             const menuItem: MenuRecordMainRaw = {
@@ -30,7 +35,7 @@ export const useAppMenuStore = defineStore(
               },
               children: [],
             }
-            menuItem.children = convertRouteToMenuRecursive(item.children)
+            menuItem.children = convertRouteToMenuRecursive(item.children, item.path)
             returnMenus.push(menuItem)
           }
         }
@@ -60,7 +65,12 @@ export const useAppMenuStore = defineStore(
     }
 
     // 完整导航数据
-    const allMenus = computed(() => filterAsyncMenus(convertRouteToMenu(appRouteStore.routesRaw)))
+    const allMenus = computed(() => {
+      console.log('[DEBUG allMenus] menu.mode:', appSettingsStore.settings.menu.mode)
+      const result = filterAsyncMenus(convertRouteToMenu(appRouteStore.routesRaw))
+      console.log('[DEBUG allMenus] routesRaw:', JSON.stringify(appRouteStore.routesRaw), 'allMenus result:', JSON.stringify(result))
+      return result
+    })
 
     function normalizeActivedIndex(index: number) {
       if (allMenus.value.length === 0) {
@@ -86,9 +96,16 @@ export const useAppMenuStore = defineStore(
 
     // 次导航数据
     const sidebarMenus = computed<MenuRecordMainRaw['children']>(() => {
-      return allMenus.value.length > 0
+      const result = allMenus.value.length > 0
         ? allMenus.value[normalizeActivedIndex(actived.value)].children
         : []
+      console.log('[DEBUG sidebarMenus] actived:', actived.value, 'allMenus.length:', allMenus.value.length, 'sidebarMenus result:', JSON.stringify(result), 'children count:', result?.length)
+      if (result?.length > 0) {
+        result.forEach((item: any, idx: number) => {
+          console.log(`[DEBUG sidebarMenus] item[${idx}]:`, item, 'children:', item.children)
+        })
+      }
+      return result
     })
     // 次导航第一层最深路径
     const sidebarMenusFirstDeepestPath = computed(() => {
@@ -114,7 +131,9 @@ export const useAppMenuStore = defineStore(
     }
     // 次导航是否有且只有一个可访问的菜单
     const sidebarMenusHasOnlyMenu = computed(() => {
-      return isSidebarMenusHasOnlyMenu(sidebarMenus.value)
+      const result = isSidebarMenusHasOnlyMenu(sidebarMenus.value)
+      console.log('[DEBUG sidebarMenusHasOnlyMenu] sidebarMenus:', sidebarMenus.value, 'result:', result)
+      return result
     })
     function isSidebarMenusHasOnlyMenu(menus: MenuRecordRaw[]) {
       let count = 0

@@ -61,16 +61,27 @@ function initItems(menu: MenuProps['menu'], parentPaths: string[] = []) {
   })
 }
 
+console.log('[DEBUG Menu/index.vue] props.menu:', props.menu)
+console.log('[DEBUG Menu/index.vue] props.value (activeIndex):', props.value)
+console.log('[DEBUG Menu/index.vue] items:', items.value)
+console.log('[DEBUG Menu/index.vue] subMenus:', subMenus.value)
+console.log('[DEBUG Menu/index.vue] expandMenus:', expandMenus.value)
+
 const openMenu: MenuInjection['openMenu'] = (index, indexPath) => {
+  console.log('[DEBUG openMenu] index:', index, 'indexPath:', indexPath, 'accordion:', props.accordion, 'current expandMenus:', [...expandMenus.value])
   if (expandMenus.value.includes(index)) {
+    console.log('[DEBUG openMenu] already expanded, returning')
     return
   }
   if (props.accordion) {
+    console.log('[DEBUG openMenu] accordion mode, filtering')
     expandMenus.value = expandMenus.value.filter(key => indexPath.includes(key))
   }
   expandMenus.value.push(index)
+  console.log('[DEBUG openMenu] after push, expandMenus:', [...expandMenus.value])
 }
 const closeMenu: MenuInjection['closeMenu'] = (index) => {
+  console.log('[DEBUG closeMenu] index:', index)
   if (Array.isArray(index)) {
     nextTick(() => {
       closeMenu(index.at(-1)!)
@@ -81,6 +92,7 @@ const closeMenu: MenuInjection['closeMenu'] = (index) => {
     return
   }
   expandMenus.value = expandMenus.value.filter(item => item !== index)
+  console.log('[DEBUG closeMenu] after filter, expandMenus:', [...expandMenus.value])
 }
 
 function setSubMenusActive(index: string) {
@@ -102,12 +114,16 @@ const handleMenuItemClick: MenuInjection['handleMenuItemClick'] = (index) => {
   setSubMenusActive(index)
 }
 const handleSubMenuClick: MenuInjection['handleSubMenuClick'] = (index, indexPath) => {
+  console.log('[DEBUG handleSubMenuClick] index:', index, 'indexPath:', indexPath, 'expandMenus before:', [...expandMenus.value])
   if (expandMenus.value.includes(index)) {
+    console.log('[DEBUG handleSubMenuClick] closing menu')
     closeMenu(index)
   }
   else {
+    console.log('[DEBUG handleSubMenuClick] opening menu')
     openMenu(index, indexPath)
   }
+  console.log('[DEBUG handleSubMenuClick] expandMenus after:', [...expandMenus.value])
 }
 
 function initMenu() {

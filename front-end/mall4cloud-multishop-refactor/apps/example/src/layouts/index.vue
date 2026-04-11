@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { useElementSize, useScroll } from '@vueuse/core'
+import { useRoute } from 'vue-router'
+import { computed, watch, ref } from 'vue'
 import { useHotkeyBindings } from '@/hotkeys/useHotkeys'
 import { useSlots } from '@/slots'
 import { cn } from '@/utils'
 import eventBus from '@/utils/eventBus'
+import { useAppSettingsStore } from '@/store/modules/app/settings'
+import { useAppKeepAliveStore } from '@/store/modules/app/keepAlive'
+import { useAppMenuStore } from '@/store/modules/app/menu'
+import { useAppPage } from '@/composables/app/page'
 import AppSetting from './components/AppSetting/index.vue'
 import Header from './components/Header/index.vue'
 import Hotkeys from './components/Hotkeys/index.vue'
@@ -11,6 +17,7 @@ import MainSidebar from './components/MainSidebar/index.vue'
 import SubSidebar from './components/SubSidebar/index.vue'
 import Topbar from './components/Topbar/index.vue'
 import LinkView from './components/views/link.vue'
+import AppCopyright from '@/components/AppCopyright/index.vue'
 
 defineOptions({
   name: 'Layout',
@@ -52,7 +59,7 @@ const isMainSidebarEnable = computed(() => {
 
 // 侧边栏次导航是否显示
 const isSubSidebarEnable = computed(() => {
-  return appSettingsStore.mode === 'mobile'
+  const result = appSettingsStore.mode === 'mobile'
     || (
       ['side', 'head'].includes(appSettingsStore.settings.menu.mode)
       && appMenuStore.sidebarMenus.length !== 0
@@ -72,6 +79,8 @@ const isSubSidebarEnable = computed(() => {
       && appMenuStore.sidebarMenus.length !== 0
       && !appMenuStore.sidebarMenus.every(item => item.meta?.menu === false)
     )
+  console.log('[DEBUG isSubSidebarEnable] result:', result, 'mode:', appSettingsStore.mode, 'menuMode:', appSettingsStore.settings.menu.mode, 'sidebarMenus length:', appMenuStore.sidebarMenus.length, 'sidebarMenus:', appMenuStore.sidebarMenus, 'mainMenuClickMode:', appSettingsStore.settings.menu.mainMenuClickMode)
+  return result
 })
 
 // 顶栏是否显示
@@ -121,8 +130,10 @@ watch(() => routeInfo.path, () => {
 })
 
 const { y } = useScroll(window)
-const { height: fixedContentBeforeAreaHeight } = useElementSize(useTemplateRef('fixedContentBeforeAreaRef'))
-const { height: fixedContentAfterAreaHeight } = useElementSize(useTemplateRef('fixedContentAfterAreaRef'))
+const fixedContentBeforeAreaRef = useTemplateRef('fixedContentBeforeAreaRef')
+const { height: fixedContentBeforeAreaHeight } = useElementSize(fixedContentBeforeAreaRef)
+const fixedContentAfterAreaRef = useTemplateRef('fixedContentAfterAreaRef')
+const { height: fixedContentAfterAreaHeight } = useElementSize(fixedContentAfterAreaRef)
 const topbarScrollVisibleOrHidden = ref(false)
 eventBus.on('topbar-scroll-visible-or-hidden', (val) => {
   topbarScrollVisibleOrHidden.value = val

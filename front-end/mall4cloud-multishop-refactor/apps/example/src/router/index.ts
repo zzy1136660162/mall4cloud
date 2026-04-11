@@ -1,6 +1,7 @@
 import { loadingFadeOut } from 'virtual:app-loading'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import pinia from '@/store'
+import { useAppSettingsStore } from '@/store/modules/app/settings'
 import setupExtensions from './extensions'
 import setupGuards from './guards'
 // 路由相关数据

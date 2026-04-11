@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
+import { useAppSettingsStore } from '@/store/modules/app/settings'
+
 defineOptions({
   name: 'AppCopyright',
 })

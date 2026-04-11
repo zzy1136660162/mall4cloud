@@ -20,9 +20,17 @@ const itemRef = useTemplateRef('itemRef')
 const subMenuRef = useTemplateRef('subMenuRef')
 const rootMenu = inject(rootMenuInjectionKey)!
 
+console.log('[DEBUG SubMenu] props.menu:', props.menu)
+console.log('[DEBUG SubMenu] props.uniqueKey:', props.uniqueKey)
+console.log('[DEBUG SubMenu] rootMenu.expandMenus:', rootMenu.expandMenus)
+
 const index = props.menu.path ?? rootMenu.getUseId(props.menu)
 
-const expand = computed(() => rootMenu.expandMenus.includes(props.uniqueKey.at(-1)!))
+const expand = computed(() => {
+  const result = rootMenu.expandMenus.includes(props.uniqueKey.at(-1)!)
+  console.log('[DEBUG SubMenu] expand computed:', props.uniqueKey.at(-1), result, 'expandMenus:', rootMenu.expandMenus)
+  return result
+})
 
 const transitionEvent = computed(() => {
   if (rootMenu.isMenuPopup) {
@@ -110,18 +118,23 @@ const transitionClass = computed(() => {
 })
 
 const hasChildren = computed(() => props.menu.children?.some((item: any) => item.meta?.menu !== false) ?? false)
+console.log('[DEBUG SubMenu] hasChildren:', hasChildren.value, 'isMenuPopup:', rootMenu.isMenuPopup, 'mode:', rootMenu.props.mode, 'collapse:', rootMenu.props.collapse)
 
 function handleClick() {
+  console.log('[DEBUG SubMenu handleClick] called, isMenuPopup:', rootMenu.isMenuPopup, 'hasChildren:', hasChildren.value, 'menu.meta?.link:', props.menu.meta?.link)
   if (
     (rootMenu.isMenuPopup && hasChildren.value)
     || props.menu.meta?.link
   ) {
+    console.log('[DEBUG SubMenu handleClick] early return')
     return
   }
   if (hasChildren.value) {
+    console.log('[DEBUG SubMenu handleClick] calling handleSubMenuClick', index, props.uniqueKey)
     rootMenu.handleSubMenuClick(index, props.uniqueKey)
   }
   else {
+    console.log('[DEBUG SubMenu handleClick] calling handleMenuItemClick', index)
     rootMenu.handleMenuItemClick(index)
   }
 }

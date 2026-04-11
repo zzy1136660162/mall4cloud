@@ -19,6 +19,8 @@ declare module 'vue' {
     AppNotAllowed: typeof import('./../components/AppNotAllowed/index.vue')['default']
     AppNotSupportedMobile: typeof import('./../components/AppNotSupportedMobile/index.vue')['default']
     AppSystemInfo: typeof import('./../components/AppSystemInfo/index.vue')['default']
+    BrandSelector: typeof import('./../components/BrandSelector/index.vue')['default']
+    CategorySelector: typeof import('./../components/CategorySelector/index.vue')['default']
     FaAnimatedBeam: typeof import('@fantastic-admin/components')['FaAnimatedBeam']
     FaAnimatedCountTo: typeof import('@fantastic-admin/components')['FaAnimatedCountTo']
     FaAnimatedCountToGroup: typeof import('@fantastic-admin/components')['FaAnimatedCountToGroup']
@@ -97,6 +99,11 @@ declare module 'vue' {
     FaTooltip: typeof import('@fantastic-admin/components')['FaTooltip']
     FaTree: typeof import('@fantastic-admin/components')['FaTree']
     FaTrend: typeof import('@fantastic-admin/components')['FaTrend']
+    ImgBox: typeof import('./../components/ImgBox/index.vue')['default']
+    ImgsUpload: typeof import('./../components/ImgsUpload/index.vue')['default']
+    ImgUpload: typeof import('./../components/ImgUpload/index.vue')['default']
+    Pagination: typeof import('./../components/Pagination/index.vue')['default']
+    PicturePreview: typeof import('./../components/PicturePreview/index.vue')['default']
   }
 }
 
@@ -109,6 +116,8 @@ declare global {
   const AppNotAllowed: typeof import('./../components/AppNotAllowed/index.vue')['default']
   const AppNotSupportedMobile: typeof import('./../components/AppNotSupportedMobile/index.vue')['default']
   const AppSystemInfo: typeof import('./../components/AppSystemInfo/index.vue')['default']
+  const BrandSelector: typeof import('./../components/BrandSelector/index.vue')['default']
+  const CategorySelector: typeof import('./../components/CategorySelector/index.vue')['default']
   const FaAnimatedBeam: typeof import('@fantastic-admin/components')['FaAnimatedBeam']
   const FaAnimatedCountTo: typeof import('@fantastic-admin/components')['FaAnimatedCountTo']
   const FaAnimatedCountToGroup: typeof import('@fantastic-admin/components')['FaAnimatedCountToGroup']
@@ -187,4 +196,9 @@ declare global {
   const FaTooltip: typeof import('@fantastic-admin/components')['FaTooltip']
   const FaTree: typeof import('@fantastic-admin/components')['FaTree']
   const FaTrend: typeof import('@fantastic-admin/components')['FaTrend']
+  const ImgBox: typeof import('./../components/ImgBox/index.vue')['default']
+  const ImgsUpload: typeof import('./../components/ImgsUpload/index.vue')['default']
+  const ImgUpload: typeof import('./../components/ImgUpload/index.vue')['default']
+  const Pagination: typeof import('./../components/Pagination/index.vue')['default']
+  const PicturePreview: typeof import('./../components/PicturePreview/index.vue')['default']
 }

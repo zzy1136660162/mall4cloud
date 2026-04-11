@@ -18,28 +18,29 @@ interface BreadcrumbRecord {
   title?: string | (() => string)
 }
 
-let breadcrumbListBackup: BreadcrumbRecord[] = []
 const breadcrumbList = computed<BreadcrumbRecord[]>(() => {
-  if (route.name === 'reload') {
-    return breadcrumbListBackup
-  }
   const list: BreadcrumbRecord[] = []
+
+  // 如果启用了主页，则首先添加主页
   if (appSettingsStore.settings.app.home.enable) {
     list.push({
       path: appSettingsStore.settings.app.home.fullPath,
       title: appSettingsStore.settings.app.home.title,
     })
   }
+
+  // 使用 route.matched 获取路由匹配
   route.matched.forEach((item) => {
-    if (item.meta?.breadcrumb !== false) {
+    // 跳过没有标题或明确设置 breadcrumb: false 的路由
+    if (item.meta?.breadcrumb !== false && item.meta?.title) {
       list.push({
         path: item.path,
         title: item.meta?.title,
       })
     }
   })
-  breadcrumbListBackup = list.filter(item => generateTitle(item.title))
-  return breadcrumbListBackup
+
+  return list
 })
 
 function pathCompile(path: string) {
@@ -51,7 +52,7 @@ function pathCompile(path: string) {
 <template>
   <Breadcrumb v-if="appSettingsStore.mode === 'pc'" class="breadcrumb px-2 whitespace-nowrap">
     <TransitionGroup name="breadcrumb">
-      <BreadcrumbItem v-for="(item, index) in breadcrumbList" :key="`${index}_${item.path}_${item.title}`" :to="index < breadcrumbList.length - 1 && item.path !== '' ? pathCompile(item.path) : ''">
+      <BreadcrumbItem v-for="(item, index) in breadcrumbList" :key="item.path" :to="index < breadcrumbList.length - 1 && item.path !== '' ? pathCompile(item.path) : ''">
         {{ generateTitle(item.title) }}
       </BreadcrumbItem>
     </TransitionGroup>

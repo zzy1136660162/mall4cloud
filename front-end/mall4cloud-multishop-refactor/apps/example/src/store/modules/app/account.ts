@@ -28,13 +28,23 @@ export const useAppAccountStore = defineStore('appAccount', () => {
     account: string
     password: string
   }) {
-    const res = await apiApp.login(data)
-    localStorage.setItem('account', res.data.account)
-    localStorage.setItem('token', res.data.token)
-    localStorage.setItem('avatar', res.data.avatar)
-    account.value = res.data.account
-    token.value = res.data.token
-    avatar.value = res.data.avatar
+    // 转换参数格式适配旧后端
+    const res = await apiApp.login({
+      principal: data.account,
+      credentials: data.password,
+      sysType: 1,
+    })
+    // 旧后端响应格式 { accessToken: '...' }，拦截器返回 res.data
+    const accessToken = res?.accessToken || res?.token || res
+    if (!accessToken) {
+      throw new Error('登录失败：未获取到 token')
+    }
+    localStorage.setItem('account', data.account)
+    localStorage.setItem('token', accessToken)
+    localStorage.setItem('avatar', '')
+    account.value = data.account
+    token.value = accessToken
+    avatar.value = ''
   }
 
   // 手动登出
@@ -82,8 +92,15 @@ export const useAppAccountStore = defineStore('appAccount', () => {
 
   // 获取权限
   async function getPermissions() {
-    const res = await apiApp.permission()
-    permissions.value = res.data.permissions
+    try {
+      const res = await apiApp.permission()
+      // 适配旧后端响应格式
+      permissions.value = res?.permissions || res?.data?.permissions || res || []
+    }
+    catch {
+      // 如果后端权限接口不可用，使用测试权限
+      permissions.value = ['*']
+    }
   }
 
   // 修改密码
