@@ -1,5 +1,12 @@
 <template>
-  <view class="page-jiedong">
+  <scroll-view
+    class="page-jiedong"
+    scroll-y
+    enable-back-to-top
+    :scroll-top="scrollTop"
+    :scroll-with-animation="true"
+    :scroll-into-view="scrollIntoView"
+  >
     <view class="page-content">
       <view class="banner-wrapper">
         <swiper
@@ -54,7 +61,7 @@
         </view>
       </view>
 
-      <view class="tab-section">
+      <view class="tab-section" id="tab-section">
         <view class="tab-wrapper">
           <view
             class="tab-item"
@@ -89,8 +96,8 @@
         </view>
       </view>
 
-      <view class="content-area">
-        <view v-show="currentTab === 0" class="content-panel cert-panel">
+      <view class="content-area" id="content-area">
+        <view id="panel-cert" class="content-panel cert-panel">
           <view class="panel-header cert-header">
             <image class="header-bg" src="/static/images/homepage/cert-header-bg.jpg" mode="aspectFill" />
             <view class="header-content">
@@ -144,7 +151,7 @@
           </view>
         </view>
 
-        <view v-show="currentTab === 1" class="content-panel cdmo-panel">
+        <view id="panel-cdmo" class="content-panel cdmo-panel">
           <view class="panel-header production-header">
             <image class="header-bg" src="/static/images/homepage/production-bg-1.png" mode="aspectFill" />
             <view class="header-content">
@@ -235,7 +242,7 @@
           </view>
         </view>
 
-        <view v-show="currentTab === 2" class="content-panel marketing-panel">
+        <view id="panel-prod" class="content-panel marketing-panel">
           <view class="panel-header marketing-header">
             <image class="header-bg" src="/static/images/homepage/marketing-bg.png" mode="aspectFill" />
             <view class="header-content">
@@ -297,15 +304,62 @@
           </view>
         </view>
       </view>
+
+      <view class="bottom-nav">
+        <view
+          class="nav-item"
+          :class="{ active: currentNav === 0 }"
+          @tap="switchNav(0)"
+        >
+          <view class="nav-icon">
+            <image src="/static/images/homepage/icon-nav-home.svg" mode="aspectFit" />
+          </view>
+          <view class="nav-text">首页</view>
+        </view>
+        <view
+          class="nav-item"
+          :class="{ active: currentNav === 1 }"
+          @tap="switchNav(1)"
+        >
+          <view class="nav-icon">
+            <image src="/static/images/homepage/icon-nav-product.svg" mode="aspectFit" />
+          </view>
+          <view class="nav-text">产品</view>
+        </view>
+        <view
+          class="nav-item"
+          :class="{ active: currentNav === 2 }"
+          @tap="switchNav(2)"
+        >
+          <view class="nav-icon">
+            <image src="/static/images/homepage/icon-nav-consult.svg" mode="aspectFit" />
+          </view>
+          <view class="nav-text">咨询</view>
+        </view>
+        <view
+          class="nav-item"
+          :class="{ active: currentNav === 3 }"
+          @tap="switchNav(3)"
+        >
+          <view class="nav-icon">
+            <image src="/static/images/homepage/icon-nav-my.svg" mode="aspectFit" />
+          </view>
+          <view class="nav-text">我的</view>
+        </view>
+      </view>
     </view>
-  </view>
+  </scroll-view>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, nextTick } from 'vue'
 
 const currentBanner = ref(0)
 const currentTab = ref(0)
+const currentNav = ref(0)
+const scrollIntoView = ref('')
+
+const panelIds = ['panel-cert', 'panel-cdmo', 'panel-prod']
 
 const certTypes = reactive([
   { name: '械字号', desc: '一类/二类/三类注册' },
@@ -394,6 +448,18 @@ const onBannerChange = (e) => {
 
 const switchTab = (index) => {
   currentTab.value = index
+  scrollIntoView.value = panelIds[index]
+  nextTick(() => {
+    scrollIntoView.value = ''
+  })
+}
+
+const switchNav = (index) => {
+  if (index === 0) return
+  uni.showToast({
+    title: ['首页', '产品', '咨询', '我的'][index] + '页面开发中',
+    icon: 'none'
+  })
 }
 
 const onConsult = () => {
