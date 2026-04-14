@@ -1,5 +1,7 @@
 <template>
   <view class="shop-prods-page">
+    <DiyTabbar :current-index="3" @change="handleTabChange" />
+
     <scroll-view class="category-scroll" scroll-x :show-scrollbar="false">
       <view class="category-list">
         <view
@@ -80,22 +82,13 @@
         <text class="no-more-text">没有更多了</text>
       </view>
     </scroll-view>
-
-    <view class="cart-tab" @tap="goToCart">
-      <view class="cart-icon-wrapper">
-        <text class="cart-icon">🛒</text>
-        <view class="cart-badge" v-if="cartCount > 0">
-          <text>{{ cartCount > 99 ? '99+' : cartCount }}</text>
-        </view>
-      </view>
-      <text class="cart-text">购物车</text>
-    </view>
   </view>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import util from '@/utils/util.js'
+import DiyTabbar from '@/components/diy-tabbar/diy-tabbar.vue'
 
 const Data = reactive({
   shopId: null,
@@ -133,6 +126,10 @@ const {
 } = toRefs(Data)
 
 const cartCount = ref(0)
+
+const handleTabChange = ({ item, index }) => {
+  console.log('Tab切换到:', item.text, index)
+}
 
 onReachBottom(() => {
   if (Data.hasMore && !Data.loading) {
@@ -334,12 +331,6 @@ function addToCart(item) {
   })
 }
 
-function goToCart() {
-  uni.navigateTo({
-    url: '/pages/cart/cart'
-  })
-}
-
 function onScrollToLower() {
   if (Data.hasMore && !Data.loading) {
     Data.pageNum++
@@ -353,6 +344,14 @@ function onScrollToLower() {
   min-height: 100vh;
   background-color: #f5f5f5;
   padding-bottom: 120rpx;
+}
+
+.shop-prods-page :deep(.diy-tabbar) {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
 }
 
 .category-scroll {
@@ -440,7 +439,7 @@ function onScrollToLower() {
 }
 
 .product-scroll {
-  height: calc(100vh - 280rpx);
+  height: calc(100vh - 160rpx - env(safe-area-inset-bottom));
 }
 
 .product-grid {
@@ -583,51 +582,5 @@ function onScrollToLower() {
 .no-more-text {
   font-size: 26rpx;
   color: #999;
-}
-
-.cart-tab {
-  position: fixed;
-  bottom: 40rpx;
-  right: 40rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100rpx;
-  height: 100rpx;
-  background-color: #ff4d4f;
-  border-radius: 50%;
-  box-shadow: 0 4rpx 12rpx rgba(255, 77, 79, 0.4);
-  z-index: 999;
-}
-
-.cart-icon-wrapper {
-  position: relative;
-}
-
-.cart-icon {
-  font-size: 40rpx;
-}
-
-.cart-badge {
-  position: absolute;
-  top: -12rpx;
-  right: -16rpx;
-  min-width: 32rpx;
-  height: 32rpx;
-  padding: 0 8rpx;
-  background-color: #fff;
-  color: #ff4d4f;
-  font-size: 20rpx;
-  border-radius: 16rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cart-text {
-  font-size: 20rpx;
-  color: #fff;
-  margin-top: 4rpx;
 }
 </style>

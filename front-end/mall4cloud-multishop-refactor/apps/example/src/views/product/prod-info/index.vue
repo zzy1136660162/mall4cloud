@@ -350,6 +350,28 @@ const buildSkuAttrs = (sku: SkuVO) => {
   return Array.from(new Set(attrNames)).join(',')
 }
 
+const extractSpuAttrValues = (skuList: SkuVO[]) => {
+  const attrMap: Record<string, any> = {}
+
+  skuList.forEach(sku => {
+    sku.spuSkuAttrValues?.forEach((attr: any) => {
+      if (attr.attrId && attr.attrValueId) {
+        const key = `${attr.attrId}-${attr.attrValueId}`
+        if (!attrMap[key]) {
+          attrMap[key] = {
+            attrId: attr.attrId,
+            attrName: attr.attrName || '',
+            attrValueId: attr.attrValueId,
+            attrValueName: attr.attrValueName || ''
+          }
+        }
+      }
+    })
+  })
+
+  return Object.values(attrMap)
+}
+
 const validateSubmitSkus = (skuList: SkuVO[]) => {
   if (!skuSelectorRef.value?.validateStock()) {
     return false
@@ -388,6 +410,7 @@ const buildSubmitData = () => {
   })
 
   submitData.skuList = skuList
+  submitData.spuAttrValues = extractSpuAttrValues(dataForm.skuList)
   submitData.priceFee = toCent(dataForm.priceFee)
   submitData.marketPriceFee = toCent(dataForm.marketPriceFee)
   submitData.totalStock = dataForm.totalStock
@@ -471,6 +494,7 @@ const init = async () => {
     dataForm.priceFee = toYuan(data.priceFee)
     dataForm.marketPriceFee = toYuan(data.marketPriceFee)
     dataForm.changeStock = 0
+    dataForm.spuAttrValues = extractSpuAttrValues(skus)
     refreshSkuSummary(dataForm.skuList)
 
     if (data.brand?.imgUrl) {

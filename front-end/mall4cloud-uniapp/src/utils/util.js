@@ -958,6 +958,43 @@ const util = {
     return import.meta.env.VITE_APP_RESOURCES_URL + url
   },
 
+  /**
+   * 处理富文本中的图片路径，添加MinIO域名前缀
+   * @param content 富文本HTML内容
+   * @returns {String} 处理后的富文本HTML内容
+   */
+  processRichText: (content) => {
+    if (!content) return ''
+
+    const baseUrl = import.meta.env.VITE_APP_RESOURCES_URL
+
+    // 处理 img 标签的 src 属性
+    let result = content.replace(/<img([^>]*)src=["']([^"']*)["']([^>]*)>/gi, (match, before, src, after) => {
+      // 如果已经是完整URL，直接返回
+      if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) {
+        return match
+      }
+      // 添加域名前缀
+      const fullUrl = baseUrl + src
+      return `<img${before}src="${fullUrl}"${after}>`
+    })
+
+    // 处理富文本样式（参考 formatHtml）
+    result = result.replace(/<p/gi, '<p style="max-width:100% !important;word-wrap:break-word;word-break:break-word;" ')
+    result = result.replace(/<ul/gi, '<ul style="list-style-type: none" ')
+    result = result.replace(/<img/gi, '<img style="width: auto; max-width:100% !important;height:auto !important;margin:0;" ')
+    result = result.replace(/style="/gi, 'style="max-width:100% !important;table-layout:fixed;word-wrap:break-word; word-break: break-word;')
+    result = result.replace(/<table/gi, '<table style="table-layout:fixed; word-wrap:break-word; word-break:break-word;" ')
+    result = result.replace(/<td/gi, '<td cellspacing="0" cellpadding="0" border="0" style="display:block;vertical-align:top;margin: 0px; padding: 0px; border: 0px;outline-width:0px;"')
+    result = result.replace(/width=/gi, 'sss=')
+    result = result.replace(/height=/gi, 'sss=')
+    result = result.replace(/ \/>/gi, ' style="max-width:100% !important;height:auto !important;margin:0;display:block;" />')
+    result = result.replace(/\n/gi, '<br>')
+    result = result.replace(/\r\n/gi, '<br>')
+
+    return result
+  },
+
   // 获取用户授权
   getUserAuth: (callBack) => {
     const system = uni.getSystemInfoSync()

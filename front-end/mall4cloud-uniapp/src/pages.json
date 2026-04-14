@@ -104,7 +104,8 @@
     {
 			"path": "pages/shop-prods/shop-prods",
 			"style": {
-				"navigationBarTitleText": "店铺商品"
+				"navigationBarTitleText": "店铺商品",
+				"disableScroll": true
 			}
 		},
     {

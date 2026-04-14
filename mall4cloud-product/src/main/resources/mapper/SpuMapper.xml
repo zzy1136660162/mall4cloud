@@ -194,6 +194,33 @@
       <if test="spu.seq != null">
         `seq` = #{spu.seq},
       </if>
+      <if test="spu.isSelection != null">
+        `is_selection` = #{spu.isSelection},
+      </if>
+      <if test="spu.commissionRate != null">
+        `commission_rate` = #{spu.commissionRate},
+      </if>
+      <if test="spu.isHot != null">
+        `is_hot` = #{spu.isHot},
+      </if>
+      <if test="spu.isNew != null">
+        `is_new` = #{spu.isNew},
+      </if>
+      <if test="spu.isRecommend != null">
+        `is_recommend` = #{spu.isRecommend},
+      </if>
+      <if test="spu.isSelectionBest != null">
+        `is_selection_best` = #{spu.isSelectionBest},
+      </if>
+      <if test="spu.rating != null">
+        `rating` = #{spu.rating},
+      </if>
+      <if test="spu.totalSales != null">
+        `total_sales` = #{spu.totalSales},
+      </if>
+      <if test="spu.monthSales != null">
+        `month_sales` = #{spu.monthSales},
+      </if>
     </set>
     where spu_id = #{spu.spuId}
   </update>

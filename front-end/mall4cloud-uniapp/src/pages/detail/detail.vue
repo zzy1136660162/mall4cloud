@@ -95,43 +95,13 @@
       </view>
     </view>
 
-    <!-- 店铺 -->
-    <view class="shop-box">
-      <view class="shop-info">
-        <view class="info">
-          <view class="img">
-            <image :src="util.getImgUrl(shopInfo.shopLogo)" />
-          </view>
-          <view class="text">
-            <view class="name">
-              {{ shopInfo.shopName }}
-            </view>
-            <view class="focus-box">
-              <view
-                v-if="shopInfo.type === 1"
-                class="self"
-              >
-                自营
-              </view>
-            </view>
-          </view>
-        </view>
-        <view
-          class="go-shop"
-          @tap="toShopIndex"
-        >
-          进店逛逛
-        </view>
-      </view>
-    </view>
-
     <!-- 详情 -->
     <div class="det-det">
       <div class="tit">
         商品详情
       </div>
       <div class="con">
-        <rich-text :nodes="prodDetail" />
+        <rich-text  :nodes="prodDetail" />
       </div>
     </div>
 
@@ -479,7 +449,7 @@ const getProdInfo = () => {
 
     Data.prodInfo = res
     Data.deliveryModeVO = res.deliveryModeVO
-    Data.prodDetail = util.formatHtml(res.detail)
+    Data.prodDetail = util.processRichText(res.detail)
     Data.imgList = imgList
     Data.skuList = res.skus
   })
@@ -702,7 +672,7 @@ const toIndex = () => {
 * 去购物车
 */
 const toCart = () => {
-  uni.switchTab({
+  uni.navigateTo({
     url: '/pages/cart/cart'
   })
 }

@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -33,21 +35,35 @@ public class SpuAttrValueServiceImpl implements SpuAttrValueService {
 
     @Override
     public void update(Long spuId, List<SpuAttrValue> spuAttrValues, List<SpuAttrValueVO> spuAttrValuesDb) {
-        List<Long> spuAttrValueIdsDb = spuAttrValuesDb.stream().map(SpuAttrValueVO::getSpuAttrValueId).collect(Collectors.toList());
+        // 基于 attrId 建立 Map，方便快速查找
+        Map<Long, SpuAttrValueVO> dbAttrValueMap = spuAttrValuesDb.stream()
+                .collect(Collectors.toMap(SpuAttrValueVO::getAttrId, v -> v, (v1, v2) -> v1));
+        Set<Long> dbAttrIds = dbAttrValueMap.keySet();
+
         List<SpuAttrValue> updateList = new ArrayList<>();
         List<SpuAttrValue> saveList = new ArrayList<>();
-        List<Long> spuAttrValueIds = new ArrayList<>();
+        Set<Long> handledAttrIds = new java.util.HashSet<>();
+
         for (SpuAttrValue spuAttrValue : spuAttrValues) {
-            if (spuAttrValueIdsDb.contains(spuAttrValue.getSpuAttrValueId())) {
-                if (Objects.nonNull(spuAttrValue.getAttrValueName()) || Objects.nonNull(spuAttrValue.getAttrValueId())) {
-                    updateList.add(spuAttrValue);
-                }
-                spuAttrValueIds.add(spuAttrValue.getSpuAttrValueId());
+            Long attrId = spuAttrValue.getAttrId();
+            if (attrId == null) {
                 continue;
             }
-            spuAttrValue.setSpuId(spuId);
-            saveList.add(spuAttrValue);
+            handledAttrIds.add(attrId);
+
+            if (dbAttrIds.contains(attrId)) {
+                // 数据库已存在该 attrId，更新
+                SpuAttrValueVO dbRecord = dbAttrValueMap.get(attrId);
+                spuAttrValue.setSpuAttrValueId(dbRecord.getSpuAttrValueId());
+                spuAttrValue.setSpuId(spuId);
+                updateList.add(spuAttrValue);
+            } else {
+                // 数据库不存在，新增
+                spuAttrValue.setSpuId(spuId);
+                saveList.add(spuAttrValue);
+            }
         }
+
         // 保存新增的关联属性
         if (CollUtil.isNotEmpty(saveList)) {
             saveBatch(spuId, saveList);
@@ -56,10 +72,15 @@ public class SpuAttrValueServiceImpl implements SpuAttrValueService {
         if (CollUtil.isNotEmpty(updateList)) {
             spuAttrValueMapper.updateBatch(updateList);
         }
-        // 删除属性
-        spuAttrValueIdsDb.removeAll(spuAttrValueIds);
-        if (CollUtil.isNotEmpty(spuAttrValueIdsDb)) {
-            spuAttrValueMapper.deleteBatch(spuAttrValueIdsDb);
+        // 删除不再使用的属性（数据库有但前端没提交的）
+        List<Long> toDeleteIds = spuAttrValuesDb.stream()
+                .map(SpuAttrValueVO::getAttrId)
+                .filter(attrId -> !handledAttrIds.contains(attrId))
+                .map(dbAttrValueMap::get)
+                .map(SpuAttrValueVO::getSpuAttrValueId)
+                .collect(Collectors.toList());
+        if (CollUtil.isNotEmpty(toDeleteIds)) {
+            spuAttrValueMapper.deleteBatch(toDeleteIds);
         }
     }
 
