@@ -60,9 +60,43 @@
               .{{ wxs.parsePrice(defaultSku.priceFee)[1] }}
             </view>
           </view>
-          <view class="stock">
-            仅剩{{ defaultSku.stock }}件
-          </view>
+        </view>
+      </view>
+      <!-- 宣传语 -->
+      <!-- <view class="selling-point" v-if="prodInfo.sellingPoint">
+        <text class="point-icon">🎯</text>
+        <text class="point-text">{{ prodInfo.sellingPoint }}</text>
+      </view> -->
+      <!-- 服务标签 -->
+      <view class="service-tags">
+        <view class="tag-item">
+          <text class="tag-icon">⚡</text>
+          <text class="tag-text">24h发货</text>
+        </view>
+        <view class="tag-item">
+          <text class="tag-icon">🛡️</text>
+          <text class="tag-text">正品保障</text>
+        </view>
+        <view class="tag-item">
+          <text class="tag-icon">📦</text>
+          <text class="tag-text">实物一致</text>
+        </view>
+      </view>
+      <!-- 销量信息 -->
+      <view class="sales-info">
+        <view class="sales-item">
+          <text class="sales-num">{{ prodInfo.totalSales || 0 }}</text>
+          <text class="sales-label">累计销量</text>
+        </view>
+        <view class="sales-divider">|</view>
+        <view class="sales-item">
+          <text class="sales-num">{{ prodInfo.monthSales || 0 }}</text>
+          <text class="sales-label">本月销量</text>
+        </view>
+        <view class="sales-divider">|</view>
+        <view class="sales-item">
+          <text class="sales-num stock-num">{{ defaultSku.stock || 0 }}</text>
+          <text class="sales-label">剩余库存</text>
         </view>
       </view>
     </view>
