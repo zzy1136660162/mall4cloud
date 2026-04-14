@@ -64,7 +64,7 @@
                     @tap.stop="handleProdItemSelect(shopIndex, prodIndex)"
                   />
                   <view class="prod-img">
-                    <image :src="prodItem.imgUrl" />
+                    <image :src="util.getImgUrl(prodItem.imgUrl)" />
                   </view>
                   <view class="prod-info">
                     <view class="name">
@@ -189,7 +189,7 @@
       <view class="popup-con-bottom check-sku">
         <view class="goods-box">
           <view class="img">
-            <image :src="defaultSku ? defaultSku.imgUrl : prodInfo.mainImgUrl" />
+            <image :src="util.getImgUrl(defaultSku ? defaultSku.imgUrl : prodInfo.mainImgUrl)" />
           </view>
           <view class="info">
             <view class="name">
@@ -253,6 +253,7 @@
 <script setup>
 import { reactive } from 'vue'
 import * as cartCount from '@/utils/cart-count.js'
+import util from '@/utils/util.js'
 
 const wxs = number()
 

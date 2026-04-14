@@ -182,7 +182,7 @@
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { productApi } from '@/api/modules/product'
+import { productApi, type SkuVO } from '@/api/modules/product'
 import ImgUpload from '@/components/ImgUpload/index.vue'
 import ImgsUpload from '@/components/ImgsUpload/index.vue'
 import CategorySelector from '@/components/CategorySelector/index.vue'
@@ -198,8 +198,9 @@ const dataFormRef = ref()
 const categorySelectorRef = ref()
 const brandSelectRef = ref()
 const skuSelectorRef = ref()
+const backTotalStock = ref(0)
 
-const dataForm = reactive({
+const dataForm = reactive<any>({
   spuId: route.query.spuId || null,
   categoryId: null as number | null,
   shopCategoryId: null as number | null,
@@ -211,6 +212,10 @@ const dataForm = reactive({
   seq: null as number | null,
   detail: '',
   totalStock: 0,
+  changeStock: 0,
+  priceFee: 0,
+  marketPriceFee: 0,
+  spuAttrValues: [] as any[],
   skuList: [] as any[],
   isSelection: 0,
   commissionRate: 0,
@@ -287,15 +292,112 @@ const changeSkuGroupData = (data: any[]) => {
   salesAttrs.value = data
 }
 
-const handleSkuChange = (skuList: any[]) => {
+const toYuan = (fee?: number | null) => {
+  if (fee == null) {
+    return 0
+  }
+  return Math.round(Number(fee)) / 100
+}
+
+const toCent = (amount?: number | null) => {
+  if (amount == null) {
+    return 0
+  }
+  return Math.round(Number(amount) * 100)
+}
+
+const normalizeSkuForEdit = (sku: SkuVO) => {
+  const stock = Number(sku.stock || 0)
+  return {
+    ...sku,
+    stock,
+    originalStock: stock,
+    changeStock: 0,
+    marketPriceFee: toYuan(sku.marketPriceFee),
+    priceFee: toYuan(sku.priceFee),
+  }
+}
+
+const refreshSkuSummary = (skuList: SkuVO[]) => {
   let totalStock = 0
-  skuList.forEach((sku: any) => {
-    if (sku.stock) {
-      totalStock += Number(sku.stock)
-    }
+  const salePrices: number[] = []
+  const marketPrices: number[] = []
+
+  skuList.forEach((sku) => {
+    totalStock += Number(sku.stock || 0)
+    salePrices.push(Number(sku.priceFee || 0))
+    marketPrices.push(Number(sku.marketPriceFee || 0))
   })
+
   dataForm.totalStock = totalStock
+  dataForm.changeStock = dataForm.spuId ? Math.max(totalStock - backTotalStock.value, 0) : 0
+  dataForm.priceFee = salePrices.length ? Math.min(...salePrices) : 0
+  dataForm.marketPriceFee = marketPrices.length ? Math.min(...marketPrices) : 0
+}
+
+const handleSkuChange = (skuList: any[]) => {
+  refreshSkuSummary(skuList)
   flatten.value = skuList
+}
+
+const buildSkuName = (sku: SkuVO) => {
+  const attrValueNames = sku.spuSkuAttrValues?.map(attr => attr.attrValueName).filter(Boolean) || []
+  return attrValueNames.length ? attrValueNames.join(' ') : sku.skuName
+}
+
+const buildSkuAttrs = (sku: SkuVO) => {
+  const attrNames = sku.spuSkuAttrValues?.map(attr => attr.attrName).filter(Boolean) || []
+  return Array.from(new Set(attrNames)).join(',')
+}
+
+const validateSubmitSkus = (skuList: SkuVO[]) => {
+  if (!skuSelectorRef.value?.validateStock()) {
+    return false
+  }
+  if (skuList.some(sku => sku.stock === null || sku.stock === undefined || Number.isNaN(Number(sku.stock)))) {
+    ElMessage.warning('商品库存不能为空！')
+    return false
+  }
+  if (skuList.some(sku => Number(sku.priceFee || 0) <= 0)) {
+    ElMessage.warning('商品销售价格必须大于0！')
+    return false
+  }
+  return true
+}
+
+const buildSubmitData = () => {
+  refreshSkuSummary(dataForm.skuList)
+  const submitData = JSON.parse(JSON.stringify(dataForm))
+  const skuList = submitData.skuList.map((sku: SkuVO) => {
+    const nextSku: SkuVO = {
+      ...sku,
+      attrs: buildSkuAttrs(sku),
+      skuName: buildSkuName(sku),
+      marketPriceFee: toCent(sku.marketPriceFee),
+      priceFee: toCent(sku.priceFee),
+      stock: Number(sku.stock || 0),
+    }
+    if (nextSku.skuId && nextSku.spuId) {
+      nextSku.spuSkuAttrValues = undefined
+    }
+    if (nextSku.changeStock != null) {
+      nextSku.changeStock = Math.max(Number(nextSku.changeStock), 0)
+    }
+    delete nextSku.originalStock
+    return nextSku
+  })
+
+  submitData.skuList = skuList
+  submitData.priceFee = toCent(dataForm.priceFee)
+  submitData.marketPriceFee = toCent(dataForm.marketPriceFee)
+  submitData.totalStock = dataForm.totalStock
+  submitData.changeStock = Math.max(Number(dataForm.changeStock || 0), 0)
+  delete submitData.skus
+  delete submitData.brand
+  delete submitData.category
+  delete submitData.shopCategory
+  delete submitData.shopName
+  return submitData
 }
 
 const changeFormatOfFormData = () => {
@@ -320,10 +422,11 @@ const changeFormatOfFormData = () => {
       return
     }
 
-    const submitData = {
-      ...dataForm,
-      skuList: dataForm.skuList,
+    if (!validateSubmitSkus(dataForm.skuList)) {
+      return
     }
+
+    const submitData = buildSubmitData()
 
     const request = dataForm.spuId
       ? productApi.prodInfo.update(submitData)
@@ -344,6 +447,9 @@ const resetForm = () => {
   dataForm.imgUrls = ''
   dataForm.seq = null
   dataForm.detail = ''
+  dataForm.skuList = []
+  dataForm.totalStock = 0
+  dataForm.changeStock = 0
   selectedShopCategorys.value = []
   if (!dataForm.spuId) {
     selectedCategorys.value = []
@@ -359,6 +465,13 @@ const init = async () => {
   try {
     const data: any = await productApi.prodInfo.get(spuId)
     Object.assign(dataForm, data)
+    const skus = data.skus || []
+    backTotalStock.value = skus.reduce((total: number, sku: SkuVO) => total + Number(sku.stock || 0), 0)
+    dataForm.skuList = skus.map(normalizeSkuForEdit)
+    dataForm.priceFee = toYuan(data.priceFee)
+    dataForm.marketPriceFee = toYuan(data.marketPriceFee)
+    dataForm.changeStock = 0
+    refreshSkuSummary(dataForm.skuList)
 
     if (data.brand?.imgUrl) {
       brandImgUrl.value = data.brand.imgUrl.startsWith('http')
@@ -366,6 +479,8 @@ const init = async () => {
         : resourcesUrl + data.brand.imgUrl
     }
     brandName.value = data.brand?.name || ''
+    selectedCategorys.value = data.category?.pathNames || []
+    selectedShopCategorys.value = data.shopCategory?.pathNames || []
     showCategorySelectBtn.value = false
     showShopCategorySelectBtn.value = false
   } catch (error) {

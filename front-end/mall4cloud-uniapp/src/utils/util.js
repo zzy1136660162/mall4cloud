@@ -944,6 +944,20 @@ const util = {
     }
   },
 
+  /**
+   * 获取带前缀的图片URL（专门用于MinIO图片服务器）
+   * @param imgUrl 图片路径
+   * @returns {String} 带前缀的完整图片URL
+   */
+  getImgUrl: (imgUrl) => {
+    if (!imgUrl) return ''
+    const url = imgUrl.trim()
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('//')) {
+      return url
+    }
+    return import.meta.env.VITE_APP_RESOURCES_URL + url
+  },
+
   // 获取用户授权
   getUserAuth: (callBack) => {
     const system = uni.getSystemInfoSync()

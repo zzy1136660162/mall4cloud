@@ -67,6 +67,9 @@ public class SpuPageSearchDTO {
 	@Schema(description = "创建时间排序 0：倒序 1：顺序" )
 	private Integer createTimeSort;
 
+	@Schema(description = "佣金排序 0：倒序 1：顺序" )
+	private Integer commissionSort;
+
 	@Schema(description = "是否选品 0-否 1-是" )
 	private Integer isSelection;
 
@@ -235,6 +238,14 @@ public class SpuPageSearchDTO {
 		this.createTimeSort = createTimeSort;
 	}
 
+	public Integer getCommissionSort() {
+		return commissionSort;
+	}
+
+	public void setCommissionSort(Integer commissionSort) {
+		this.commissionSort = commissionSort;
+	}
+
 	public Integer getIsSelection() {
 		return isSelection;
 	}
@@ -320,6 +331,7 @@ public class SpuPageSearchDTO {
 				", stockSort=" + stockSort +
 				", seqSort=" + seqSort +
 				", createTimeSort=" + createTimeSort +
+				", commissionSort=" + commissionSort +
 				'}';
 	}
 }

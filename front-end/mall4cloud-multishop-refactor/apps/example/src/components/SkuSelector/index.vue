@@ -125,7 +125,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { ArrowDown, Plus } from '@element-plus/icons-vue'
 import ImgBox from '@/components/ImgBox/index.vue'
 import { productApi, type AttrVO, type SkuVO, type SpuSkuAttrValue } from '@/api/modules/product'
@@ -160,6 +160,66 @@ const availableAttrs = computed(() => {
   return allAttrs.value.filter(attr => !selectedIds.includes(attr.attrId))
 })
 
+const cloneSkuList = (skuList: SkuVO[]) => JSON.parse(JSON.stringify(skuList)) as SkuVO[]
+
+const hasSameAttrValues = (skuAttrs: SpuSkuAttrValue[], combination: SpuSkuAttrValue[]) => {
+  return combination.every((comb: SpuSkuAttrValue) =>
+    skuAttrs.some(s => s.attrValueId === comb.attrValueId)
+  ) && skuAttrs.length === combination.length
+}
+
+const syncSelectedAttrsFromSkus = (skus: SkuVO[]) => {
+  const attrMap = new Map<number, AttrWithSelection>()
+  skus.forEach((sku) => {
+    sku.spuSkuAttrValues?.forEach((skuAttr) => {
+      if (skuAttr.attrId == null || skuAttr.attrValueId == null) {
+        return
+      }
+      const attrConfig = allAttrs.value.find(attr => attr.attrId === skuAttr.attrId)
+      const attr = attrMap.get(skuAttr.attrId) || {
+        ...(attrConfig || {
+          attrId: skuAttr.attrId,
+          name: skuAttr.attrName,
+          attrValues: [],
+        }),
+        selectedValues: [],
+      }
+      if (!attr.selectedValues.includes(skuAttr.attrValueId)) {
+        attr.selectedValues.push(skuAttr.attrValueId)
+      }
+      if (!attr.attrValues?.some(value => value.attrValueId === skuAttr.attrValueId)) {
+        attr.attrValues = [
+          ...(attr.attrValues || []),
+          { attrValueId: skuAttr.attrValueId, value: skuAttr.attrValueName },
+        ]
+      }
+      attrMap.set(skuAttr.attrId, attr)
+    })
+  })
+  selectedAttrs.value = Array.from(attrMap.values()).slice(0, 2)
+}
+
+const normalizeSkuList = (skuList: SkuVO[]) => {
+  return cloneSkuList(skuList).map((sku) => {
+    const stock = Number(sku.stock || 0)
+    const originalStock = sku.originalStock ?? stock
+    const changeStock = sku.skuId ? Math.max(stock - originalStock, 0) : undefined
+    return {
+      ...sku,
+      stock,
+      originalStock,
+      changeStock,
+      marketPriceFee: Number(sku.marketPriceFee || 0),
+      priceFee: Number(sku.priceFee || 0),
+    }
+  })
+}
+
+const refreshSkuState = (skuList: SkuVO[]) => {
+  skuCombinations.value = normalizeSkuList(skuList)
+  syncSelectedAttrsFromSkus(skuCombinations.value)
+}
+
 watch(() => props.categoryId, (newVal) => {
   if (newVal) {
     loadAttrs()
@@ -172,7 +232,10 @@ watch(() => props.categoryId, (newVal) => {
 
 watch(() => props.modelValue, (newVal) => {
   if (newVal && newVal.length > 0) {
-    skuCombinations.value = JSON.parse(JSON.stringify(newVal))
+    refreshSkuState(newVal)
+  } else {
+    skuCombinations.value = []
+    selectedAttrs.value = []
   }
 }, { immediate: true, deep: true })
 
@@ -184,6 +247,7 @@ const loadAttrs = async () => {
       attrType: 2,
     })
     allAttrs.value = data || []
+    syncSelectedAttrsFromSkus(skuCombinations.value)
   } catch (error) {
     console.error('获取销售属性失败', error)
   }
@@ -251,9 +315,7 @@ const generateSkuCombinations = () => {
   allCombinations.forEach(combination => {
     const existingSku = skuCombinations.value.find(sku => {
       const skuAttrs = sku.spuSkuAttrValues || []
-      return combination.every((comb: SpuSkuAttrValue) =>
-        skuAttrs.some(s => s.attrValueId === comb.attrValueId)
-      ) && skuAttrs.length === combination.length
+      return hasSameAttrValues(skuAttrs, combination)
     })
 
     if (existingSku) {
@@ -295,15 +357,12 @@ const batchSetPrice = () => {
     cancelButtonText: '取消',
     inputType: 'number',
     inputValue: '0',
-  }).then((action: any, instance: any) => {
-    if (action === 'confirm') {
-      const inputValue = instance.inputValue
-      const price = parseFloat(inputValue) || 0
-      skuCombinations.value.forEach(sku => {
-        sku.priceFee = price
-      })
-      emitUpdate()
-    }
+  }).then(({ value }) => {
+    const price = parseFloat(value) || 0
+    skuCombinations.value.forEach(sku => {
+      sku.priceFee = price
+    })
+    emitUpdate()
   }).catch(() => {})
 }
 
@@ -313,16 +372,26 @@ const batchSetStock = () => {
     cancelButtonText: '取消',
     inputType: 'number',
     inputValue: '0',
-  }).then((action: any, instance: any) => {
-    if (action === 'confirm') {
-      const inputValue = instance.inputValue
-      const stock = parseInt(inputValue) || 0
-      skuCombinations.value.forEach(sku => {
-        sku.stock = stock
-      })
-      emitUpdate()
-    }
+  }).then(({ value }) => {
+    const stock = parseInt(value) || 0
+    skuCombinations.value.forEach(sku => {
+      updateSkuStock(sku, stock)
+    })
+    emitUpdate()
   }).catch(() => {})
+}
+
+const updateSkuStock = (sku: SkuVO, stock: number) => {
+  if (sku.skuId && sku.originalStock != null && stock < sku.originalStock) {
+    sku.stock = sku.originalStock
+    sku.changeStock = 0
+    ElMessage.warning('输入库存不得小于原有库存')
+    return
+  }
+  sku.stock = stock
+  if (sku.skuId && sku.originalStock != null) {
+    sku.changeStock = stock - sku.originalStock
+  }
 }
 
 const getAttrValueName = (row: SkuVO, attrId: number) => {
@@ -337,16 +406,37 @@ const getImgSrc = (img: string) => {
 }
 
 const handleSkuChange = () => {
+  skuCombinations.value.forEach((sku) => {
+    updateSkuStock(sku, Number(sku.stock || 0))
+  })
   emitUpdate()
 }
 
+const validateStock = () => {
+  const invalidSku = skuCombinations.value.find((sku) => {
+    return sku.skuId && sku.originalStock != null && Number(sku.stock || 0) < sku.originalStock
+  })
+  if (invalidSku) {
+    ElMessage.warning('输入库存不得小于原有库存')
+    return false
+  }
+  return true
+}
+
 const emitUpdate = () => {
-  emit('update:modelValue', JSON.parse(JSON.stringify(skuCombinations.value)))
-  emit('change', JSON.parse(JSON.stringify(skuCombinations.value)))
+  const nextSkuList = cloneSkuList(skuCombinations.value).map((sku) => {
+    if (sku.skuId && sku.originalStock != null) {
+      sku.changeStock = Math.max(Number(sku.stock || 0) - sku.originalStock, 0)
+    }
+    return sku
+  })
+  emit('update:modelValue', nextSkuList)
+  emit('change', cloneSkuList(nextSkuList))
 }
 
 defineExpose({
   loadAttrs,
+  validateStock,
 })
 </script>
 

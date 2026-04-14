@@ -42,7 +42,7 @@
           @tap="toDetail(item.spuId)"
         >
           <view class="img">
-            <image :src="item.mainImgUrl" />
+            <image :src="util.getImgUrl(item.mainImgUrl)" />
           </view>
           <view class="text-box">
             <view class="name">
@@ -88,6 +88,7 @@
 </template>
 
 <script setup>
+import util from '@/utils/util.js'
 
 const wxs = number()
 

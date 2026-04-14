@@ -110,7 +110,7 @@
           @tap="toProdDetail(item.spuId)"
         >
           <view class="img">
-            <image :src="item.mainImgUrl" />
+            <image :src="util.getImgUrl(item.mainImgUrl)" />
           </view>
           <view class="text-box">
             <view class="name">
@@ -189,7 +189,7 @@
                 @tap="toProdDetail(prodItem.spuId)"
               >
                 <view class="img">
-                  <image :src="prodItem.mainImgUrl" />
+                  <image :src="util.getImgUrl(prodItem.mainImgUrl)" />
                 </view>
                 <view class="price">
                   ￥{{ wxs.parsePrice(prodItem.priceFee)[0] + '.' + wxs.parsePrice(prodItem.priceFee)[1] }}
@@ -224,6 +224,7 @@
 
 <script setup>
 import { reactive } from 'vue'
+import util from '@/utils/util.js'
 
 const wxs = number()
 

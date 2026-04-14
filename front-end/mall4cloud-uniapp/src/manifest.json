@@ -49,7 +49,7 @@
     },
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wxc4b6fb48ec3afa8b",
+        "appid" : "wxcf8066477a8b2b0c",
         "setting" : {
             "urlCheck" : false,
             "minified" : true

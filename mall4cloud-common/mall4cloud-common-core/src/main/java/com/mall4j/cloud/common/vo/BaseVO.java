@@ -1,6 +1,8 @@
 package com.mall4j.cloud.common.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 
@@ -11,6 +13,7 @@ import java.util.Date;
  *
  * @author FrozenWatermelon
  */
+@Data
 public class BaseVO {
 
 	/**

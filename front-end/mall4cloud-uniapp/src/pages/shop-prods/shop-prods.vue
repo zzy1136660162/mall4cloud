@@ -45,7 +45,7 @@
           @tap="detail(item.spuId)"
         >
           <view class="product-image-wrapper">
-            <image class="product-image" :src="item.mainImgUrl" mode="aspectFill" :lazy-load="true" />
+            <image class="product-image" :src="util.getImgUrl(item.mainImgUrl)" mode="aspectFill" :lazy-load="true" />
             <view class="product-tag" v-if="item.isNew || item.isHot">
               <text v-if="item.isNew">新品</text>
               <text v-if="item.isHot">热销</text>
@@ -95,6 +95,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import util from '@/utils/util.js'
 
 const Data = reactive({
   shopId: null,

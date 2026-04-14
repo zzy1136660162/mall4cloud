@@ -6,7 +6,7 @@
         <view class="bg">
           <image
             v-if="shopInfo.mobileBackgroundPic"
-            :src="shopInfo.mobileBackgroundPic"
+            :src="util.getImgUrl(shopInfo.mobileBackgroundPic)"
           />
           <image
             v-else
@@ -17,7 +17,7 @@
       <!-- 店铺信息 -->
       <view class="shop-info">
         <view class="logo">
-          <image :src="shopInfo.shopLogo" />
+          <image :src="util.getImgUrl(shopInfo.shopLogo)" />
         </view>
         <view class="text-box">
           <view class="name">
@@ -57,7 +57,7 @@
               @tap="detail(item.spuId)"
             >
               <view class="img">
-                <image :src="item.mainImgUrl" />
+                <image :src="util.getImgUrl(item.mainImgUrl)" />
               </view>
               <view class="text-box">
                 <view class="name">
@@ -91,6 +91,7 @@
 
 <script setup>
 import { reactive } from 'vue'
+import util from '@/utils/util.js'
 
 const Data = reactive({
   isCollect: false, // 是否收藏

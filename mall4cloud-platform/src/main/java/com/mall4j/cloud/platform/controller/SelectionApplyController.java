@@ -15,6 +15,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 选品申请控制器
  * 包含APP端和管理端的所有接口
@@ -36,9 +39,11 @@ public class SelectionApplyController {
      */
     @PostMapping("/app/selection/apply")
     @Operation(summary = "申请选品商品")
-    public ServerResponseEntity<Long> applySelection(@Valid @RequestBody SelectionApplyDTO dto) {
+    public ServerResponseEntity<Map<String, Long>> applySelection(@Valid @RequestBody SelectionApplyDTO dto) {
         Long applyId = selectionApplyService.applySelection(dto);
-        return ServerResponseEntity.success(applyId);
+        Map<String, Long> result = new HashMap<>(1);
+        result.put("applyId", applyId);
+        return ServerResponseEntity.success(result);
     }
 
     /**

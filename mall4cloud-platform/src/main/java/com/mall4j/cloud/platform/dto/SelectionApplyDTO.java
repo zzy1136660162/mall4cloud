@@ -50,6 +50,22 @@ public class SelectionApplyDTO implements Serializable {
     @Schema(description = "申请备注")
     private String applyRemark;
 
+    public String getContactName() {
+        return userName;
+    }
+
+    public void setContactName(String contactName) {
+        this.userName = contactName;
+    }
+
+    public String getRemark() {
+        return applyRemark;
+    }
+
+    public void setRemark(String remark) {
+        this.applyRemark = remark;
+    }
+
     public Long getSpuId() {
         return spuId;
     }

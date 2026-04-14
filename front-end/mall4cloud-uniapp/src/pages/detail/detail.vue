@@ -6,6 +6,10 @@
       class="det-header"
       :style="{ opacity: topTabOpacity, zIndex: topTabOpacity > 0.2 ? '1' : '-1' }"
     >
+      <!-- 返回按钮 -->
+      <view class="back-btn" @tap="goBack">
+        <text class="back-icon">←</text>
+      </view>
       <view
         :class="['item', topTabSts === 0 ? 'active' : '']"
         @tap="hanleTopTabClick(0)"
@@ -34,7 +38,7 @@
         :key="imgIdx"
         class="item"
       >
-        <image :src="img" />
+        <image :src="util.getImgUrl(img)" />
       </swiper-item>
     </swiper>
 
@@ -96,7 +100,7 @@
       <view class="shop-info">
         <view class="info">
           <view class="img">
-            <image :src="shopInfo.shopLogo" />
+            <image :src="util.getImgUrl(shopInfo.shopLogo)" />
           </view>
           <view class="text">
             <view class="name">
@@ -192,7 +196,7 @@
       <view class="popup-con-bottom check-sku">
         <view class="goods-box">
           <view class="img">
-            <image :src="prodInfo.mainImgUrl" />
+            <image :src="util.getImgUrl(prodInfo.mainImgUrl)" />
           </view>
           <view class="info">
             <view class="name">
@@ -279,6 +283,7 @@
 
 <script setup>
 import { reactive, watch } from 'vue'
+import util from '@/utils/util.js'
 
 const wxs = number()
 
@@ -606,6 +611,15 @@ const isSkuLineItemNotOptional = (allProperties, selectedPropObjpra, key, item, 
 const toChooseItem = (skuLineItem, key) => {
   Data.selectedPropObj[key] = skuLineItem
   parseSelectedObjToVals(Data.skuList)
+}
+
+/**
+ * 返回上一页
+ */
+const goBack = () => {
+  uni.navigateBack({
+    delta: 1
+  })
 }
 
 /**

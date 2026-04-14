@@ -91,21 +91,20 @@ public class DemandServiceImpl implements DemandService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long submit(DemandSubmitDTO demandSubmitDTO) {
-        Long demandId;
+        Long demandNoId;
         try {
             ServerResponseEntity<Long> segmentIdResponse = segmentFeignClient.getSegmentId(DEMAND_ID_KEY);
             if (segmentIdResponse.isSuccess() && segmentIdResponse.getData() != null) {
-                demandId = segmentIdResponse.getData();
+                demandNoId = segmentIdResponse.getData();
             } else {
-                demandId = generateSimpleId();
+                demandNoId = generateSimpleId();
             }
         } catch (Exception e) {
-            demandId = generateSimpleId();
+            demandNoId = generateSimpleId();
         }
 
         Demand demand = new Demand();
-        demand.setId(demandId);
-        demand.setDemandNo("D" + demandId);
+        demand.setDemandNo("D" + demandNoId);
         demand.setTitle(demandSubmitDTO.getTitle());
         demand.setFunctionalAppeal(demandSubmitDTO.getFunctionalAppeal());
         demand.setTargetAudience(demandSubmitDTO.getTargetAudience());
@@ -123,7 +122,7 @@ public class DemandServiceImpl implements DemandService {
         demand.setUpdateTime(now);
 
         demandMapper.save(demand);
-        return demandId;
+        return demand.getId();
     }
 
     @Override
@@ -182,21 +181,20 @@ public class DemandServiceImpl implements DemandService {
             throw new Mall4cloudException(ResponseEnum.SHOW_FAIL, "当前状态不允许重新申请");
         }
 
-        Long newDemandId;
+        Long newDemandNoId;
         try {
             ServerResponseEntity<Long> segmentIdResponse = segmentFeignClient.getSegmentId(DEMAND_ID_KEY);
             if (segmentIdResponse.isSuccess() && segmentIdResponse.getData() != null) {
-                newDemandId = segmentIdResponse.getData();
+                newDemandNoId = segmentIdResponse.getData();
             } else {
-                newDemandId = generateSimpleId();
+                newDemandNoId = generateSimpleId();
             }
         } catch (Exception e) {
-            newDemandId = generateSimpleId();
+            newDemandNoId = generateSimpleId();
         }
 
         Demand demand = new Demand();
-        demand.setId(newDemandId);
-        demand.setDemandNo("D" + newDemandId);
+        demand.setDemandNo("D" + newDemandNoId);
         demand.setTitle(demandVO.getTitle());
         demand.setFunctionalAppeal(demandVO.getFunctionalAppeal());
         demand.setTargetAudience(demandVO.getTargetAudience());
