@@ -208,6 +208,20 @@
 				"navigationBarTitleText": "智能客服",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
+		},
+    {
+			"path": "pages/talent-pool/index/index",
+			"style": {
+				"navigationBarTitleText": "人才库",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+    {
+			"path": "pages/talent-pool/detail/detail",
+			"style": {
+				"navigationBarTitleText": "人才详情"
+			}
 		}
   ],
   "tabBar": {

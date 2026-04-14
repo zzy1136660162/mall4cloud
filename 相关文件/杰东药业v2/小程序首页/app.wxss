@@ -1,0 +1,180 @@
+/* 全局样式 */
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+/* 主色调变量 */
+:root {
+  --primary-color: #134585;
+  --primary-light: #1a5aa0;
+  --primary-dark: #0d3566;
+  --bg-gray: #f5f7fa;
+  --text-gray: #666;
+  --border-color: #e8e8e8;
+}
+
+/* 通用按钮样式 */
+.btn-primary {
+  background: linear-gradient(135deg, #134585, #1a5aa0);
+  color: #ffffff;
+  border-radius: 44rpx;
+  padding: 24rpx 48rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: #134585;
+  border: 2rpx solid #134585;
+  border-radius: 44rpx;
+  padding: 24rpx 48rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.btn-secondary::after {
+  border: none;
+}
+
+/* 卡片通用样式 */
+.card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 标题通用样式 */
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #134585;
+  margin-bottom: 24rpx;
+  padding-left: 20rpx;
+  border-left: 6rpx solid #134585;
+}
+
+/* 标签通用样式 */
+.tag {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+
+.tag-primary {
+  background: rgba(19, 69, 133, 0.1);
+  color: #134585;
+}
+
+.tag-solid {
+  background: linear-gradient(135deg, #134585, #1a5aa0);
+  color: #ffffff;
+}
+
+/* 列表通用样式 */
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #e8e8e8;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+/* 网格布局 */
+.grid-2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.grid-2 .grid-item {
+  width: calc(50% - 10rpx);
+}
+
+.grid-3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.grid-3 .grid-item {
+  width: calc(33.333% - 14rpx);
+}
+
+/* 弹性布局工具类 */
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flex-around {
+  justify-content: space-around;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 文本工具类 */
+.text-primary {
+  color: #134585;
+}
+
+.text-gray {
+  color: #666;
+}
+
+.text-light {
+  color: #999;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* 间距工具类 */
+.mt-10 { margin-top: 10rpx; }
+.mt-20 { margin-top: 20rpx; }
+.mt-30 { margin-top: 30rpx; }
+.mb-10 { margin-bottom: 10rpx; }
+.mb-20 { margin-bottom: 20rpx; }
+.mb-30 { margin-bottom: 30rpx; }
+.ml-10 { margin-left: 10rpx; }
+.mr-10 { margin-right: 10rpx; }
+.p-20 { padding: 20rpx; }
+.p-30 { padding: 30rpx; }
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

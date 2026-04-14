@@ -1,57 +1,55 @@
 <template>
   <view class="page-jiedong">
-    <view class="page-content">
-      <view class="banner-wrapper">
-        <swiper
-          class="banner-swiper"
-          indicator-dots="{{false}}"
-          autoplay="{{true}}"
-          interval="{{3000}}"
-          circular="{{true}}"
-          @change="onBannerChange"
-        >
-          <swiper-item>
-            <image class="banner-img" src="/static/images/homepage/banner-1.jpg" mode="aspectFill" />
-          </swiper-item>
-          <swiper-item>
-            <image class="banner-img" src="/static/images/homepage/banner-2.jpg" mode="aspectFill" />
-          </swiper-item>
-          <swiper-item>
-            <image class="banner-img" src="/static/images/homepage/banner-3.jpg" mode="aspectFill" />
-          </swiper-item>
-        </swiper>
-        <view class="banner-logo">
-          <image src="/static/images/homepage/logo.png" mode="heightFix" />
-        </view>
-        <view class="banner-content">
-          <view class="banner-title">共创医健产业创新生态圈</view>
-          <view class="banner-subtitle">大道至简 · 实干为要</view>
-        </view>
-        <view class="banner-dots">
-          <view
-            v-for="(item, index) in 3"
-            :key="index"
-            class="banner-dot"
-            :class="{ active: currentBanner === index }"
-          />
-        </view>
+    <view class="banner-wrapper">
+      <swiper
+        class="banner-swiper"
+        indicator-dots="{{false}}"
+        autoplay="{{true}}"
+        interval="{{3000}}"
+        circular="{{true}}"
+        @change="onBannerChange"
+      >
+        <swiper-item>
+          <image class="banner-img" src="/static/images/homepage/banner-1.jpg" mode="aspectFill" />
+        </swiper-item>
+        <swiper-item>
+          <image class="banner-img" src="/static/images/homepage/banner-2.jpg" mode="aspectFill" />
+        </swiper-item>
+        <swiper-item>
+          <image class="banner-img" src="/static/images/homepage/banner-3.jpg" mode="aspectFill" />
+        </swiper-item>
+      </swiper>
+      <view class="banner-logo">
+        <text class="logo-text">杰东优选平台</text>
       </view>
+      <view class="banner-content">
+        <view class="banner-title">共创医健产业创新生态圈</view>
+        <view class="banner-subtitle">大道至简 · 实干为要</view>
+      </view>
+      <view class="banner-dots">
+        <view
+          v-for="(item, index) in 3"
+          :key="index"
+          class="banner-dot"
+          :class="{ active: currentBanner === index }"
+        />
+      </view>
+    </view>
 
-      <view class="stats-bar">
-        <view class="stat-item">
-          <view class="stat-num">13年</view>
-          <view class="stat-label">行业深耕</view>
-        </view>
-        <view class="stat-divider" />
-        <view class="stat-item">
-          <view class="stat-num">3万+</view>
-          <view class="stat-label">服务企业</view>
-        </view>
-        <view class="stat-divider" />
-        <view class="stat-item">
-          <view class="stat-num">1000+</view>
-          <view class="stat-label">精选产品</view>
-        </view>
+    <view class="stats-bar">
+      <view class="stat-item">
+        <view class="stat-num">13年</view>
+        <view class="stat-label">行业深耕</view>
+      </view>
+      <view class="stat-divider" />
+      <view class="stat-item">
+        <view class="stat-num">3万+</view>
+        <view class="stat-label">服务企业</view>
+      </view>
+      <view class="stat-divider" />
+      <view class="stat-item">
+        <view class="stat-num">1000+</view>
+        <view class="stat-label">精选产品</view>
       </view>
     </view>
 
@@ -92,15 +90,9 @@
       </view>
     </view>
 
-    <scroll-view
-      class="content-scroll"
-      scroll-y
-      :scroll-top="scrollTop"
-      :scroll-with-animation="true"
-      :scroll-into-view="scrollIntoView"
-      @scroll="onScroll"
-    >
-      <view id="panel-cert" class="content-panel cert-panel">
+    <!-- 认证板块 -->
+    <view v-if="currentTab === 0" class="content-area">
+      <view class="content-panel cert-panel">
         <view class="panel-header cert-header">
           <image class="header-bg" src="/static/images/homepage/cert-header-bg.jpg" mode="aspectFill" />
           <view class="header-content">
@@ -129,6 +121,9 @@
               <view class="cert-image-item" v-for="(license, index) in licenses" :key="index">
                 <image :src="license" mode="aspectFit" />
               </view>
+              <view class="cert-image-item" v-for="(license, index) in licenses" :key="'copy-' + index">
+                <image :src="license" mode="aspectFit" />
+              </view>
             </view>
           </scroll-view>
         </view>
@@ -149,12 +144,36 @@
           </view>
         </view>
 
+        <view class="section-block">
+          <view class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24rpx;">
+            <view class="section-title" style="margin-bottom: 0;">专家团队</view>
+            <text style="font-size: 24rpx; color: #fe9a51;">更多</text>
+          </view>
+          <view class="expert-list">
+            <view class="expert-card" v-for="(expert, index) in experts" :key="index">
+              <view class="expert-photo">
+                <image :src="expert.photo" mode="aspectFill" />
+              </view>
+              <view class="expert-info">
+                <view class="expert-name">
+                  {{ expert.name }}
+                  <text class="expert-title">{{ expert.title }}</text>
+                </view>
+                <view class="expert-field">{{ expert.field }}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+
         <view class="cta-section">
           <view class="cta-btn primary" @tap="onConsult">立即咨询认证</view>
         </view>
       </view>
+    </view>
 
-      <view id="panel-cdmo" class="content-panel cdmo-panel">
+    <!-- CDMO板块 -->
+    <view v-if="currentTab === 1" class="content-area">
+      <view class="content-panel cdmo-panel">
         <view class="panel-header production-header">
           <image class="header-bg" src="/static/images/homepage/production-bg-1.png" mode="aspectFill" />
           <view class="header-content">
@@ -177,33 +196,93 @@
 
         <view class="section-block">
           <view class="section-title">产品类别</view>
-          <scroll-view class="category-scroll" scroll-x>
-            <view class="category-grid">
-              <view class="category-item" v-for="(product, index) in products" :key="index">
-                <view class="category-img">
-                  <image :src="product.img" mode="aspectFit" />
-                </view>
-                <view class="category-info">
-                  <view class="category-name">{{ product.name }}</view>
-                  <view class="category-tag">{{ product.tag }}</view>
-                </view>
+          <view class="category-grid">
+            <view class="category-item" v-for="(product, index) in products" :key="index">
+              <view class="category-img">
+                <image :src="product.img" mode="aspectFit" />
+              </view>
+              <view class="category-info">
+                <view class="category-name">{{ product.name }}</view>
+                <view class="category-tag">{{ product.tag }}</view>
               </view>
             </view>
-          </scroll-view>
+          </view>
+          <view class="category-pagination">
+            <view
+              class="category-dot"
+              :class="{ active: currentCategoryPage === 0 }"
+              @tap="switchCategoryPage(0)"
+            />
+            <view
+              class="category-dot"
+              :class="{ active: currentCategoryPage === 1 }"
+              @tap="switchCategoryPage(1)"
+            />
+            <view
+              class="category-dot"
+              :class="{ active: currentCategoryPage === 2 }"
+              @tap="switchCategoryPage(2)"
+            />
+          </view>
         </view>
 
         <view class="section-block">
           <view class="section-title">保健用品功效覆盖（15大类）</view>
-          <scroll-view class="effect-scroll" scroll-x>
-            <view class="effect-grid">
-              <view class="effect-item" v-for="(effect, index) in effects" :key="index">
-                <view class="effect-icon">
-                  <image :src="'/static/images/homepage/icon-effect-' + ((index % 6) + 1) + '.svg'" mode="aspectFit" />
+          <scroll-view
+            id="effectScroll"
+            class="effect-scroll"
+            scroll-x
+            :scroll-left="currentEffectPage * 375"
+            @scroll="onEffectScroll"
+          >
+            <view class="effect-wrapper">
+              <view class="effect-grid">
+                <view class="effect-item" v-for="(effect, index) in effects.slice(0, 8)" :key="'p1-' + index">
+                  <view class="effect-icon">
+                    <image :src="'/static/images/homepage/icon-effect-' + ((index % 6) + 1) + '.svg'" mode="aspectFit" />
+                  </view>
+                  <view class="effect-name">{{ effect }}</view>
                 </view>
-                <view class="effect-name">{{ effect }}</view>
+              </view>
+            </view>
+            <view class="effect-wrapper">
+              <view class="effect-grid">
+                <view class="effect-item" v-for="(effect, index) in effects.slice(8, 16)" :key="'p2-' + index">
+                  <view class="effect-icon">
+                    <image :src="'/static/images/homepage/icon-effect-' + (((index + 8) % 6) + 1) + '.svg'" mode="aspectFit" />
+                  </view>
+                  <view class="effect-name">{{ effect }}</view>
+                </view>
+              </view>
+            </view>
+            <view class="effect-wrapper">
+              <view class="effect-grid">
+                <view class="effect-item" v-for="(effect, index) in effects.slice(16, 18)" :key="'p3-' + index">
+                  <view class="effect-icon">
+                    <image :src="'/static/images/homepage/icon-effect-' + (((index + 16) % 6) + 1) + '.svg'" mode="aspectFit" />
+                  </view>
+                  <view class="effect-name">{{ effect }}</view>
+                </view>
               </view>
             </view>
           </scroll-view>
+          <view class="effect-pagination">
+            <view
+              class="effect-dot"
+              :class="{ active: currentEffectPage === 0 }"
+              @tap="switchEffectPage(0)"
+            />
+            <view
+              class="effect-dot"
+              :class="{ active: currentEffectPage === 1 }"
+              @tap="switchEffectPage(1)"
+            />
+            <view
+              class="effect-dot"
+              :class="{ active: currentEffectPage === 2 }"
+              @tap="switchEffectPage(2)"
+            />
+          </view>
         </view>
 
         <view class="section-block">
@@ -244,8 +323,11 @@
           <view class="cta-btn primary" @tap="onOEMConsult">获取贴牌方案</view>
         </view>
       </view>
+    </view>
 
-      <view id="panel-prod" class="content-panel marketing-panel">
+    <!-- 营销板块 -->
+    <view v-if="currentTab === 2" class="content-area">
+      <view class="content-panel marketing-panel">
         <view class="panel-header marketing-header">
           <image class="header-bg" src="/static/images/homepage/marketing-bg.png" mode="aspectFill" />
           <view class="header-content">
@@ -306,26 +388,20 @@
           <view class="cta-btn secondary" @tap="onPartner">成为合伙人</view>
         </view>
       </view>
-
-      <view class="bottom-spacer" />
-    </scroll-view>
+    </view>
   </view>
 
-  <!-- 自定义tabbar -->
   <diy-tabbar :current-index="0" />
 </template>
 
 <script setup>
-import { ref, reactive, nextTick } from 'vue'
+import { ref, reactive, nextTick, getCurrentInstance } from 'vue'
 
 const currentBanner = ref(0)
 const currentTab = ref(0)
-const currentNav = ref(0)
-const scrollTop = ref(0)
-const scrollIntoView = ref('')
-const tabOffsetTop = ref(0)
-
-const panelIds = ['panel-cert', 'panel-cdmo', 'panel-prod']
+const currentEffectPage = ref(0)
+const currentCategoryPage = ref(0)
+const scrollWidth = ref(375)
 
 const certTypes = reactive([
   { name: '械字号', desc: '一类/二类/三类注册' },
@@ -342,6 +418,27 @@ const licenses = [
   '/static/images/homepage/cert-license-3.jpg',
   '/static/images/homepage/cert-license-4.jpg'
 ]
+
+const experts = reactive([
+  {
+    name: '张明华',
+    title: '高级工程师 / 注册专员',
+    field: '擅长领域：医疗器械注册、GMP认证',
+    photo: '/static/images/homepage/expert-2.png'
+  },
+  {
+    name: '李建国',
+    title: '资深顾问 / 合规专家',
+    field: '擅长领域：化妆品备案、消字号审批',
+    photo: '/static/images/homepage/expert-1.png'
+  },
+  {
+    name: '王晓峰',
+    title: '技术总监 / 研发专家',
+    field: '擅长领域：功能性食品配方、工艺优化',
+    photo: '/static/images/homepage/expert-2.png'
+  }
+])
 
 const dosages = ['膏剂', '粉剂', '片剂', '液体', '颗粒', '凝胶']
 
@@ -414,21 +511,25 @@ const onBannerChange = (e) => {
 
 const switchTab = (index) => {
   currentTab.value = index
-  scrollIntoView.value = panelIds[index]
-  nextTick(() => {
-    scrollIntoView.value = ''
-  })
 }
 
-const onScroll = (e) => {
+const switchEffectPage = (page) => {
+  currentEffectPage.value = page
 }
 
-const switchNav = (index) => {
-  if (index === 0) return
-  uni.showToast({
-    title: ['首页', '产品', '咨询', '我的'][index] + '页面开发中',
-    icon: 'none'
-  })
+const onEffectScroll = (e) => {
+  const scrollLeft = e.detail.scrollLeft
+  const width = scrollWidth.value
+  const page = Math.round(scrollLeft / width)
+  if (page >= 0 && page <= 2) {
+    currentEffectPage.value = page
+  }
+}
+
+const switchCategoryPage = (page) => {
+  currentCategoryPage.value = page
+  // 未来可以从数据库获取对应页的数据
+  // fetchCategoryData(page)
 }
 
 const onConsult = () => {
