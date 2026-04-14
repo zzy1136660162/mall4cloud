@@ -968,14 +968,24 @@ const util = {
 
     const baseUrl = import.meta.env.VITE_APP_RESOURCES_URL
 
+    // 判断是否为完整的外部URL
+    const isExternalUrl = (url) => {
+      const trimmed = url.trim()
+      return trimmed.startsWith('http://') ||
+             trimmed.startsWith('https://') ||
+             trimmed.startsWith('//') ||
+             trimmed.startsWith('www.')
+    }
+
     // 处理 img 标签的 src 属性
     let result = content.replace(/<img([^>]*)src=["']([^"']*)["']([^>]*)>/gi, (match, before, src, after) => {
-      // 如果已经是完整URL，直接返回
-      if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) {
+      const trimmedSrc = src.trim()
+      // 如果已经是完整URL（包含协议或www），直接返回
+      if (isExternalUrl(trimmedSrc)) {
         return match
       }
       // 添加域名前缀
-      const fullUrl = baseUrl + src
+      const fullUrl = baseUrl + trimmedSrc
       return `<img${before}src="${fullUrl}"${after}>`
     })
 
