@@ -20,7 +20,7 @@
       <view class="products-list">
         <view class="product-item" v-for="item in selectedProducts" :key="item.id">
           <view class="product-image-wrap">
-            <image class="product-image" :src="item.image" mode="aspectFill" />
+            <image class="product-image" :src="util.getImgUrl(item.image)" mode="aspectFill" />
           </view>
           <view class="product-info">
             <text class="product-name">{{ item.name }}</text>
@@ -148,6 +148,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import selectionApi from '@/utils/api/selection.js'
+import util from '@/utils/util.js'
 
 const selectedProducts = ref([])
 const spuId = ref(null)
@@ -226,7 +227,7 @@ function loadDefaultAddress() {
     formData.phone = address.mobile || ''
     formData.regionText = `${address.province || ''} ${address.city || ''} ${address.district || ''}`
     formData.region = [address.province, address.city, address.district].filter(Boolean)
-    formData.address = address.addrDetails || ''
+    formData.address = address.addr || address.addrDetails || ''
   }
 }
 
@@ -241,16 +242,26 @@ function addProduct() {
 }
 
 function selectAddress() {
+  console.log('selectAddress function called')
   uni.navigateTo({
     url: '/pages/address-list/address-list?type=select',
     events: {
       selectAddress: (address) => {
+        console.log('selectAddress event received!')
+        console.log('选择的地址数据:', address)
         formData.name = address.consignee || ''
         formData.phone = address.mobile || ''
         formData.regionText = `${address.province || ''} ${address.city || ''} ${address.district || ''}`
         formData.region = [address.province, address.city, address.district].filter(Boolean)
-        formData.address = address.addrDetails || ''
+        formData.address = address.addr || address.addrDetails || ''
+        console.log('formData after update:', formData)
       }
+    },
+    success: (res) => {
+      console.log('navigateTo success, eventChannel:', res.eventChannel)
+    },
+    fail: (err) => {
+      console.log('navigateTo failed:', err)
     }
   })
 }
@@ -315,7 +326,7 @@ async function doSubmit() {
 
     const res = await selectionApi.submitSelectionApply({
       spuId: spuId.value,
-      contactName: formData.name,
+      userName: formData.name,
       contactPhone: formData.phone,
       deliveryAddress: deliveryAddress,
       remark: formData.remark

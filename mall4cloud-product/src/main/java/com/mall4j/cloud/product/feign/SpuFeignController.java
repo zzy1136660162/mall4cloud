@@ -1,5 +1,7 @@
 package com.mall4j.cloud.product.feign;
 
+import com.mall4j.cloud.api.multishop.bo.EsShopDetailBO;
+import com.mall4j.cloud.api.multishop.feign.ShopDetailFeignClient;
 import com.mall4j.cloud.api.product.feign.SpuFeignClient;
 import com.mall4j.cloud.api.product.vo.SkuVO;
 import com.mall4j.cloud.api.product.vo.SpuAndSkuVO;
@@ -29,6 +31,9 @@ public class SpuFeignController implements SpuFeignClient {
     @Autowired
     private SkuService skuService;
 
+    @Autowired
+    private ShopDetailFeignClient shopDetailFeignClient;
+
     @Override
     public ServerResponseEntity<SpuVO> getById(Long spuId) {
         SpuVO spuVO = spuService.getBySpuId(spuId);
@@ -41,7 +46,14 @@ public class SpuFeignController implements SpuFeignClient {
         spu.setName(spuVO.getName());
         spu.setMainImgUrl(spuVO.getMainImgUrl());
         spu.setPriceFee(spuVO.getPriceFee());
-        spu.setShopName(spuVO.getShopName());
+        
+        if (Objects.nonNull(spuVO.getShopId())) {
+            ServerResponseEntity<EsShopDetailBO> shopResponse = shopDetailFeignClient.getShopByShopId(spuVO.getShopId());
+            if (Objects.nonNull(shopResponse) && Objects.nonNull(shopResponse.getData())) {
+                spu.setShopName(shopResponse.getData().getShopName());
+            }
+        }
+        
         return ServerResponseEntity.success(spu);
     }
 
