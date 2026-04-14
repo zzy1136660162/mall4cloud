@@ -165,6 +165,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import selectionApi from '@/utils/api/selection.js'
+import util from '@/utils/util.js'
 
 const currentCategory = ref(0)
 const currentFilter = ref('all')
@@ -266,7 +267,7 @@ async function loadProducts() {
       const formattedProducts = res.list.map(item => ({
         ...item,
         id: item.spuId,
-        image: item.mainImgUrl,
+        image: util.getImgUrl(item.mainImgUrl),
         title: item.name,
         price: (item.priceFee / 100).toFixed(2),
         originalPrice: item.marketPriceFee ? (item.marketPriceFee / 100).toFixed(2) : null,

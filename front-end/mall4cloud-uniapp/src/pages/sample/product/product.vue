@@ -187,6 +187,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import selectionApi from '@/utils/api/selection.js'
+import util from '@/utils/util.js'
 
 const product = ref({
   spuId: null,
@@ -236,6 +237,14 @@ async function loadDetail(spuId) {
   try {
     const res = await selectionApi.getSelectionDetail(spuId)
     if (res) {
+      // 处理图片，确保是数组
+      let rawImages = []
+      if (Array.isArray(res.imgUrls) && res.imgUrls.length > 0) {
+        rawImages = res.imgUrls
+      } else if (res.mainImgUrl) {
+        rawImages = [res.mainImgUrl]
+      }
+
       product.value = {
         spuId: res.spuId,
         id: res.spuId,
@@ -244,7 +253,7 @@ async function loadDetail(spuId) {
         originalPrice: res.marketPriceFee ? (res.marketPriceFee / 100).toFixed(2) : '',
         commissionRate: res.commissionRate || 0,
         commissionAmount: res.commissionAmount ? (res.commissionAmount / 100).toFixed(2) : '0.00',
-        images: res.imgUrls && res.imgUrls.length ? res.imgUrls : [res.mainImgUrl],
+        images: rawImages.map(img => util.getImgUrl(img)),
         shopName: res.shopName || '旗舰店',
         sales: res.totalSales ? `${Math.floor(res.totalSales / 10000)}万+` : '0',
         goodRate: res.rating ? (res.rating * 20).toFixed(0) : 98,

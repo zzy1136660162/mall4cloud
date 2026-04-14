@@ -255,10 +255,12 @@ const loadAttrs = async () => {
 
 const handleAddAttr = (attr: AttrVO) => {
   const exists = selectedAttrs.value.find(a => a.attrId === attr.attrId)
+
   if (!exists && selectedAttrs.value.length < 2) {
+    const allAttrValueIds = attr.attrValues?.map(v => v.attrValueId) || []
     selectedAttrs.value.push({
       ...attr,
-      selectedValues: [],
+      selectedValues: allAttrValueIds,
     })
     generateSkuCombinations()
   }
