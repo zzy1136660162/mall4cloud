@@ -203,7 +203,7 @@
             <view class="prod-item">
               <view class="single-prod">
                 <view class="pic">
-                  <image :src="item.imgUrl" />
+                  <image :src="util.getImgUrl(item.imgUrl)" />
                 </view>
                 <view class="info">
                   <view class="name">
@@ -294,6 +294,8 @@
 
 <script setup>
 import { reactive } from 'vue'
+import util from '@/utils/util.js'
+
 const wxs = number()
 
 const Data = reactive({

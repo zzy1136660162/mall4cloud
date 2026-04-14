@@ -176,10 +176,7 @@ public class SpuServiceImpl implements SpuService {
 
         // 3.修改商品库存
         if (Objects.nonNull(spuDTO.getChangeStock()) && spuDTO.getChangeStock() > 0) {
-            SpuExtension spuExtension = new SpuExtension();
-            spuExtension.setSpuId(spu.getSpuId());
-            spuExtension.setStock(spuDTO.getChangeStock());
-            spuExtensionService.updateStock(spu.getSpuId(), spuDTO.getTotalStock());
+            spuExtensionService.updateStock(spu.getSpuId(), spuDTO.getChangeStock());
         }
 
         // 4.修改商品sku信息

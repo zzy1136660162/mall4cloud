@@ -137,10 +137,12 @@ const selectFirstCategorys = (categoryId: number, index: number) => {
   secondCategorys.id = 0
   threeCategorys.id = 0
 
-  if (isCreateCategory.value || (!isCreateCategory.value && secondCategorys.dataList.length === 0)) {
+  // 修改：创建模式下或二级分类列表为空时高亮；非创建模式下只要有二级分类也允许高亮（放宽要求）
+  if (isCreateCategory.value || secondCategorys.dataList.length === 0) {
     buttonHighlight.value = true
   } else {
-    buttonHighlight.value = false
+    // 有二级分类时，允许高亮（不再强制要求选到三级）
+    buttonHighlight.value = true
   }
 }
 
@@ -152,11 +154,8 @@ const selectSecondCategorys = (categoryId: number, index: number) => {
   secondCategorys.name = secondCategorys.dataList[index].name
   threeCategorys.id = 0
 
-  if (!isCreateCategory.value && !buttonHighlight.value && !showthreeCategorys.value) {
-    buttonHighlight.value = true
-  } else {
-    buttonHighlight.value = false
-  }
+  // 修改：选中二级分类立即高亮，不再强制要求选择三级分类
+  buttonHighlight.value = true
 }
 
 const selectThreeCategorys = (categoryId: number, index: number) => {
@@ -168,7 +167,10 @@ const selectThreeCategorys = (categoryId: number, index: number) => {
 }
 
 const optionsConfirm = () => {
-  if (showthreeCategorys.value && !threeCategorys.id) return
+  // 修改：平台分类允许只选到二级分类（放宽要求）
+  // 原逻辑：if (showthreeCategorys.value && !threeCategorys.id) return
+  // 新逻辑：平台分类下，只要有二级分类选中即可确认
+  if (showthreeCategorys.value && !secondCategorys.id) return
   if (!showthreeCategorys.value && isCreateCategory.value && !firstCategorys.id) return
   if (!showthreeCategorys.value && !isCreateCategory.value && secondCategorys.dataList.length > 0 && !secondCategorys.id) return
 
@@ -179,6 +181,7 @@ const optionsConfirm = () => {
   if (!isCreateCategory.value && secondCategorys.id) {
     selectedCategorys.push(secondCategorys.name)
   }
+  // 修改：三级分类名称只在选中时才添加（不再强制要求）
   if (showthreeCategorys.value && !isCreateCategory.value && threeCategorys.id) {
     selectedCategorys.push(threeCategorys.name)
   }

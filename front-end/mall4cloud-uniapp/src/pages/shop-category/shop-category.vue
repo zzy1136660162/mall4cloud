@@ -54,7 +54,7 @@
               v-if="firstCategoryList.length"
               class="adv-img"
             >
-              <image :src="firstCategoryList[selectedIndex].imgUrl" />
+              <image :src="util.getImgUrl(firstCategoryList[selectedIndex].imgUrl)" />
             </view>
             <block
               v-for="(secondCategory, index) in secondCategoryList"
@@ -69,9 +69,9 @@
                     :data-name="secondCategory.name"
                     @tap="toSearchListPage"
                   >
-                    <view class="img">
-                      <image :src="secondCategory.imgUrl" />
-                    </view>
+                       <view class="img">
+                         <image :src="util.getImgUrl(secondCategory.imgUrl)" />
+                       </view>
                     <view class="text">
                       {{ secondCategory.name }}
                     </view>
@@ -133,6 +133,7 @@
 
 <script setup>
 import { reactive } from 'vue'
+import util from '@/utils/util.js'
 
 const Data = reactive({
   shopId: 0,

@@ -32,10 +32,16 @@ public class SpuFeignController implements SpuFeignClient {
     @Override
     public ServerResponseEntity<SpuVO> getById(Long spuId) {
         SpuVO spuVO = spuService.getBySpuId(spuId);
+        if (Objects.isNull(spuVO)) {
+            return ServerResponseEntity.fail(ResponseEnum.SPU_NOT_EXIST);
+        }
         SpuVO spu = new SpuVO();
         spu.setSpuId(spuVO.getSpuId());
+        spu.setShopId(spuVO.getShopId());
         spu.setName(spuVO.getName());
         spu.setMainImgUrl(spuVO.getMainImgUrl());
+        spu.setPriceFee(spuVO.getPriceFee());
+        spu.setShopName(spuVO.getShopName());
         return ServerResponseEntity.success(spu);
     }
 

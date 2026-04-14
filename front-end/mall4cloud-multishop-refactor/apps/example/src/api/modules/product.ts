@@ -35,7 +35,7 @@ export interface SpuPageParam {
 }
 
 export interface SpuVO {
-  spuId: number
+  spuId: number | string
   name: string
   categoryId: number
   shopCategoryId: number
@@ -71,8 +71,9 @@ export interface ProdInfoVO extends SpuVO {
   spuAttrValues: SpuAttrValue[]
   detail: string
   skuList: SkuVO[]
-  skus: SkuVO[]
+  skus?: SkuVO[]
   totalStock: number
+  changeStock?: number
   isSelection: number
   commissionRate: number
   isHot: number
@@ -99,16 +100,25 @@ export interface SkuVO {
   priceFee: number
   marketPriceFee: number
   stock: number
+  originalStock?: number
+  changeStock?: number
+  status?: number
+  partyCode?: string
+  modelId?: string
   imgUrl?: string
   spuSkuAttrValues?: SpuSkuAttrValue[]
   attrs?: string
 }
 
 export interface SpuSkuAttrValue {
+  spuSkuAttrId?: number
+  spuId?: number
+  skuId?: number
   attrId: number
   attrName: string
   attrValueId: number
   attrValueName: string
+  status?: number
 }
 
 export interface AttrParam {

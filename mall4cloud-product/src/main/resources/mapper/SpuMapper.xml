@@ -123,8 +123,10 @@
         <if test="spu.seqSort == 1">,s.seq</if>
         <if test="spu.createTimeSort == 0">,s.create_time desc</if>
         <if test="spu.createTimeSort == 1">,s.create_time</if>
+        <if test="spu.commissionSort == 0">,s.commission_rate desc</if>
+        <if test="spu.commissionSort == 1">,s.commission_rate</if>
         <if test="spu.priceFeeSort == null and spu.marketPriceFeeSort == null and spu.saleNumSort == null
-            and spu.stockSort == null and spu.seqSort == null and spu.createTimeSort == null">
+            and spu.stockSort == null and spu.seqSort == null and spu.createTimeSort == null and spu.commissionSort == null">
           <choose>
             <when test="spu.orderBy == 'totalSales'">s.total_sales desc</when>
             <when test="spu.orderBy == 'monthSales'">s.month_sales desc</when>

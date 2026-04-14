@@ -4,9 +4,9 @@
 -- ============================================
 
 -- 1. 在 role 表中增加达人角色
-INSERT INTO `role` (`role_id`, `role_name`, `role_priority`, `create_time`, `update_time`, `is_deleted`)
-VALUES (100, 'talent', '达人', 100, NOW(), NOW(), 0)
-ON DUPLICATE KEY UPDATE role_name = '达人';
+INSERT INTO `role` (`role_id`, `role_name`, `remark`, `create_user_id`, `biz_type`, `tenant_id`)
+VALUES (100, '达人', 'talent', 0, 2, 0)
+ON DUPLICATE KEY UPDATE role_name = '达人', remark = 'talent';
 
 -- 2. 创建选品申请表
 CREATE TABLE IF NOT EXISTS `selection_apply` (
@@ -67,4 +67,4 @@ CREATE TABLE IF NOT EXISTS `selection_apply` (
 -- 回滚脚本（如需回滚，执行以下SQL）
 -- ============================================
 -- DROP TABLE IF EXISTS selection_apply;
--- DELETE FROM role WHERE role_id = 100 AND role_name = 'talent';
+-- DELETE FROM role WHERE role_id = 100 AND remark = 'talent';

@@ -46,6 +46,28 @@ page {
     background: linear-gradient(to right, #fc1b35, #fff);
   }
 
+  /* 返回按钮 */
+  .det-header .back-btn {
+    position: absolute;
+    left: 20rpx;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    z-index: 100;
+  }
+
+  .det-header .back-icon {
+    color: #fff;
+    font-size: 32rpx;
+    font-weight: bold;
+  }
+
   /* 大图 */
   .pic-box {
     width: 750rpx;

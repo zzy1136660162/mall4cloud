@@ -1,7 +1,10 @@
 package com.mall4j.cloud.platform.service.impl;
 
+import com.mall4j.cloud.api.product.feign.SpuFeignClient;
+import com.mall4j.cloud.api.product.vo.SpuVO;
 import com.mall4j.cloud.common.database.vo.PageVO;
 import com.mall4j.cloud.common.exception.Mall4cloudException;
+import com.mall4j.cloud.common.response.ServerResponseEntity;
 import com.mall4j.cloud.common.security.AuthUserContext;
 import com.mall4j.cloud.common.util.BeanUtil;
 import com.mall4j.cloud.platform.dto.SelectionApplyDTO;
@@ -34,6 +37,9 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
     @Autowired
     private SelectionApplyMapper selectionApplyMapper;
 
+    @Autowired
+    private SpuFeignClient spuFeignClient;
+
     /**
      * 达人角色ID
      */
@@ -58,6 +64,8 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
                 throw new Mall4cloudException("您已申请过该商品，无需重复申请");
             }
         }
+
+        fillProductInfo(dto);
         
         // 3. 创建申请记录
         SelectionApply apply = new SelectionApply();
@@ -77,6 +85,19 @@ public class SelectionApplyServiceImpl implements SelectionApplyService {
         selectionApplyMapper.insert(apply);
         
         return apply.getApplyId();
+    }
+
+    private void fillProductInfo(SelectionApplyDTO dto) {
+        ServerResponseEntity<SpuVO> spuResponse = spuFeignClient.getById(dto.getSpuId());
+        if (!spuResponse.isSuccess() || spuResponse.getData() == null) {
+            throw new Mall4cloudException("商品不存在");
+        }
+        SpuVO spu = spuResponse.getData();
+        dto.setSpuName(spu.getName());
+        dto.setShopId(spu.getShopId());
+        dto.setShopName(spu.getShopName());
+        dto.setMainImgUrl(spu.getMainImgUrl());
+        dto.setPriceFee(spu.getPriceFee());
     }
 
     @Override

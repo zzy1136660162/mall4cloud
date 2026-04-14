@@ -163,8 +163,8 @@ onReachBottom(() => {
 })
 
 onLoad((options) => {
-  Data.shopId = options.shopId
-  Data.shopSecondaryCategoryId = options.shopSecondaryCategoryId
+  Data.shopId = options.shopId||0
+  Data.shopSecondaryCategoryId = options.shopSecondaryCategoryId||0
   Data.keyword = options.keyword
   Data.shopInfo = uni.getStorageSync('cloudShopInfo')
   getProd()
