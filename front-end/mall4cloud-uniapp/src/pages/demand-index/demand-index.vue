@@ -16,6 +16,10 @@
           <view class="action-icon list-icon">📋</view>
           <text class="action-text">我的需求</text>
         </view>
+        <view class="action-item" @tap="goToTalentPool">
+          <view class="action-icon talent-icon">🎯</view>
+          <text class="action-text">人才库</text>
+        </view>
       </view>
     </view>
 
@@ -177,6 +181,12 @@ const goToDetail = (e) => {
   const { id } = e.currentTarget.dataset
   uni.navigateTo({
     url: '/pages/demand-detail/demand-detail?id=' + id
+  })
+}
+
+const goToTalentPool = () => {
+  uni.navigateTo({
+    url: '/pages/talent-pool/index/index'
   })
 }
 </script>

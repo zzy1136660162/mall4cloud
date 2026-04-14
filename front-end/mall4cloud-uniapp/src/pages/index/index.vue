@@ -147,7 +147,7 @@
         <view class="section-block">
           <view class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24rpx;">
             <view class="section-title" style="margin-bottom: 0;">专家团队</view>
-            <text style="font-size: 24rpx; color: #fe9a51;">更多</text>
+            <text style="font-size: 24rpx; color: #fe9a51;" @tap="goToTalentPool">更多</text>
           </view>
           <view class="expert-list">
             <view class="expert-card" v-for="(expert, index) in experts" :key="index">
@@ -228,44 +228,52 @@
 
         <view class="section-block">
           <view class="section-title">保健用品功效覆盖（15大类）</view>
-          <scroll-view
-            id="effectScroll"
-            class="effect-scroll"
-            scroll-x
-            :scroll-left="currentEffectPage * 375"
-            @scroll="onEffectScroll"
+          <swiper
+            class="effect-swiper"
+            :current="currentEffectPage"
+            :autoplay="true"
+            :interval="5000"
+            :circular="true"
+            :duration="500"
+            @change="onEffectSwiperChange"
           >
-            <view class="effect-wrapper">
-              <view class="effect-grid">
-                <view class="effect-item" v-for="(effect, index) in effects.slice(0, 8)" :key="'p1-' + index">
-                  <view class="effect-icon">
-                    <image :src="'/static/images/homepage/icon-effect-' + ((index % 6) + 1) + '.svg'" mode="aspectFit" />
+            <swiper-item>
+              <view class="effect-wrapper">
+                <view class="effect-grid">
+                  <view class="effect-item" v-for="(effect, index) in effects.slice(0, 8)" :key="'p1-' + index">
+                    <view class="effect-icon">
+                      <image :src="'/static/images/homepage/icon-effect-' + ((index % 6) + 1) + '.svg'" mode="aspectFit" />
+                    </view>
+                    <view class="effect-name">{{ effect }}</view>
                   </view>
-                  <view class="effect-name">{{ effect }}</view>
                 </view>
               </view>
-            </view>
-            <view class="effect-wrapper">
-              <view class="effect-grid">
-                <view class="effect-item" v-for="(effect, index) in effects.slice(8, 16)" :key="'p2-' + index">
-                  <view class="effect-icon">
-                    <image :src="'/static/images/homepage/icon-effect-' + (((index + 8) % 6) + 1) + '.svg'" mode="aspectFit" />
+            </swiper-item>
+            <swiper-item>
+              <view class="effect-wrapper">
+                <view class="effect-grid">
+                  <view class="effect-item" v-for="(effect, index) in effects.slice(8, 16)" :key="'p2-' + index">
+                    <view class="effect-icon">
+                      <image :src="'/static/images/homepage/icon-effect-' + (((index + 8) % 6) + 1) + '.svg'" mode="aspectFit" />
+                    </view>
+                    <view class="effect-name">{{ effect }}</view>
                   </view>
-                  <view class="effect-name">{{ effect }}</view>
                 </view>
               </view>
-            </view>
-            <view class="effect-wrapper">
-              <view class="effect-grid">
-                <view class="effect-item" v-for="(effect, index) in effects.slice(16, 18)" :key="'p3-' + index">
-                  <view class="effect-icon">
-                    <image :src="'/static/images/homepage/icon-effect-' + (((index + 16) % 6) + 1) + '.svg'" mode="aspectFit" />
+            </swiper-item>
+            <swiper-item>
+              <view class="effect-wrapper">
+                <view class="effect-grid">
+                  <view class="effect-item" v-for="(effect, index) in effects.slice(16, 18)" :key="'p3-' + index">
+                    <view class="effect-icon">
+                      <image :src="'/static/images/homepage/icon-effect-' + (((index + 16) % 6) + 1) + '.svg'" mode="aspectFit" />
+                    </view>
+                    <view class="effect-name">{{ effect }}</view>
                   </view>
-                  <view class="effect-name">{{ effect }}</view>
                 </view>
               </view>
-            </view>
-          </scroll-view>
+            </swiper-item>
+          </swiper>
           <view class="effect-pagination">
             <view
               class="effect-dot"
@@ -517,13 +525,8 @@ const switchEffectPage = (page) => {
   currentEffectPage.value = page
 }
 
-const onEffectScroll = (e) => {
-  const scrollLeft = e.detail.scrollLeft
-  const width = scrollWidth.value
-  const page = Math.round(scrollLeft / width)
-  if (page >= 0 && page <= 2) {
-    currentEffectPage.value = page
-  }
+const onEffectSwiperChange = (e) => {
+  currentEffectPage.value = e.detail.current
 }
 
 const switchCategoryPage = (page) => {
@@ -564,6 +567,12 @@ const onProductTap = (product) => {
   uni.showToast({
     title: '产品详情：' + product.name,
     icon: 'none'
+  })
+}
+
+const goToTalentPool = () => {
+  uni.navigateTo({
+    url: '/pages/talent-pool/index/index'
   })
 }
 </script>

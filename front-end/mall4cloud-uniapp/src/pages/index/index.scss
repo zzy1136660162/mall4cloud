@@ -688,34 +688,29 @@ page {
   }
 }
 
-.effect-scroll {
+.effect-swiper {
   width: 100%;
-  overflow-x: auto;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  font-size: 0;
+  height: 240rpx;
 }
 
 .effect-wrapper {
-  display: inline-block;
   width: 100%;
-  vertical-align: top;
-  white-space: normal;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
-  scroll-snap-align: start;
 }
 
 .effect-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  grid-auto-flow: column;
   gap: 16rpx;
-  width: max-content;
-  margin: 0 auto;
+  width: 100%;
+  padding: 0 24rpx;
+  box-sizing: border-box;
 }
 
 .effect-item {
