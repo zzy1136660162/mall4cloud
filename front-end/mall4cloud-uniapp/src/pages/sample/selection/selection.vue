@@ -1,5 +1,6 @@
 <template>
-  <view class="page" style="padding-bottom: calc(100rpx + env(safe-area-inset-bottom));">
+  <view class="page">
+    <scroll-view class="content-scroll" scroll-y @scrolltolower="onReachBottom">
     <view class="header">
       <view class="search-bar" @tap="goToSearch">
         <view class="search-input-box">
@@ -109,53 +110,55 @@
     </view>
 
     <view class="product-list">
-      <view
-        class="product-item"
-        v-for="item in products"
-        :key="item.id"
-        @tap="goToProductDetail(item.id)"
-      >
-        <view class="product-img-wrap">
-          <image class="product-img" :src="item.image" mode="aspectFill" />
-          <view class="product-tag" v-if="item.tag">{{ item.tag }}</view>
-        </view>
-        <view class="product-info">
-          <view class="product-title">{{ item.title }}</view>
-          <view class="service-tags" v-if="item.tags && item.tags.length">
-            <text class="service-tag" v-for="(tag, idx) in item.tags" :key="idx">{{ tag }}</text>
+      <view class="product-grid">
+        <view
+          class="product-item"
+          v-for="item in products"
+          :key="item.id"
+          @tap="goToProductDetail(item.id)"
+        >
+          <view class="product-img-wrap">
+            <image class="product-img" :src="item.image" mode="aspectFill" />
+            <view class="product-tag" v-if="item.tag">{{ item.tag }}</view>
           </view>
-          <view class="shop-info">
-            <text class="shop-name">{{ item.shop }}</text>
-            <text class="shop-score" v-if="item.shopScore">{{ item.shopScore }}分</text>
-          </view>
-          <view class="product-price-wrap">
-            <text class="price-symbol">¥</text>
-            <text class="product-price">{{ item.price }}</text>
-            <text class="product-original" v-if="item.originalPrice">¥{{ item.originalPrice }}</text>
-          </view>
-          <view class="product-commission-wrap">
-            <text class="commission-tag">佣金{{ item.commissionRate }}%</text>
-            <text class="commission-amount">预计赚¥{{ item.commissionAmount }}</text>
-          </view>
-          <view class="product-bottom">
-            <view class="sales-info">
-              <text class="sales-text">已售{{ item.salesText }}</text>
-              <text class="location" v-if="item.location">{{ item.location }}</text>
+          <view class="product-info">
+            <view class="product-title">{{ item.title }}</view>
+            <view class="service-tags" v-if="item.tags && item.tags.length">
+              <text class="service-tag" v-for="(tag, idx) in item.tags" :key="idx">{{ tag }}</text>
+            </view>
+            <view class="shop-info">
+              <text class="shop-name">{{ item.shop }}</text>
+              <text class="shop-score" v-if="item.shopScore">{{ item.shopScore }}分</text>
+            </view>
+            <view class="product-price-wrap">
+              <text class="price-symbol">¥</text>
+              <text class="product-price">{{ item.price }}</text>
+              <text class="product-original" v-if="item.originalPrice">¥{{ item.originalPrice }}</text>
+            </view>
+            <view class="product-commission-wrap">
+              <text class="commission-tag">佣金{{ item.commissionRate }}%</text>
+              <text class="commission-amount">预计赚¥{{ item.commissionAmount }}</text>
+            </view>
+            <view class="product-bottom">
+              <view class="sales-info">
+                <text class="sales-text">已售{{ item.salesText }}</text>
+                <text class="location" v-if="item.location">{{ item.location }}</text>
+              </view>
             </view>
           </view>
-        </view>
-        <view class="btn-apply-wrap">
-          <view class="btn-apply" @tap.stop="applySample(item.id)">申请样品</view>
+          <view class="btn-apply-wrap">
+            <view class="btn-apply" @tap.stop="applySample(item.id)">申请样品</view>
+          </view>
         </view>
       </view>
+      <view class="loading-more" v-if="loading">
+        <text>加载中...</text>
+      </view>
+      <view class="no-more" v-if="!hasMore && products.length">
+        <text>没有更多了</text>
+      </view>
     </view>
-
-    <view class="loading-more" v-if="loading">
-      <text>加载中...</text>
-    </view>
-    <view class="no-more" v-if="!hasMore && products.length">
-      <text>没有更多了</text>
-    </view>
+    </scroll-view>
   </view>
 
   <!-- 自定义tabbar -->
@@ -425,15 +428,16 @@ function onReachBottom() {
 
 <style lang="scss" scoped>
 .page {
-  min-height: 100vh;
+  height: 100vh;
   background-color: #f5f5f5;
+}
+
+.content-scroll {
+  height: calc(100vh - 100rpx - env(safe-area-inset-bottom));
 }
 
 .header {
   background-color: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .search-bar {
@@ -630,6 +634,9 @@ function onReachBottom() {
 
 .product-list {
   padding: 0 20rpx;
+}
+
+.product-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

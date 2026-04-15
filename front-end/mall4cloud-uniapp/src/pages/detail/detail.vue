@@ -54,10 +54,10 @@
               ￥
             </view>
             <view class="big">
-              {{ wxs.parsePrice(defaultSku.priceFee)[0] }}
+              {{ wxs.parsePrice(defaultSku.priceFee || prodInfo.priceFee)[0] }}
             </view>
             <view class="symbol">
-              .{{ wxs.parsePrice(defaultSku.priceFee)[1] }}
+              .{{ wxs.parsePrice(defaultSku.priceFee || prodInfo.priceFee)[1] }}
             </view>
           </view>
         </view>
@@ -95,7 +95,7 @@
         </view>
         <view class="sales-divider">|</view>
         <view class="sales-item">
-          <text class="sales-num stock-num">{{ defaultSku.stock || 0 }}</text>
+          <text class="sales-num stock-num">{{ defaultSku.stock || prodInfo.totalStock || 0 }}</text>
           <text class="sales-label">剩余库存</text>
         </view>
       </view>
@@ -211,10 +211,10 @@
                 ￥
               </view>
               <view class="big">
-                {{ wxs.parsePrice(defaultSku.priceFee)[0] }}
+                {{ wxs.parsePrice(defaultSku.priceFee || prodInfo.priceFee)[0] }}
               </view>
               <view class="symbol">
-                .{{ wxs.parsePrice(defaultSku.priceFee)[1] }}
+                .{{ wxs.parsePrice(defaultSku.priceFee || prodInfo.priceFee)[1] }}
               </view>
             </view>
           </view>
