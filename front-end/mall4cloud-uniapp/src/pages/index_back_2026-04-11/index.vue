@@ -7,7 +7,7 @@
         @tap="toSrearch"
       >
         <view class="icon">
-          <image src="/static/images/search.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/search.png" />
         </view>
         <view class="text">
           搜索您想购买的商品或者店铺
@@ -21,7 +21,7 @@
       class="banner"
     >
       <view class="bg">
-        <image src="/static/images/bannerBg.png" />
+        <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/bannerBg.png" />
       </view>
       <swiper
         class="img"
@@ -49,7 +49,7 @@
         @tap="toNewProds"
       >
         <view class="icon">
-          <image src="/static/images/icon-new.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/icon-new.png" />
         </view>
         <view class="text">
           新品推荐
@@ -60,7 +60,7 @@
         @tap="notOpen('打折特惠')"
       >
         <view class="icon">
-          <image src="/static/images/icon-sale.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/icon-sale.png" />
         </view>
         <view class="text">
           打折特惠
@@ -71,7 +71,7 @@
         @tap="notOpen('优惠团购')"
       >
         <view class="icon">
-          <image src="/static/images/icon-group.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/icon-group.png" />
         </view>
         <view class="text">
           优惠团购
@@ -82,7 +82,7 @@
         @tap="notOpen('秒杀')"
       >
         <view class="icon">
-          <image src="/static/images/icon-flash.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/icon-flash.png" />
         </view>
         <view class="text">
           限时秒杀
@@ -93,7 +93,7 @@
         @tap="notOpen('领券中心')"
       >
         <view class="icon">
-          <image src="/static/images/icon-coupon.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/icon-coupon.png" />
         </view>
         <view class="text">
           领券中心
@@ -104,7 +104,7 @@
         @tap="notOpen('会员中心')"
       >
         <view class="icon">
-          <image src="/static/images/icon-member.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/icon-member.png" />
         </view>
         <view class="text">
           会员中心
@@ -115,7 +115,7 @@
         @tap="notOpen('分销中心')"
       >
         <view class="icon">
-          <image src="/static/images/icon-distribution.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/icon-distribution.png" />
         </view>
         <view class="text">
           分销中心
@@ -126,7 +126,7 @@
         @tap="notOpen('积分商城')"
       >
         <view class="icon">
-          <image src="/static/images/icon-integral.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/icon-integral.png" />
         </view>
         <view class="text">
           积分商城
@@ -198,7 +198,7 @@
       class="empty"
     >
       <view class="img">
-        <image src="/static/empty-img/not-found.png" />
+        <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/empty-img/not-found.png" />
       </view>
       <view class="text">
         没有找到对应商品，看看别的吧

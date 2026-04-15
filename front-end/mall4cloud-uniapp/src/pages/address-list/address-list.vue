@@ -33,7 +33,7 @@
             class="edit-icon"
             @tap.stop="toEditAddress(addressItem.addrId)"
           >
-            <image src="/static/images/edit.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/edit.png" />
           </view>
           <view
             v-else

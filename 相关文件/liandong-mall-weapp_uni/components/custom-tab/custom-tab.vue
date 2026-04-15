@@ -22,40 +22,40 @@ export default {
                     id: 0,
                     name: '首页',
                     url: '/pages/index/index',
-                    normalIcon: '/static/images/tab/首页（未选中）.png',
-                    selectedIcon: '/static/images/tab/首页 (选中).png',
+                    normalIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/首页（未选中）.png',
+                    selectedIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/首页 (选中).png',
                     badge: 0
                 },
                 {
                     id: 1,
                     name: '商城',
                     url: '/pages/Product_list_page/Product_list_page',
-                    normalIcon: '/static/images/tab/商城 (未选中).png',
-                    selectedIcon: '/static/images/tab/商城（选中）.png',
+                    normalIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/商城 (未选中).png',
+                    selectedIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/商城（选中）.png',
                     badge: 0
                 },
                 {
                     id: 2,
                     name: '选品',
                     url: '/pages/selection/selection',
-                    normalIcon: '/static/images/tab/选品 (未选中).png',
-                    selectedIcon: '/static/images/tab/选品（选中）.png',
+                    normalIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/选品 (未选中).png',
+                    selectedIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/选品（选中）.png',
                     badge: 0
                 },
                 {
                     id: 3,
                     name: '研发',
                     url: '/pages/rd_index/rd_index',
-                    normalIcon: '/static/images/tab/研发 (未选中).png',
-                    selectedIcon: '/static/images/tab/研发（选中）.png',
+                    normalIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/研发 (未选中).png',
+                    selectedIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/研发（选中）.png',
                     badge: 0
                 },
                 {
                     id: 4,
                     name: '我的',
                     url: '/pages/Profile_page/Profile_page',
-                    normalIcon: '/static/images/tab/我的 (未选中).png',
-                    selectedIcon: '/static/images/tab/我的 (选中).png',
+                    normalIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/我的 (未选中).png',
+                    selectedIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/我的 (选中).png',
                     badge: 0
                 }
             ]

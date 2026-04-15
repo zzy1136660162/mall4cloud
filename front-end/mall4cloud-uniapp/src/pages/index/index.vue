@@ -10,13 +10,13 @@
         @change="onBannerChange"
       >
         <swiper-item>
-          <image class="banner-img" src="/static/images/homepage/banner-1.jpg" mode="aspectFill" />
+          <image class="banner-img" src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/banner-1.jpg" mode="aspectFill" />
         </swiper-item>
         <swiper-item>
-          <image class="banner-img" src="/static/images/homepage/banner-2.jpg" mode="aspectFill" />
+          <image class="banner-img" src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/banner-2.jpg" mode="aspectFill" />
         </swiper-item>
         <swiper-item>
-          <image class="banner-img" src="/static/images/homepage/banner-3.jpg" mode="aspectFill" />
+          <image class="banner-img" src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/banner-3.jpg" mode="aspectFill" />
         </swiper-item>
       </swiper>
       <view class="banner-logo">
@@ -63,7 +63,7 @@
             @tap="switchTab(0)"
           >
             <view class="tab-icon">
-              <image src="/static/images/homepage/icon-tab-cert.svg" mode="aspectFit" />
+              <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-tab-cert.svg" mode="aspectFit" />
             </view>
             <view class="tab-text">认证</view>
           </view>
@@ -73,7 +73,7 @@
             @tap="switchTab(1)"
           >
             <view class="tab-icon">
-              <image src="/static/images/homepage/icon-tab-cdmo.svg" mode="aspectFit" />
+              <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-tab-cdmo.svg" mode="aspectFit" />
             </view>
             <view class="tab-text">CDMO</view>
           </view>
@@ -83,7 +83,7 @@
             @tap="switchTab(2)"
           >
             <view class="tab-icon">
-              <image src="/static/images/homepage/icon-tab-prod.svg" mode="aspectFit" />
+              <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-tab-prod.svg" mode="aspectFit" />
             </view>
             <view class="tab-text">生产</view>
           </view>
@@ -95,7 +95,7 @@
     <view v-if="currentTab === 0" class="content-area">
       <view class="content-panel cert-panel">
         <view class="panel-header cert-header">
-          <image class="header-bg" src="/static/images/homepage/cert-header-bg.jpg" mode="aspectFill" />
+          <image class="header-bg" src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/cert-header-bg.jpg" mode="aspectFill" />
           <view class="header-content">
             <view class="header-title">破解产品全生命周期中的复杂课题</view>
             <view class="header-subtitle">打造全球大健康产业合规智造领航者</view>
@@ -104,10 +104,10 @@
 
         <view class="card-grid">
           <view class="cert-card" v-for="(cert, index) in certTypes" :key="index">
-            <image class="cert-bg" :src="'/static/images/homepage/cert-bg-' + (index + 1) + '.jpg'" mode="aspectFill" />
+            <image class="cert-bg" :src="'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/cert-bg-' + (index + 1) + '.jpg'" mode="aspectFill" />
             <view class="cert-content">
               <view class="cert-icon">
-                <image :src="'/static/images/homepage/icon-cert-' + (index + 1) + '.svg'" mode="aspectFit" />
+                <image :src="'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-cert-' + (index + 1) + '.svg'" mode="aspectFit" />
               </view>
               <view class="cert-name">{{ cert.name }}</view>
               <view class="cert-desc">{{ cert.desc }}</view>
@@ -176,7 +176,7 @@
     <view v-if="currentTab === 1" class="content-area">
       <view class="content-panel cdmo-panel">
         <view class="panel-header production-header">
-          <image class="header-bg" src="/static/images/homepage/production-bg-1.png" mode="aspectFill" />
+          <image class="header-bg" src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/production-bg-1.png" mode="aspectFill" />
           <view class="header-content">
             <view class="header-title">OEM/ODM 贴牌加工</view>
             <view class="header-subtitle">从产品设计、研发到量产的全链条解决方案</view>
@@ -188,7 +188,7 @@
           <view class="dosage-grid">
             <view class="dosage-item" v-for="(dosage, index) in dosages" :key="index">
               <view class="dosage-icon">
-                <image :src="'/static/images/homepage/icon-dosage-' + (index + 1) + '.svg'" mode="aspectFit" />
+                <image :src="'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-dosage-' + (index + 1) + '.svg'" mode="aspectFit" />
               </view>
               <view class="dosage-text">{{ dosage }}</view>
             </view>
@@ -243,7 +243,7 @@
                 <view class="effect-grid">
                   <view class="effect-item" v-for="(effect, index) in effects.slice(0, 8)" :key="'p1-' + index">
                     <view class="effect-icon">
-                      <image :src="'/static/images/homepage/icon-effect-' + ((index % 6) + 1) + '.svg'" mode="aspectFit" />
+                      <image :src="'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-effect-' + ((index % 6) + 1) + '.svg'" mode="aspectFit" />
                     </view>
                     <view class="effect-name">{{ effect }}</view>
                   </view>
@@ -255,7 +255,7 @@
                 <view class="effect-grid">
                   <view class="effect-item" v-for="(effect, index) in effects.slice(8, 16)" :key="'p2-' + index">
                     <view class="effect-icon">
-                      <image :src="'/static/images/homepage/icon-effect-' + (((index + 8) % 6) + 1) + '.svg'" mode="aspectFit" />
+                      <image :src="'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-effect-' + (((index + 8) % 6) + 1) + '.svg'" mode="aspectFit" />
                     </view>
                     <view class="effect-name">{{ effect }}</view>
                   </view>
@@ -267,7 +267,7 @@
                 <view class="effect-grid">
                   <view class="effect-item" v-for="(effect, index) in effects.slice(16, 18)" :key="'p3-' + index">
                     <view class="effect-icon">
-                      <image :src="'/static/images/homepage/icon-effect-' + (((index + 16) % 6) + 1) + '.svg'" mode="aspectFit" />
+                      <image :src="'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-effect-' + (((index + 16) % 6) + 1) + '.svg'" mode="aspectFit" />
                     </view>
                     <view class="effect-name">{{ effect }}</view>
                   </view>
@@ -298,28 +298,28 @@
           <view class="section-title">生产优势</view>
           <view class="prod-advantage-list">
             <view class="prod-advantage-item item-1">
-              <image src="/static/images/homepage/production-img-1.png" mode="aspectFill" />
+              <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/production-img-1.png" mode="aspectFill" />
               <view class="prod-advantage-overlay">
                 <view class="prod-advantage-number">200+</view>
                 <view class="prod-advantage-text">安评类目 · 合规无忧</view>
               </view>
             </view>
             <view class="prod-advantage-item item-2">
-              <image src="/static/images/homepage/production-img-2.png" mode="aspectFill" />
+              <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/production-img-2.png" mode="aspectFill" />
               <view class="prod-advantage-overlay">
                 <view class="prod-advantage-number">95%</view>
                 <view class="prod-advantage-text">市场覆盖</view>
               </view>
             </view>
             <view class="prod-advantage-item item-3">
-              <image src="/static/images/homepage/production-img-3.png" mode="aspectFill" />
+              <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/production-img-3.png" mode="aspectFill" />
               <view class="prod-advantage-overlay">
                 <view class="prod-advantage-number">多剂型</view>
                 <view class="prod-advantage-text">一站式生产</view>
               </view>
             </view>
             <view class="prod-advantage-item item-4">
-              <image src="/static/images/homepage/production-img-4.jpeg" mode="aspectFill" />
+              <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/production-img-4.jpeg" mode="aspectFill" />
               <view class="prod-advantage-overlay">
                 <view class="prod-advantage-number">高品质</view>
                 <view class="prod-advantage-text">严格质控</view>
@@ -338,7 +338,7 @@
     <view v-if="currentTab === 2" class="content-area">
       <view class="content-panel marketing-panel">
         <view class="panel-header marketing-header">
-          <image class="header-bg" src="/static/images/homepage/marketing-bg.png" mode="aspectFill" />
+          <image class="header-bg" src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/marketing-bg.png" mode="aspectFill" />
           <view class="header-content">
             <view class="header-title">垂直供应链智能中台</view>
             <view class="header-subtitle">重构产业价值链，打造产业级供应链协同平台</view>
@@ -350,7 +350,7 @@
           <view class="model-cards">
             <view class="model-card" v-for="(model, index) in coreModels" :key="index">
               <view class="model-icon">
-                <image :src="'/static/images/homepage/icon-model-' + (index + 1) + '.svg'" mode="aspectFit" />
+                <image :src="'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-model-' + (index + 1) + '.svg'" mode="aspectFit" />
               </view>
               <view class="model-content">
                 <view class="model-name">{{ model.name }}</view>
@@ -422,10 +422,10 @@ const certTypes = reactive([
 ])
 
 const licenses = [
-  '/static/images/homepage/cert-license-1.jpg',
-  '/static/images/homepage/cert-license-2.jpg',
-  '/static/images/homepage/cert-license-3.jpg',
-  '/static/images/homepage/cert-license-4.jpg'
+  'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/cert-license-1.jpg',
+  'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/cert-license-2.jpg',
+  'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/cert-license-3.jpg',
+  'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/cert-license-4.jpg'
 ]
 
 const experts = reactive([
@@ -433,31 +433,31 @@ const experts = reactive([
     name: '张明华',
     title: '高级工程师 / 注册专员',
     field: '擅长领域：医疗器械注册、GMP认证',
-    photo: '/static/images/homepage/expert-2.png'
+    photo: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/expert-2.png'
   },
   {
     name: '李建国',
     title: '资深顾问 / 合规专家',
     field: '擅长领域：化妆品备案、消字号审批',
-    photo: '/static/images/homepage/expert-1.png'
+    photo: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/expert-1.png'
   },
   {
     name: '王晓峰',
     title: '技术总监 / 研发专家',
     field: '擅长领域：功能性食品配方、工艺优化',
-    photo: '/static/images/homepage/expert-2.png'
+    photo: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/expert-2.png'
   }
 ])
 
 const dosages = ['膏剂', '粉剂', '片剂', '液体', '颗粒', '凝胶']
 
 const products = reactive([
-  { name: '纤体瘦身贴', tag: '辅助减肥', img: '/static/images/homepage/product-slim.png' },
-  { name: '疏通活络液', tag: '缓解疼痛', img: '/static/images/homepage/product-luo.png' },
-  { name: '通络透骨喷剂', tag: '改善微循环', img: '/static/images/homepage/product-spray.png' },
-  { name: '舒筋活络膏', tag: '舒筋活络', img: '/static/images/homepage/product-ointment.png' },
-  { name: '舒缓通鼻膏', tag: '改善鼻部', img: '/static/images/homepage/product-nose.png' },
-  { name: '净肤康乳膏', tag: '改善皮肤', img: '/static/images/homepage/product-cream.png' }
+  { name: '纤体瘦身贴', tag: '辅助减肥', img: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/product-slim.png' },
+  { name: '疏通活络液', tag: '缓解疼痛', img: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/product-luo.png' },
+  { name: '通络透骨喷剂', tag: '改善微循环', img: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/product-spray.png' },
+  { name: '舒筋活络膏', tag: '舒筋活络', img: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/product-ointment.png' },
+  { name: '舒缓通鼻膏', tag: '改善鼻部', img: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/product-nose.png' },
+  { name: '净肤康乳膏', tag: '改善皮肤', img: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/product-cream.png' }
 ])
 
 const effects = [
@@ -492,25 +492,25 @@ const featuredProducts = reactive([
     name: '巴克宁疤痕膏',
     spec: '规格：20g/瓶',
     effect: '平滑增生、渗透肌底、祛除色素、桥接修补',
-    img: '/static/images/homepage/product-scar.png'
+    img: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/product-scar.png'
   },
   {
     name: '屁屁黄金',
     spec: '规格：20g/瓶',
     effect: '减少红肿、滋润保湿、温和消疹、舒缓PP、呵护皮脂',
-    img: '/static/images/homepage/product-baby.png'
+    img: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/product-baby.png'
   },
   {
     name: '男性抑菌喷剂',
     spec: '规格：5ml/瓶',
     effect: '对金黄色葡萄球菌、大肠杆菌、白色念珠菌，真菌有抑制作用',
-    img: '/static/images/homepage/product-men.png'
+    img: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/product-men.png'
   },
   {
     name: '净肤康乳膏',
     spec: '规格：20g/支',
     effect: '改善皮肤、抑菌止痒、滋润修护',
-    img: '/static/images/homepage/product-cream.png'
+    img: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/product-cream.png'
   }
 ])
 

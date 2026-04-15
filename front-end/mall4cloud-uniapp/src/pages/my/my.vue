@@ -6,7 +6,7 @@
         class="img"
         @tap="toUserSettings"
       >
-        <image :src="userInfo.pic || '/static/images/head-sculpture.png'" />
+        <image :src="userInfo.pic || 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/head-sculpture.png'" />
       </view>
       <view
         v-if="isNotLogged"
@@ -47,7 +47,7 @@
           @tap="toMyOder(1)"
         >
           <view class="img">
-            <image src="/static/images/my-paid.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-paid.png" />
             <view
               v-if="orderCountInfo.unPay"
               class="mark"
@@ -64,7 +64,7 @@
           @tap="toMyOder(2)"
         >
           <view class="img">
-            <image src="/static/images/my-delivered.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-delivered.png" />
             <view
               v-if="orderCountInfo.payed"
               class="mark"
@@ -81,7 +81,7 @@
           @tap="toMyOder(3)"
         >
           <view class="img">
-            <image src="/static/images/my-receiving.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-receiving.png" />
             <view
               v-if="orderCountInfo.consignment"
               class="mark"
@@ -98,7 +98,7 @@
           @tap="notOpen('退换货')"
         >
           <view class="img">
-            <image src="/static/images/my-refund.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-refund.png" />
             <!-- <view class="mark">{{ orderCountInfo.consignment }}</view> -->
           </view>
           <view class="text">
@@ -121,7 +121,7 @@
           @tap="notOpen('会员功能')"
         >
           <view class="img">
-            <image src="/static/images/my-member.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-member.png" />
           </view>
           <view class="text">
             会员中心
@@ -132,7 +132,7 @@
           @tap="toSampleList"
         >
           <view class="img">
-            <image src="/static/images/my-sample.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-sample.png" />
           </view>
           <view class="text">
             我的样品
@@ -143,7 +143,7 @@
           @tap="toFreeShop"
         >
           <view class="img">
-            <image src="/static/images/my-shop.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-shop.png" />
           </view>
           <view class="text">
             免费开店
@@ -154,7 +154,7 @@
           @tap="toAddressList"
         >
           <view class="img">
-            <image src="/static/images/my-address.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-address.png" />
           </view>
           <view class="text">
             地址管理
@@ -165,7 +165,7 @@
           @tap="toUserSettings"
         >
           <view class="img">
-            <image src="/static/images/my-set.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-set.png" />
           </view>
           <view class="text">
             系统设置

@@ -37,7 +37,7 @@
       <label class="item">
         <view class="pay-name">
           <view class="img">
-            <image src="/static/images/balancePay.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/balancePay.png" />
           </view>
           <view class="name">模拟支付</view>
         </view>
@@ -49,7 +49,7 @@
       <label class="item">
         <view class="pay-name">
           <view class="img">
-            <image src="/static/images/alipay.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/alipay.png" />
           </view>
           <view class="name">支付宝</view>
         </view>
@@ -62,7 +62,7 @@
       <label class="item">
         <view class="pay-name">
           <view class="img">
-            <image src="/static/images/wxpay.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/wxpay.png" />
           </view>
           <view class="name">微信支付</view>
         </view>

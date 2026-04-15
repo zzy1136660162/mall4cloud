@@ -7,7 +7,7 @@
     <view class="cart-top">
       <view class="address">
         <view class="img">
-          <image src="/static/images/local.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/local.png" />
         </view>
         <view
           class="text"
@@ -39,7 +39,7 @@
               />
               <view class="info">
                 <view class="icon">
-                  <image src="/static/images/shop.png" />
+                  <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop.png" />
                 </view>
                 <view class="name text-arrow">
                   {{ shopItem.shopName }}
@@ -117,7 +117,7 @@
           class="empty"
         >
           <view class="img">
-            <image src="/static/empty-img/cart-empty.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/empty-img/cart-empty.png" />
           </view>
           <view class="text">
             购物车空空的，去逛逛吧~
@@ -211,7 +211,7 @@
             class="close"
             @tap="closePopup"
           >
-            <image src="/static/images/close.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/close.png" />
           </view>
         </view>
         <view class="con-box">

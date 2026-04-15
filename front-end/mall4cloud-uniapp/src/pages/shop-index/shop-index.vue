@@ -10,7 +10,7 @@
           />
           <image
             v-else
-            src="/static/img/banner3.png"
+            src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/img/banner3.png"
           />
         </view>
       </view>

@@ -1,4 +1,5 @@
 {
+  "lazyCodeLoading": "requiredComponents",
   "easycom": {
 		"custom":{
     	"^w-(.*)": "@uni-ui/code-ui/components/w-$1/index.vue"

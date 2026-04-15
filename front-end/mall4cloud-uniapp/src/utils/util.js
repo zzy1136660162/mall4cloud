@@ -858,7 +858,7 @@ const util = {
           if (res.loginLogoImg) {
             res.loginLogoImg = res.loginLogoImg.indexOf('http') > -1 ? res.loginLogoImg : import.meta.env.VITE_APP_RESOURCES_URL + res.loginLogoImg
           } else {
-            res.loginLogoImg = new URL('@/static/logo.png', import.meta.url).href
+            res.loginLogoImg = 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/logo.png'
           }
           res.titleContentCn = res.titleContentCn || '蓝海商城'
           res.titleContentEn = res.titleContentEn || 'Mall4j'
@@ -1100,7 +1100,7 @@ const util = {
           {
             type: 'image',
             // 这个是默认图片，路径错误会导致小程序生成失败
-            src: '/static/images/def.png',
+            src: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/def.png',
             css: {
               width: '540rpx',
               height: '540rpx',

@@ -7,7 +7,7 @@
         @tap="toSearchPage"
       >
         <view class="icon">
-          <image src="/static/images/search.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/search.png" />
         </view>
         <view class="text">
           搜索您想购买的商品或者店铺
