@@ -5,7 +5,7 @@
       <view class="banner-subtitle">提交您的研发需求，我们为您定制专属产品</view>
     </view>
 
-    <view class="card">
+    <view class="card quick-card">
       <view class="section-title">快捷入口</view>
       <view class="quick-actions">
         <view class="action-item" @tap="goToSubmit">

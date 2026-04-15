@@ -470,26 +470,25 @@ function onScrollToLower() {
 .product-grid {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   padding: 20rpx;
+  box-sizing: border-box;
 }
 
 .product-card {
-  width: calc(50% - 10rpx);
-  margin-right: 20rpx;
+  width: 345rpx;
+  flex: 0 0 345rpx;
   margin-bottom: 20rpx;
   background-color: #fff;
   border-radius: 16rpx;
   overflow: hidden;
-}
-
-.product-card:nth-child(2n) {
-  margin-right: 0;
+  box-sizing: border-box;
 }
 
 .product-image-wrapper {
   position: relative;
   width: 100%;
-  height: 340rpx;
+  height: 345rpx;
   background-color: #f8f8f8;
 }
 

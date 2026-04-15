@@ -2,6 +2,8 @@
   padding: 0 0 calc(100rpx + env(safe-area-inset-bottom));
   background: linear-gradient(180deg, #fffbe6 0%, #f5f5f5 100%);
   min-height: 100vh;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .banner {
@@ -11,6 +13,7 @@
   color: #333;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .banner::before {
@@ -42,6 +45,7 @@
   position: relative;
   z-index: 1;
   text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+  word-break: break-all;
 }
 
 .banner-subtitle {
@@ -49,6 +53,7 @@
   opacity: 0.95;
   position: relative;
   z-index: 1;
+  word-break: break-all;
 }
 
 .card {
@@ -59,6 +64,11 @@
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
   position: relative;
   z-index: 2;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.quick-card {
   margin-top: -40rpx;
 }
 
@@ -69,6 +79,7 @@
   margin-bottom: 30rpx;
   display: flex;
   align-items: center;
+  min-width: 0;
 }
 
 .section-title::before {
@@ -84,6 +95,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-width: 0;
 }
 
 .link-text {
@@ -92,20 +104,25 @@
   display: flex;
   align-items: center;
   font-weight: 500;
+  flex-shrink: 0;
+  margin-left: 20rpx;
 }
 
 .quick-actions {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   padding: 20rpx 0;
 }
 
 .action-item {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20rpx 50rpx;
+  padding: 20rpx 0;
   transition: transform 0.2s;
+  box-sizing: border-box;
 }
 
 .action-item:active {
@@ -113,14 +130,14 @@
 }
 
 .action-icon {
-  width: 140rpx;
-  height: 140rpx;
+  width: 112rpx;
+  height: 112rpx;
   border-radius: 36rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 64rpx;
-  line-height: 140rpx;
+  font-size: 48rpx;
+  line-height: 112rpx;
   text-align: center;
   margin-bottom: 20rpx;
   box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
@@ -152,9 +169,12 @@
 }
 
 .action-text {
-  font-size: 30rpx;
+  width: 100%;
+  font-size: 28rpx;
   color: #333;
   font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .process-list {
@@ -169,6 +189,7 @@
   background: #fafafa;
   border-radius: 16rpx;
   transition: all 0.3s;
+  box-sizing: border-box;
 }
 
 .process-item:active {
@@ -198,6 +219,7 @@
 
 .process-content {
   flex: 1;
+  min-width: 0;
 }
 
 .process-title {
@@ -206,12 +228,14 @@
   font-weight: 600;
   display: block;
   margin-bottom: 8rpx;
+  word-break: break-all;
 }
 
 .process-desc {
   font-size: 26rpx;
   color: #666;
   display: block;
+  word-break: break-all;
 }
 
 .demand-list {
@@ -225,6 +249,7 @@
   margin-bottom: 20rpx;
   transition: all 0.3s;
   border: 2rpx solid #ffe7ba;
+  box-sizing: border-box;
 }
 
 .demand-item:last-child {
@@ -250,6 +275,7 @@
   color: #5c3810;
   font-weight: 600;
   flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -261,6 +287,7 @@
   padding: 8rpx 20rpx;
   border-radius: 24rpx;
   font-weight: 500;
+  flex-shrink: 0;
 }
 
 .status-pending {

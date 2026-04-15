@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * @author AI Assistant
  */
 @RestController
-@RequestMapping("/talent_pool")
+@RequestMapping({"/talent_pool", "/ua/talent_pool"})
 @Tag(name = "人才库管理")
 public class TalentPoolController {
 
