@@ -221,6 +221,29 @@ const selectedCount = ref(1)
 const totalPrice = ref(0)
 const loading = ref(false)
 
+const isLoggedIn = () => {
+  const token = uni.getStorageSync('cloudToken')
+  return !!token
+}
+
+const checkLogin = () => {
+  if (!isLoggedIn()) {
+    uni.showModal({
+      title: '提示',
+      content: '您还未登录，是否立即登录？',
+      success: (res) => {
+        if (res.confirm) {
+          uni.navigateTo({
+            url: '/pages/login/login'
+          })
+        }
+      }
+    })
+    return false
+  }
+  return true
+}
+
 onMounted(() => {
   const pages = getCurrentPages()
   const currentPage = pages[pages.length - 1]
@@ -314,6 +337,9 @@ function showLogistics() {
 }
 
 function goToSampleApply() {
+  if (!checkLogin()) {
+    return
+  }
   uni.navigateTo({
     url: `/pages/sample/apply/apply?spuId=${product.value.spuId}`
   })

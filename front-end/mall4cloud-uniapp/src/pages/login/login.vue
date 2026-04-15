@@ -158,9 +158,26 @@ const login = () => {
   http.request(params).then((res) => {
     uni.setStorageSync('cloudToken', res.accessToken)
     uni.setStorageSync('cloudLoginResult', res) // 保存整个登录数据
-    uni.reLaunch({ // 关闭所有页面，打开首页
-      url: '/pages/index/index'
-    })
+    
+    const pages = getCurrentPages()
+    const prevPage = pages[pages.length - 2]
+    
+    if (prevPage) {
+      const prevData = prevPage.data || {}
+      const hasData = prevData.products?.length || prevData.prodList?.length || prevData.banners?.length
+      
+      if (hasData) {
+        uni.navigateBack()
+      } else {
+        uni.reLaunch({
+          url: '/pages/index/index'
+        })
+      }
+    } else {
+      uni.reLaunch({
+        url: '/pages/index/index'
+      })
+    }
   })
 }
 

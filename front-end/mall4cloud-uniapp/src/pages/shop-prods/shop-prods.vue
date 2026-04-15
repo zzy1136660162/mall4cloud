@@ -127,6 +127,29 @@ const {
 
 const cartCount = ref(0)
 
+const isLoggedIn = () => {
+  const token = uni.getStorageSync('cloudToken')
+  return !!token
+}
+
+const checkLoginAndAction = (action) => {
+  if (!isLoggedIn()) {
+    uni.showModal({
+      title: '提示',
+      content: '您还未登录，是否立即登录？',
+      success: (res) => {
+        if (res.confirm) {
+          uni.navigateTo({
+            url: '/pages/login/login'
+          })
+        }
+      }
+    })
+    return false
+  }
+  return true
+}
+
 const handleTabChange = ({ item, index }) => {
   console.log('Tab切换到:', item.text, index)
 }
@@ -278,6 +301,9 @@ const getProd = () => {
 }
 
 async function loadCartCount() {
+  if (!isLoggedIn()) {
+    return
+  }
   try {
     const res = await http.request({
       url: '/mall4cloud_product/a/shop_cart/info',
@@ -303,10 +329,9 @@ async function loadCartCount() {
 }
 
 function addToCart(item) {
-  uni.showToast({
-    title: '已加入购物车',
-    icon: 'success'
-  })
+  if (!checkLoginAndAction('addToCart')) {
+    return
+  }
 
   http.request({
     url: '/mall4cloud_product/a/shop_cart/add_item',

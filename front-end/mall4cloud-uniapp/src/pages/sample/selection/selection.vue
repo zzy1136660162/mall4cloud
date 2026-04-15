@@ -179,6 +179,29 @@ const categories = ref([])
 
 const banners = ref([])
 
+const isLoggedIn = () => {
+  const token = uni.getStorageSync('cloudToken')
+  return !!token
+}
+
+const checkLogin = () => {
+  if (!isLoggedIn()) {
+    uni.showModal({
+      title: '提示',
+      content: '您还未登录，是否立即登录？',
+      success: (res) => {
+        if (res.confirm) {
+          uni.navigateTo({
+            url: '/pages/login/login'
+          })
+        }
+      }
+    })
+    return false
+  }
+  return true
+}
+
 const filterOptions = {
   commission: [
     { label: '不限', value: 'all' },
@@ -359,6 +382,9 @@ function goToProductDetail(spuId) {
 }
 
 function applySample(spuId) {
+  if (!checkLogin()) {
+    return
+  }
   uni.navigateTo({
     url: `/pages/sample/apply/apply?spuId=${spuId}`
   })
