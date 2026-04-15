@@ -166,31 +166,31 @@ export default {
                     id: 0,
                     name: '首页',
                     path: '/pages/index/index',
-                    selectedIcon: '/static/images/tab/首页 (选中).png'
+                    selectedIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/首页 (选中).png'
                 },
                 {
                     id: 1,
                     name: '商城',
                     path: '/pages/Product_list_page/Product_list_page',
-                    selectedIcon: '/static/images/tab/商城（选中）.png'
+                    selectedIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/商城（选中）.png'
                 },
                 {
                     id: 2,
                     name: '选品',
                     path: '/pages/selection/selection',
-                    selectedIcon: '/static/images/tab/选品（选中）.png'
+                    selectedIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/选品（选中）.png'
                 },
                 {
                     id: 3,
                     name: '研发',
                     path: '/pages/rd/rd',
-                    selectedIcon: '/static/images/tab/研发（选中）.png'
+                    selectedIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/研发（选中）.png'
                 },
                 {
                     id: 4,
                     name: '我的',
                     path: '/pages/Profile_page/Profile_page',
-                    selectedIcon: '/static/images/tab/我的 (选中).png'
+                    selectedIcon: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/tab/我的 (选中).png'
                 }
             ],
 

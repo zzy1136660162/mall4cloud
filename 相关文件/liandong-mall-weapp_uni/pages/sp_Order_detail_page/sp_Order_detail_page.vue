@@ -152,7 +152,7 @@
 const orderApi = require('../../utils/sp_api.js').orderApi;
 
 // 默认图片
-const DEFAULT_PRODUCT_IMAGE = '/static/images/products/product_1_main.jpg';
+const DEFAULT_PRODUCT_IMAGE = 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/products/product_1_main.jpg';
 export default {
     data() {
         return {

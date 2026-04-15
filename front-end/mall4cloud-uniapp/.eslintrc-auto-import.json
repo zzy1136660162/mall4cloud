@@ -18,6 +18,7 @@
     "Ref": true,
     "VNode": true,
     "WritableComputedRef": true,
+    "chatService": true,
     "computed": true,
     "createApp": true,
     "customRef": true,
@@ -103,7 +104,6 @@
     "watchEffect": true,
     "watchPostEffect": true,
     "watchSyncEffect": true,
-    "wechat": true,
-    "chatService": true
+    "wechat": true
   }
 }
