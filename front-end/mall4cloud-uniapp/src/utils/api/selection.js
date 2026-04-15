@@ -2,8 +2,23 @@ import http from '@/utils/http.js'
 
 const API_PRODUCT = '/mall4cloud_product/ua'
 const API_PLATFORM = '/mall4cloud_platform'
+const API_MULTISHOP = '/mall4cloud_multishop/ua'
 
 export default {
+  /**
+   * 获取选品轮播图
+   * @param {Number} shopId 店铺ID
+   */
+  getSelectionBanners (shopId = 324) {
+    return http.request({
+      url: `${API_MULTISHOP}/index_img/list`,
+      method: 'GET',
+      data: {
+        shopId
+      }
+    })
+  },
+
   /**
    * 获取商品分类列表（使用现有接口）
    * @param {Number} parentId 父分类ID（0获取一级分类）

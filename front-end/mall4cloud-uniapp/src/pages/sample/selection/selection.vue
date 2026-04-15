@@ -177,20 +177,7 @@ const hasMore = ref(true)
 const showFilterPanel = ref(false)
 const categories = ref([])
 
-const banners = ref([
-  {
-    id: 1,
-    image: 'https://picsum.photos/750/300?random=1',
-    title: '精选好物',
-    type: 'activity'
-  },
-  {
-    id: 2,
-    image: 'https://picsum.photos/750/300?random=2',
-    title: '爆款推荐',
-    type: 'activity'
-  }
-])
+const banners = ref([])
 
 const filterOptions = {
   commission: [
@@ -218,6 +205,7 @@ const currentFilters = reactive({
 onMounted(() => {
   loadCategories()
   loadProducts()
+  loadBanners()
 })
 
 async function loadCategories() {
@@ -228,6 +216,22 @@ async function loadCategories() {
     }
   } catch (error) {
     console.error('加载分类失败', error)
+  }
+}
+
+async function loadBanners() {
+  try {
+    const res = await selectionApi.getSelectionBanners()
+    if (res && res.length) {
+      banners.value = res.map(item => ({
+        ...item,
+        image: item.imgUrl,
+        title: '精选好物',
+        type: item.spuId ? 'product' : 'activity'
+      }))
+    }
+  } catch (error) {
+    console.error('加载轮播图失败', error)
   }
 }
 
@@ -361,10 +365,14 @@ function applySample(spuId) {
 }
 
 function onBannerTap(item) {
-  uni.showToast({
-    title: item.title,
-    icon: 'none'
-  })
+  if (item.spuId) {
+    goToProductDetail(item.spuId)
+  } else {
+    uni.showToast({
+      title: item.title || '精选好物',
+      icon: 'none'
+    })
+  }
 }
 
 function onEntryTap(type) {
