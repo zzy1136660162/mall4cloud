@@ -147,7 +147,7 @@
 
         <view class="section-block">
           <view class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24rpx;">
-            <view class="section-title" style="margin-bottom: 0;">专家团队</view>
+            <view class="section-title" style="margin-bottom: 0;">研发专家</view>
             <text style="font-size: 24rpx; color: #fe9a51;" @tap="goToTalentPool">更多</text>
           </view>
           <view class="expert-list">
