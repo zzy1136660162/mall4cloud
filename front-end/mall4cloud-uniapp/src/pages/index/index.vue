@@ -20,7 +20,7 @@
         </swiper-item>
       </swiper>
       <view class="banner-logo">
-        <image class="logo-img" src="/static/logo.png" mode="aspectFit" />
+        <image class="logo-img" src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/logo.png" mode="aspectFit" />
         <text class="logo-text">杰东优选平台</text>
       </view>
       <view class="banner-content">
