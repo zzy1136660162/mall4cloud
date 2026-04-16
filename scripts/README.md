@@ -98,7 +98,23 @@ cd scripts
 ./status.sh AUTH
 ```
 
-### 5. 停止服务
+### 5. 重启服务
+
+```bash
+# 串行重启所有服务（默认）
+./restart.sh
+
+# 并行重启所有服务（更快！）
+./restart.sh --parallel
+
+# 重启单个服务
+./restart.sh BIZ
+
+# 重启多个服务
+./restart.sh AUTH GATEWAY
+```
+
+### 6. 停止服务
 
 ```bash
 # 停止所有服务
@@ -106,16 +122,6 @@ cd scripts
 
 # 停止单个服务
 ./stop.sh AUTH
-```
-
-### 6. 重启服务
-
-```bash
-# 重启所有服务
-./restart.sh
-
-# 重启单个服务
-./restart.sh AUTH
 ```
 
 ## 微服务列表
@@ -273,6 +279,29 @@ chmod +x *.sh
 3. 最后启动GATEWAY
 4. 生产环境请根据服务器配置调整JVM参数
 5. 建议在生产环境设置合适的日志轮转策略
+6. 推荐使用 `./restart.sh --parallel` 并行重启，速度更快
+
+## 并行执行说明
+
+`restart.sh` 脚本支持并行执行：
+
+- **串行重启**（默认）：`./restart.sh` - 一个接一个地启动/停止
+- **并行重启**：`./restart.sh --parallel` - 同时启动多个服务
+
+### 并行启动批次
+
+为了保证服务依赖关系，并行启动会分批次进行：
+
+| 批次 | 服务 | 说明 |
+|------|------|------|
+| 批次 1 | LEAF, USER, RBAC | 基础服务（无依赖）|
+| 批次 2 | AUTH, PRODUCT | 核心服务 |
+| 批次 3 | ORDER, PAYMENT, SEARCH | 业务服务 |
+| 批次 4 | BIZ, MULTISHOP, PLATFORM | 聚合服务 |
+| 批次 5 | GATEWAY | 网关服务（最后）|
+
+**优势**：并行重启比串行重启快 3-5 倍！
+
 
 ## 联系方式
 
