@@ -9,6 +9,16 @@
     <result column="nick_name" property="nickName"/>
     <result column="pic" property="pic"/>
     <result column="status" property="status"/>
+    <result column="is_talent" property="isTalent"/>
+    <result column="talent_apply_time" property="talentApplyTime"/>
+    <result column="talent_real_name" property="talentRealName"/>
+    <result column="talent_phone" property="talentPhone"/>
+    <result column="talent_province" property="talentProvince"/>
+    <result column="talent_city" property="talentCity"/>
+    <result column="talent_area" property="talentArea"/>
+    <result column="talent_apply_reason" property="talentApplyReason"/>
+    <result column="talent_intro" property="talentIntro"/>
+    <result column="talent_status" property="talentStatus"/>
   </resultMap>
 
   <resultMap id="userAndOpenIdsMap" type="com.mall4j.cloud.api.user.vo.UserApiVO">
@@ -25,11 +35,13 @@
   </resultMap>
 
   <sql id="Vo_Column_List">
-    `user_id`,`create_time`,`update_time`,`nick_name`,`pic`,`status`
+    `user_id`,`create_time`,`update_time`,`nick_name`,`pic`,`status`,`is_talent`,`talent_apply_time`,`talent_real_name`,`talent_phone`,`talent_province`,`talent_city`,`talent_area`,`talent_apply_reason`,`talent_intro`,`talent_status`
   </sql>
+
   <select id="list" resultType="com.mall4j.cloud.user.vo.UserVO">
     select <include refid="Vo_Column_List"/> from user order by user_id desc
   </select>
+
   <select id="getByUserId" resultType="com.mall4j.cloud.api.user.vo.UserApiVO">
     select <include refid="Vo_Column_List"/> from user where user_id = #{userId}
   </select>
@@ -38,6 +50,7 @@
     insert into user (`user_id`,`nick_name`,`pic`,`status`)
     values (#{user.userId},#{user.nickName},#{user.pic},#{user.status});
   </insert>
+
   <update id="update">
     update user
     <set>
@@ -49,6 +62,36 @@
       </if>
       <if test="user.status != null">
         `status` = #{user.status},
+      </if>
+      <if test="user.isTalent != null">
+        `is_talent` = #{user.isTalent},
+      </if>
+      <if test="user.talentApplyTime != null">
+        `talent_apply_time` = #{user.talentApplyTime},
+      </if>
+      <if test="user.talentRealName != null">
+        `talent_real_name` = #{user.talentRealName},
+      </if>
+      <if test="user.talentPhone != null">
+        `talent_phone` = #{user.talentPhone},
+      </if>
+      <if test="user.talentProvince != null">
+        `talent_province` = #{user.talentProvince},
+      </if>
+      <if test="user.talentCity != null">
+        `talent_city` = #{user.talentCity},
+      </if>
+      <if test="user.talentArea != null">
+        `talent_area` = #{user.talentArea},
+      </if>
+      <if test="user.talentApplyReason != null">
+        `talent_apply_reason` = #{user.talentApplyReason},
+      </if>
+      <if test="user.talentIntro != null">
+        `talent_intro` = #{user.talentIntro},
+      </if>
+      <if test="user.talentStatus != null">
+        `talent_status` = #{user.talentStatus},
       </if>
     </set>
     where user_id = #{user.userId}
@@ -62,4 +105,21 @@
       </foreach>
     order by user_id desc
   </select>
+
+  <update id="updateTalentApply">
+    update user
+    <set>
+      `is_talent` = #{user.isTalent},
+      `talent_apply_time` = #{user.talentApplyTime},
+      `talent_real_name` = #{user.talentRealName},
+      `talent_phone` = #{user.talentPhone},
+      `talent_province` = #{user.talentProvince},
+      `talent_city` = #{user.talentCity},
+      `talent_area` = #{user.talentArea},
+      `talent_apply_reason` = #{user.talentApplyReason},
+      `talent_intro` = #{user.talentIntro},
+      `talent_status` = #{user.talentStatus},
+    </set>
+    where user_id = #{user.userId}
+  </update>
 </mapper>

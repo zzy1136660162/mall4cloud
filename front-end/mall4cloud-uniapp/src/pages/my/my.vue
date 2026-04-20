@@ -171,6 +171,17 @@
             系统设置
           </view>
         </view>
+        <view
+          class="item"
+          @tap="toTalentApply"
+        >
+          <view class="img">
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-talent.png" />
+          </view>
+          <view class="text">
+            达人申请
+          </view>
+        </view>
       </view>
     </view>
   </view>
@@ -304,6 +315,13 @@ const toFreeShop = () => {
 const toSampleList = () => {
   uni.navigateTo({
     url: '/pages/sample/list/list'
+  })
+}
+
+// 去达人申请
+const toTalentApply = () => {
+  uni.navigateTo({
+    url: '/pages/talent-apply/talent-apply'
   })
 }
 </script>

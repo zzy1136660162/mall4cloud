@@ -51,4 +51,11 @@ public interface UserMapper {
 	 * @return 用户信息
 	 */
 	List<UserApiVO> getUserByUserIds(@Param("userIds") List<Long> userIds);
+
+	/**
+	 * 更新达人申请信息
+	 *
+	 * @param user 用户表
+	 */
+	void updateTalentApply(@Param("user") User user);
 }

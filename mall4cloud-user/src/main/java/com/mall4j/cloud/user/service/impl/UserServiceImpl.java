@@ -125,4 +125,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    @CacheEvict(cacheNames = UserCacheNames.USER_INFO, key = "#user.userId")
+    public void updateTalentApply(User user) {
+        userMapper.updateTalentApply(user);
+    }
+
 }

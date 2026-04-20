@@ -50,4 +50,10 @@ public interface UserService {
 	 * @return uid
 	 */
     Long save(UserRegisterDTO param);
+
+	/**
+	 * 更新达人申请信息
+	 * @param user 用户表
+	 */
+	void updateTalentApply(User user);
 }
