@@ -58,4 +58,19 @@ public interface UserMapper {
 	 * @param user 用户表
 	 */
 	void updateTalentApply(@Param("user") User user);
+
+	/**
+	 * 分页查询达人申请
+	 *
+	 * @param talentStatus 审核状态
+	 * @return 达人申请列表
+	 */
+	List<User> pageTalentApply(@Param("talentStatus") Integer talentStatus);
+
+	/**
+	 * 审核达人申请
+	 *
+	 * @param user 用户信息
+	 */
+	void auditTalentApply(@Param("user") User user);
 }

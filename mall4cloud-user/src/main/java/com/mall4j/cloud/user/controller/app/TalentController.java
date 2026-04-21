@@ -1,6 +1,7 @@
 package com.mall4j.cloud.user.controller.app;
 
 import com.mall4j.cloud.api.auth.bo.UserInfoInTokenBO;
+import com.mall4j.cloud.common.database.vo.PageVO;
 import com.mall4j.cloud.common.response.ServerResponseEntity;
 import com.mall4j.cloud.common.security.AuthUserContext;
 import com.mall4j.cloud.user.dto.TalentApplyDTO;
@@ -50,5 +51,39 @@ public class TalentController {
         userService.updateTalentApply(user);
 
         return ServerResponseEntity.success();
+    }
+
+    @GetMapping("/page")
+    @Operation(summary = "分页查询达人申请")
+    public ServerResponseEntity<PageVO<User>> page(@RequestParam Integer page, @RequestParam Integer limit, @RequestParam(required = false) Integer talentStatus) {
+        return ServerResponseEntity.success(userService.pageTalentApply(page, limit, talentStatus));
+    }
+
+    @PutMapping("/audit")
+    @Operation(summary = "审核达人申请")
+    public ServerResponseEntity<Void> audit(@RequestBody AuditDTO dto) {
+        userService.auditTalentApply(dto.getUserId(), dto.getStatus());
+        return ServerResponseEntity.success();
+    }
+
+    public static class AuditDTO {
+        private Long userId;
+        private Integer status;
+
+        public Long getUserId() {
+            return userId;
+        }
+
+        public void setUserId(Long userId) {
+            this.userId = userId;
+        }
+
+        public Integer getStatus() {
+            return status;
+        }
+
+        public void setStatus(Integer status) {
+            this.status = status;
+        }
     }
 }

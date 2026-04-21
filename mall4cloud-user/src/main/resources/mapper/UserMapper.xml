@@ -122,4 +122,22 @@
     </set>
     where user_id = #{user.userId}
   </update>
+
+  <select id="pageTalentApply" resultMap="userMap">
+    select * from user
+    where talent_status is not null
+    <if test="talentStatus != null">
+      and talent_status = #{talentStatus}
+    </if>
+    order by talent_apply_time desc
+  </select>
+
+  <update id="auditTalentApply">
+    update user
+    <set>
+      `talent_status` = #{user.talentStatus},
+      `is_talent` = #{user.isTalent}
+    </set>
+    where user_id = #{user.userId}
+  </update>
 </mapper>
