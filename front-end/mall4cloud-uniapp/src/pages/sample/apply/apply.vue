@@ -147,6 +147,7 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import selectionApi from '@/utils/api/selection.js'
 import util from '@/utils/util.js'
 
@@ -187,6 +188,9 @@ const canSubmit = computed(() => {
 })
 
 onMounted(() => {
+  // 从存储恢复商品（如果还没有加载的话）
+  loadProductsFromStorage()
+
   const pages = getCurrentPages()
   const currentPage = pages[pages.length - 1]
   const options = currentPage.options || currentPage.$page?.options || {}
@@ -204,6 +208,12 @@ async function loadProductInfo(productSpuId) {
   try {
     const res = await selectionApi.getSelectionDetail(productSpuId)
     if (res) {
+      // 检查是否已存在
+      const exists = selectedProducts.value.some(item => item.id === res.spuId)
+      if (exists) {
+        return
+      }
+
       const product = {
         id: res.spuId,
         image: res.mainImgUrl,
@@ -212,7 +222,9 @@ async function loadProductInfo(productSpuId) {
         commissionRate: res.commissionRate || 0,
         commissionAmount: res.commissionAmount ? (res.commissionAmount / 100).toFixed(2) : '0.00'
       }
-      selectedProducts.value = [product]
+      selectedProducts.value.push(product)
+      saveProductsToStorage()
+      console.log('加载初始商品:', product)
     }
   } catch (error) {
     uni.showToast({ title: '加载商品信息失败', icon: 'none' })
@@ -231,15 +243,113 @@ function loadDefaultAddress() {
   }
 }
 
-function removeProduct(id) {
-  selectedProducts.value = selectedProducts.value.filter(item => item.id !== id)
-}
-
 function addProduct() {
-  uni.navigateTo({
-    url: '/pages/sample/selection/selection?mode=select'
+  console.log('点击了添加更多商品按钮')
+  uni.switchTab({
+    url: '/pages/sample/selection/selection',
+    success: () => {
+      console.log('switchTab 跳转成功')
+    },
+    fail: (err) => {
+      console.error('跳转失败:', err)
+      uni.showToast({
+        title: '页面跳转失败',
+        icon: 'none'
+      })
+    }
   })
 }
+
+function selectProduct(product) {
+  console.log('apply.vue 收到选中的商品:', product)
+  const exists = selectedProducts.value.some(item => item.id === product.id)
+  if (exists) {
+    uni.showToast({
+      title: '该商品已添加',
+      icon: 'none'
+    })
+    return
+  }
+
+  selectedProducts.value.push(product)
+  saveProductsToStorage()
+  console.log('当前已选商品列表:', selectedProducts.value)
+}
+
+async function loadAndAddProduct(spuId) {
+  try {
+    const res = await selectionApi.getSelectionDetail(spuId)
+    if (res) {
+      // 检查是否已存在
+      const exists = selectedProducts.value.some(item => item.id === res.spuId)
+      if (exists) {
+        uni.showToast({
+          title: '该商品已添加',
+          icon: 'none'
+        })
+        return
+      }
+
+      const product = {
+        id: res.spuId,
+        image: res.mainImgUrl,
+        name: res.name,
+        price: res.priceFee ? (res.priceFee / 100).toFixed(2) : '0.00',
+        commissionRate: res.commissionRate || 0,
+        commissionAmount: res.commissionAmount ? (res.commissionAmount / 100).toFixed(2) : '0.00'
+      }
+      selectedProducts.value.push(product)
+      saveProductsToStorage()
+      console.log('添加商品到列表:', product)
+    }
+  } catch (error) {
+    uni.showToast({ title: '加载商品信息失败', icon: 'none' })
+    console.error('加载商品信息失败', error)
+  }
+}
+
+function saveProductsToStorage() {
+  uni.setStorageSync('applySelectedProducts', selectedProducts.value)
+}
+
+function loadProductsFromStorage() {
+  const saved = uni.getStorageSync('applySelectedProducts')
+  if (saved && Array.isArray(saved) && saved.length > 0) {
+    // 如果当前没有商品，从存储恢复
+    if (selectedProducts.value.length === 0) {
+      selectedProducts.value = saved
+      console.log('从存储恢复商品:', saved)
+    }
+  }
+}
+
+function removeProduct(id) {
+  selectedProducts.value = selectedProducts.value.filter(item => item.id !== id)
+  saveProductsToStorage()
+}
+
+onShow(() => {
+  console.log('apply.vue - onShow 触发')
+
+  // 从本地存储恢复商品数据（只有在没有商品时才恢复）
+  loadProductsFromStorage()
+
+  // 检查是否有从 selection 页面选择的商品
+  const selectedProduct = uni.getStorageSync('selectedProductForApply')
+  if (selectedProduct) {
+    console.log('检测到选中的商品:', selectedProduct)
+    uni.removeStorageSync('selectedProductForApply')
+    selectProduct(selectedProduct)
+  }
+
+  // 检查是否有从 selection 页面点击"申请样品"传递的 spuId
+  const applySpuId = uni.getStorageSync('applySpuId')
+  if (applySpuId) {
+    console.log('检测到申请样品 spuId:', applySpuId)
+    uni.removeStorageSync('applySpuId')
+    loadAndAddProduct(applySpuId)
+  }
+})
 
 function selectAddress() {
   console.log('selectAddress function called')
