@@ -6,7 +6,7 @@
         <input
           class="search-input"
           type="text"
-          placeholder="搜索人才姓名、专长..."
+          placeholder="搜索人才姓名..."
           :value="searchKeyword"
           @confirm="onSearchConfirm"
           @input="onSearch"
@@ -92,7 +92,8 @@ const state = reactive({
   hasMore: true,
   loading: false,
   currentArea: '',
-  searchKeyword: ''
+  searchKeyword: '',
+  requestId: 0
 })
 
 const {
@@ -115,6 +116,126 @@ const areas = [
   '品质控制'
 ]
 
+const onSearch = (e) => {
+  const keyword = e.detail.value || ''
+  state.searchKeyword = keyword
+  state.page = 1
+  state.hasMore = true
+  state.requestId++
+  state.talentList = []
+  state.loading = false
+  loadTalentList()
+}
+
+const onSearchConfirm = (e) => {
+  const keyword = e.detail.value || ''
+  state.searchKeyword = keyword
+  state.page = 1
+  state.hasMore = true
+  state.requestId++
+  state.talentList = []
+  state.loading = false
+  loadTalentList()
+}
+
+const clearSearch = () => {
+  state.searchKeyword = ''
+  state.page = 1
+  state.hasMore = true
+  state.requestId++
+  state.talentList = []
+  state.loading = false
+  loadTalentList()
+}
+
+const loadTalentList = (callback) => {
+  if (state.loading) {
+    return
+  }
+  state.loading = true
+  state.requestId++
+  const currentRequestId = state.requestId
+
+  const params = {
+    page: state.page,
+    pageSize: state.pageSize
+  }
+  if (state.currentArea) {
+    params.area = state.currentArea
+  }
+  if (state.searchKeyword) {
+    params.name = state.searchKeyword
+  }
+
+  talentPoolApi.getList(params).then((res) => {
+    if (currentRequestId !== state.requestId) {
+      return
+    }
+    
+    let list = []
+    if (Array.isArray(res)) {
+      list = res
+    } else if (res && res.data) {
+      list = res.data
+    } else if (res && res.list) {
+      list = res.list
+    }
+
+    const formattedList = list.map(item => ({
+      ...item,
+      expertiseAreas: parseJsonArray(item.expertiseAreas)
+    }))
+
+    state.talentList = state.page === 1 ? formattedList : [...state.talentList, ...formattedList]
+    state.hasMore = list.length >= state.pageSize
+    state.loading = false
+
+    if (callback) {
+      callback()
+    }
+  }).catch(() => {
+    if (currentRequestId !== state.requestId) {
+      return
+    }
+    state.loading = false
+    if (callback) {
+      callback()
+    }
+  })
+}
+
+const parseJsonArray = (str) => {
+  if (!str) return []
+  if (Array.isArray(str)) return str
+  try {
+    return JSON.parse(str)
+  } catch (e) {
+    return []
+  }
+}
+
+const loadMore = () => {
+  if (state.loading || !state.hasMore) return
+  state.page = state.page + 1
+  loadTalentList()
+}
+
+const filterByArea = (area) => {
+  state.currentArea = area
+  state.page = 1
+  state.hasMore = true
+  state.requestId++
+  state.talentList = []
+  state.loading = false
+  loadTalentList()
+}
+
+const goToDetail = (id) => {
+  uni.navigateTo({
+    url: `/pages/talent-pool/detail/detail?id=${id}`
+  })
+}
+
 onLoad(() => {
   loadTalentList()
 })
@@ -134,106 +255,8 @@ onPullDownRefresh(() => {
 })
 
 onReachBottom(() => {
-  if (state.hasMore && !state.loading) {
-    loadMore()
-  }
+  loadMore()
 })
-
-const loadTalentList = (callback) => {
-  if (state.loading) {
-    return
-  }
-  state.loading = true
-
-  const params = {
-    page: state.page,
-    pageSize: state.pageSize
-  }
-  if (state.currentArea) {
-    params.area = state.currentArea
-  }
-  if (state.searchKeyword) {
-    params.keyword = state.searchKeyword
-  }
-
-  talentPoolApi.getList(params).then((res) => {
-    let list = []
-    if (Array.isArray(res)) {
-      list = res
-    } else if (res && res.list) {
-      list = res.list
-    }
-
-    const formattedList = list.map(item => ({
-      ...item,
-      expertiseAreas: parseJsonArray(item.expertiseAreas)
-    }))
-
-    state.talentList = state.page === 1 ? formattedList : [...state.talentList, ...formattedList]
-    state.hasMore = list.length >= state.pageSize
-    state.loading = false
-
-    if (callback) {
-      callback()
-    }
-  }).catch(() => {
-    state.loading = false
-    if (callback) {
-      callback()
-    }
-  })
-}
-
-const parseJsonArray = (str) => {
-  if (!str) return []
-  if (Array.isArray(str)) return str
-  try {
-    return JSON.parse(str)
-  } catch (e) {
-    return []
-  }
-}
-
-const loadMore = () => {
-  state.page = state.page + 1
-  loadTalentList()
-}
-
-const onSearch = (e) => {
-  const keyword = e.detail.value || ''
-  state.searchKeyword = keyword
-  state.page = 1
-  state.hasMore = true
-  loadTalentList()
-}
-
-const onSearchConfirm = (e) => {
-  const keyword = e.detail.value || ''
-  state.searchKeyword = keyword
-  state.page = 1
-  state.hasMore = true
-  loadTalentList()
-}
-
-const clearSearch = () => {
-  state.searchKeyword = ''
-  state.page = 1
-  state.hasMore = true
-  loadTalentList()
-}
-
-const filterByArea = (area) => {
-  state.currentArea = area
-  state.page = 1
-  state.hasMore = true
-  loadTalentList()
-}
-
-const goToDetail = (id) => {
-  uni.navigateTo({
-    url: `/pages/talent-pool/detail/detail?id=${id}`
-  })
-}
 </script>
 
 <style lang="scss" scoped>

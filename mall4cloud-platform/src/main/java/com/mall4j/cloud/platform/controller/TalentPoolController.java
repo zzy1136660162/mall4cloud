@@ -26,14 +26,16 @@ public class TalentPoolController {
      *
      * @param page 页码，默认1
      * @param pageSize 每页数量，默认10
+     * @param name 姓名搜索关键字
      * @return 人才列表
      */
     @GetMapping("/list")
     @Operation(summary = "获取人才列表")
     public ServerResponseEntity<TalentPoolVO[]> list(
             @RequestParam(required = false, defaultValue = "1") Integer page,
-            @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        TalentPoolVO[] list = talentPoolService.list(page, pageSize);
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+            @RequestParam(required = false) String name) {
+        TalentPoolVO[] list = talentPoolService.list(page, pageSize, name);
         return ServerResponseEntity.success(list);
     }
 

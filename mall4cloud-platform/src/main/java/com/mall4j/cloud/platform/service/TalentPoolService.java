@@ -14,9 +14,10 @@ public interface TalentPoolService {
      *
      * @param page 页码
      * @param pageSize 每页数量
+     * @param name 姓名搜索关键字
      * @return 人才列表
      */
-    TalentPoolVO[] list(Integer page, Integer pageSize);
+    TalentPoolVO[] list(Integer page, Integer pageSize, String name);
 
     /**
      * 获取人才详情
