@@ -29,6 +29,9 @@ public class UserApiVO extends BaseVO{
     @Schema(description = "状态 1 正常 0 无效" )
     private Integer status;
 
+    @Schema(description = "是否是达人：0-否 1-是" )
+    private Integer isTalent;
+
     @Schema(description = "是否创建过店铺" )
 
 	/**
@@ -76,6 +79,14 @@ public class UserApiVO extends BaseVO{
 		this.status = status;
 	}
 
+	public Integer getIsTalent() {
+		return isTalent;
+	}
+
+	public void setIsTalent(Integer isTalent) {
+		this.isTalent = isTalent;
+	}
+
 	@Override
 	public String toString() {
 		return "UserApiVO{" +
@@ -85,6 +96,7 @@ public class UserApiVO extends BaseVO{
 				",nickName=" + nickName +
 				",pic=" + pic +
 				",status=" + status +
+				",isTalent=" + isTalent +
 				'}';
 	}
 }

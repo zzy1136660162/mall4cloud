@@ -29,6 +29,7 @@
     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
     <result column="pic" jdbcType="VARCHAR" property="pic" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="is_talent" jdbcType="INTEGER" property="isTalent" />
     <collection property="bizUserIdList"  javaType="java.util.List" ofType="string">
       <id column="bizUserIdList" />
     </collection>
@@ -38,11 +39,21 @@
     `user_id`,`create_time`,`update_time`,`nick_name`,`pic`,`status`,`is_talent`,`talent_apply_time`,`talent_real_name`,`talent_phone`,`talent_province`,`talent_city`,`talent_area`,`talent_apply_reason`,`talent_intro`,`talent_status`
   </sql>
 
+  <resultMap id="userApiVOMap" type="com.mall4j.cloud.api.user.vo.UserApiVO">
+    <id column="user_id" property="userId" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="nick_name" property="nickName" />
+    <result column="pic" property="pic" />
+    <result column="status" property="status" />
+    <result column="is_talent" property="isTalent" />
+  </resultMap>
+
   <select id="list" resultType="com.mall4j.cloud.user.vo.UserVO">
     select <include refid="Vo_Column_List"/> from user order by user_id desc
   </select>
 
-  <select id="getByUserId" resultType="com.mall4j.cloud.api.user.vo.UserApiVO">
+  <select id="getByUserId" resultMap="userApiVOMap">
     select <include refid="Vo_Column_List"/> from user where user_id = #{userId}
   </select>
 

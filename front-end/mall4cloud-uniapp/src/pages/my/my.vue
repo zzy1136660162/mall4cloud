@@ -22,8 +22,16 @@
         class="text-box"
         @tap="toUserSettings"
       >
-        <view class="name">
-          {{ userInfo.nickName }}
+        <view class="name-row">
+          <view class="name">
+            {{ userInfo.nickName }}
+          </view>
+          <view
+            v-if="userInfo.isTalent === 1"
+            class="talent-tag"
+          >
+            达人
+          </view>
         </view>
       </view>
     </view>
