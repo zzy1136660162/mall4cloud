@@ -148,11 +148,9 @@ const filteredList = computed(() => {
 })
 
 const statusMap = {
-  0: '待审核',
-  1: '已通过',
-  2: '已拒绝',
-  3: '已发货',
-  4: '已完成'
+  1: '待审核',
+  2: '已通过',
+  3: '已拒绝'
 }
 
 onMounted(() => {
@@ -173,23 +171,42 @@ async function loadApplies() {
       const formattedList = res.list.map(item => ({
         id: item.applyId,
         applyId: item.applyId,
-        applyTime: item.createTime,
-        status: item.status === 0 ? 'pending' : item.status === 1 ? 'approved' : item.status === 2 ? 'rejected' : item.status === 3 ? 'approved' : 'approved',
-        statusText: statusMap[item.status] || '未知',
-        shipStatus: item.status === 3 ? 'shipped' : item.status === 4 ? 'received' : 'not_shipped',
-        shipStatusText: item.status === 3 ? '已寄出' : item.status === 4 ? '已签收' : '未寄出',
+        applyTime: item.applyTime,
+        status: item.auditStatus === 1 ? 'pending' : item.auditStatus === 2 ? 'approved' : item.auditStatus === 3 ? 'rejected' : 'pending',
+        statusText: item.auditStatusText || statusMap[item.auditStatus] || '未知',
+        shipStatus: item.auditStatus === 4 ? 'shipped' : item.auditStatus === 5 ? 'received' : 'not_shipped',
+        shipStatusText: item.auditStatus === 4 ? '已寄出' : item.auditStatus === 5 ? '已签收' : '未寄出',
         logisticsCompany: item.expressCompany,
         trackingNo: item.expressNo,
         products: [
           {
             id: item.spuId,
-            image: item.spuImg,
+            image: item.mainImgUrl,
             name: item.spuName,
-            price: '0.00',
-            commission: '0%'
+            price: (item.priceFee / 100).toFixed(2),
+            commission: '0%',
+            commissionRate: 0
           }
         ]
       }))
+
+      // 获取每个商品的佣金率
+      for (let i = 0; i < formattedList.length; i++) {
+        const item = formattedList[i]
+        const spuId = item.products[0].id
+        if (spuId) {
+          try {
+            const spuRes = await selectionApi.getProductDetail(spuId)
+            if (spuRes && spuRes.commissionRate !== undefined && spuRes.commissionRate !== null) {
+              const commissionRate = parseFloat(spuRes.commissionRate)
+              item.products[0].commissionRate = commissionRate
+              item.products[0].commission = commissionRate.toFixed(0) + '%'
+            }
+          } catch (e) {
+            console.error('获取商品佣金率失败', e)
+          }
+        }
+      }
 
       if (page.value === 1) {
         sampleList.value = formattedList

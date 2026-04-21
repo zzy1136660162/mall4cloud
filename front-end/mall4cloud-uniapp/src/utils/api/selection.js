@@ -59,6 +59,17 @@ export default {
   },
 
   /**
+   * 获取商品详情（包含佣金率）
+   * @param {String|Number} spuId 商品ID
+   */
+  getProductDetail(spuId) {
+    return http.request({
+      url: `${API_PRODUCT}/spu/detail/${spuId}`,
+      method: 'GET'
+    })
+  },
+
+  /**
    * 提交选品申请
    * @param {Object} data 申请数据
    */

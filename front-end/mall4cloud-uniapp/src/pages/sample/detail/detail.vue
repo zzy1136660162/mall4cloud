@@ -206,11 +206,9 @@ const statusDesc = computed(() => {
 })
 
 const statusMap = {
-  0: { status: 'pending', statusText: '待审核' },
-  1: { status: 'approved', statusText: '审核通过' },
-  2: { status: 'rejected', statusText: '已拒绝' },
-  3: { status: 'approved', statusText: '已发货' },
-  4: { status: 'approved', statusText: '已完成' }
+  1: { status: 'pending', statusText: '待审核' },
+  2: { status: 'approved', statusText: '审核通过' },
+  3: { status: 'rejected', statusText: '已拒绝' }
 }
 
 onMounted(() => {
@@ -229,22 +227,38 @@ async function loadDetail(applyId) {
   try {
     const res = await selectionApi.getApplyDetail(applyId)
     if (res) {
-      const statusInfo = statusMap[res.status] || { status: 'pending', statusText: '未知' }
+      const statusInfo = statusMap[res.auditStatus] || { status: 'pending', statusText: '未知' }
+
+      // 获取商品佣金率
+      let commissionRate = 0
+      let commissionText = '0%'
+      if (res.spuId) {
+        try {
+          const spuRes = await selectionApi.getProductDetail(res.spuId)
+          if (spuRes && spuRes.commissionRate !== undefined && spuRes.commissionRate !== null) {
+            commissionRate = parseFloat(spuRes.commissionRate)
+            commissionText = commissionRate.toFixed(0) + '%'
+          }
+        } catch (e) {
+          console.error('获取商品佣金率失败', e)
+        }
+      }
+
       application.value = {
         id: res.applyId,
-        applyTime: res.createTime,
-        reviewTime: res.reviewTime || '',
+        applyTime: res.applyTime || '',
+        reviewTime: res.auditTime || '',
         shipTime: res.shipTime || '',
         receiveTime: res.receiveTime || '',
         status: statusInfo.status,
-        statusText: statusInfo.statusText,
-        shipStatus: res.status === 3 ? 'shipped' : res.status === 4 ? 'received' : 'not_shipped',
-        shipStatusText: res.status === 3 ? '已寄出' : res.status === 4 ? '已签收' : '未寄出',
+        statusText: res.auditStatusText || statusInfo.statusText,
+        shipStatus: res.expressNo && res.expressCompany ? (res.shipTime ? 'shipped' : 'shipped') : 'not_shipped',
+        shipStatusText: res.expressNo && res.expressCompany ? '已寄出' : '未寄出',
         logisticsCompany: res.expressCompany || '',
         trackingNo: res.expressNo || '',
-        reviewRemark: res.reviewRemark || '',
+        reviewRemark: res.auditRemark || '',
         recipient: {
-          name: res.contactName || '',
+          name: res.userName || '',
           phone: res.contactPhone || '',
           province: '',
           city: '',
@@ -254,10 +268,11 @@ async function loadDetail(applyId) {
         products: [
           {
             id: res.spuId,
-            image: res.spuImg || '',
+            image: res.mainImgUrl || '',
             name: res.spuName || '',
-            price: '0.00',
-            commission: '0%'
+            price: res.priceFee ? (res.priceFee / 100).toFixed(2) : '0.00',
+            commission: commissionText,
+            commissionRate: commissionRate
           }
         ],
         trackingList: res.trackingList || []

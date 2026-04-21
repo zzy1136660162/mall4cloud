@@ -111,13 +111,17 @@
     </view>
 
     <view class="submit-section">
-      <view class="submit-btn" :class="{ disabled: isSubmitting }" @tap="submitApply">提交申请</view>
+      <view class="submit-btn" :class="{ disabled: isSubmitting || checkingTalent }" @tap="submitApply">
+        <text v-if="checkingTalent">加载中...</text>
+        <text v-else>提交申请</text>
+      </view>
     </view>
   </view>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import talentApi from '@/utils/api/talent.js'
 
 const formData = reactive({
   realName: '',
@@ -135,6 +139,34 @@ const areaId = ref(0)
 const addrIds = ref([])
 const showPicker = ref(false)
 const isSubmitting = ref(false)
+const isTalent = ref(false)
+const checkingTalent = ref(true)
+
+onMounted(() => {
+  checkTalentStatus()
+})
+
+const checkTalentStatus = async () => {
+  try {
+    const res = await talentApi.getTalentStatus()
+    if (res && res.isTalent === true) {
+      checkingTalent.value = false
+      uni.showModal({
+        title: '提示',
+        content: '您已经是达人，无需再次申请',
+        showCancel: false,
+        success: () => {
+          uni.navigateBack()
+        }
+      })
+    } else {
+      checkingTalent.value = false
+    }
+  } catch (error) {
+    console.error('检查达人状态失败', error)
+    checkingTalent.value = false
+  }
+}
 
 const addressPickerConfirm = (selectedAddrInfo, isChange) => {
   if (isChange) {

@@ -1,6 +1,7 @@
 package com.mall4j.cloud.user.controller.app;
 
 import com.mall4j.cloud.api.auth.bo.UserInfoInTokenBO;
+import com.mall4j.cloud.api.user.vo.UserApiVO;
 import com.mall4j.cloud.common.database.vo.PageVO;
 import com.mall4j.cloud.common.response.ServerResponseEntity;
 import com.mall4j.cloud.common.security.AuthUserContext;
@@ -64,6 +65,32 @@ public class TalentController {
     public ServerResponseEntity<Void> audit(@RequestBody AuditDTO dto) {
         userService.auditTalentApply(dto.getUserId(), dto.getStatus());
         return ServerResponseEntity.success();
+    }
+
+    @GetMapping("/status")
+    @Operation(summary = "获取当前用户达人状态")
+    public ServerResponseEntity<TalentStatusVO> getTalentStatus() {
+        UserInfoInTokenBO userInfo = AuthUserContext.get();
+        if (userInfo == null) {
+            return ServerResponseEntity.showFailMsg("请先登录");
+        }
+        
+        UserApiVO user = userService.getByUserId(userInfo.getUserId());
+        TalentStatusVO vo = new TalentStatusVO();
+        vo.setIsTalent(user != null && user.getIsTalent() != null && user.getIsTalent() == 1);
+        return ServerResponseEntity.success(vo);
+    }
+
+    public static class TalentStatusVO {
+        private Boolean isTalent;
+
+        public Boolean getIsTalent() {
+            return isTalent;
+        }
+
+        public void setIsTalent(Boolean isTalent) {
+            this.isTalent = isTalent;
+        }
     }
 
     public static class AuditDTO {
