@@ -42,6 +42,13 @@ public interface SpuExtensionService {
 	void updateStock(Long spuId, Integer count);
 
 	/**
+	 * 设置库存
+	 * @param spuId 商品id
+	 * @param totalStock 总库存
+	 */
+	void setStock(Long spuId, Integer totalStock);
+
+	/**
 	 * 根据id删除
 	 * @param spuId
 	 */

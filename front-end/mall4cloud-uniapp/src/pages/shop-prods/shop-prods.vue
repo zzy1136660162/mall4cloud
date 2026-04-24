@@ -249,11 +249,13 @@ const getProd = () => {
   Data.loading = true
 
   const data = {
-    shopId: 0,
     pageNum: Data.pageNum,
     pageSize: Data.pageSize
   }
 
+  if (Data.shopId) {
+    data.shopId = Data.shopId
+  }
   if (Data.shopSecondaryCategoryId) {
     data.shopSecondaryCategoryId = Data.shopSecondaryCategoryId
   }
