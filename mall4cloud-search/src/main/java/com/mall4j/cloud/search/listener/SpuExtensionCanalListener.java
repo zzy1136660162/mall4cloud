@@ -38,11 +38,12 @@ public class SpuExtensionCanalListener extends BaseCanalBinlogEventProcessor<Spu
     private RestHighLevelClient restHighLevelClient;
 
     /**
-     * 插入商品，此时插入es
+     * 插入商品扩展信息，更新es中的库存信息
      */
     @Override
     protected void processInsertInternal(CanalBinLogResult<SpuExtensionBO> result) {
-        System.out.println();
+        // 插入时也调用更新逻辑，确保ES数据同步
+        processUpdateInternal(result);
     }
 
     /**
@@ -62,10 +63,13 @@ public class SpuExtensionCanalListener extends BaseCanalBinlogEventProcessor<Spu
         // 可售库存
         esProductBO.setSpuId(afterData.getSpuId());
         esProductBO.setStock(afterData.getStock());
-        esProductBO.setHasStock(afterData.getStock() != 0);
+        // hasStock为布尔值，true表示有库存，false表示无库存
+        esProductBO.setHasStock(afterData.getStock() != null && afterData.getStock() > 0);
         esProductBO.setSaleNum(afterData.getSaleNum());
 
         request.doc(Json.toJsonString(esProductBO), XContentType.JSON);
+        // 如果文档不存在则创建
+        request.docAsUpsert(true);
         try {
             UpdateResponse updateResponse = restHighLevelClient.update(request, RequestOptions.DEFAULT);
             log.info(updateResponse.toString());

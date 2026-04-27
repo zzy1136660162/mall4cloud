@@ -57,4 +57,11 @@ public interface SkuStockService {
 	 * @param skuList
 	 */
 	void updateBatch(List<SkuDTO> skuList);
+
+	/**
+	 * 根据spuId同步SPU库存
+	 * 计算该SPU下所有SKU的库存总和，更新到spu_extension表
+	 * @param spuId SPU ID
+	 */
+	void syncSpuStockBySpuId(Long spuId);
 }

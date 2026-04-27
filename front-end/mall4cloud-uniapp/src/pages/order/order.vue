@@ -256,7 +256,7 @@ const Data = reactive({
 const { isShowDelOrderPopup, orderStatus, orderList, operType } = toRefs(Data)
 
 onLoad((options) => {
-  Data.orderStatus = options.orderStatus
+  Data.orderStatus = options.orderStatus ? parseInt(options.orderStatus) : 0
 })
 
 onShow(() => {

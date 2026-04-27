@@ -146,10 +146,12 @@ public class SpuServiceImpl implements SpuService {
         spuDetail.setDetail(spuDTO.getDetail());
         spuDetailService.save(spuDetail);
 
+        // 先创建spu_extension记录，初始库存为0
+        // 库存会在skuService.save中通过skuStockService.saveBatch自动同步为SKU库存总和
         SpuExtension spuExtension = new SpuExtension();
         spuExtension.setSpuId(spu.getSpuId());
-        spuExtension.setActualStock(spuDTO.getTotalStock());
-        spuExtension.setStock(spuDTO.getTotalStock());
+        spuExtension.setActualStock(0);
+        spuExtension.setStock(0);
         spuExtensionService.save(spuExtension);
 
         // 3.保存sku信息
@@ -174,12 +176,8 @@ public class SpuServiceImpl implements SpuService {
         spuDetail.setDetail(spuDTO.getDetail());
         spuDetailService.update(spuDetail);
 
-        // 3.修改商品库存
-        if (Objects.nonNull(spuDTO.getTotalStock())) {
-            spuExtensionService.setStock(spu.getSpuId(), spuDTO.getTotalStock());
-        }
-
-        // 4.修改商品sku信息
+        // 3.修改商品sku信息
+        // 注意：spu_extension的库存会在skuService.update中通过skuStockService.updateBatch自动同步为SKU库存总和
         skuService.update(spu.getSpuId(),spuDTO.getSkuList());
     }
 
@@ -209,9 +207,7 @@ public class SpuServiceImpl implements SpuService {
         spu.setSeq(spuDTO.getSeq());
         if (CollUtil.isNotEmpty(spuDTO.getSkuList())) {
             skuService.updateAmountOrStock(spuDTO);
-        }
-        if (Objects.nonNull(spuDTO.getTotalStock())) {
-            spuExtensionService.setStock(spuDTO.getSpuId(), spuDTO.getTotalStock());
+            // 注意：spu_extension的库存会在skuService.updateAmountOrStock中自动同步为SKU库存总和
         }
         spu.setPriceFee(spuDTO.getPriceFee());
         spuMapper.update(spu);

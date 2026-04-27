@@ -88,4 +88,12 @@ public interface SkuMapper {
 	 * @return
 	 */
 	List<SkuVO> getSkuBySpuId(@Param("spuId") Long spuId);
+
+	/**
+	 * 根据spuId查询所有SKU的库存总和
+	 *
+	 * @param spuId 商品id
+	 * @return 库存总和
+	 */
+	Integer getTotalStockBySpuId(@Param("spuId") Long spuId);
 }

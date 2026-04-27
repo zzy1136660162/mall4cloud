@@ -279,7 +279,7 @@
         class="btn"
         @tap="toPay"
       >
-        提交订单
+        提交意向订单
       </view>
     </view>
     <!-- 确认弹窗 -->
@@ -578,8 +578,25 @@ const submitOrder = () => {
   }
   http.request(params).then((res) => {
     const orderIds = res.join(',')
-    uni.redirectTo({
-      url: `/pages/payment/payment?orderIds=${orderIds}&dvyType=1`
+    // 提交成功后不跳转到支付页面，直接显示成功并跳转到订单列表
+    uni.showToast({
+      title: '意向订单提交成功',
+      icon: 'success',
+      duration: 2000,
+      success: () => {
+        setTimeout(() => {
+          uni.redirectTo({
+            url: `/pages/order/order?orderType=5`
+          })
+        }, 2000)
+      }
+    })
+  }).catch((err) => {
+    console.error('提交意向订单失败', err)
+    uni.showToast({
+      title: '提交失败，请重试',
+      icon: 'none',
+      duration: 2000
     })
   })
 }

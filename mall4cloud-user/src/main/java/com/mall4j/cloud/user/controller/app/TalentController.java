@@ -83,7 +83,6 @@ public class TalentController {
 
     public static class TalentStatusVO {
         private Boolean isTalent;
-
         public Boolean getIsTalent() {
             return isTalent;
         }

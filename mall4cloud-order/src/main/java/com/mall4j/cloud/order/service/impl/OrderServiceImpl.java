@@ -288,6 +288,10 @@ public class OrderServiceImpl implements OrderService {
         orderItem.setShopCartTime(shopCartItem.getCreateTime());
         // 订单项支付金额
         orderItem.setSpuTotalAmount(shopCartItem.getTotalAmount());
+        // 设置创建时间和更新时间
+        Date now = new Date();
+        orderItem.setCreateTime(now);
+        orderItem.setUpdateTime(now);
         return orderItem;
     }
 
@@ -311,6 +315,10 @@ public class OrderServiceImpl implements OrderService {
         order.setDeleteStatus(0);
         order.setAllCount(shopCartOrderDto.getTotalCount());
         order.setDeliveryType(DeliveryType.NOT_DELIVERY.value());
+        // 设置创建时间和更新时间
+        Date now = new Date();
+        order.setCreateTime(now);
+        order.setUpdateTime(now);
         return order;
     }
 
