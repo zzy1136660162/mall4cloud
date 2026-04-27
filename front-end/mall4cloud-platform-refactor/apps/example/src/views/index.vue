@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import logo from '@/assets/images/logo.svg'
+const logo = 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/logo.png'
 
 const versionType = ref('basic')
 watch(versionType, (val) => {

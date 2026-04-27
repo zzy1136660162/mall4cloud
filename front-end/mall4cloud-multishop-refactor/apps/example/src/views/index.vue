@@ -1,61 +1,61 @@
 <script setup lang="ts">
-import logo from '@/assets/images/logo.svg'
+const logo = 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/logo.png'
 
-const versionType = ref('basic')
-watch(versionType, (val) => {
-  if (val === 'pro') {
-    location.href = `${location.origin}${location.pathname}`.replace('basic-example', 'pro-example')
-  }
-})
+const platformStats = ref([
+  { value: '13年', label: '行业深耕' },
+  { value: '3万+', label: '服务企业' },
+  { value: '1000+', label: '精选产品' },
+])
 
-const products = ref([
+const businessModules = ref([
   {
-    id: 'startkit',
-    name: 'Fantastic-startkit',
-    tagline: '一款简单好用的 Vue3 项目启动套件',
-    logo: 'https://cn.vuejs.org/logo.svg',
-    url: 'https://hooray.github.io/fantastic-startkit',
+    id: 'product',
+    name: '商品管理',
+    tagline: '全面管控商品信息与分类体系',
     features: [
-      '支持 TypeScript',
-      '默认集成 vue-router 和 pinia',
-      '支持基于文件系统的路由',
-      '全局组件自动引入',
-      '支持 Unocss 和 SVG 图标',
-      '结合 IDE 插件、ESlint 、stylelint 、Git 钩子，轻松实现团队代码规范',
+      '商品列表管理',
+      '商品分类设置',
+      '商品属性配置',
+      '商品信息编辑',
     ],
   },
   {
-    id: 'admin',
-    name: 'Fantastic-admin',
-    tagline: '一款开箱即用的 Vue 中后台管理系统框架',
-    logo: 'https://fantastic-admin.hurui.me/logo.svg',
-    url: 'https://fantastic-admin.hurui.me',
-    images: [
-      'https://fantastic-admin.hurui.me/preview1.png',
+    id: 'order',
+    name: '订单管理',
+    tagline: '高效处理订单全流程业务',
+    features: [
+      '订单列表查询',
+      '订单详情查看',
+      '物流信息更新',
+      '售后服务支持',
     ],
   },
   {
-    id: 'onestep',
-    name: 'One-step-admin',
-    tagline: '一款干啥都快人一步的 Vue 中后台系统框架',
-    logo: 'https://one-step-admin.hurui.me/logo.png',
-    url: 'https://one-step-admin.hurui.me',
-    images: [
-      'https://one-step-admin.hurui.me/preview1.png',
+    id: 'shop',
+    name: '店铺管理',
+    tagline: '灵活配置店铺展示内容',
+    features: [
+      '热门搜索设置',
+      '首页图片管理',
+      '店铺信息配置',
+      '营销活动管理',
     ],
   },
+])
+
+const platformFeatures = ref([
+  { title: '权限管理', description: '角色权限配置，用户体系管理' },
+  { title: '达人管理', description: '达人入驻审核，合作对接服务' },
+  { title: '需求管理', description: '研发需求收集，进度跟踪反馈' },
+  { title: '选品管理', description: '精选商品推荐，采购对接服务' },
 ])
 
 const useCases = ref([
-  { title: '小型公司', description: '让后端开发人员能在短时间内转型成为全栈开发' },
-  { title: '中小型公司', description: '提高项目开发效率，减轻前端开发人员工作压力' },
-  { title: '项目型公司', description: '应对绝大部分甲方需求，实现高度定制化' },
-  { title: '产品型公司', description: '完善的开发文档和代码注释，为产品保驾护航' },
+  { title: '品牌商', description: '产品上架、订单处理、客户服务' },
+  { title: '经销商', description: '采购选品、库存管理、销售分析' },
+  { title: '服务商', description: '达人管理、需求响应、服务对接' },
+  { title: '创业者', description: '低成本创业、全流程支持、灵活经营' },
 ])
-
-function open(url: string) {
-  window.open(url, '_blank')
-}
 </script>
 
 <template>
@@ -65,15 +65,11 @@ function open(url: string) {
       <div class="mb-6 flex items-center justify-between">
         <div class="flex gap-3 items-center">
           <FaIcon :name="logo" class="p-1 border rounded-lg size-10" />
-          <span class="tracking-tight font-semibold">Fantastic-admin</span>
+          <span class="tracking-tight font-semibold">杰东药业管理系统</span>
         </div>
-        <FaTabs
-          v-model="versionType"
-          :list="[
-            { label: '基础版', value: 'basic' },
-            { label: '专业版', value: 'pro' },
-          ]"
-        />
+        <div class="text-xs text-muted-foreground">
+          杰东优选平台 · 后台管理系统
+        </div>
       </div>
 
       <!-- Hero: Asymmetric split -->
@@ -81,71 +77,34 @@ function open(url: string) {
         <!-- Left: Title & CTA -->
         <div class="hero-enter p-6 border rounded-xl relative overflow-hidden md-p-8">
           <div class="text-xs text-muted-foreground tracking-widest font-medium mb-3 uppercase">
-            TypeScript · Vue 3.6 · Vite 8 · UnoCSS
+            医健产业 · B2B平台
           </div>
           <h1 class="text-2xl leading-tight tracking-tight font-semibold mb-3 md-text-3xl">
             欢迎使用
             <div class="text-4xl tracking-tight font-semibold md-text-6xl">
-              Fantastic-admin
+              杰东药业管理系统
             </div>
           </h1>
           <p class="text-sm text-muted-foreground leading-relaxed mb-6 max-w-prose md-text-base">
-            这是一款<span class="text-foreground font-medium">开箱即用</span>的 Vue3 管理系统框架，为中后台项目开发提供完整解决方案。
+            致力于<span class="text-foreground font-medium">共创医健产业创新生态圈</span>，提供商品管理、订单处理、店铺运营等全链路电商解决方案。
           </p>
-          <div class="flex flex-wrap gap-3">
-            <FaButton size="lg" @click="open('https://fantastic-admin.hurui.me')">
-              开发文档
-            </FaButton>
-            <FaDropdown
-              :items="[
-                [
-                  { label: 'Github', icon: 'i-simple-icons:github', handle: () => open('https://github.com/fantastic-admin/basic') },
-                  { label: 'Gitee', icon: 'i-simple-icons:gitee', handle: () => open('https://gitee.com/fantastic-admin/basic') },
-                  { label: 'GitCode', icon: 'i-simple-icons:gitcode', handle: () => open('https://atomgit.com/fantastic-admin/basic') },
-                ],
-              ]"
-            >
-              <FaButton variant="outline" size="lg">
-                代码仓库 (基础版)
-                <FaIcon name="i-ep:arrow-down" class="ml-1" />
-              </FaButton>
-            </FaDropdown>
-            <FaButton variant="outline" size="lg" @click="open('https://fantastic-admin.hurui.me/buy.html')">
-              购买 (专业版)
-            </FaButton>
-          </div>
         </div>
 
         <!-- Right: Stats -->
-        <div class="gap-4 grid grid-rows-2">
-          <div class="stat-enter border rounded-xl bg-neutral-950/[.012] dark:bg-white/5" :style="{ animationDelay: '100ms' }">
+        <div class="gap-4 grid grid-rows-3">
+          <div
+            v-for="(stat, i) in platformStats"
+            :key="stat.label"
+            class="stat-enter border rounded-xl bg-neutral-950/[.012] dark:bg-white/5"
+            :style="{ animationDelay: `${i * 100}ms` }"
+          >
             <div class="p-5 flex flex-col h-full justify-between">
-              <div class="text-xs text-muted-foreground tracking-widest font-medium uppercase">
-                稳定运行
-              </div>
               <div>
                 <div class="text-3xl tracking-tight font-semibold mb-1 md-text-4xl">
-                  1000+
+                  {{ stat.value }}
                 </div>
                 <div class="text-sm text-muted-foreground">
-                  个项目稳定运行
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="stat-enter border rounded-xl bg-neutral-950/[.012] dark:bg-white/5" :style="{ animationDelay: '200ms' }">
-            <div class="p-5 flex flex-col h-full justify-between">
-              <div class="text-xs text-muted-foreground tracking-widest font-medium uppercase">
-                持续维护
-              </div>
-              <div>
-                <div class="text-3xl tracking-tight font-semibold mb-1 md-text-4xl">
-                  5年
-                </div>
-                <div class="text-sm text-muted-foreground flex flex-wrap gap-1 items-center">
-                  <span>已在</span>
-                  <span class="text-foreground font-semibold">电商、直播、OA、CRM、ERP</span>
-                  <span>等多个领域提供技术支持</span>
+                  {{ stat.label }}
                 </div>
               </div>
             </div>
@@ -153,66 +112,35 @@ function open(url: string) {
         </div>
       </div>
 
-      <!-- Use Cases -->
+      <!-- Business Modules -->
       <div class="mb-6">
         <div class="mb-3 flex gap-2 items-center">
           <div class="rounded-full bg-primary h-4 w-0.5" />
           <h2 class="text-xs text-muted-foreground tracking-widest font-semibold uppercase">
-            应用场景
+            核心业务模块
           </h2>
-        </div>
-        <div class="gap-3 grid grid-cols-2 md-grid-cols-4">
-          <div
-            v-for="(useCase, i) in useCases"
-            :key="useCase.title"
-            class="card-enter border rounded-xl bg-neutral-950/[.012] dark:bg-white/5"
-            :style="{ animationDelay: `${i * 60}ms` }"
-          >
-            <div class="p-5">
-              <div class="text-sm font-semibold mb-2">
-                {{ useCase.title }}
-              </div>
-              <div class="text-xs text-muted-foreground leading-relaxed">
-                {{ useCase.description }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Ecosystem -->
-      <div>
-        <div class="mb-4 flex gap-3 items-center">
-          <div class="rounded-full bg-primary h-4 w-0.5" />
-          <h2 class="text-xs text-muted-foreground tracking-widest font-semibold uppercase">
-            生态
-          </h2>
-          <span class="text-xs text-muted-foreground hidden md-block">为不同场景提供完整解决方案</span>
         </div>
         <div class="gap-4 grid md-grid-cols-3">
           <div
-            v-for="(product, i) in products"
-            :key="product.id"
-            class="group card-enter border rounded-xl bg-neutral-950/[.012] dark:bg-white/5"
+            v-for="(module, i) in businessModules"
+            :key="module.id"
+            class="card-enter border rounded-xl bg-neutral-950/[.012] dark:bg-white/5"
             :style="{ animationDelay: `${i * 80}ms` }"
           >
             <div class="flex flex-col h-full">
-              <div class="p-6 border-b flex gap-4 items-start">
-                <img :src="product.logo" :alt="product.name" class="shrink-0 h-10 w-10 object-contain">
-                <div>
-                  <div class="text-sm tracking-tight font-semibold">
-                    {{ product.name }}
-                  </div>
-                  <div class="text-xs text-muted-foreground leading-relaxed mt-1">
-                    {{ product.tagline }}
-                  </div>
+              <div class="p-6 border-b">
+                <div class="text-sm tracking-tight font-semibold mb-1">
+                  {{ module.name }}
+                </div>
+                <div class="text-xs text-muted-foreground leading-relaxed">
+                  {{ module.tagline }}
                 </div>
               </div>
               <div class="p-6 flex-col-start flex-1">
-                <div v-if="product.features" class="mb-5 flex-1">
+                <div class="mb-5 flex-1">
                   <ul class="space-y-1.5">
                     <li
-                      v-for="feature in product.features"
+                      v-for="feature in module.features"
                       :key="feature"
                       class="text-xs text-muted-foreground flex gap-2 items-start"
                     >
@@ -221,21 +149,61 @@ function open(url: string) {
                     </li>
                   </ul>
                 </div>
-                <div v-if="product.images" class="mb-5 border rounded-lg flex-1 overflow-hidden">
-                  <img
-                    :src="product.images[0]"
-                    :alt="product.name"
-                    class="opacity-50 h-full w-full transition-opacity duration-500 object-cover group-hover-opacity-100"
-                  >
-                </div>
-                <FaButton
-                  variant="link"
-                  size="sm"
-                  class="mt-auto active-scale-98"
-                  @click="open(product.url)"
-                >
-                  探索 →
-                </FaButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Platform Features -->
+      <div class="mb-6">
+        <div class="mb-3 flex gap-2 items-center">
+          <div class="rounded-full bg-primary h-4 w-0.5" />
+          <h2 class="text-xs text-muted-foreground tracking-widest font-semibold uppercase">
+            平台功能
+          </h2>
+        </div>
+        <div class="gap-3 grid grid-cols-2 md-grid-cols-4">
+          <div
+            v-for="(feature, i) in platformFeatures"
+            :key="feature.title"
+            class="card-enter border rounded-xl bg-neutral-950/[.012] dark:bg-white/5"
+            :style="{ animationDelay: `${i * 60}ms` }"
+          >
+            <div class="p-5">
+              <div class="text-sm font-semibold mb-2">
+                {{ feature.title }}
+              </div>
+              <div class="text-xs text-muted-foreground leading-relaxed">
+                {{ feature.description }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use Cases -->
+      <div>
+        <div class="mb-4 flex gap-3 items-center">
+          <div class="rounded-full bg-primary h-4 w-0.5" />
+          <h2 class="text-xs text-muted-foreground tracking-widest font-semibold uppercase">
+            服务对象
+          </h2>
+          <span class="text-xs text-muted-foreground hidden md-block">为医健行业不同角色提供专业服务</span>
+        </div>
+        <div class="gap-4 grid md-grid-cols-4">
+          <div
+            v-for="(useCase, i) in useCases"
+            :key="useCase.title"
+            class="card-enter border rounded-xl bg-neutral-950/[.012] dark:bg-white/5"
+            :style="{ animationDelay: `${i * 80}ms` }"
+          >
+            <div class="p-5">
+              <div class="text-sm font-semibold mb-2">
+                {{ useCase.title }}
+              </div>
+              <div class="text-xs text-muted-foreground leading-relaxed">
+                {{ useCase.description }}
               </div>
             </div>
           </div>

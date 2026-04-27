@@ -9,9 +9,9 @@ export default setSettings({
     dynamicTitle: true,
     copyright: {
       enable: true,
-      dates: '2020-present',
-      company: 'Fantastic-admin',
-      website: 'https://fantastic-admin.hurui.me',
+      dates: '2026',
+      company: '杰东药业',
+      website: '',
     },
   },
   menu: {
