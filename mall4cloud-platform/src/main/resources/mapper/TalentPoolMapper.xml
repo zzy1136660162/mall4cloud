@@ -39,6 +39,9 @@
         SELECT <include refid="Vo_Column_List" />
         FROM talent_pool
         WHERE status = 1
+        <if test="name != null and name != ''">
+            AND name LIKE CONCAT('%', #{name}, '%')
+        </if>
         ORDER BY sort_order DESC, created_at DESC
         LIMIT #{offset}, #{limit}
     </select>

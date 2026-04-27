@@ -226,6 +226,13 @@
 			"style": {
 				"navigationBarTitleText": "人才详情"
 			}
+		},
+    {
+			"path": "pages/talent-apply/talent-apply",
+			"style": {
+				"navigationBarTitleText": "达人申请",
+				"navigationBarBackgroundColor": "#fe944d"
+			}
 		}
   ],
   "tabBar": {

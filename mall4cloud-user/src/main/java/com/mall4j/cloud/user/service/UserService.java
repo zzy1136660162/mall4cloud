@@ -50,4 +50,26 @@ public interface UserService {
 	 * @return uid
 	 */
     Long save(UserRegisterDTO param);
+
+	/**
+	 * 更新达人申请信息
+	 * @param user 用户表
+	 */
+	void updateTalentApply(User user);
+
+	/**
+	 * 分页查询达人申请
+	 * @param page 页码
+	 * @param limit 每页数量
+	 * @param talentStatus 审核状态
+	 * @return 分页结果
+	 */
+	PageVO<User> pageTalentApply(Integer page, Integer limit, Integer talentStatus);
+
+	/**
+	 * 审核达人申请
+	 * @param userId 用户ID
+	 * @param status 审核状态：1-通过 2-拒绝
+	 */
+	void auditTalentApply(Long userId, Integer status);
 }

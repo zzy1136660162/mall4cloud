@@ -20,6 +20,7 @@ import ShopExample from './modules/shop.example'
 import ProductExample from './modules/product.example'
 import OrderExample from './modules/order.example'
 import RbacExample from './modules/rbac.example'
+import TalentExample from './modules/talent.example'
 import DemandExample from './modules/demand.example'
 import SelectionExample from './modules/selection.example'
 
@@ -148,6 +149,15 @@ const asyncRoutes: RouteRecordMainRaw[] = [
     },
     children: [
       ...RbacExample,
+    ],
+  },
+  {
+    meta: {
+      title: '达人管理',
+      icon: 'i-ant-design:usergroup-add-twotone',
+    },
+    children: [
+      ...TalentExample,
     ],
   },
   {

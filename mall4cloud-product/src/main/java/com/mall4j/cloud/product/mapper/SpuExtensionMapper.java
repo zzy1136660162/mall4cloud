@@ -52,6 +52,14 @@ public interface SpuExtensionMapper {
     void updateStock(@Param("spuId") Long spuId, @Param("count") Integer count);
 
 	/**
+	 * 设置库存
+	 *
+	 * @param spuId 商品id
+	 * @param totalStock 总库存
+	 */
+    void setStock(@Param("spuId") Long spuId, @Param("totalStock") Integer totalStock);
+
+	/**
 	 * 通过订单减少库存
 	 *
 	 * @param spuId 商品id

@@ -20,7 +20,7 @@ public class TalentPoolServiceImpl implements TalentPoolService {
     private TalentPoolMapper talentPoolMapper;
 
     @Override
-    public TalentPoolVO[] list(Integer page, Integer pageSize) {
+    public TalentPoolVO[] list(Integer page, Integer pageSize, String name) {
         if (page == null || page < 1) {
             page = 1;
         }
@@ -29,7 +29,7 @@ public class TalentPoolServiceImpl implements TalentPoolService {
         }
 
         int offset = (page - 1) * pageSize;
-        List<TalentPoolVO> talentList = talentPoolMapper.page(offset, pageSize);
+        List<TalentPoolVO> talentList = talentPoolMapper.page(offset, pageSize, name);
 
         if (talentList == null) {
             return new TalentPoolVO[0];

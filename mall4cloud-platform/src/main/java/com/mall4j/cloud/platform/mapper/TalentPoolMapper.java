@@ -24,9 +24,10 @@ public interface TalentPoolMapper {
      *
      * @param offset 偏移量
      * @param limit 每页数量
+     * @param name 姓名搜索关键字
      * @return 人才列表
      */
-    List<TalentPoolVO> page(@Param("offset") Integer offset, @Param("limit") Integer limit);
+    List<TalentPoolVO> page(@Param("offset") Integer offset, @Param("limit") Integer limit, @Param("name") String name);
 
     /**
      * 获取人才总数（只统计显示状态的）

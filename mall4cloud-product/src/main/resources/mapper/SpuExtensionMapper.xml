@@ -52,6 +52,13 @@
         where spu_id = #{spuId}
     </update>
 
+    <update id="setStock">
+        update spu_extension
+        set `stock` = #{totalStock},
+            actual_stock = #{totalStock}
+        where spu_id = #{spuId}
+    </update>
+
     <update id="reduceStockByOrder">
         update spu_extension
         set `stock`      = `stock` - #{count},

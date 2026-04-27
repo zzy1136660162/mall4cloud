@@ -17,7 +17,7 @@ export const useAppMenuStore = defineStore(
       const returnMenus: MenuRecordMainRaw[] = []
       console.log('[DEBUG convertRouteToMenu] routes.length:', routes?.length, 'menu.mode:', appSettingsStore.settings.menu.mode)
       routes.forEach((item) => {
-        console.log('[DEBUG convertRouteToMenu] item:', JSON.stringify(item), 'item.children:', item?.children)
+        console.log('[DEBUG convertRouteToMenu] item.path:', item.path, 'item.meta.title:', item.meta?.title, 'item.children?.length:', item.children?.length)
         if (item.children && item.children.length > 0) {
           if (appSettingsStore.settings.menu.mode === 'single') {
             returnMenus.length === 0 && returnMenus.push({
@@ -38,6 +38,24 @@ export const useAppMenuStore = defineStore(
             menuItem.children = convertRouteToMenuRecursive(item.children, item.path)
             returnMenus.push(menuItem)
           }
+        }
+        else if (item.path && item.meta?.title) {
+          const menuItem: MenuRecordRaw = {
+            path: item.path,
+            meta: {
+              auth: item?.meta?.auth,
+              title: item?.meta?.title,
+              icon: item?.meta?.icon,
+            },
+          }
+          returnMenus.push({
+            meta: {
+              title: item?.meta?.title,
+              icon: item?.meta?.icon,
+              auth: item?.meta?.auth,
+            },
+            children: [menuItem],
+          })
         }
       })
       return returnMenus

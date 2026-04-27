@@ -98,14 +98,18 @@ export const useAppRouteStore = defineStore(
       routesMatcher.value = createRouterMatcher(routes, {})
       isGenerate.value = true
     }
+    // 预加载所有视图组件
+    const views = import.meta.glob('../../../views/**/*.vue')
     // 格式化后端路由数据（处理扁平化数据）
-    function formatBackRoutes(routes: any, views = import.meta.glob('../../../views/**/*.vue')): RouteRecordMainRaw[] {
+    function formatBackRoutes(routes: any): RouteRecordMainRaw[] {
       if (!routes || !Array.isArray(routes)) {
         console.warn('[DEBUG formatBackRoutes] routes is not array:', routes)
         return []
       }
+      console.log('[DEBUG formatBackRoutes] routes count:', routes.length)
       console.log('[DEBUG formatBackRoutes] available views:', Object.keys(views))
-      console.log('[DEBUG formatBackRoutes] sample view keys:', Object.keys(views).slice(0, 5))
+      const talentRoute = routes.find((r: any) => r.path === '/talent')
+      console.log('[DEBUG formatBackRoutes] talent route raw:', talentRoute)
       const routeMap = new Map()
       routes.forEach((route: any) => {
         if (!route.children) {
@@ -156,14 +160,39 @@ export const useAppRouteStore = defineStore(
             break
           default:
             if (route.component) {
-              const componentPath = `../../../views/${route.component}/index.vue`
+              const componentName = route.component
+              console.log('[DEBUG formatRoute] route has component:', route.path, componentName)
+              let componentPath = ''
+              if (componentName.endsWith('/index')) {
+                componentPath = `../../../views/${componentName}.vue`
+              }
+              else if (componentName.includes('/')) {
+                componentPath = `../../../views/${componentName}/index.vue`
+              }
+              else {
+                componentPath = `../../../views/${componentName}/index.vue`
+              }
               route.component = views[componentPath]
               if (!route.component) {
-                console.warn('[DEBUG formatRoute] component not found for path:', componentPath)
+                console.warn('[DEBUG formatRoute] component not found:', componentPath)
               }
             }
             else {
-              delete route.component
+              console.log('[DEBUG formatRoute] no component for:', route.path, 'trying to infer')
+              if (route.path && route.path.startsWith('/')) {
+                const componentName = route.path.substring(1)
+                if (componentName) {
+                  console.log('[DEBUG formatRoute] inferring component from path:', componentName)
+                  const componentPath = `../../../views/${componentName}/index.vue`
+                  route.component = views[componentPath]
+                  if (!route.component) {
+                    console.warn('[DEBUG formatRoute] inferred component not found:', componentPath)
+                  }
+                }
+              }
+              if (!route.component) {
+                console.log('[DEBUG formatRoute] still no component, will try layout for:', route.path)
+              }
             }
         }
         if (route.children && route.children.length > 0) {
@@ -171,7 +200,13 @@ export const useAppRouteStore = defineStore(
         }
         return route
       }
-      return rootRoutes.map((route) => formatRoute(route))
+      return rootRoutes.map((route) => {
+        const formatted = formatRoute(route)
+        if (formatted.path === '/talent') {
+          console.log('[DEBUG formatBackRoutes] formatted talent route:', formatted, 'component:', formatted.component?.toString?.())
+        }
+        return formatted
+      })
     }
     // 生成路由（后端获取）
     async function generateRoutesAtBack() {
@@ -190,18 +225,41 @@ export const useAppRouteStore = defineStore(
         const routesToRegister: RouteRecordRaw[] = []
         console.log('[DEBUG generateRoutesAtBack] routesRaw.value structure:')
         routesRaw.value.forEach((route) => {
-          console.log('[DEBUG generateRoutesAtBack]   route.path:', route.path, 'component:', route.component?.toString?.(), 'children count:', route.children?.length)
+          const hasComponent = route.component !== undefined
+          console.log('[DEBUG generateRoutesAtBack]   route.path:', route.path, 'hasComponent:', hasComponent, 'component:', route.component?.toString?.(), 'children count:', route.children?.length)
+          if (route.path === '/talent') {
+            console.log('[DEBUG generateRoutesAtBack] *** TALENT ROUTE FOUND ***')
+            console.log('[DEBUG generateRoutesAtBack] talent.component:', route.component)
+            console.log('[DEBUG generateRoutesAtBack] talent has children:', route.children?.length)
+          }
           if (route.path === '/') {
             console.warn('[DEBUG generateRoutesAtBack] WARNING: backend route has path "/", which will override system home route')
           }
           routes.push(route)
           routesToRegister.push(route)
-          if (route.children) {
+          if (route.children && route.children.length > 0) {
             route.children.forEach((child: any) => {
               console.log('[DEBUG generateRoutesAtBack]     child.path:', child.path, 'component:', child.component?.toString?.())
               const absoluteChild = { ...child, path: route.path + '/' + child.path }
               routes.push(absoluteChild)
             })
+          }
+          else if (!route.children || route.children.length === 0) {
+            // 没有 children 的路由需要包装在 Layout 中
+            const parentPath = route.path.substring(1) // 去掉开头的 /
+            if (parentPath) {
+              const layoutWrapper = {
+                path: parentPath,
+                component: () => import('@/layouts/index.vue'),
+                children: [{
+                  ...route,
+                  path: '', // 子路由使用相对路径
+                }],
+              }
+              routes.push(layoutWrapper as any)
+              routesToRegister.push(layoutWrapper as any)
+              console.log('[DEBUG generateRoutesAtBack] created layout wrapper for:', route.path)
+            }
           }
         })
         routesMatcher.value = createRouterMatcher(routes, {})

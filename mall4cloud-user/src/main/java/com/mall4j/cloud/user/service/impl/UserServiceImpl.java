@@ -125,4 +125,28 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+	@CacheEvict(cacheNames = UserCacheNames.USER_INFO, key = "#user.userId")
+	public void updateTalentApply(User user) {
+		userMapper.updateTalentApply(user);
+	}
+
+	@Override
+	public PageVO<User> pageTalentApply(Integer page, Integer limit, Integer talentStatus) {
+		PageDTO pageDTO = new PageDTO();
+		pageDTO.setPageNum(page);
+		pageDTO.setPageSize(limit);
+		return PageUtil.doPage(pageDTO, () -> userMapper.pageTalentApply(talentStatus));
+	}
+
+	@Override
+	@CacheEvict(cacheNames = UserCacheNames.USER_INFO, key = "#userId")
+	public void auditTalentApply(Long userId, Integer status) {
+		User user = new User();
+		user.setUserId(userId);
+		user.setTalentStatus(status);
+		user.setIsTalent(status == 1 ? 1 : 0);
+		userMapper.auditTalentApply(user);
+	}
+
 }

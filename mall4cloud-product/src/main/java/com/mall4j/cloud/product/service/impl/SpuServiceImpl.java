@@ -175,8 +175,8 @@ public class SpuServiceImpl implements SpuService {
         spuDetailService.update(spuDetail);
 
         // 3.修改商品库存
-        if (Objects.nonNull(spuDTO.getChangeStock()) && spuDTO.getChangeStock() > 0) {
-            spuExtensionService.updateStock(spu.getSpuId(), spuDTO.getChangeStock());
+        if (Objects.nonNull(spuDTO.getTotalStock())) {
+            spuExtensionService.setStock(spu.getSpuId(), spuDTO.getTotalStock());
         }
 
         // 4.修改商品sku信息
@@ -210,9 +210,8 @@ public class SpuServiceImpl implements SpuService {
         if (CollUtil.isNotEmpty(spuDTO.getSkuList())) {
             skuService.updateAmountOrStock(spuDTO);
         }
-        if (Objects.nonNull(spuDTO.getChangeStock()) && spuDTO.getChangeStock() > 0) {
-            spuExtensionService.updateStock(spuDTO.getSpuId(), spuDTO.getChangeStock());
-            return;
+        if (Objects.nonNull(spuDTO.getTotalStock())) {
+            spuExtensionService.setStock(spuDTO.getSpuId(), spuDTO.getTotalStock());
         }
         spu.setPriceFee(spuDTO.getPriceFee());
         spuMapper.update(spu);

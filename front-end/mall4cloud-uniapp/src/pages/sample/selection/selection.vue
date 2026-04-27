@@ -115,7 +115,7 @@
           class="product-item"
           v-for="item in products"
           :key="item.id"
-          @tap="goToProductDetail(item.id)"
+          @tap="onProductTap(item)"
         >
           <view class="product-img-wrap">
             <image class="product-img" :src="item.image" mode="aspectFill" />
@@ -146,7 +146,10 @@
               </view>
             </view>
           </view>
-          <view class="btn-apply-wrap">
+          <view class="btn-apply-wrap" v-if="selectMode">
+            <view class="btn-select" @tap.stop="selectProduct(item)">选择</view>
+          </view>
+          <view class="btn-apply-wrap" v-else>
             <view class="btn-apply" @tap.stop="applySample(item.id)">申请样品</view>
           </view>
         </view>
@@ -162,11 +165,12 @@
   </view>
 
   <!-- 自定义tabbar -->
-  <diy-tabbar :current-index="2" />
+  <diy-tabbar :current-index="2" v-if="!selectMode" />
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
 import selectionApi from '@/utils/api/selection.js'
 import util from '@/utils/util.js'
 
@@ -181,6 +185,22 @@ const showFilterPanel = ref(false)
 const categories = ref([])
 
 const banners = ref([])
+const selectMode = ref(false)
+
+onLoad((options) => {
+  console.log('selection.vue 页面加载, options:', options)
+  if (options.mode === 'select') {
+    selectMode.value = true
+    console.log('进入选择模式')
+  }
+
+  // 检查是否有从 apply 页面跳转过来需要处理的商品
+  const selectedProduct = uni.getStorageSync('selectedProductForApply')
+  if (selectedProduct) {
+    uni.removeStorageSync('selectedProductForApply')
+    console.log('检测到待选择的商品:', selectedProduct)
+  }
+})
 
 const isLoggedIn = () => {
   const token = uni.getStorageSync('cloudToken')
@@ -384,13 +404,65 @@ function goToProductDetail(spuId) {
   })
 }
 
+function onProductTap(item) {
+  if (selectMode.value) {
+    selectProduct(item)
+  } else {
+    goToProductDetail(item.id)
+  }
+}
+
+function selectProduct(item) {
+  console.log('点击了选择按钮, 商品数据:', item)
+
+  const productData = {
+    id: item.id,
+    image: item.image,
+    name: item.title,
+    price: item.price,
+    commissionRate: item.commissionRate,
+    commissionAmount: item.commissionAmount
+  }
+
+  // 使用本地存储传递数据到 apply 页面
+  uni.setStorageSync('selectedProductForApply', productData)
+  console.log('商品已保存到存储，准备切换到 apply 页面')
+
+  // 切换到 apply 页面
+  uni.switchTab({
+    url: '/pages/sample/apply/apply'
+  })
+}
+
 function applySample(spuId) {
   if (!checkLogin()) {
     return
   }
-  uni.navigateTo({
-    url: `/pages/sample/apply/apply?spuId=${spuId}`
-  })
+  
+  // 使用本地存储传递要申请的 spuId
+  uni.setStorageSync('applySpuId', spuId)
+  console.log('保存申请样品 spuId:', spuId)
+  
+  // 返回到之前的 apply 页面，而不是创建新的
+  const pages = getCurrentPages()
+  console.log('当前页面栈长度:', pages.length)
+  console.log('当前页面栈:', pages.map(p => p.route))
+  
+  // 查找 apply 页面（可能有多个实例）
+  const applyPageIndex = pages.findIndex(page => page.route && page.route.includes('apply/apply'))
+  console.log('apply 页面索引:', applyPageIndex)
+  
+  if (applyPageIndex !== -1) {
+    console.log('找到已存在的 apply 页面，返回，delta:', pages.length - 1 - applyPageIndex)
+    uni.navigateBack({
+      delta: pages.length - 1 - applyPageIndex
+    })
+  } else {
+    console.log('没有找到 apply 页面，创建新的')
+    uni.navigateTo({
+      url: `/pages/sample/apply/apply?spuId=${spuId}`
+    })
+  }
 }
 
 function onBannerTap(item) {
@@ -801,6 +873,14 @@ function onReachBottom() {
   color: #fff;
   font-size: 24rpx;
   padding: 12rpx 24rpx;
+  border-radius: 28rpx;
+}
+
+.btn-select {
+  background: linear-gradient(135deg, #00c853, #00e676);
+  color: #fff;
+  font-size: 24rpx;
+  padding: 12rpx 32rpx;
   border-radius: 28rpx;
 }
 

@@ -249,11 +249,13 @@ const getProd = () => {
   Data.loading = true
 
   const data = {
-    shopId: 0,
     pageNum: Data.pageNum,
     pageSize: Data.pageSize
   }
 
+  if (Data.shopId) {
+    data.shopId = Data.shopId
+  }
   if (Data.shopSecondaryCategoryId) {
     data.shopSecondaryCategoryId = Data.shopSecondaryCategoryId
   }
@@ -328,32 +330,49 @@ async function loadCartCount() {
   }
 }
 
-function addToCart(item) {
+async function addToCart(item) {
   if (!checkLoginAndAction('addToCart')) {
     return
   }
 
-  http.request({
-    url: '/mall4cloud_product/a/shop_cart/add_item',
-    method: 'POST',
-    data: {
-      spuId: item.spuId,
-      skuId: 0,
-      count: 1
+  try {
+    const prodRes = await http.request({
+      url: '/mall4cloud_product/ua/spu/detail/' + item.spuId,
+      method: 'GET'
+    })
+
+    if (!prodRes || !prodRes.skus || !prodRes.skus.length) {
+      uni.showToast({
+        title: '商品无规格',
+        icon: 'none'
+      })
+      return
     }
-  }).then(() => {
+
+    const defaultSku = prodRes.skus[0]
+
+    await http.request({
+      url: '/mall4cloud_product/a/shop_cart/change_item',
+      method: 'POST',
+      data: {
+        spuId: item.spuId,
+        skuId: defaultSku.skuId,
+        count: 1
+      }
+    })
+
     loadCartCount()
     uni.showToast({
       title: '加入成功',
       icon: 'success'
     })
-  }).catch(err => {
+  } catch (err) {
     console.error('加入购物车失败', err)
     uni.showToast({
       title: '加入失败',
       icon: 'none'
     })
-  })
+  }
 }
 
 function onScrollToLower() {
