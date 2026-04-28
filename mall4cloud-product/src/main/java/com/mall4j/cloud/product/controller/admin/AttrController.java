@@ -135,7 +135,7 @@ public class AttrController {
      */
     private void removeCacheAttrUnionCategory(List<Long> categoryIds) {
         // 清除分类缓存
-        if (!Objects.equals(Constant.PLATFORM_SHOP_ID, AuthUserContext.get().getTenantId()) || CollUtil.isEmpty(categoryIds)) {
+        if (CollUtil.isEmpty(categoryIds)) {
             return;
         }
         attrService.removeAttrByCategoryId(categoryIds);

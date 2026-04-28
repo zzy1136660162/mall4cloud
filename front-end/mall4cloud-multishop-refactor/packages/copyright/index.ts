@@ -20,8 +20,8 @@ export function createFantasticAdminBannerPlugin(options: FantasticAdminCopyrigh
 
   return banner(`
 /**
- * 由 Fantastic-admin 提供技术支持
- * Powered by Fantastic-admin
+ * 由 杰东药业 提供技术支持
+ * Powered by 杰东药业
  * ${website}
  */
   `)
@@ -39,7 +39,7 @@ export function createFantasticAdminTerminalInfoPlugin(options: FantasticAdminCo
       // eslint-disable-next-line no-console
       console.log(
         boxen(
-          `${bold(green(`由 ${bgGreen('Fantastic-admin')} 驱动`))}\n\n${underline(website)}\n\n当前使用：${magenta(edition)}`,
+          `${bold(green(`由 ${bgGreen('杰东药业')} 驱动`))}\n\n${underline(website)}\n\n当前使用：${magenta(edition)}`,
           {
             padding: 1,
             margin: 1,
@@ -72,10 +72,10 @@ export function createFantasticAdminSystemCopyrightPlugin(options: FantasticAdmi
         code: `
 /* eslint-disable no-console */
 if ((navigator.language).toLowerCase() === 'zh-cn') {
-  console.info('%c由%cFantastic-admin%c驱动%c👉%c${website}', ${JSON.stringify(subStyle)}, ${JSON.stringify(mainStyle)}, ${JSON.stringify(subStyle)}, ${JSON.stringify(iconStyle)}, ${JSON.stringify(linkStyle)})
+  console.info('%c由%c杰东药业%c驱动%c👉%c${website}', ${JSON.stringify(subStyle)}, ${JSON.stringify(mainStyle)}, ${JSON.stringify(subStyle)}, ${JSON.stringify(iconStyle)}, ${JSON.stringify(linkStyle)})
 }
 else {
-  console.info('%cPowered by %cFantastic-admin%c%c👉%c${website}', ${JSON.stringify(subStyle)}, ${JSON.stringify(mainStyle)}, ${JSON.stringify(subStyle)}, ${JSON.stringify(iconStyle)}, ${JSON.stringify(linkStyle)})
+  console.info('%cPowered by %c杰东药业%c%c👉%c${website}', ${JSON.stringify(subStyle)}, ${JSON.stringify(mainStyle)}, ${JSON.stringify(subStyle)}, ${JSON.stringify(iconStyle)}, ${JSON.stringify(linkStyle)})
 }
 
 ${code}

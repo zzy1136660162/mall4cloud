@@ -15,6 +15,7 @@ import com.mall4j.cloud.product.model.SpuSkuAttrValue;
 import com.mall4j.cloud.product.service.SkuService;
 import com.mall4j.cloud.product.service.SkuStockService;
 import com.mall4j.cloud.product.service.SpuSkuAttrValueService;
+import com.mall4j.cloud.product.service.SpuExtensionService;
 import com.mall4j.cloud.api.product.vo.SkuVO;
 import com.mall4j.cloud.product.vo.app.SkuAppVO;
 import com.mall4j.cloud.common.util.BeanUtil;
@@ -45,6 +46,8 @@ public class SkuServiceImpl implements SkuService {
     private SpuSkuAttrValueService spuSkuAttrValueService;
     @Autowired
     private SkuStockService skuStockService;
+    @Autowired
+    private SpuExtensionService spuExtensionService;
 
 
     @Override
@@ -74,6 +77,27 @@ public class SkuServiceImpl implements SkuService {
         }
         skuStockService.saveBatch(skuStocks);
         spuSkuAttrValueService.saveBatch(spuSkuAttrValues);
+        // 同步SPU库存为所有SKU库存总和
+        syncSpuStock(spuId);
+    }
+
+    /**
+     * 同步SPU库存
+     * 计算该SPU下所有SKU的库存总和，更新到spu_extension表
+     *
+     * @param spuId SPU ID
+     */
+    private void syncSpuStock(Long spuId) {
+        if (spuId == null) {
+            return;
+        }
+        // 查询该SPU下所有SKU的库存总和
+        Integer totalStock = skuMapper.getTotalStockBySpuId(spuId);
+        if (totalStock == null) {
+            totalStock = 0;
+        }
+        // 更新SPU库存
+        spuExtensionService.setStock(spuId, totalStock);
     }
 
 
@@ -109,6 +133,8 @@ public class SkuServiceImpl implements SkuService {
         if (CollUtil.isNotEmpty(skuIdsDb)) {
             deleteSkuBatch(skuIdsDb);
         }
+        // 同步SPU库存为所有SKU库存总和
+        syncSpuStock(spuId);
     }
 
     @Override
