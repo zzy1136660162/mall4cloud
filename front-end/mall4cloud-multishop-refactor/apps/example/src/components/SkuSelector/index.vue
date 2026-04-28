@@ -20,7 +20,7 @@
         </div>
       </div>
 
-      <div v-if="availableAttrs.length > 0 && selectedAttrs.length < 2" class="add-attr">
+      <div v-if="availableAttrs.length > 0" class="add-attr">
         <el-dropdown @command="handleAddAttr">
           <el-button type="primary" plain>
             添加销售属性
@@ -196,7 +196,7 @@ const syncSelectedAttrsFromSkus = (skus: SkuVO[]) => {
       attrMap.set(skuAttr.attrId, attr)
     })
   })
-  selectedAttrs.value = Array.from(attrMap.values()).slice(0, 2)
+  selectedAttrs.value = Array.from(attrMap.values())
 }
 
 const normalizeSkuList = (skuList: SkuVO[]) => {
@@ -256,7 +256,7 @@ const loadAttrs = async () => {
 const handleAddAttr = (attr: AttrVO) => {
   const exists = selectedAttrs.value.find(a => a.attrId === attr.attrId)
 
-  if (!exists && selectedAttrs.value.length < 2) {
+  if (!exists) {
     const allAttrValueIds = attr.attrValues?.map(v => v.attrValueId) || []
     selectedAttrs.value.push({
       ...attr,

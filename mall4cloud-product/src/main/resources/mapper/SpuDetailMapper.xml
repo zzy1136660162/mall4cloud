@@ -22,6 +22,7 @@
       <if test="spuDetail.detail != null">
         `detail` = #{spuDetail.detail},
       </if>
+      `update_time` = NOW()
     </set>
     where spu_id = #{spuDetail.spuId}
   </update>
