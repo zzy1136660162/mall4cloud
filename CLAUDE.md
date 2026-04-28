@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-mall4cloud is a microservice-based B2B2C e-commerce platform built with Spring Cloud 2025.x and Vue 3.
+mall4cloud is a microservice-based B2B2C e-commerce platform built with Spring Cloud 2025.x and Vue 3, licensed under AGPLv3.
 
 ## Development Environment
 
@@ -14,35 +14,29 @@ mall4cloud is a microservice-based B2B2C e-commerce platform built with Spring C
 - **Middleware**: MySQL 8.0, Redis 7.0, Nacos 3.1.1, Seata 2.6.0, Elasticsearch 7.17.21, RocketMQ 5.2.0, MinIO, Canal
 
 ### Quick Start
-1. Start middleware via docker-compose: `doc/中间件docker-compse一键安装/docker-compose.yaml`
-2. Backend: Import as Maven project, run services (gateway starts on port 8000)
-3. Frontend: `pnpm install && pnpm dev`
+1. Start middleware: `docker-compose -f doc/中间件docker-compse一键安装/docker-compose.yaml up -d`
+2. Build backend: `mvn clean package -DskipTests` from project root
+3. Start services via scripts (see below)
+4. Start frontend: `pnpm install && pnpm dev` in each front-end directory
 
-### Key Ports
-| Service | Port |
-|---------|------|
-| Gateway | 8000 |
-| Auth | 9101 |
-| Biz (file upload) | 9000 |
-| User | 9105 |
-| Product | 9114 |
-| Order | 9106 |
-| Payment | 9113 |
-| Multishop | 9103 |
-| Platform | 9112 |
-| RBAC | 9102 |
-| Search | 9108 |
-| Leaf (ID gen) | 9100 |
+### Service Scripts
+- `scripts/start.sh` — start all or a single service (logs to `scripts/logs/`)
+- `scripts/stop.sh` — graceful stop (SIGTERM then SIGKILL)
+- `scripts/restart.sh` — serial or `--parallel` restart
+- `scripts/services.conf` — central config: JAR name, port, JVM flags per service
+
+**Startup order** (from `scripts/services.conf`):
+LEAF → USER → RBAC → AUTH → PRODUCT → ORDER → PAYMENT → SEARCH → BIZ → MULTISHOP → PLATFORM → GATEWAY
 
 ## Architecture
 
 ### Microservices Structure
 ```
 mall4cloud-api/          # Feign interface definitions (internal calls)
-mall4cloud-common/      # Shared modules: cache, core, database, order, rocketmq, security
-mall4cloud-gateway/     # API gateway, routing, rate limiting
-mall4cloud-auth/        # Authentication, token management
-mall4cloud-{service}/   # Business services
+mall4cloud-common/       # Shared modules: cache, core, database, order, rocketmq, security
+mall4cloud-gateway/      # API gateway, routing, rate limiting
+mall4cloud-auth/         # Authentication, token management
+mall4cloud-{service}/    # Business services
 ```
 
 ### Module Naming
@@ -63,6 +57,36 @@ model/          # Database entities
 dto/            # Data transfer objects
 vo/             # View objects
 ```
+
+### Key Ports
+| Service | Port |
+|---------|------|
+| Gateway | 8000 |
+| Auth | 9101 |
+| Biz (file upload) | 9109 |
+| User | 9105 |
+| Product | 9104 |
+| Order | 9106 |
+| Payment | 9113 |
+| Multishop | 9103 |
+| Platform | 9112 |
+| RBAC | 9102 |
+| Search | 9108 |
+| Leaf (ID gen) | 9100 |
+
+## Frontend Variants
+
+The project has multiple frontend variants in `front-end/`:
+
+| Directory | Framework | Build |
+|-----------|-----------|-------|
+| `mall4cloud-platform/` | Vue 3 + Element Plus + Vite | `pnpm dev` (port 9527) |
+| `mall4cloud-multishop/` | Vue 3 + Element Plus + Vite | `pnpm dev` |
+| `mall4cloud-uniapp/` | uni-app (H5, WeChat, Android, iOS) | `pnpm dev:h5`, `pnpm dev:mp-weixin` |
+| `mall4cloud-platform-refactor/` | Fantastic-admin v6 (TypeScript, UnoCSS) | `pnpm dev` |
+| `mall4cloud-multishop-refactor/` | Fantastic-admin v6 | `pnpm dev` |
+
+Refactored frontends have Fantastic-admin AI skills under `.claude/skills/` (e.g., `fa-crud-page-generator`, `fa-route-generator`, `fa-store-generator`). See `AGENTS.md` for details.
 
 ## Key Patterns
 
@@ -89,6 +113,7 @@ Cache names defined in `mall4cloud-common-cache/.../constant/`. Use `CacheNames`
 - MyBatis 4.0.1 with annotation-based mappers
 - `PageDTO` / `PageVO` for pagination
 - `BaseModel` for entity inheritance (createTime, updateTime, etc.)
+- SQL schemas in `db/` directory per service
 
 ### Frontend API Calls
 ```javascript
@@ -101,9 +126,11 @@ Frontend env vars: `VITE_APP_BASE_API` (gateway URL), `VITE_APP_RESOURCES_URL` (
 
 ## Configuration
 - All service configs stored in Nacos config center
-- `bootstrap.yml` connects to Nacos
-- Local `application.yml` only for minimal settings (port, Nacos address)
+- `bootstrap.yml` connects to Nacos; local `application.yml` only has port and Nacos address
 - Secrets: Nacos password `Gesoft9919.`, MySQL root `Gesoft9919.`, Redis password `Gesoft9919.`
+
+## API Documentation
+Knife4j docs available at: `http://127.0.0.1:8000/doc.html`
 
 ## Adding New Features
 
