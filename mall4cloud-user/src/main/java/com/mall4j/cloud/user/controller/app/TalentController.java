@@ -48,6 +48,7 @@ public class TalentController {
         user.setTalentArea(dto.getArea());
         user.setTalentApplyReason(dto.getApplyReason());
         user.setTalentIntro(dto.getIntro());
+        user.setTalentSupportExpect(dto.getSupportExpect());
 
         userService.updateTalentApply(user);
 

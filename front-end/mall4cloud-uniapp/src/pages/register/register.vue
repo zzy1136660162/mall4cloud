@@ -18,7 +18,7 @@
           v-model="userName"
           type="text"
           class="text"
-          placeholder="设置账户名称"
+          placeholder="设置账户名称 推荐使用手机号"
         >
       </view>
       <view
@@ -27,7 +27,7 @@
       >
         <text class="error-icon">
           !
-        </text>账号为4~16位字母、数字或下划线
+        </text>账号至少6位
       </view>
       <view class="item">
         <input
@@ -43,7 +43,7 @@
       >
         <text class="error-icon">
           !
-        </text>密码由字母加数字或符号至少两种以上字符组成6-20位半角字符，区分大小写
+        </text>密码至少6位
       </view>
       <view class="item">
         <input
@@ -136,17 +136,11 @@ onLoad(() => {
 })
 
 const validate = () => {
-  const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z\W]{6,20}$/
-  const passwordResult = reg.test(Data.password)
-  if (!util.checkUserName(Data.userName)) {
+  if (!Data.userName || Data.userName.length < 6) {
     Data.errorTips = 4
     return false
   }
-  if (!Data.password) {
-    Data.errorTips = 5
-    return false
-  }
-  if (!passwordResult) {
+  if (!Data.password || Data.password.length < 6) {
     Data.errorTips = 5
     return false
   }

@@ -34,6 +34,9 @@ public class TalentApplyDTO implements Serializable {
     @Schema(description = "个人简介")
     private String intro;
 
+    @Schema(description = "希望公司提供的支持")
+    private String supportExpect;
+
     public String getRealName() {
         return realName;
     }
@@ -88,5 +91,13 @@ public class TalentApplyDTO implements Serializable {
 
     public void setIntro(String intro) {
         this.intro = intro;
+    }
+
+    public String getSupportExpect() {
+        return supportExpect;
+    }
+
+    public void setSupportExpect(String supportExpect) {
+        this.supportExpect = supportExpect;
     }
 }

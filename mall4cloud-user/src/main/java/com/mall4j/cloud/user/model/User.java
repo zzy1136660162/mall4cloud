@@ -84,6 +84,11 @@ public class User extends BaseModel implements Serializable{
     private String talentIntro;
 
     /**
+     * 希望公司提供的支持
+     */
+    private String talentSupportExpect;
+
+    /**
      * 达人申请状态：0-待审核 1-已通过 2-已拒绝
      */
     private Integer talentStatus;
@@ -192,6 +197,14 @@ public class User extends BaseModel implements Serializable{
 		this.talentIntro = talentIntro;
 	}
 
+	public String getTalentSupportExpect() {
+		return talentSupportExpect;
+	}
+
+	public void setTalentSupportExpect(String talentSupportExpect) {
+		this.talentSupportExpect = talentSupportExpect;
+	}
+
 	public Integer getTalentStatus() {
 		return talentStatus;
 	}
@@ -218,6 +231,7 @@ public class User extends BaseModel implements Serializable{
 				",talentArea=" + talentArea +
 				",talentApplyReason=" + talentApplyReason +
 				",talentIntro=" + talentIntro +
+				",talentSupportExpect=" + talentSupportExpect +
 				",talentStatus=" + talentStatus +
 				'}';
 	}

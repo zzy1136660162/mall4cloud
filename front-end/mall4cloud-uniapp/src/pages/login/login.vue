@@ -31,7 +31,7 @@
         >
           <text class="error-icon">
             !
-          </text>账号为4~16位字母、数字或下划线组成的用户名 / 11位手机号
+          </text>账号至少6位
         </view>
         <view class="item">
           <input
@@ -60,7 +60,7 @@
             v-model="principal"
             type="text"
             class="text"
-            placeholder="请输入手机号"
+            placeholder="推荐输入手机号"
           >
         </view>
         <view
@@ -124,7 +124,7 @@ const { isAccountLogin, captchaVerification, credentials, principal, errorTips }
 
 // 登录
 const login = () => {
-  if (Data.isAccountLogin && (!Data.principal || !util.checkUserName(Data.principal))) {
+  if (Data.isAccountLogin && (!Data.principal || Data.principal.length < 6)) {
     Data.errorTips = 1
     return
   }

@@ -18,6 +18,7 @@
     <result column="talent_area" property="talentArea"/>
     <result column="talent_apply_reason" property="talentApplyReason"/>
     <result column="talent_intro" property="talentIntro"/>
+    <result column="talent_support_expect" property="talentSupportExpect"/>
     <result column="talent_status" property="talentStatus"/>
   </resultMap>
 
@@ -129,6 +130,7 @@
       `talent_area` = #{user.talentArea},
       `talent_apply_reason` = #{user.talentApplyReason},
       `talent_intro` = #{user.talentIntro},
+      `talent_support_expect` = #{user.talentSupportExpect},
       `talent_status` = #{user.talentStatus},
     </set>
     where user_id = #{user.userId}

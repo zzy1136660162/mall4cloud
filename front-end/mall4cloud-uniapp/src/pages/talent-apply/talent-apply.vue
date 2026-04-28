@@ -78,6 +78,20 @@
         />
         <text class="textarea-count">{{ formData.intro.length }}/500</text>
       </view>
+
+      <view class="form-item form-item-textarea">
+        <view class="item-label">
+          <text class="label-text">希望公司提供的支持</text>
+        </view>
+        <textarea
+          class="item-textarea"
+          placeholder="请填写您希望公司在哪些方面提供帮助，例如产品样品、推广素材、佣金政策、培训支持、流量扶持等"
+          placeholder-class="placeholder"
+          v-model="formData.supportExpect"
+          maxlength="500"
+        />
+        <text class="textarea-count">{{ formData.supportExpect.length }}/500</text>
+      </view>
     </view>
 
     <view class="benefits-section">
@@ -127,7 +141,8 @@ const formData = reactive({
   realName: '',
   phone: '',
   applyReason: '',
-  intro: ''
+  intro: '',
+  supportExpect: ''
 })
 
 const province = ref('')
@@ -243,7 +258,8 @@ const submitApply = () => {
     city: city.value,
     area: area.value,
     applyReason: formData.applyReason,
-    intro: formData.intro
+    intro: formData.intro,
+    supportExpect: formData.supportExpect
   }
 
   http.request({
