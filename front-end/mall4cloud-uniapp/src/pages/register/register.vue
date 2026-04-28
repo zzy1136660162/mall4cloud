@@ -6,113 +6,7 @@
     </view>
 
     <view class="register-card">
-      <view class="tab">
-        <view class="item active">
-          注册
-        </view>
-        <view
-          class="item"
-          @tap="toLogin"
-        >
-          登录
-        </view>
-      </view>
-
-      <!-- 设置密码 -->
-      <view class="con">
-        <view class="field-group">
-          <view class="field-label">账户名称</view>
-          <view :class="['item', { 'has-error': errors.userName }]">
-            <input
-              v-model="userName"
-              type="text"
-              class="text"
-              maxlength="16"
-              placeholder="4-16位字母、数字或下划线"
-              placeholder-class="input-placeholder"
-              @input="onFieldInput('userName')"
-              @blur="validateField('userName')"
-            >
-          </view>
-          <view
-            v-if="errors.userName"
-            class="error"
-          >
-            <text class="error-icon">!</text>{{ errors.userName }}
-          </view>
-        </view>
-
-        <view class="field-group">
-          <view class="field-label">登录密码</view>
-          <view :class="['item', { 'has-error': errors.password }]">
-            <input
-              v-model="password"
-              :type="showPassword ? 'text' : 'password'"
-              class="text"
-              maxlength="20"
-              placeholder="请输入登录密码"
-              placeholder-class="input-placeholder"
-              @input="onFieldInput('password')"
-              @blur="validateField('password')"
-            >
-            <view class="field-action" @tap="togglePassword">
-              {{ showPassword ? '隐藏' : '显示' }}
-            </view>
-          </view>
-          <view class="password-rules">
-            <text :class="['rule', { pass: passwordLengthValid }]">6-20位</text>
-            <text :class="['rule', { pass: passwordMixValid }]">至少两种字符</text>
-            <text :class="['rule', { pass: passwordHalfWidthValid }]">半角字符</text>
-          </view>
-          <view
-            v-if="errors.password"
-            class="error"
-          >
-            <text class="error-icon">!</text>{{ errors.password }}
-          </view>
-        </view>
-
-        <view class="field-group">
-          <view class="field-label">确认密码</view>
-          <view :class="['item', { 'has-error': errors.confirmPwd }]">
-            <input
-              v-model="confirmPwd"
-              :type="showConfirmPwd ? 'text' : 'password'"
-              class="text"
-              maxlength="20"
-              placeholder="请再次输入密码"
-              placeholder-class="input-placeholder"
-              @input="onFieldInput('confirmPwd')"
-              @blur="validateField('confirmPwd')"
-            >
-            <view class="field-action" @tap="toggleConfirmPwd">
-              {{ showConfirmPwd ? '隐藏' : '显示' }}
-            </view>
-          </view>
-          <view
-            v-if="errors.confirmPwd"
-            class="error"
-          >
-            <text class="error-icon">!</text>{{ errors.confirmPwd }}
-          </view>
-        </view>
-
-        <view
-          v-if="submitError"
-          class="submit-error"
-        >
-          {{ submitError }}
-        </view>
-
-        <view
-          class="btn register-btn"
-          :class="{ disabled: submitting }"
-          @tap="getRegister"
-        >
-          {{ submitting ? '注册中...' : '立即注册' }}
-        </view>
-    <view class="tab">
-      <view class="item active">
+      <!-- <view class="item active">
         注册
       </view>
       <view
@@ -120,7 +14,7 @@
         @tap="toLogin"
       >
         登录
-      </view>
+      </view> -->
     </view>
     <!-- 设置密码 -->
     <view class="con">
@@ -162,7 +56,7 @@
           type="password"
           class="text"
           placeholder="再次输入密码"
-          @input="validate"
+          @input="simpleValidate"
         >
       </view>
       <view
@@ -209,7 +103,7 @@
 </template>
 
 <script setup>
-import { computed, onUnmounted, reactive } from 'vue'
+import { onUnmounted, reactive } from 'vue'
 import Wechat from '../../utils/wechat.js'
 
 const Data = reactive({
@@ -220,16 +114,8 @@ const Data = reactive({
   confirmPwd: '', // 确认密码
   nickName: '', // 昵称
   userName: '', // 用户名
-  showPassword: false,
-  showConfirmPwd: false,
   submitting: false,
   submitError: '',
-  errors: {
-    userName: '',
-    password: '',
-    confirmPwd: ''
-  },
-
   errorTips: 0, // 输入错误提示
 
   registerType: 0, // 注册方式 0.直接注册
@@ -245,24 +131,10 @@ const {
   password,
   confirmPwd,
   userName,
-  showPassword,
-  showConfirmPwd,
   submitting,
   submitError,
-  errors,
   loCount
 } = toRefs(Data)
-
-const passwordLengthValid = computed(() => Data.password.length >= 6 && Data.password.length <= 20)
-const passwordHalfWidthValid = computed(() => !!Data.password && /^[\x21-\x7E]*$/.test(Data.password))
-const passwordMixValid = computed(() => {
-  const types = [
-    /[A-Za-z]/.test(Data.password),
-    /\d/.test(Data.password),
-    /[^A-Za-z0-9]/.test(Data.password)
-  ]
-  return types.filter(Boolean).length >= 2
-})
 
 onLoad(() => {
   // #ifdef H5
@@ -283,77 +155,6 @@ onUnmounted(() => {
   clearSuccessTimer()
 })
 
-const setFieldError = (field, message) => {
-  Data.errors[field] = message
-  return !message
-}
-
-const validateField = (field) => {
-  const userName = Data.userName.trim()
-  const validators = {
-    userName: () => {
-      if (!userName) {
-        return setFieldError('userName', '请设置账户名称')
-      }
-      if (!util.checkUserName(userName)) {
-        return setFieldError('userName', '账号需为4-16位字母、数字或下划线，且不能为纯数字')
-      }
-      return setFieldError('userName', '')
-    },
-    password: () => {
-      if (!Data.password) {
-        return setFieldError('password', '请设置登录密码')
-      }
-      if (!passwordLengthValid.value || !passwordHalfWidthValid.value || !passwordMixValid.value) {
-        return setFieldError('password', '密码需为6-20位半角字符，且至少包含字母、数字、符号中的两种')
-      }
-      return setFieldError('password', '')
-    },
-    confirmPwd: () => {
-      if (!Data.confirmPwd) {
-        return setFieldError('confirmPwd', '请再次输入密码')
-      }
-      if (Data.confirmPwd !== Data.password) {
-        return setFieldError('confirmPwd', '两次输入的密码不一致')
-      }
-      return setFieldError('confirmPwd', '')
-    }
-  }
-  return validators[field] ? validators[field]() : true
-}
-
-const onFieldInput = (field) => {
-  Data.submitError = ''
-  if (Data.errors[field]) {
-    Data.errors[field] = ''
-  }
-  if (field === 'password' && Data.errors.confirmPwd) {
-    Data.errors.confirmPwd = ''
-  }
-}
-
-const validate = () => {
-  Data.userName = Data.userName.trim()
-  const results = ['userName', 'password', 'confirmPwd'].map(validateField)
-  const isValid = results.every(Boolean)
-  if (!isValid) {
-    const firstError = Data.errors.userName || Data.errors.password || Data.errors.confirmPwd
-    uni.showToast({
-      title: firstError,
-      icon: 'none'
-    })
-  }
-  return isValid
-}
-
-const togglePassword = () => {
-  Data.showPassword = !Data.showPassword
-}
-
-const toggleConfirmPwd = () => {
-  Data.showConfirmPwd = !Data.showConfirmPwd
-}
-
 const clearSuccessTimer = () => {
   if (Data.loRedirectTimer) {
     clearTimeout(Data.loRedirectTimer)
@@ -363,7 +164,9 @@ const clearSuccessTimer = () => {
     clearInterval(Data.loTimer)
     Data.loTimer = null
   }
-const validate = () => {
+}
+
+const simpleValidate = () => {
   if (!Data.userName || Data.userName.length < 6) {
     Data.errorTips = 4
     return false
@@ -394,7 +197,7 @@ const toLogin = () => {
 // 注册
 const getRegister = () => {
   if (Data.submitting) return
-  const isvalid = validate()
+  const isvalid = simpleValidate()
   if (!isvalid) return
 
   Data.submitting = true
