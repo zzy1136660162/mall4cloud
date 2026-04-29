@@ -64,6 +64,33 @@
     <if test="spu.name != null and spu.name != ''">
       and s.name = #{spu.name}
     </if>
+    <if test="spu.keyword != null and spu.keyword != ''">
+      AND (s.name LIKE CONCAT('%', #{spu.keyword}, '%') OR s.selling_point LIKE CONCAT('%', #{spu.keyword}, '%'))
+    </if>
+    <if test="spu.brandIds != null and spu.brandIds != ''">
+      AND s.brand_id IN (${spu.brandIds})
+    </if>
+    <if test="spu.shopId != null">
+      AND s.shop_id = #{spu.shopId}
+    </if>
+    <if test="spu.primaryCategoryId != null">
+      AND s.category_id = #{spu.primaryCategoryId}
+    </if>
+    <if test="spu.secondaryCategoryId != null">
+      AND s.category_id = #{spu.secondaryCategoryId}
+    </if>
+    <if test="spu.shopPrimaryCategoryId != null">
+      AND s.shop_category_id = #{spu.shopPrimaryCategoryId}
+    </if>
+    <if test="spu.shopSecondaryCategoryId != null">
+      AND s.shop_category_id = #{spu.shopSecondaryCategoryId}
+    </if>
+    <if test="spu.hasStock == 1">
+      AND se.stock > 0
+    </if>
+    <if test="spu.hasStock == 0">
+      AND se.stock = 0
+    </if>
     <if test="spu.status != null">
       and s.status = #{spu.status}
     </if>
@@ -420,6 +447,18 @@
     <foreach collection="cidList" item="categoryId" open="(" close=")" separator=",">
       #{categoryId}
     </foreach>
+  </select>
+
+  <select id="listByShopIds" resultType="com.mall4j.cloud.api.product.vo.SpuVO">
+    SELECT s.spu_id, s.shop_id, s.name, s.main_img_url, s.price_fee, s.status, se.sale_num, se.actual_stock as total_stock
+    FROM spu s
+    LEFT JOIN spu_extension se ON s.spu_id = se.spu_id
+    WHERE s.status = 1
+    AND s.shop_id IN
+    <foreach collection="shopIds" item="shopId" open="(" close=")" separator=",">
+      #{shopId}
+    </foreach>
+    ORDER BY s.shop_id, se.sale_num DESC
   </select>
 
 </mapper>

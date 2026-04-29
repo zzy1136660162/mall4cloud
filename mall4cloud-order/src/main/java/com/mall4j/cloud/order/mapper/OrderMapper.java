@@ -143,4 +143,12 @@ public interface OrderMapper {
 	 * @return
 	 */
     OrderCountVO countNumberOfStatus(@Param("userId") Long userId);
+
+	/**
+	 * 搜索订单列表
+	 *
+	 * @param orderSearchDTO 搜索条件
+	 * @return 订单列表
+	 */
+	List<com.mall4j.cloud.order.vo.OrderVO> searchOrders(@Param("orderSearch") com.mall4j.cloud.common.dto.OrderSearchDTO orderSearchDTO);
 }

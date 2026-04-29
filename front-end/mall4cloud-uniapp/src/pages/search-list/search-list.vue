@@ -83,14 +83,14 @@
       </view>
       <view
         class="item"
-        :class="{ active: state === 1, 'arrow-up': pageQuery.sort === 2, 'arrow-down': pageQuery.sort === 3 }"
+        :class="{ active: state === 1, 'arrow-up': pageQuery.saleNumSort === 1, 'arrow-down': pageQuery.saleNumSort === 0 }"
         @tap="switchSearchList(1)"
       >
         销量
       </view>
       <view
         class="item"
-        :class="{ active: state === 2, 'arrow-up': pageQuery.sort === 4, 'arrow-down': pageQuery.sort === 5 }"
+        :class="{ active: state === 2, 'arrow-up': pageQuery.priceFeeSort === 1, 'arrow-down': pageQuery.priceFeeSort === 0 }"
         @tap="switchSearchList(2)"
       >
         价格
@@ -105,16 +105,13 @@
         v-for="(item, index) in prodList"
         :key="index"
       >
-        <view
-          class="item"
-          @tap="toProdDetail(item.spuId)"
-        >
+        <view class="item" @tap="toProdDetail(item.spuId)">
           <view class="img">
             <image :src="util.getImgUrl(item.mainImgUrl)" />
           </view>
           <view class="text-box">
             <view class="name">
-              {{ item.spuName }}
+              {{ item.name }}
             </view>
             <view class="price-box">
               <view class="price">
@@ -239,7 +236,8 @@ const Data = reactive({
     pageNum: 1, // 当前页
     keyword: '', // 关键词
     categoryId: '', // 第三级分类ID
-    sort: '' // 商品排序
+    saleNumSort: null, // 销量排序 0:降序 1:升序
+    priceFeeSort: null // 价格排序 0:降序 1:升序
   },
   prodList: [], // 商品列表
   searchListData: { // 搜索数据
@@ -290,20 +288,33 @@ onReachBottom(() => {
  */
 const getSearchList = () => {
   uni.showLoading()
+  // 构建查询参数，过滤掉空值
+  const queryData = {
+    pageSize: Data.pageQuery.pageSize,
+    pageNum: Data.pageQuery.pageNum,
+    keyword: Data.pageQuery.keyword || undefined,
+    categoryId: Data.pageQuery.categoryId || undefined
+  }
+  // 只有排序参数有值时才添加
+  if (Data.pageQuery.saleNumSort !== null && Data.pageQuery.saleNumSort !== undefined) {
+    queryData.saleNumSort = Data.pageQuery.saleNumSort
+  }
+  if (Data.pageQuery.priceFeeSort !== null && Data.pageQuery.priceFeeSort !== undefined) {
+    queryData.priceFeeSort = Data.pageQuery.priceFeeSort
+  }
   const params = {
-    url: '/mall4cloud_search/ua/search/simple_page',
+    url: '/mall4cloud_product/ua/spu/page',
     method: 'GET',
-    data: Data.pageQuery
+    data: queryData
   }
   http.request(params).then(res => {
     Data.searchListData = res
-    Data.shopInfo = res.list[0].shopInfo
     let list = []
     if (Data.pageQuery.pageNum === 1) {
-      list = res.list[0].spus
+      list = res.list || []
     } else {
       list = Data.prodList
-      list = list.concat(res.list[0].spus)
+      list = list.concat(res.list || [])
     }
     if (Data.pageQuery.pageNum === Data.searchListData.pages) {
       Data.isLoadAll = true
@@ -360,7 +371,6 @@ const changeListStyle = () => {
  * @param state 0:商品 1:商品销量排序 2:商品价格排序 3:店铺
  */
 const switchSearchList = (state) => {
-  let sort = ''
   uni.pageScrollTo({
     duration: 0,
     scrollTop: 0
@@ -374,15 +384,27 @@ const switchSearchList = (state) => {
   Data.shopData = {}
   Data.searchListData = {}
   Data.prodList = []
-  Data.shopInfo = {}
+
+  // 重置排序参数
+  Data.pageQuery.saleNumSort = null
+  Data.pageQuery.priceFeeSort = null
 
   if (state === 1) {
-    sort = Data.state === state ? Data.pageQuery.sort === 2 ? 3 : 2 : 2
+    // 销量排序
+    if (Data.state === state) {
+      Data.pageQuery.saleNumSort = Data.pageQuery.saleNumSort === 0 ? 1 : 0
+    } else {
+      Data.pageQuery.saleNumSort = 0
+    }
   } else if (state === 2) {
-    sort = Data.state === state ? Data.pageQuery.sort === 4 ? 5 : 4 : 4
+    // 价格排序
+    if (Data.state === state) {
+      Data.pageQuery.priceFeeSort = Data.pageQuery.priceFeeSort === 0 ? 1 : 0
+    } else {
+      Data.pageQuery.priceFeeSort = 0
+    }
   }
   Data.state = state
-  Data.pageQuery.sort = sort
 
   if (Data.state !== 3) {
     getSearchList()

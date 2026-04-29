@@ -152,4 +152,12 @@ public interface SpuMapper {
 	 * @param tagDTO 标签信息
 	 */
 	void batchSetTags(@Param("tagDTO") SelectionTagDTO tagDTO);
+
+	/**
+	 * 根据店铺ID列表获取商品列表（每个店铺取固定数量）
+	 * @param shopIds 店铺ID列表
+	 * @param size 每个店铺取的商品数量
+	 * @return 商品列表
+	 */
+	List<SpuVO> listByShopIds(@Param("shopIds") List<Long> shopIds, @Param("size") Integer size);
 }

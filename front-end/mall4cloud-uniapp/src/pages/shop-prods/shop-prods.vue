@@ -55,7 +55,7 @@
           </view>
 
           <view class="product-info">
-            <text class="product-name">{{ item.spuName }}</text>
+            <text class="product-name">{{ item.name }}</text>
             <view class="product-price-row">
               <text class="product-price">￥{{ price(item.priceFee) }}</text>
               <text class="product-original-price" v-if="item.marketPriceFee">￥{{ price(item.marketPriceFee) }}</text>
@@ -264,14 +264,14 @@ const getProd = () => {
   }
 
   const params = {
-    url: '/mall4cloud_search/ua/search/simple_page',
+    url: '/mall4cloud_product/ua/spu/page',
     method: 'GET',
     data: data
   }
 
   return http.request(params).then(res => {
     if (res && res.list && res.list.length > 0) {
-      let newProducts = res.list[0].spus || []
+      let newProducts = res.list || []
 
       if (Data.currentFilterId === 1) {
         newProducts.sort((a, b) => (b.totalSales || 0) - (a.totalSales || 0))

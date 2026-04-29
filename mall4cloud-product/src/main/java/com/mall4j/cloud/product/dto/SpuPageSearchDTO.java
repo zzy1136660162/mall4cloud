@@ -94,6 +94,36 @@ public class SpuPageSearchDTO {
 	@Schema(description = "排序字段" )
 	private String orderBy;
 
+	@Schema(description = "关键字搜索（商品名、卖点）" )
+	private String keyword;
+
+	@Schema(description = "品牌ID列表，逗号分隔" )
+	private String brandIds;
+
+	@Schema(description = "平台一级分类ID" )
+	private Long primaryCategoryId;
+
+	@Schema(description = "平台二级分类ID" )
+	private Long secondaryCategoryId;
+
+	@Schema(description = "店铺一级分类ID" )
+	private Long shopPrimaryCategoryId;
+
+	@Schema(description = "店铺二级分类ID" )
+	private Long shopSecondaryCategoryId;
+
+	@Schema(description = "属性值ID列表，逗号分隔" )
+	private String attrValueIds;
+
+	@Schema(description = "是否有库存：0/1" )
+	private Integer hasStock;
+
+	@Schema(description = "是否自营店：0/1" )
+	private Integer selfShop;
+
+	@Schema(description = "店铺ID" )
+	private Long shopId;
+
 	public Long getSpuId() {
 		return spuId;
 	}
@@ -308,6 +338,86 @@ public class SpuPageSearchDTO {
 
 	public void setOrderBy(String orderBy) {
 		this.orderBy = orderBy;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public String getBrandIds() {
+		return brandIds;
+	}
+
+	public void setBrandIds(String brandIds) {
+		this.brandIds = brandIds;
+	}
+
+	public Long getPrimaryCategoryId() {
+		return primaryCategoryId;
+	}
+
+	public void setPrimaryCategoryId(Long primaryCategoryId) {
+		this.primaryCategoryId = primaryCategoryId;
+	}
+
+	public Long getSecondaryCategoryId() {
+		return secondaryCategoryId;
+	}
+
+	public void setSecondaryCategoryId(Long secondaryCategoryId) {
+		this.secondaryCategoryId = secondaryCategoryId;
+	}
+
+	public Long getShopPrimaryCategoryId() {
+		return shopPrimaryCategoryId;
+	}
+
+	public void setShopPrimaryCategoryId(Long shopPrimaryCategoryId) {
+		this.shopPrimaryCategoryId = shopPrimaryCategoryId;
+	}
+
+	public Long getShopSecondaryCategoryId() {
+		return shopSecondaryCategoryId;
+	}
+
+	public void setShopSecondaryCategoryId(Long shopSecondaryCategoryId) {
+		this.shopSecondaryCategoryId = shopSecondaryCategoryId;
+	}
+
+	public String getAttrValueIds() {
+		return attrValueIds;
+	}
+
+	public void setAttrValueIds(String attrValueIds) {
+		this.attrValueIds = attrValueIds;
+	}
+
+	public Integer getHasStock() {
+		return hasStock;
+	}
+
+	public void setHasStock(Integer hasStock) {
+		this.hasStock = hasStock;
+	}
+
+	public Integer getSelfShop() {
+		return selfShop;
+	}
+
+	public void setSelfShop(Integer selfShop) {
+		this.selfShop = selfShop;
+	}
+
+	public Long getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(Long shopId) {
+		this.shopId = shopId;
 	}
 
 	@Override

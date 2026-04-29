@@ -12,6 +12,16 @@ interface ImportMetaEnv {
    */
   readonly VITE_APP_DEBUG_TOOL: string
   /**
+   * 文件上传类型 0.阿里云 1.minIo
+   * File upload type 0. Alibaba Cloud 1. minIo
+   */
+  readonly VITE_APP_RESOURCES_TYPE: number
+  /**
+   * 访问文件存储资源的url 对应阿里云的Bucket域名
+   * Access file storage resource url, corresponding to Alibaba Cloud Bucket domain
+   */
+  readonly VITE_APP_RESOURCES_URL: string
+  /**
    * 应用配置面板
    * Application configuration panel
    */

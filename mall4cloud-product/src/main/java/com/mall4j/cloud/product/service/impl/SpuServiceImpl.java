@@ -322,4 +322,27 @@ public class SpuServiceImpl implements SpuService {
         spuMapper.batchSetTags(tagDTO);
         this.batchRemoveSpuCacheBySpuId(tagDTO.getSpuIds());
     }
+
+    @Override
+    public List<SpuVO> listByShopIds(List<Long> shopIds, Integer size) {
+        if (CollUtil.isEmpty(shopIds)) {
+            return new ArrayList<>();
+        }
+        List<SpuVO> allSpuList = spuMapper.listByShopIds(shopIds, size);
+        if (CollUtil.isEmpty(allSpuList)) {
+            return new ArrayList<>();
+        }
+        Map<Long, List<SpuVO>> spuMap = allSpuList.stream()
+                .collect(Collectors.groupingBy(SpuVO::getShopId));
+        List<SpuVO> result = new ArrayList<>();
+        for (Long shopId : shopIds) {
+            List<SpuVO> shopSpuList = spuMap.get(shopId);
+            if (CollUtil.isNotEmpty(shopSpuList)) {
+                for (int i = 0; i < Math.min(shopSpuList.size(), size); i++) {
+                    result.add(shopSpuList.get(i));
+                }
+            }
+        }
+        return result;
+    }
 }

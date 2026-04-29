@@ -331,4 +331,9 @@ public class OrderServiceImpl implements OrderService {
     public OrderCountVO countNumberOfStatus(Long userId) {
         return orderMapper.countNumberOfStatus(userId);
     }
+
+    @Override
+    public List<OrderVO> searchOrders(com.mall4j.cloud.common.dto.OrderSearchDTO orderSearchDTO) {
+        return orderMapper.searchOrders(orderSearchDTO);
+    }
 }

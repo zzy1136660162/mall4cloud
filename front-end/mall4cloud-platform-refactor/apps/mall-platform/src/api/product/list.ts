@@ -2,7 +2,7 @@ import api from '@/api'
 
 export function page(pageParam) {
   return api({
-    url: '/mall4cloud_search/p/search/page',
+    url: '/mall4cloud_product/admin/spu/platform_page',
     method: 'get',
     params: pageParam,
   })

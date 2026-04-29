@@ -8,9 +8,9 @@ import com.mall4j.cloud.api.auth.constant.SysTypeEnum;
 import com.mall4j.cloud.api.auth.dto.AuthAccountDTO;
 import com.mall4j.cloud.api.auth.feign.AccountFeignClient;
 import com.mall4j.cloud.api.auth.vo.AuthAccountVO;
-import com.mall4j.cloud.api.feign.SearchSpuFeignClient;
 import com.mall4j.cloud.api.multishop.bo.EsShopDetailBO;
-import com.mall4j.cloud.api.vo.search.SpuSearchVO;
+import com.mall4j.cloud.api.product.feign.ProductSpuFeignClient;
+import com.mall4j.cloud.api.product.vo.SpuVO;
 import com.mall4j.cloud.common.cache.constant.CacheNames;
 import com.mall4j.cloud.common.constant.Constant;
 import com.mall4j.cloud.common.constant.UserAdminType;
@@ -60,7 +60,7 @@ public class ShopDetailServiceImpl implements ShopDetailService {
     @Autowired
     private ShopDetailMapper shopDetailMapper;
     @Autowired
-    private SearchSpuFeignClient searchSpuFeignClient;
+    private ProductSpuFeignClient productSpuFeignClient;
     @Autowired
     private ShopUserService shopUserService;
 
@@ -117,15 +117,15 @@ public class ShopDetailServiceImpl implements ShopDetailService {
     @Override
     public PageVO<ShopDetailAppVO> shopSearchPage(PageDTO pageDTO, ShopDetailDTO shopDetailDTO) {
         PageVO<ShopDetailAppVO> page = PageUtil.doPage(pageDTO, () -> shopDetailMapper.shopSearchList(shopDetailDTO));
-        Set<Long> spuIdSet = page.getList().stream().map(ShopDetailAppVO::getShopId).collect(Collectors.toSet());
-        ServerResponseEntity<List<SpuSearchVO>> spuResponse = searchSpuFeignClient.limitSizeListByShopIds(new ArrayList<>(spuIdSet), Constant.SPU_SIZE_FIVE);
+        Set<Long> shopIdSet = page.getList().stream().map(ShopDetailAppVO::getShopId).collect(Collectors.toSet());
+        ServerResponseEntity<List<SpuVO>> spuResponse = productSpuFeignClient.listByShopIds(new ArrayList<>(shopIdSet), Constant.SPU_SIZE_FIVE);
         if (!Objects.equals(spuResponse.getCode(), ResponseEnum.OK.value())) {
             throw new Mall4cloudException(spuResponse.getMsg());
         } else if (CollectionUtil.isEmpty(spuResponse.getData())) {
             return page;
         }
-        List<SpuSearchVO> data = spuResponse.getData();
-        Map<Long, List<SpuSearchVO>> shopMap = data.stream().collect(Collectors.groupingBy(SpuSearchVO::getShopId));
+        List<SpuVO> data = spuResponse.getData();
+        Map<Long, List<SpuVO>> shopMap = data.stream().collect(Collectors.groupingBy(SpuVO::getShopId));
         for (ShopDetailAppVO shopDetail : page.getList()) {
             shopDetail.setSpuList(shopMap.get(shopDetail.getShopId()));
         }

@@ -259,4 +259,62 @@
                COUNT(CASE WHEN o.status = 5 THEN o.order_id ELSE NULL END)        AS success
         FROM `order` o WHERE o.user_id = #{userId} AND o.delete_status = 0
     </select>
+
+    <select id="searchOrders" resultType="com.mall4j.cloud.order.vo.OrderVO">
+        SELECT DISTINCT o.order_id, o.create_time, o.update_time, o.shop_id, o.user_id, o.order_addr_id,
+               o.shop_name, o.total, o.status, o.delivery_type, o.close_type, o.all_count, o.pay_time,
+               o.delivery_time, o.finally_time, o.cancel_time, o.is_payed, o.delete_status
+        FROM `order` o
+        LEFT JOIN order_item oi ON o.order_id = oi.order_id
+        WHERE o.delete_status = 0
+        <if test="orderSearch.userId != null">
+            AND o.user_id = #{orderSearch.userId}
+        </if>
+        <if test="orderSearch.shopId != null">
+            AND o.shop_id = #{orderSearch.shopId}
+        </if>
+        <if test="orderSearch.status != null and orderSearch.status != 0">
+            AND o.status = #{orderSearch.status}
+        </if>
+        <if test="orderSearch.isPayed != null">
+            AND o.is_payed = #{orderSearch.isPayed}
+        </if>
+        <if test="orderSearch.orderId != null">
+            AND o.order_id = #{orderSearch.orderId}
+        </if>
+        <if test="orderSearch.startTime != null">
+            AND o.create_time >= #{orderSearch.startTime}
+        </if>
+        <if test="orderSearch.endTime != null">
+            AND o.create_time &lt;= #{orderSearch.endTime}
+        </if>
+        <if test="orderSearch.shopName != null and orderSearch.shopName != ''">
+            AND o.shop_name LIKE CONCAT('%', #{orderSearch.shopName}, '%')
+        </if>
+        <if test="orderSearch.spuName != null and orderSearch.spuName != ''">
+            AND EXISTS (
+                SELECT 1 FROM order_item WHERE order_id = o.order_id
+                AND spu_name LIKE CONCAT('%', #{orderSearch.spuName}, '%')
+            )
+        </if>
+        <if test="orderSearch.consignee != null and orderSearch.consignee != ''">
+            AND EXISTS (
+                SELECT 1 FROM order_addr WHERE order_addr_id = o.order_addr_id
+                AND consignee LIKE CONCAT('%', #{orderSearch.consignee}, '%')
+            )
+        </if>
+        <if test="orderSearch.mobile != null and orderSearch.mobile != ''">
+            AND EXISTS (
+                SELECT 1 FROM order_addr WHERE order_addr_id = o.order_addr_id
+                AND mobile = #{orderSearch.mobile}
+            )
+        </if>
+        <if test="orderSearch.deliveryType != null and orderSearch.deliveryType">
+            AND o.delivery_type = #{orderSearch.deliveryType}
+        </if>
+        ORDER BY o.create_time DESC
+        <if test="orderSearch.pageNum != null and orderSearch.pageSize != null">
+            LIMIT #{orderSearch.pageNum}, #{orderSearch.pageSize}
+        </if>
+    </select>
 </mapper>

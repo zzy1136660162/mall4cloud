@@ -95,4 +95,11 @@ public class SpuController {
                 .multiply(commissionRate)
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
     }
+
+    @GetMapping("/shop_ids")
+    @Operation(summary = "根据店铺ID列表获取商品列表", description = "根据店铺ID列表获取商品列表，每个店铺取固定数量")
+    public ServerResponseEntity<List<SpuVO>> listByShopIds(@RequestParam("shopIds") List<Long> shopIds,
+                                                            @RequestParam(value = "size", defaultValue = "5") Integer size) {
+        return ServerResponseEntity.success(spuService.listByShopIds(shopIds, size));
+    }
 }

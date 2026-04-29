@@ -17,9 +17,9 @@ public class PrincipalUtil {
 	public static final String MOBILE_REGEXP = "1[0-9]{10}";
 
 	/**
-	 * 用户名 6位以上，字母数字下划线组合，不区分大小写
+	 * 用户名 2位以上，字母或数字或下划线组合，不区分大小写
 	 */
-	public static final String USER_NAME_REGEXP = "^[a-zA-Z0-9_]{6,}$";
+	public static final String USER_NAME_REGEXP = "^([a-zA-Z]{2,}|[0-9]{2,}|_{2,})$";
 
 	/**
 	 * 字段名，数字字母下划线

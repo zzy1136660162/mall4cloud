@@ -173,7 +173,7 @@
           <template #default="{row}">
             <img
               v-if="row.mainImgUrl"
-              :src="resourcesUrl + row.mainImgUrl"
+              :src="getImageUrl(row.mainImgUrl)"
               class="w-10 h-10 rounded object-cover"
             >
           </template>
@@ -347,6 +347,15 @@ const Data = reactive({
 })
 
 const { dataForm, selectedMenu, categoryList, categoryListTreeProps, prodStatusRadio, pageQuery, pageVO, prodDetailsVisible } = toRefs(Data)
+
+const getImageUrl = (imgUrl: string) => {
+  if (!imgUrl) return ''
+  if (imgUrl.startsWith('http://') || imgUrl.startsWith('https://')) {
+    return imgUrl
+  }
+  const baseUrl = Data.resourcesUrl?.replace(/^['"]|['"]$/g, '') || ''
+  return baseUrl + imgUrl
+}
 
 onMounted(() => {
   getDataList()

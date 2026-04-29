@@ -135,4 +135,11 @@ public interface OrderService {
 	 * @return
 	 */
 	OrderCountVO countNumberOfStatus(Long userId);
+
+	/**
+	 * 搜索订单列表
+	 * @param orderSearchDTO 搜索条件
+	 * @return 订单列表
+	 */
+	List<OrderVO> searchOrders(com.mall4j.cloud.common.dto.OrderSearchDTO orderSearchDTO);
 }

@@ -1,10 +1,8 @@
 package com.mall4j.cloud.order.controller.multishop;
 
-import com.mall4j.cloud.api.feign.SearchOrderFeignClient;
 import com.mall4j.cloud.api.order.constant.OrderStatus;
 import com.mall4j.cloud.api.order.dto.DeliveryOrderDTO;
-import com.mall4j.cloud.api.vo.EsPageVO;
-import com.mall4j.cloud.api.vo.search.EsOrderVO;
+import com.mall4j.cloud.common.database.vo.PageVO;
 import com.mall4j.cloud.common.dto.OrderSearchDTO;
 import com.mall4j.cloud.common.response.ResponseEnum;
 import com.mall4j.cloud.common.response.ServerResponseEntity;
@@ -23,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,11 +36,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-
-
-    @Autowired
-    private SearchOrderFeignClient searchOrderFeignClient;
-
     @Autowired
     private OrderAddrService orderAddrService;
     /**
@@ -49,10 +43,13 @@ public class OrderController {
      */
     @GetMapping("/page")
     @Operation(summary = "分页获取订单详情")
-    public ServerResponseEntity<EsPageVO<EsOrderVO>> page(OrderSearchDTO orderSearchDTO) {
+    public ServerResponseEntity<PageVO<OrderVO>> page(OrderSearchDTO orderSearchDTO) {
         Long shopId = AuthUserContext.get().getTenantId();
         orderSearchDTO.setShopId(shopId);
-        return searchOrderFeignClient.getOrderPage(orderSearchDTO);
+        List<OrderVO> orders = orderService.searchOrders(orderSearchDTO);
+        PageVO<OrderVO> pageVO = new PageVO<>();
+        pageVO.setList(orders);
+        return ServerResponseEntity.success(pageVO);
     }
 
     /**
