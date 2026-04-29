@@ -860,8 +860,8 @@ const util = {
           } else {
             res.loginLogoImg = 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/logo.png'
           }
-          res.titleContentCn = res.titleContentCn || '蓝海商城'
-          res.titleContentEn = res.titleContentEn || 'Mall4j'
+          res.titleContentCn = res.titleContentCn || '杰东药业'
+          res.titleContentEn = res.titleContentEn || '杰东药业'
           uni.setStorageSync('cloudUniWebConfigData', res)
           uni.setStorageSync('cloudUniLoginLogoImg', res.loginLogoImg)
         } else {

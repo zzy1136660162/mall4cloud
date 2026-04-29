@@ -44,7 +44,7 @@
       </view>
       <view class="stat-divider" />
       <view class="stat-item">
-        <view class="stat-num">3万+</view>
+        <view class="stat-num">5万+</view>
         <view class="stat-label">服务企业</view>
       </view>
       <view class="stat-divider" />
@@ -62,30 +62,32 @@
             :class="{ active: currentTab === 0 }"
             @tap="switchTab(0)"
           >
-            <view class="tab-icon">
+           <!-- <view class="tab-icon">
               <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-tab-cert.svg" mode="aspectFit" />
-            </view>
-            <view class="tab-text">认证</view>
+            </view> -->
+            <view class="tab-text">杰东认证</view>
           </view>
           <view
             class="tab-item"
             :class="{ active: currentTab === 1 }"
             @tap="switchTab(1)"
           >
-            <view class="tab-icon">
+          <!--  <view class="tab-icon">
               <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-tab-cdmo.svg" mode="aspectFit" />
-            </view>
-            <view class="tab-text">CDMO</view>
+            </view> -->
+            <view class="tab-text">杰东智造</view>
           </view>
           <view
             class="tab-item"
             :class="{ active: currentTab === 2 }"
             @tap="switchTab(2)"
           >
-            <view class="tab-icon">
+          <!--  <view class="tab-icon">
               <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/icon-tab-prod.svg" mode="aspectFit" />
+            </view> -->
+            <view class="tab-text tab-text--stacked">
+              <text>杰东优品</text>
             </view>
-            <view class="tab-text">生产</view>
           </view>
         </view>
       </view>
@@ -300,7 +302,7 @@
             <view class="prod-advantage-item item-1">
               <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/homepage/production-img-1.png" mode="aspectFill" />
               <view class="prod-advantage-overlay">
-                <view class="prod-advantage-number">200+</view>
+                <view class="prod-advantage-number">400+</view>
                 <view class="prod-advantage-text">安评类目 · 合规无忧</view>
               </view>
             </view>
@@ -413,12 +415,12 @@ const currentCategoryPage = ref(0)
 const scrollWidth = ref(375)
 
 const certTypes = reactive([
-  { name: '械字号', desc: '一类/二类/三类注册' },
-  { name: '妆字号', desc: '普通/特殊化妆品' },
-  { name: '消字号', desc: '消毒产品备案' },
-  { name: '保健号', desc: '保健用品批件' },
-  { name: '食字号', desc: '食字号/特膳/特医' },
-  { name: '日用品', desc: '日用品备案' }
+  { name: '院内制剂', desc: '院内制剂备案/注册' },
+  { name: '医疗器械', desc: '一类/二类/三类注册' },
+  { name: '功能性食品', desc: '配方研发/合规申报' },
+  { name: '消毒产品', desc: '消毒产品备案' },
+  { name: '保健用品', desc: '保健用品批件' },
+  { name: '化妆品', desc: '普通/特殊化妆品' }
 ])
 
 const licenses = [
@@ -537,30 +539,26 @@ const switchCategoryPage = (page) => {
 }
 
 const onConsult = () => {
-  uni.showToast({
-    title: '即将为您连接专业认证顾问...',
-    icon: 'none'
+  uni.switchTab({
+    url: '/pages/demand-index/demand-index'
   })
 }
 
 const onOEMConsult = () => {
-  uni.showToast({
-    title: '我们的专业团队将为您定制生产方案',
-    icon: 'none'
+  uni.switchTab({
+    url: '/pages/demand-index/demand-index'
   })
 }
 
 const onBrowseProducts = () => {
-  uni.showToast({
-    title: '正在加载产品库...',
-    icon: 'none'
+  uni.switchTab({
+    url: '/pages/sample/selection/selection'
   })
 }
 
 const onPartner = () => {
-  uni.showToast({
-    title: '加入杰东优品合伙人计划，共享供应链红利',
-    icon: 'none'
+  uni.navigateTo({
+    url: '/pages/talent-apply/talent-apply'
   })
 }
 
