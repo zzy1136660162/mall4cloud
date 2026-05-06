@@ -61,7 +61,7 @@
               </view>
               <view class="text-box">
                 <view class="name">
-                  {{ item.spuName }}
+                  {{ item.name }}
                 </view>
                 <!-- <view class="sku">夏季换新 银色 256g</view> -->
                 <view class="price-box">
@@ -151,7 +151,7 @@ const getShopInfo = () => {
      */
 const getProd = () => {
   const params = {
-    url: '/mall4cloud_search/ua/search/simple_page',
+    url: '/mall4cloud_product/ua/spu/page',
     method: 'GET',
     data: {
       shopId: Data.shopId,
@@ -161,9 +161,9 @@ const getProd = () => {
   }
   http.request(params).then(res => {
     if (Data.pageNum !== 1) {
-      Data.prodList = Data.prodList.concat(res.list[0].spus)
+      Data.prodList = Data.prodList.concat(res.list || [])
     } else {
-      Data.prodList = res.list[0].spus
+      Data.prodList = res.list || []
     }
     Data.total = res.total
     Data.pages = res.pages

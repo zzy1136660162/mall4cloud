@@ -46,7 +46,7 @@
           </view>
           <view class="text-box">
             <view class="name">
-              {{ item.spuName }}
+              {{ item.name }}
             </view>
             <view class="price-box">
               <view class="price">
@@ -198,7 +198,7 @@ const getSearchList = () => {
   Data.isLoadAll = false
   Data.pageQuery.primaryCategoryId = Data.selectedCategoryId
   const params = {
-    url: '/mall4cloud_search/ua/search/simple_page',
+    url: '/mall4cloud_product/ua/spu/page',
     method: 'GET',
     data: Data.pageQuery
   }
@@ -206,10 +206,10 @@ const getSearchList = () => {
     Data.searchListData = res
     let list = []
     if (Data.pageQuery.pageNum === 1) {
-      list = res.list[0].spus
+      list = res.list || []
     } else {
       list = Data.prodList
-      list = list.concat(res.list[0].spus)
+      list = list.concat(res.list || [])
     }
     if (Data.pageQuery.pageNum === Data.searchListData.pages) {
       Data.isLoadAll = true

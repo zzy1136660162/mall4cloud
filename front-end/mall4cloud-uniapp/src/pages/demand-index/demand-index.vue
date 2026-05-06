@@ -81,11 +81,13 @@
   </view>
 
   <!-- 自定义tabbar -->
+  <FloatingServiceEntry />
   <diy-tabbar :current-index="1" />
 </template>
 
 <script setup>
 import { reactive } from 'vue'
+import FloatingServiceEntry from '@/components/floating-service-entry/floating-service-entry.vue'
 
 const Data = reactive({
   recentDemands: []
