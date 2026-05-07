@@ -12,7 +12,7 @@
                 <image v-if="item.type === 'user'" class="avatar" :src="userInfo.avatarUrl || ''" mode="aspectFill" />
 
                 <view v-if="item.type === 'agent' || item.type === 'system'" class="avatar avatar-service">
-                    <text class="avatar-text">客</text>
+                    <text class="avatar-text"></text>
                 </view>
 
                 <view class="message-content">
