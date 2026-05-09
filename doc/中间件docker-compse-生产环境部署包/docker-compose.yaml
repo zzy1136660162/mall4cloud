@@ -1,8 +1,4 @@
-version: "3.5"
-
 services:
-
-
   mall4cloud-mysql:
     image: mysql:8.0
     container_name: mall4cloud-mysql
@@ -119,7 +115,7 @@ services:
 
 
   mall4cloud-rocketmq-dashboard:
-    image: fsckzy01/rocketmq-dashboard:latest
+    image: fsckzy01/rocketmq-dashboard:1.0.1
     container_name: mall4cloud-rocketmq-dashboard
     restart: always
     ports:
