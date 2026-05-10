@@ -61,6 +61,9 @@ services:
       - MYSQL_SERVICE_USER=root
       - MYSQL_SERVICE_PASSWORD=Gesoft9919.
       - NACOS_AUTH_ENABLE=true
+      - NACOS_AUTH_TOKEN=TWFsbDRqTWFsbDRjbG91ZE1hbGw0ak1hbGw0Y2xvdWRNYWxsNGpNYWxsNGNsb3Vk
+      - NACOS_AUTH_IDENTITY_KEY=mall4jmall4jmall4jmall4jmall4jmall4jmall4jmall4j
+      - NACOS_AUTH_IDENTITY_VALUE=mall4cloudmall4cloudmall4cloudmall4cloudmall4cloudmall4cloudmall4cloud
       - NACOS_CORE_AUTH_PLUGIN_NACOS_TOKEN_SECRET_KEY=TWFsbDRqTWFsbDRjbG91ZE1hbGw0ak1hbGw0Y2xvdWRNYWxsNGpNYWxsNGNsb3Vk
       - NACOS_CORE_AUTH_SERVER_IDENTITY_KEY=mall4jmall4jmall4jmall4jmall4jmall4jmall4jmall4j
       - NACOS_CORE_AUTH_SERVER_IDENTITY_VALUE=mall4cloudmall4cloudmall4cloudmall4cloudmall4cloudmall4cloudmall4cloud
@@ -99,6 +102,7 @@ services:
     image: apache/rocketmq:5.2.0
     container_name: mall4cloud-rocketmq-broker
     restart: always
+    user: "0:0"
     network_mode: "host"
     expose:
       - 10909
@@ -109,7 +113,7 @@ services:
       - ./rocketmq/broker/conf/broker.conf:/etc/rocketmq/broker.conf
     environment:
       JAVA_OPT_EXT: "-Duser.home=/home/rocketmq -Xms512M -Xmx512M -Xmn128M -XX:-AssumeMP"
-    command: ["sh","mqbroker","-c","/etc/rocketmq/broker.conf","-n","127.0.0.1:9876","autoCreateTopicEnable=true"]
+    command: ["sh","mqbroker","-c","/etc/rocketmq/broker.conf","-n","127.0.0.1:9876"]
     depends_on:
       - mall4cloud-rocketmq-namesrv
 
