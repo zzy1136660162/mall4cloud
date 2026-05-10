@@ -5,11 +5,13 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_ROOT="${SCRIPT_DIR}/dumps"
 
-MYSQL_HOST="${MYSQL_HOST:-101.126.90.255}"
-MYSQL_PORT="${MYSQL_PORT:-63306}"
+MYSQL_HOST="${MYSQL_HOST:-192.168.0.101}"
+MYSQL_PORT="${MYSQL_PORT:-3306}"
 MYSQL_USER="${MYSQL_USER:-root}"
 MYSQL_PASSWORD="${MYSQL_PASSWORD:-Gesoft9919.}"
 DB_PATTERN="${DB_PATTERN:-mall4cloud\_%}"
+MYSQL_CONNECT_TIMEOUT="${MYSQL_CONNECT_TIMEOUT:-5}"
+EXCLUDED_DATABASES=("mall4cloud_seata" "mall4cloud_nacos")
 
 MODE="full"
 COMPRESS=0
@@ -22,6 +24,9 @@ GREEN='\033[32m'
 YELLOW='\033[33m'
 BLUE='\033[34m'
 NC='\033[0m'
+
+MYSQL_CMD=""
+MYSQLDUMP_CMD=""
 
 print_color() {
     local color=$1
@@ -64,19 +69,43 @@ require_command() {
     fi
 }
 
+resolve_mysql_tools() {
+    if command -v mysql >/dev/null 2>&1; then
+        MYSQL_CMD="mysql"
+    elif command -v mariadb >/dev/null 2>&1; then
+        MYSQL_CMD="mariadb"
+    else
+        print_color "${RED}" "ERROR: mysql client not found. Install mysql-client or mariadb-client."
+        exit 1
+    fi
+
+    if command -v mysqldump >/dev/null 2>&1; then
+        MYSQLDUMP_CMD="mysqldump"
+    elif command -v mariadb-dump >/dev/null 2>&1; then
+        MYSQLDUMP_CMD="mariadb-dump"
+    else
+        print_color "${RED}" "ERROR: mysqldump not found. Install mysql-client or mariadb-client."
+        exit 1
+    fi
+}
+
 mysql_base_cmd() {
-    mysql \
+    "${MYSQL_CMD}" \
+        --protocol=TCP \
         --host="${MYSQL_HOST}" \
         --port="${MYSQL_PORT}" \
         --user="${MYSQL_USER}" \
         --password="${MYSQL_PASSWORD}" \
+        --connect-timeout="${MYSQL_CONNECT_TIMEOUT}" \
         --default-character-set=utf8mb4 \
         --batch \
-        --skip-column-names
+        --skip-column-names \
+        "$@"
 }
 
 mysqldump_base_cmd() {
-    mysqldump \
+    "${MYSQLDUMP_CMD}" \
+        --protocol=TCP \
         --host="${MYSQL_HOST}" \
         --port="${MYSQL_PORT}" \
         --user="${MYSQL_USER}" \
@@ -88,7 +117,8 @@ mysqldump_base_cmd() {
         --triggers \
         --events \
         --hex-blob \
-        --skip-comments
+        --skip-comments \
+        "$@"
 }
 
 parse_args() {
@@ -129,8 +159,19 @@ parse_args() {
 
 test_connection() {
     print_color "${BLUE}" "Checking MySQL connection..."
-    if ! mysql_base_cmd -e "SELECT 1;" >/dev/null 2>&1; then
+    if ! "${MYSQL_CMD}" \
+        --protocol=TCP \
+        --host="${MYSQL_HOST}" \
+        --port="${MYSQL_PORT}" \
+        --user="${MYSQL_USER}" \
+        --password="${MYSQL_PASSWORD}" \
+        --connect-timeout="${MYSQL_CONNECT_TIMEOUT}" \
+        --default-character-set=utf8mb4 \
+        --batch \
+        --skip-column-names \
+        -e "SELECT 1;" >/dev/null 2>&1; then
         print_color "${RED}" "ERROR: failed to connect to MySQL ${MYSQL_HOST}:${MYSQL_PORT}"
+        echo "Hint: check network reachability, firewall, and whether ${MYSQL_HOST}:${MYSQL_PORT} accepts TCP connections."
         exit 1
     fi
 }
@@ -141,7 +182,20 @@ collect_databases() {
         return 0
     fi
 
-    mysql_base_cmd -e "SHOW DATABASES LIKE '${DB_PATTERN}';"
+    mysql_base_cmd -e "SHOW DATABASES LIKE '${DB_PATTERN}';" | while IFS= read -r db_name; do
+        local excluded=0
+        local exclude_name=""
+        for exclude_name in "${EXCLUDED_DATABASES[@]}"; do
+            if [ "${db_name}" = "${exclude_name}" ]; then
+                excluded=1
+                break
+            fi
+        done
+
+        if [ "${excluded}" -eq 0 ]; then
+            printf '%s\n' "${db_name}"
+        fi
+    done
 }
 
 dump_one_db() {
@@ -158,8 +212,8 @@ dump_one_db() {
             ;;
     esac
 
-    print_color "${BLUE}" "Dumping ${db_name} -> ${output_file}"
-    mysqldump_base_cmd "${dump_args[@]}" "${db_name}" > "${output_file}"
+    print_color "${BLUE}" "Dumping ${db_name} -> ${output_file}" >&2
+    mysqldump_base_cmd "${dump_args[@]}" --databases "${db_name}" > "${output_file}"
 
     if [ "${COMPRESS}" -eq 1 ]; then
         gzip -f "${output_file}"
@@ -170,9 +224,8 @@ dump_one_db() {
 }
 
 main() {
-    require_command mysql
-    require_command mysqldump
     parse_args "$@"
+    resolve_mysql_tools
     test_connection
 
     mapfile -t databases < <(collect_databases)
