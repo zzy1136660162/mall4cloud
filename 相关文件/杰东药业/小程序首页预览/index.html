@@ -1,0 +1,2446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>杰东药业 - 共创医健产业创新生态圈</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #1a1a1a;
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 70px;
+        }
+
+        /* 顶部Banner - 商务深蓝 */
+        .banner {
+            background: linear-gradient(145deg, #0d2d5a 0%, #194276 40%, #1a5aa0 100%);
+            padding: 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at top right, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 2;
+        }
+
+        /* Banner轮播 - 淡入淡出效果 */
+        .banner-slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .banner-slides {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .banner-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .banner-slide.active {
+            opacity: 1;
+        }
+
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .banner-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .banner-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .banner-dot.active {
+            background: #ffffff;
+            width: 20px;
+            border-radius: 4px;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .banner-subtitle {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 6px;
+            font-weight: 300;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 核心数据展示 - 商务卡片 */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 20px 15px;
+            margin: -35px 20px 22px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(13, 45, 90, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .stat-num {
+            font-size: 26px;
+            font-weight: 700;
+            color: #cda360;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-unit {
+            font-size: 12px;
+            color: #555;
+            font-weight: 400;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #777;
+            margin-top: 3px;
+            font-weight: 400;
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 30px;
+            background: linear-gradient(to bottom, transparent, rgba(19, 69, 133, 0.15), transparent);
+        }
+
+        /* 切换按钮区域 - 选中与内容融合风格 */
+        .tab-section {
+            background: transparent;
+            padding: 0;
+            margin: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .tab-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            background: transparent;
+            padding: 0;
+            gap: 8px;
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px 10px;
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 12px 12px 0 0;
+            cursor: pointer;
+            gap: 6px;
+            flex: 1;
+            background: #f5f7fa;
+            border: none;
+            margin-bottom: 0;
+        }
+
+        .tab-item:hover {
+            background: #f0f3f7;
+        }
+
+        .tab-item.active {
+            background: #ffffff;
+            border: none;
+            padding: 16px 20px 14px;
+            z-index: 2;
+            box-shadow: 0 -2px 8px rgba(19, 69, 133, 0.08);
+        }
+
+        /* 选中按钮渐变描边 */
+        .tab-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 12px 12px 0 0;
+            padding: 2px 2px 0 2px;
+            background: linear-gradient(to bottom, rgba(19, 69, 133, 0.3), rgba(19, 69, 133, 0.1) 60%, rgba(19, 69, 133, 0.05));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 内容区域渐变描边 */
+        .content-panel.active {
+            position: relative;
+        }
+
+        .content-panel.active::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0 0 12px 12px;
+            padding: 2px;
+            background: linear-gradient(to bottom, rgba(19, 69, 133, 0.05) 0%, rgba(19, 69, 133, 0.03) 40%, transparent 80%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .tab-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tab-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: #666;
+            stroke-width: 1.5;
+            fill: none;
+            transition: all 0.3s;
+        }
+
+        .tab-item.active .tab-icon svg {
+            stroke: #134585;
+            stroke-width: 1.5;
+        }
+
+        .tab-text {
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab-item.active .tab-text {
+            color: #134585;
+            font-weight: 600;
+        }
+
+        /* 内容区域 */
+        .content-area {
+            padding: 0 20px 20px;
+            min-height: 400px;
+            margin-top: 0;
+        }
+
+        .content-panel {
+            display: none;
+            background: #ffffff;
+            border-radius: 0 0 12px 12px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(13, 45, 90, 0.08);
+            border: none;
+            margin-top: -1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 板块标题 - 商务简约 */
+        .panel-header {
+            text-align: center;
+            margin-bottom: 22px;
+            padding: 18px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .panel-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .panel-subtitle {
+            font-size: 12px;
+            color: #555;
+            font-weight: 400;
+        }
+
+        /* 卡片网格 - 商务风格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .cert-card {
+            background-color: #ecf7f9;
+            border-radius: 8px;
+            padding: 18px 8px;
+            text-align: center;
+            border: 1px solid #e0f0f3;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .cert-card:hover {
+            border-color: #134585;
+            box-shadow: 0 4px 12px rgba(19, 69, 133, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* 资质证书展示 - 循环滚动 */
+        .cert-gallery-wrapper {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .cert-gallery {
+            display: flex;
+            gap: 16px;
+            animation: certScroll 12s linear infinite;
+            width: max-content;
+        }
+
+        .cert-gallery:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes certScroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .cert-image-item {
+            flex: 0 0 180px;
+            height: 130px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e8e8e8;
+            background: #f8f9fa;
+        }
+
+        .cert-image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            background: #f5f5f5;
+        }
+
+        .cert-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cert-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: #134585;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .cert-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a1a;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .cert-desc {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* 区块标题 */
+        .section-block {
+            margin-bottom: 16px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid #e8ecf1;
+        }
+
+        .section-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 3px;
+            height: 16px;
+            background: linear-gradient(to bottom, #194276, #2bd0ff);
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        /* 剂型类型 - 图标网格 */
+        .dosage-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .dosage-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 12px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #f0f0f0;
+            transition: all 0.2s;
+        }
+
+        .dosage-item:hover {
+            border-color: #134585;
+            box-shadow: 0 2px 8px rgba(19, 69, 133, 0.1);
+        }
+
+        .dosage-icon {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .dosage-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: #134585;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .dosage-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        /* 产品类别网格 - 带图片 */
+        .category-section {
+            position: relative;
+        }
+
+        .category-grid-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .category-grid-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            grid-auto-flow: column;
+            gap: 9px;
+            width: max-content;
+            padding-right: 50px;
+        }
+
+        .category-item {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 9px;
+            border: 1px solid #f0f0f0;
+            transition: all 0.2s;
+            width: calc((100vw - 84px) / 2);
+            max-width: 152px;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            box-sizing: border-box;
+        }
+
+        .category-item:hover {
+            border-color: #134585;
+            box-shadow: 0 2px 8px rgba(19, 69, 133, 0.1);
+        }
+
+        .category-img {
+            width: 46px;
+            height: 46px;
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #f5f5f5;
+        }
+
+        .category-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .category-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .category-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .category-tag {
+            font-size: 10px;
+            color: #134585;
+            background: rgba(19, 69, 133, 0.08);
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        /* 分页指示器 - 共用样式 */
+        .category-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        /* 功效网格 - 分页滚动 */
+        .effect-section {
+            position: relative;
+        }
+
+        .effect-grid-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            width: calc(4 * 82px - 12px); /* 4列宽度 */
+            margin: 0 auto;
+        }
+
+        .effect-grid-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .effect-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            grid-auto-flow: column;
+            gap: 12px;
+            width: max-content;
+        }
+
+        .effect-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 8px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #f0f0f0;
+            transition: all 0.2s;
+            width: 70px;
+            scroll-snap-align: start;
+        }
+
+        /* 分页指示器 */
+        .effect-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .effect-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background: #d0d0d0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .effect-dot.active {
+            width: 24px;
+            background: linear-gradient(90deg, #194276, #2bd0ff);
+        }
+
+        .effect-item:hover {
+            border-color: #194276;
+            box-shadow: 0 2px 8px rgba(25, 66, 118, 0.1);
+        }
+
+        .effect-icon {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .effect-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: #194276;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .effect-name {
+            font-size: 11px;
+            color: #555;
+            text-align: center;
+            line-height: 1.3;
+            white-space: nowrap;
+        }
+
+        /* 优势列表 - 紧凑横向布局 */
+        .advantage-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .advantage-item {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 14px 12px;
+            border: 1px solid rgba(25, 66, 118, 0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .advantage-item:hover {
+            border-color: rgba(25, 66, 118, 0.15);
+            box-shadow: 0 4px 12px rgba(25, 66, 118, 0.08);
+        }
+
+        .advantage-number {
+            font-size: 22px;
+            font-weight: 700;
+            color: #cda360;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .advantage-text {
+            font-size: 13px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .advantage-desc {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* 生产优势 - 规整外框自由内布局 */
+        .prod-advantage-list {
+            position: relative;
+            height: 280px;
+            background: #f5f7fa;
+            border-radius: 16px;
+            padding: 12px;
+        }
+
+        .prod-advantage-item {
+            position: absolute;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .prod-advantage-item:nth-child(1) {
+            width: calc(50% - 18px);
+            height: 150px;
+            left: 12px;
+            top: 12px;
+        }
+
+        .prod-advantage-item:nth-child(2) {
+            width: calc(50% - 18px);
+            height: 90px;
+            right: 12px;
+            top: 12px;
+        }
+
+        .prod-advantage-item:nth-child(3) {
+            width: calc(50% - 18px);
+            height: 90px;
+            left: 12px;
+            bottom: 12px;
+        }
+
+        .prod-advantage-item:nth-child(4) {
+            width: calc(50% - 18px);
+            height: 150px;
+            right: 12px;
+            bottom: 12px;
+        }
+
+        .prod-advantage-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .prod-advantage-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: linear-gradient(transparent 0%, rgba(25,66,118,0.5) 50%, rgba(25,66,118,0.92) 100%);
+            color: #fff;
+        }
+
+        .prod-advantage-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #cda360;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .prod-advantage-text {
+            font-size: 11px;
+            opacity: 0.95;
+        }
+
+        /* 核心模式卡片 - 商务风格 */
+        .model-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .model-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 18px;
+            border: 1px solid #f0f0f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: all 0.25s;
+        }
+
+        .model-card:hover {
+            border-color: #134585;
+            box-shadow: 0 4px 12px rgba(19, 69, 133, 0.08);
+        }
+
+        .model-icon {
+            width: 40px;
+            height: 40px;
+            background: #f5f7fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .model-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: #134585;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .model-content {
+            flex: 1;
+        }
+
+        .model-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .model-desc {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* 资源卡片 - 金黄商务风 */
+        .resource-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .resource-card {
+            background: linear-gradient(145deg, #ebc880 0%, #d0a860 50%, #b8944f 100%);
+            border-radius: 8px;
+            padding: 12px 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(205, 163, 96, 0.25);
+        }
+
+        .resource-num {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            display: block;
+            margin-bottom: 4px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        }
+
+        .resource-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.95);
+            display: block;
+            margin-bottom: 2px;
+            font-weight: 600;
+        }
+
+        .resource-desc {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* 货盘矩阵 */
+        .product-matrix {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .matrix-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #f0f0f0;
+            transition: all 0.2s;
+        }
+
+        .matrix-item:hover {
+            border-color: #134585;
+            background: #fafbfc;
+        }
+
+        .matrix-num {
+            font-size: 22px;
+            font-weight: 600;
+            color: #134585;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .matrix-name {
+            font-size: 13px;
+            color: #1a1a1a;
+            display: block;
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+
+        .matrix-channel {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* 货盘矩阵紧凑版 */
+        .product-matrix-compact {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 16px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .matrix-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .matrix-stat-num {
+            font-size: 20px;
+            font-weight: 700;
+            color: #134585;
+            line-height: 1.2;
+        }
+
+        .matrix-stat-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* 产品列表 - 商务风格 */
+        .product-list {
+            background: #fafbfc;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #f0f0f0;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .product-item:hover {
+            background: #ffffff;
+        }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .product-desc {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .product-arrow {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-arrow svg {
+            width: 18px;
+            height: 18px;
+            stroke: #134585;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* 认证板块头部 - 厂房背景 */
+        .cert-header {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(43, 208, 255, 0.85) 0%, rgba(19, 69, 133, 0.9) 100%);
+            padding: 20px 16px !important;
+            margin-bottom: 16px;
+            border-bottom: none !important;
+        }
+
+        .cert-header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+        }
+
+        .cert-header-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%);
+        }
+
+        .cert-header .panel-title,
+        .cert-header .panel-subtitle {
+            position: relative;
+            z-index: 1;
+            color: #ffffff;
+        }
+
+        .cert-header .panel-title {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .cert-header .panel-subtitle {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* 生产板块头部 - 融入生产场景 */
+        .production-header {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(25, 66, 118, 0.9) 0%, rgba(19, 69, 133, 0.95) 100%);
+            padding: 20px 16px !important;
+            margin-bottom: 16px;
+            border-bottom: none !important;
+        }
+
+        .production-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+        }
+
+        .production-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%);
+        }
+
+        .production-header .panel-title,
+        .production-header .panel-subtitle {
+            position: relative;
+            z-index: 1;
+            color: #ffffff;
+        }
+
+        .production-header .panel-title {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .production-header .panel-subtitle {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* 营销板块头部 - 产品展示背景 */
+        .marketing-header {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(205, 163, 96, 0.85) 0%, rgba(19, 69, 133, 0.9) 100%);
+            padding: 20px 16px !important;
+            margin-bottom: 16px;
+            border-bottom: none !important;
+        }
+
+        .marketing-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+        }
+
+        .marketing-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%);
+        }
+
+        .marketing-header .panel-title,
+        .marketing-header .panel-subtitle {
+            position: relative;
+            z-index: 1;
+            color: #ffffff;
+        }
+
+        .marketing-header .panel-title {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .marketing-header .panel-subtitle {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* 特色产品卡片 - 2x2网格 */
+        .featured-products {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .featured-product-card {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #f0f0f0;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .featured-product-card:hover {
+            border-color: #134585;
+            box-shadow: 0 4px 16px rgba(19, 69, 133, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .featured-product-img {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .featured-product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .featured-product-info {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .featured-product-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a1a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .featured-product-spec {
+            font-size: 10px;
+            color: #134585;
+            background: rgba(19, 69, 133, 0.08);
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .featured-product-effect {
+            font-size: 10px;
+            color: #666;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* CTA按钮区域 - 商务风格 */
+        .cta-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .cta-btn {
+            width: 100%;
+            height: 46px;
+            line-height: 46px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-btn.primary {
+            background: #134585;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(19, 69, 133, 0.25);
+        }
+
+        .cta-btn.primary:hover {
+            background: #0d2d5a;
+            box-shadow: 0 6px 16px rgba(19, 69, 133, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .cta-btn.secondary {
+            background: #ffffff;
+            color: #134585;
+            border: 1.5px solid #134585;
+        }
+
+        .cta-btn.secondary:hover {
+            background: #f5f7fa;
+        }
+
+        /* 底部导航 - 商务简约 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            height: 60px;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #f0f0f0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.04);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            cursor: pointer;
+            padding: 8px 0;
+            transition: all 0.2s;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: #999;
+            stroke-width: 1.5;
+            fill: none;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active .nav-icon svg {
+            stroke: #194276;
+            stroke-width: 2;
+        }
+
+        .nav-text {
+            font-size: 11px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .nav-item.active .nav-text {
+            color: #194276;
+            font-weight: 600;
+        }
+
+        /* 滚动条隐藏 */
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        /* 响应式 */
+        @media (max-width: 430px) {
+            body {
+                max-width: 100%;
+            }
+            
+            .bottom-nav {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部Banner - 使用DNA主题图片 -->
+    <div class="banner">
+        <div class="banner-slider">
+            <div class="banner-slides" id="bannerSlides">
+                <div class="banner-slide active">
+                    <img src="../imgs_260408_09_生图_杰东药业banner_柔和过渡_2.jpg" alt="杰东药业">
+                </div>
+                <div class="banner-slide">
+                    <img src="../杰东药业banner_浅色版_0.jpg" alt="杰东药业">
+                </div>
+                <div class="banner-slide">
+                    <img src="../杰东药业banner_科技粒子_2.jpg" alt="杰东药业">
+                </div>
+            </div>
+            <!-- 轮播指示点 -->
+            <div class="banner-dots" id="bannerDots">
+                <div class="banner-dot active" data-index="0"></div>
+                <div class="banner-dot" data-index="1"></div>
+                <div class="banner-dot" data-index="2"></div>
+            </div>
+        </div>
+        <!-- Logo -->
+        <img src="../图片1.png" style="position: absolute; top: 12px; left: 12px; height: 28px; width: auto; z-index: 10; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));" alt="杰东药业Logo">
+        <div class="banner-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; z-index: 5;">
+            <div class="banner-title">共创医健产业创新生态圈</div>
+            <div class="banner-subtitle">大道至简 · 实干为要</div>
+        </div>
+    </div>
+
+    <!-- 核心数据展示 -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="stat-num">13年</span>
+            <div class="stat-label">行业深耕</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-num">3万+</span>
+            <div class="stat-label">服务企业</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-num">1000+</span>
+            <div class="stat-label">精选产品</div>
+        </div>
+    </div>
+
+    <!-- 三个切换按钮 -->
+    <div class="tab-section">
+        <div class="tab-wrapper">
+            <div class="tab-item active" onclick="switchTab(0)">
+                <div class="tab-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <div class="tab-text">认证</div>
+            </div>
+            <div class="tab-item" onclick="switchTab(1)">
+                <div class="tab-icon">
+                    <svg viewBox="0 0 24 24"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v16z"/></svg>
+                </div>
+                <div class="tab-text">CDMO</div>
+            </div>
+            <div class="tab-item" onclick="switchTab(2)">
+                <div class="tab-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <div class="tab-text">生产</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content-area">
+        <!-- 认证板块 -->
+        <div class="content-panel active" id="panel-0">
+            <div class="panel-header cert-header">
+                <div class="cert-header-bg">
+                    <img src="../media/image19.jpeg" alt="杰东药业厂房">
+                </div>
+                <div class="panel-title">破解产品全生命周期中的复杂课题</div>
+                <div class="panel-subtitle">打造全球大健康产业合规智造领航者</div>
+            </div>
+
+            <!-- 认证类别卡片 -->
+            <div class="card-grid">
+                <div class="cert-card" style="position: relative; overflow: hidden;">
+                    <div class="cert-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('../imgs_260408_14_生图_杰东药业_极淡底纹_0.jpg'); background-size: cover; background-position: center; opacity: 0.3; z-index: 0;"></div>
+                    <div class="cert-content" style="position: relative; z-index: 1;">
+                        <div class="cert-icon">
+                            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        </div>
+                        <div class="cert-name">械字号</div>
+                        <div class="cert-desc">一类/二类/三类注册</div>
+                    </div>
+                </div>
+                <div class="cert-card" style="position: relative; overflow: hidden;">
+                    <div class="cert-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('../imgs_260408_14_生图_杰东药业_极淡底纹_1.jpg'); background-size: cover; background-position: center; opacity: 0.3; z-index: 0;"></div>
+                    <div class="cert-content" style="position: relative; z-index: 1;">
+                        <div class="cert-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                        </div>
+                        <div class="cert-name">妆字号</div>
+                        <div class="cert-desc">普通/特殊化妆品</div>
+                    </div>
+                </div>
+                <div class="cert-card" style="position: relative; overflow: hidden;">
+                    <div class="cert-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('../imgs_260408_14_生图_杰东药业_极淡底纹_2.jpg'); background-size: cover; background-position: center; opacity: 0.3; z-index: 0;"></div>
+                    <div class="cert-content" style="position: relative; z-index: 1;">
+                        <div class="cert-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <div class="cert-name">消字号</div>
+                        <div class="cert-desc">消毒产品备案</div>
+                    </div>
+                </div>
+                <div class="cert-card" style="position: relative; overflow: hidden;">
+                    <div class="cert-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('../imgs_260408_14_生图_杰东药业_极淡底纹_后三张_0.jpg'); background-size: cover; background-position: center; opacity: 0.3; z-index: 0;"></div>
+                    <div class="cert-content" style="position: relative; z-index: 1;">
+                        <div class="cert-icon">
+                            <svg viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        </div>
+                        <div class="cert-name">保健号</div>
+                        <div class="cert-desc">保健用品批件</div>
+                    </div>
+                </div>
+                <div class="cert-card" style="position: relative; overflow: hidden;">
+                    <div class="cert-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('../imgs_260408_14_生图_杰东药业_极淡底纹_后三张_1.jpg'); background-size: cover; background-position: center; opacity: 0.3; z-index: 0;"></div>
+                    <div class="cert-content" style="position: relative; z-index: 1;">
+                        <div class="cert-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+                        </div>
+                        <div class="cert-name">食字号</div>
+                        <div class="cert-desc">食字号/特膳/特医</div>
+                    </div>
+                </div>
+                <div class="cert-card" style="position: relative; overflow: hidden;">
+                    <div class="cert-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('../imgs_260408_14_生图_杰东药业_极淡底纹_后三张_2.jpg'); background-size: cover; background-position: center; opacity: 0.3; z-index: 0;"></div>
+                    <div class="cert-content" style="position: relative; z-index: 1;">
+                        <div class="cert-icon">
+                            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                        </div>
+                        <div class="cert-name">日用品</div>
+                        <div class="cert-desc">日用品备案</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 资质证书展示 -->
+            <div class="section-block">
+                <div class="section-title">资质证书</div>
+                <div class="cert-gallery-wrapper">
+                    <div class="cert-gallery">
+                        <div class="cert-image-item">
+                            <img src="../media/image22.jpeg" alt="医疗器械生产备案凭证">
+                        </div>
+                        <div class="cert-image-item">
+                            <img src="../media/image23.jpeg" alt="化妆品生产许可证">
+                        </div>
+                        <div class="cert-image-item">
+                            <img src="../media/image24.jpeg" alt="消毒产品生产许可证">
+                        </div>
+                        <div class="cert-image-item">
+                            <img src="../media/image25.jpeg" alt="保健用品生产备案证">
+                        </div>
+                        <!-- 复制一份实现无缝循环 -->
+                        <div class="cert-image-item">
+                            <img src="../media/image22.jpeg" alt="医疗器械生产备案凭证">
+                        </div>
+                        <div class="cert-image-item">
+                            <img src="../media/image23.jpeg" alt="化妆品生产许可证">
+                        </div>
+                        <div class="cert-image-item">
+                            <img src="../media/image24.jpeg" alt="消毒产品生产许可证">
+                        </div>
+                        <div class="cert-image-item">
+                            <img src="../media/image25.jpeg" alt="保健用品生产备案证">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 服务优势 -->
+            <div class="section-block">
+                <div class="section-title">服务优势</div>
+                <div class="advantage-list">
+                    <div class="advantage-item">
+                        <div class="advantage-number">140+</div>
+                        <div class="advantage-text">专业团队</div>
+                        <div class="advantage-desc">主力40+人，交付100人</div>
+                    </div>
+                    <div class="advantage-item">
+                        <div class="advantage-number">1075</div>
+                        <div class="advantage-text">货盘矩阵</div>
+                        <div class="advantage-desc">SKU覆盖多品类</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA按钮 -->
+            <div class="cta-section">
+                <button class="cta-btn primary" onclick="showMessage('认证咨询')">立即咨询认证</button>
+            </div>
+        </div>
+
+        <!-- 生产板块 -->
+        <div class="content-panel" id="panel-1">
+            <div class="panel-header production-header">
+                <div class="production-bg">
+                    <img src="../media/image121.png" alt="生产车间">
+                </div>
+                <div class="panel-title">OEM/ODM 贴牌加工</div>
+                <div class="panel-subtitle">从产品设计、研发到量产的全链条解决方案</div>
+            </div>
+
+            <!-- 剂型类型 -->
+            <div class="section-block">
+                <div class="section-title">剂型类型</div>
+                <div class="dosage-grid">
+                    <div class="dosage-item">
+                        <div class="dosage-icon">
+                            <svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+                        </div>
+                        <div class="dosage-text">膏剂</div>
+                    </div>
+                    <div class="dosage-item">
+                        <div class="dosage-icon">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+                        </div>
+                        <div class="dosage-text">粉剂</div>
+                    </div>
+                    <div class="dosage-item">
+                        <div class="dosage-icon">
+                            <svg viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9 8h6"/></svg>
+                        </div>
+                        <div class="dosage-text">片剂</div>
+                    </div>
+                    <div class="dosage-item">
+                        <div class="dosage-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="3"/></svg>
+                        </div>
+                        <div class="dosage-text">液体</div>
+                    </div>
+                    <div class="dosage-item">
+                        <div class="dosage-icon">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                        </div>
+                        <div class="dosage-text">颗粒</div>
+                    </div>
+                    <div class="dosage-item">
+                        <div class="dosage-icon">
+                            <svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="5"/><path d="M12 8v8"/></svg>
+                        </div>
+                        <div class="dosage-text">凝胶</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 产品类别 -->
+            <div class="section-block category-section">
+                <div class="section-title">产品类别</div>
+                <div class="category-grid-wrapper" id="categoryWrapper">
+                    <div class="category-grid" id="categoryGrid">
+                        <div class="category-item">
+                            <div class="category-img">
+                                <img src="../media/纤体瘦身贴.png" alt="纤体瘦身贴">
+                            </div>
+                            <div class="category-info">
+                                <div class="category-name">纤体瘦身贴</div>
+                                <span class="category-tag">辅助减肥</span>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-img">
+                                <img src="../media/疏通活络液.png" alt="疏通活络液">
+                            </div>
+                            <div class="category-info">
+                                <div class="category-name">疏通活络液</div>
+                                <span class="category-tag">缓解疼痛</span>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-img">
+                                <img src="../media/通络透骨喷剂.png" alt="通络透骨喷剂">
+                            </div>
+                            <div class="category-info">
+                                <div class="category-name">通络透骨喷剂</div>
+                                <span class="category-tag">改善微循环</span>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-img">
+                                <img src="../media/舒筋活络膏.png" alt="舒筋活络膏">
+                            </div>
+                            <div class="category-info">
+                                <div class="category-name">舒筋活络膏</div>
+                                <span class="category-tag">舒筋活络</span>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-img">
+                                <img src="../media/舒缓通鼻膏.png" alt="舒缓通鼻膏">
+                            </div>
+                            <div class="category-info">
+                                <div class="category-name">舒缓通鼻膏</div>
+                                <span class="category-tag">改善鼻部</span>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-img">
+                                <img src="../media/净肤康乳膏.png" alt="净肤康乳膏">
+                            </div>
+                            <div class="category-info">
+                                <div class="category-name">净肤康乳膏</div>
+                                <span class="category-tag">改善皮肤</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 分页指示器 -->
+                <div class="category-pagination" id="categoryPagination">
+                    <div class="effect-dot active" data-page="0"></div>
+                    <div class="effect-dot" data-page="1"></div>
+                </div>
+            </div>
+
+            <!-- 保健用品功效 -->
+            <div class="section-block effect-section">
+                <div class="section-title">保健用品功效覆盖（15大类）</div>
+                <div class="effect-grid-wrapper" id="effectWrapper">
+                    <div class="effect-grid" id="effectGrid">
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.5 2 6 4.5 6 8v3H4v11h16V11h-2V8c0-3.5-2.5-6-6-6zm0 2c2.5 0 4 1.5 4 4v3H8V8c0-2.5 1.5-4 4-4z"/></svg>
+                        </div>
+                        <div class="effect-name">鼻部护理</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="effect-name">狐臭产品</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                        </div>
+                        <div class="effect-name">美肤护肤</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        </div>
+                        <div class="effect-name">调理亚健康</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                        </div>
+                        <div class="effect-name">护目</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        </div>
+                        <div class="effect-name">面瘫康复</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="effect-name">固肾养肾</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+                        </div>
+                        <div class="effect-name">缓解疼痛</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                        </div>
+                        <div class="effect-name">女性调理</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8zm0 18c-3.15 0-6-2.38-6-6.2 0-2.34 1.78-5.06 6-8.54 4.22 3.48 6 6.2 6 8.54 0 3.82-2.85 6.2-6 6.2z"/></svg>
+                        </div>
+                        <div class="effect-name">泡浴养生</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                        </div>
+                        <div class="effect-name">润肠通便</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        </div>
+                        <div class="effect-name">小儿系列</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        </div>
+                        <div class="effect-name">前列腺养护</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        </div>
+                        <div class="effect-name">烧烫褥疮</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        </div>
+                        <div class="effect-name">养发护发</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        </div>
+                        <div class="effect-name">祛痘祛斑</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        </div>
+                        <div class="effect-name">纤体瘦身</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        </div>
+                        <div class="effect-name">正骨理疗</div>
+                    </div>
+                    </div>
+                </div>
+                <!-- 分页指示器 -->
+                <div class="effect-pagination" id="effectPagination">
+                    <div class="effect-dot active" data-page="0"></div>
+                    <div class="effect-dot" data-page="1"></div>
+                    <div class="effect-dot" data-page="2"></div>
+                </div>
+            </div>
+
+            <!-- 生产优势 -->
+            <div class="section-block production-advantage">
+                <div class="section-title">生产优势</div>
+                <div class="prod-advantage-list">
+                    <div class="prod-advantage-item">
+                        <img src="../media/图层 2.png" alt="生产线" class="prod-advantage-img">
+                        <div class="prod-advantage-overlay">
+                            <div class="prod-advantage-number">200+</div>
+                            <div class="prod-advantage-text">安评类目 · 合规无忧</div>
+                        </div>
+                    </div>
+                    <div class="prod-advantage-item">
+                        <img src="../media/图层 3.png" alt="生产团队" class="prod-advantage-img">
+                        <div class="prod-advantage-overlay">
+                            <div class="prod-advantage-number">95%</div>
+                            <div class="prod-advantage-text">市场覆盖</div>
+                        </div>
+                    </div>
+                    <div class="prod-advantage-item">
+                        <img src="../media/图层 4.png" alt="生产设备" class="prod-advantage-img">
+                        <div class="prod-advantage-overlay">
+                            <div class="prod-advantage-number">多剂型</div>
+                            <div class="prod-advantage-text">一站式生产</div>
+                        </div>
+                    </div>
+                    <div class="prod-advantage-item">
+                        <img src="../media/image122.jpeg" alt="品质管控" class="prod-advantage-img">
+                        <div class="prod-advantage-overlay">
+                            <div class="prod-advantage-number">高品质</div>
+                            <div class="prod-advantage-text">严格质控</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA按钮 -->
+            <div class="cta-section">
+                <button class="cta-btn primary" onclick="showMessage('贴牌方案')">获取贴牌方案</button>
+            </div>
+        </div>
+
+        <!-- 营销板块 -->
+        <div class="content-panel" id="panel-2">
+            <div class="panel-header marketing-header">
+                <div class="marketing-bg">
+                    <img src="../media/image103.png" alt="产品展示">
+                </div>
+                <div class="panel-title">垂直供应链智能中台</div>
+                <div class="panel-subtitle">重构产业价值链，打造产业级供应链协同平台</div>
+            </div>
+
+            <!-- 核心模式 -->
+            <div class="section-block">
+                <div class="section-title">核心模式</div>
+                <div class="model-cards">
+                    <div class="model-card">
+                        <div class="model-icon">
+                            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        </div>
+                        <div class="model-content">
+                            <div class="model-name">上游·深度整合</div>
+                            <div class="model-desc">直连源头，构建数字化、柔性化供应池</div>
+                        </div>
+                    </div>
+                    <div class="model-card">
+                        <div class="model-icon">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        </div>
+                        <div class="model-content">
+                            <div class="model-name">中台·智能枢纽</div>
+                            <div class="model-desc">沉淀核心能力，一站式赋能上下游</div>
+                        </div>
+                    </div>
+                    <div class="model-card">
+                        <div class="model-icon">
+                            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <div class="model-content">
+                            <div class="model-name">下游·无限裂变</div>
+                            <div class="model-desc">独创无限合伙人生态体系</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 资源优势 -->
+            <div class="section-block">
+                <div class="section-title">资源优势</div>
+                <div class="resource-cards">
+                    <div class="resource-card">
+                        <span class="resource-num">1000+</span>
+                        <span class="resource-label">精选产品库</span>
+                    </div>
+                    <div class="resource-card">
+                        <span class="resource-num">1000+</span>
+                        <span class="resource-label">配方数据库</span>
+                    </div>
+                    <div class="resource-card">
+                        <span class="resource-num">72h</span>
+                        <span class="resource-label">响应速度</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 特色产品（含货盘矩阵数据） -->
+            <div class="section-block">
+                <div class="section-title">特色产品</div>
+                <!-- 货盘数据展示 -->
+                <div class="product-matrix-compact">
+                    <div class="matrix-stat">
+                        <span class="matrix-stat-num">45</span>
+                        <span class="matrix-stat-label">医疗器械</span>
+                    </div>
+                    <div class="matrix-stat">
+                        <span class="matrix-stat-num">210</span>
+                        <span class="matrix-stat-label">功能性食品</span>
+                    </div>
+                    <div class="matrix-stat">
+                        <span class="matrix-stat-num">168</span>
+                        <span class="matrix-stat-label">消字号产品</span>
+                    </div>
+                    <div class="matrix-stat">
+                        <span class="matrix-stat-num">132</span>
+                        <span class="matrix-stat-label">妆字号产品</span>
+                    </div>
+                </div>
+                <div class="featured-products">
+                    <div class="featured-product-card" onclick="showMessage('巴克宁疤痕膏')">
+                        <div class="featured-product-img">
+                            <img src="../media/巴克宁疤痕膏.png" alt="巴克宁疤痕膏">
+                        </div>
+                        <div class="featured-product-info">
+                            <div class="featured-product-name">巴克宁疤痕膏</div>
+                            <div class="featured-product-spec">规格：20g/瓶</div>
+                            <div class="featured-product-effect">平滑增生、渗透肌底、祛除色素、桥接修补</div>
+                        </div>
+                    </div>
+                    <div class="featured-product-card" onclick="showMessage('屁屁黄金')">
+                        <div class="featured-product-img">
+                            <img src="../media/屁屁黄金.png" alt="屁屁黄金">
+                        </div>
+                        <div class="featured-product-info">
+                            <div class="featured-product-name">屁屁黄金</div>
+                            <div class="featured-product-spec">规格：20g/瓶</div>
+                            <div class="featured-product-effect">减少红肿、滋润保湿、温和消疹、舒缓PP、呵护皮脂</div>
+                        </div>
+                    </div>
+                    <div class="featured-product-card" onclick="showMessage('男性抑菌喷剂')">
+                        <div class="featured-product-img">
+                            <img src="../media/男性抑菌喷剂.png" alt="男性抑菌喷剂">
+                        </div>
+                        <div class="featured-product-info">
+                            <div class="featured-product-name">男性抑菌喷剂</div>
+                            <div class="featured-product-spec">规格：5ml/瓶</div>
+                            <div class="featured-product-effect">对金黄色葡萄球菌、大肠杆菌、白色念珠菌、真菌有抑制作用</div>
+                        </div>
+                    </div>
+                    <div class="featured-product-card" onclick="showMessage('净肤康乳膏')">
+                        <div class="featured-product-img">
+                            <img src="../media/净肤康乳膏.png" alt="净肤康乳膏">
+                        </div>
+                        <div class="featured-product-info">
+                            <div class="featured-product-name">净肤康乳膏</div>
+                            <div class="featured-product-spec">规格：20g/支</div>
+                            <div class="featured-product-effect">改善皮肤、抑菌止痒、滋润修护</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA按钮 -->
+            <div class="cta-section">
+                <button class="cta-btn primary" onclick="showMessage('产品库')">浏览产品库</button>
+                <button class="cta-btn secondary" onclick="showMessage('合伙人')">成为合伙人</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部服务导航 -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="nav-text">首页</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+            <div class="nav-text">产品</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </div>
+            <div class="nav-text">咨询</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="nav-text">我的</div>
+        </div>
+    </div>
+
+    <script>
+        // 切换Tab功能
+        function switchTab(index) {
+            // 更新按钮状态
+            const tabs = document.querySelectorAll('.tab-item');
+            tabs.forEach((tab, i) => {
+                if (i === index) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            // 切换内容面板
+            const panels = document.querySelectorAll('.content-panel');
+            panels.forEach((panel, i) => {
+                if (i === index) {
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
+
+            // 滚动到内容区域顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 显示消息提示
+        function showMessage(type) {
+            const messages = {
+                '认证咨询': '即将为您连接专业认证顾问...',
+                '贴牌方案': '我们的专业团队将为您定制生产方案',
+                '产品库': '正在加载产品库...',
+                '合伙人': '加入杰东优品合伙人计划，共享供应链红利',
+                '巴克宁疤痕膏': '产品详情：平滑增生、祛除色素',
+                '屁屁黄金': '产品详情：减少红肿、滋润保湿',
+                '舒痛通络贴': '产品详情：消炎镇痛，适用于肩颈腰腿',
+                '男性抑菌喷剂': '产品详情：对多种细菌、真菌有抑制作用'
+            };
+            
+            alert(messages[type] || '功能开发中...');
+        }
+
+        // 底部导航点击效果
+        document.querySelectorAll('.nav-item').forEach((item, index) => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (index === 0) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    alert(['首页', '产品', '咨询', '我的'][index] + '页面开发中...');
+                }
+            });
+        });
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('杰东药业小程序首页已加载');
+            
+            // 初始化Banner轮播
+            initBannerSlider();
+            
+            // 初始化功效区域拖动和自动滚动
+            initEffectScroll();
+            
+            // 初始化产品类别分页滚动
+            initCategoryScroll();
+        });
+
+        // Banner轮播功能 - 淡入淡出效果
+        function initBannerSlider() {
+            const slides = document.querySelectorAll('.banner-slide');
+            const dots = document.querySelectorAll('.banner-dot');
+            if (slides.length === 0 || dots.length === 0) return;
+
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+            let autoPlayInterval;
+            let isTransitioning = false;
+
+            function goToSlide(index) {
+                // 移除当前active
+                slides[currentIndex].classList.remove('active');
+                dots[currentIndex].classList.remove('active');
+                
+                // 设置新的active
+                currentIndex = index;
+                slides[currentIndex].classList.add('active');
+                dots[currentIndex].classList.add('active');
+            }
+
+            function nextSlide() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                
+                const nextIndex = (currentIndex + 1) % totalSlides;
+                goToSlide(nextIndex);
+                
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, 1000); // 等待淡入淡出动画完成
+            }
+
+            // 点击指示点切换
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    if (isTransitioning || currentIndex === index) return;
+                    stopAutoPlay();
+                    isTransitioning = true;
+                    goToSlide(index);
+                    setTimeout(() => {
+                        isTransitioning = false;
+                        startAutoPlay();
+                    }, 1000);
+                });
+            });
+
+            // 自动播放
+            function startAutoPlay() {
+                autoPlayInterval = setInterval(nextSlide, 3000);
+            }
+
+            function stopAutoPlay() {
+                if (autoPlayInterval) {
+                    clearInterval(autoPlayInterval);
+                }
+            }
+
+            // 页面不可见时停止自动播放
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopAutoPlay();
+                } else {
+                    startAutoPlay();
+                }
+            });
+
+            // 开始自动播放
+            startAutoPlay();
+        }
+        
+        // 功效区域分页滚动
+        function initEffectScroll() {
+            const wrapper = document.getElementById('effectWrapper');
+            const pagination = document.getElementById('effectPagination');
+            if (!wrapper || !pagination) return;
+            
+            const dots = pagination.querySelectorAll('.effect-dot');
+            const itemWidth = 82; // 70px + 12px gap
+            const itemsPerPage = 8;
+            const pageWidth = itemWidth * 4; // 4列宽度
+            let currentPage = 0;
+            let autoScrollInterval;
+            let isDragging = false;
+            let startX;
+            let scrollLeft;
+            
+            // 计算总页数
+            const totalItems = wrapper.querySelectorAll('.effect-item').length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            // 更新分页指示器
+            function updatePagination(page) {
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === page);
+                });
+                currentPage = page;
+            }
+            
+            // 滚动到指定页
+            function scrollToPage(page) {
+                if (page < 0) page = totalPages - 1;
+                if (page >= totalPages) page = 0;
+                wrapper.scrollLeft = page * pageWidth;
+                updatePagination(page);
+            }
+            
+            // 自动轮播
+            function startAutoScroll() {
+                stopAutoScroll();
+                autoScrollInterval = setInterval(() => {
+                    if (!isDragging) {
+                        const nextPage = (currentPage + 1) % totalPages;
+                        scrollToPage(nextPage);
+                    }
+                }, 3000);
+            }
+            
+            function stopAutoScroll() {
+                if (autoScrollInterval) {
+                    clearInterval(autoScrollInterval);
+                    autoScrollInterval = null;
+                }
+            }
+            
+            // 拖动功能
+            wrapper.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                wrapper.style.cursor = 'grabbing';
+                startX = e.pageX - wrapper.offsetLeft;
+                scrollLeft = wrapper.scrollLeft;
+                stopAutoScroll();
+            });
+            
+            wrapper.addEventListener('mouseleave', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    wrapper.style.cursor = 'grab';
+                    // 吸附到最近的一页
+                    const page = Math.round(wrapper.scrollLeft / pageWidth);
+                    scrollToPage(page);
+                    startAutoScroll();
+                }
+            });
+            
+            wrapper.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    wrapper.style.cursor = 'grab';
+                    // 吸附到最近的一页
+                    const page = Math.round(wrapper.scrollLeft / pageWidth);
+                    scrollToPage(page);
+                    startAutoScroll();
+                }
+            });
+            
+            wrapper.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.pageX - wrapper.offsetLeft;
+                const walk = (x - startX) * 1.5;
+                wrapper.scrollLeft = scrollLeft - walk;
+            });
+            
+            // 触摸支持
+            wrapper.addEventListener('touchstart', () => {
+                stopAutoScroll();
+            }, { passive: true });
+            
+            wrapper.addEventListener('touchend', () => {
+                // 吸附到最近的一页
+                setTimeout(() => {
+                    const page = Math.round(wrapper.scrollLeft / pageWidth);
+                    scrollToPage(page);
+                    startAutoScroll();
+                }, 100);
+            }, { passive: true });
+            
+            // 滚动监听更新指示器
+            wrapper.addEventListener('scroll', () => {
+                if (!isDragging) {
+                    const page = Math.round(wrapper.scrollLeft / pageWidth);
+                    if (page !== currentPage && page >= 0 && page < totalPages) {
+                        updatePagination(page);
+                    }
+                }
+            }, { passive: true });
+            
+            // 点击指示器切换页面
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    scrollToPage(index);
+                    stopAutoScroll();
+                    startAutoScroll();
+                });
+            });
+            
+            // 初始化
+            wrapper.style.cursor = 'grab';
+            startAutoScroll();
+            
+            // 页面可见性变化时控制自动滚动
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopAutoScroll();
+                } else {
+                    startAutoScroll();
+                }
+            });
+        }
+        
+        // 产品类别分页滚动
+        function initCategoryScroll() {
+            const wrapper = document.getElementById('categoryWrapper');
+            const pagination = document.getElementById('categoryPagination');
+            if (!wrapper || !pagination) return;
+            
+            const dots = pagination.querySelectorAll('.effect-dot');
+            const pageWidth = wrapper.offsetWidth;
+            const itemsPerPage = 6;
+            let currentPage = 0;
+            let autoScrollInterval;
+            let isDragging = false;
+            let startX;
+            let scrollLeft;
+            
+            const totalItems = wrapper.querySelectorAll('.category-item').length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            function updatePagination(page) {
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === page);
+                });
+                currentPage = page;
+            }
+            
+            function scrollToPage(page) {
+                if (page < 0) page = totalPages - 1;
+                if (page >= totalPages) page = 0;
+                wrapper.scrollLeft = page * pageWidth;
+                updatePagination(page);
+            }
+            
+            function startAutoScroll() {
+                stopAutoScroll();
+                autoScrollInterval = setInterval(() => {
+                    if (!isDragging) {
+                        const nextPage = (currentPage + 1) % totalPages;
+                        scrollToPage(nextPage);
+                    }
+                }, 3000);
+            }
+            
+            function stopAutoScroll() {
+                if (autoScrollInterval) {
+                    clearInterval(autoScrollInterval);
+                    autoScrollInterval = null;
+                }
+            }
+            
+            wrapper.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                wrapper.style.cursor = 'grabbing';
+                startX = e.pageX - wrapper.offsetLeft;
+                scrollLeft = wrapper.scrollLeft;
+                stopAutoScroll();
+            });
+            
+            wrapper.addEventListener('mouseleave', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    wrapper.style.cursor = 'grab';
+                    const page = Math.round(wrapper.scrollLeft / pageWidth);
+                    scrollToPage(page);
+                    startAutoScroll();
+                }
+            });
+            
+            wrapper.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    wrapper.style.cursor = 'grab';
+                    const page = Math.round(wrapper.scrollLeft / pageWidth);
+                    scrollToPage(page);
+                    startAutoScroll();
+                }
+            });
+            
+            wrapper.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.pageX - wrapper.offsetLeft;
+                const walk = (x - startX) * 1.5;
+                wrapper.scrollLeft = scrollLeft - walk;
+            });
+            
+            wrapper.addEventListener('touchstart', () => {
+                stopAutoScroll();
+            }, { passive: true });
+            
+            wrapper.addEventListener('touchend', () => {
+                setTimeout(() => {
+                    const page = Math.round(wrapper.scrollLeft / pageWidth);
+                    scrollToPage(page);
+                    startAutoScroll();
+                }, 100);
+            }, { passive: true });
+            
+            wrapper.addEventListener('scroll', () => {
+                if (!isDragging) {
+                    const page = Math.round(wrapper.scrollLeft / pageWidth);
+                    if (page !== currentPage && page >= 0 && page < totalPages) {
+                        updatePagination(page);
+                    }
+                }
+            }, { passive: true });
+            
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    scrollToPage(index);
+                    stopAutoScroll();
+                    startAutoScroll();
+                });
+            });
+            
+            wrapper.style.cursor = 'grab';
+            startAutoScroll();
+            
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopAutoScroll();
+                } else {
+                    startAutoScroll();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

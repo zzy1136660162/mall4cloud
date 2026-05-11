@@ -2,7 +2,7 @@
   <view class="new-prods">
     <!-- banner -->
     <view class="banner">
-      <image src="/static/img/banner2.png" />
+      <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/img/banner2.png" />
     </view>
 
     <!-- 新品分类 -->
@@ -42,11 +42,11 @@
           @tap="toDetail(item.spuId)"
         >
           <view class="img">
-            <image :src="item.mainImgUrl" />
+            <image :src="util.getImgUrl(item.mainImgUrl)" />
           </view>
           <view class="text-box">
             <view class="name">
-              {{ item.spuName }}
+              {{ item.name }}
             </view>
             <view class="price-box">
               <view class="price">
@@ -71,7 +71,7 @@
       class="empty"
     >
       <view class="img">
-        <image src="/static/empty-img/not-found.png" />
+        <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/empty-img/not-found.png" />
       </view>
       <view class="text">
         没有找到对应商品，看看别的吧
@@ -88,6 +88,7 @@
 </template>
 
 <script setup>
+import util from '@/utils/util.js'
 
 const wxs = number()
 
@@ -197,7 +198,7 @@ const getSearchList = () => {
   Data.isLoadAll = false
   Data.pageQuery.primaryCategoryId = Data.selectedCategoryId
   const params = {
-    url: '/mall4cloud_search/ua/search/simple_page',
+    url: '/mall4cloud_product/ua/spu/page',
     method: 'GET',
     data: Data.pageQuery
   }
@@ -205,10 +206,10 @@ const getSearchList = () => {
     Data.searchListData = res
     let list = []
     if (Data.pageQuery.pageNum === 1) {
-      list = res.list[0].spus
+      list = res.list || []
     } else {
       list = Data.prodList
-      list = list.concat(res.list[0].spus)
+      list = list.concat(res.list || [])
     }
     if (Data.pageQuery.pageNum === Data.searchListData.pages) {
       Data.isLoadAll = true

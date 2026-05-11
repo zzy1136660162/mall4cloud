@@ -6,18 +6,18 @@
         <view class="bg">
           <image
             v-if="shopInfo.mobileBackgroundPic"
-            :src="shopInfo.mobileBackgroundPic"
+            :src="util.getImgUrl(shopInfo.mobileBackgroundPic)"
           />
           <image
             v-else
-            src="/static/img/banner3.png"
+            src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/img/banner3.png"
           />
         </view>
       </view>
       <!-- 店铺信息 -->
       <view class="shop-info">
         <view class="logo">
-          <image :src="shopInfo.shopLogo" />
+          <image :src="util.getImgUrl(shopInfo.shopLogo)" />
         </view>
         <view class="text-box">
           <view class="name">
@@ -57,11 +57,11 @@
               @tap="detail(item.spuId)"
             >
               <view class="img">
-                <image :src="item.mainImgUrl" />
+                <image :src="util.getImgUrl(item.mainImgUrl)" />
               </view>
               <view class="text-box">
                 <view class="name">
-                  {{ item.spuName }}
+                  {{ item.name }}
                 </view>
                 <!-- <view class="sku">夏季换新 银色 256g</view> -->
                 <view class="price-box">
@@ -82,52 +82,16 @@
           没有更多了，看看别的吧
         </view>
       </view>
-
-      <!-- 店铺tabbar -->
-      <view class="shop-tabbar">
-        <view
-          class="item active"
-          @tap="goShopIndex"
-        >
-          <view class="icon">
-            <image src="/static/images/shop-index-r.png" />
-            <!-- <image src="/static/images/shop-index.png" /> -->
-          </view>
-          <view class="text">
-            首页
-          </view>
-        </view>
-        <view
-          class="item"
-          @tap="goShopProds"
-        >
-          <view class="icon">
-            <!-- <image src="/static/images/shop-prods-r.png" /> -->
-            <image src="/static/images/shop-prods.png" />
-          </view>
-          <view class="text">
-            商品
-          </view>
-        </view>
-        <view
-          class="item"
-          @tap="goShopCategory"
-        >
-          <view class="icon">
-            <!-- <image src="/static/images/shop-category-r.png" /> -->
-            <image src="/static/images/shop-category.png" />
-          </view>
-          <view class="text">
-            分类
-          </view>
-        </view>
-      </view>
     </view>
+
+    <!-- 自定义tabbar -->
+    <diy-tabbar :current-index="0" @change="handleTabChange" />
   </view>
 </template>
 
 <script setup>
 import { reactive } from 'vue'
+import util from '@/utils/util.js'
 
 const Data = reactive({
   isCollect: false, // 是否收藏
@@ -187,7 +151,7 @@ const getShopInfo = () => {
      */
 const getProd = () => {
   const params = {
-    url: '/mall4cloud_search/ua/search/simple_page',
+    url: '/mall4cloud_product/ua/spu/page',
     method: 'GET',
     data: {
       shopId: Data.shopId,
@@ -197,9 +161,9 @@ const getProd = () => {
   }
   http.request(params).then(res => {
     if (Data.pageNum !== 1) {
-      Data.prodList = Data.prodList.concat(res.list[0].spus)
+      Data.prodList = Data.prodList.concat(res.list || [])
     } else {
-      Data.prodList = res.list[0].spus
+      Data.prodList = res.list || []
     }
     Data.total = res.total
     Data.pages = res.pages
@@ -207,22 +171,8 @@ const getProd = () => {
 }
 
 // 切换tabbar
-const goShopIndex = () => {
-  uni.navigateTo({
-    url: `/pages/shop-index/shop-index?shopId=${Data.shopId}`
-  })
-}
-
-const goShopProds = () => {
-  uni.navigateTo({
-    url: `/pages/shop-prods/shop-prods?shopId=${Data.shopId}`
-  })
-}
-
-const goShopCategory = () => {
-  uni.navigateTo({
-    url: `/pages/shop-category/shop-category?shopId=${Data.shopId}`
-  })
+const handleTabChange = ({ index }) => {
+  console.log('切换到tab:', index)
 }
 </script>
 

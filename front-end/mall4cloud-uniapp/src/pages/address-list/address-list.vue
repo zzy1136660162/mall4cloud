@@ -5,7 +5,10 @@
         v-for="(addressItem, addressIndex) in addressList"
         :key="addressIndex"
       >
-        <view :class="['item', addressItem.isDefault === 1 ? 'default-address' : '']">
+        <view
+          :class="['item', addressItem.isDefault === 1 ? 'default-address' : '', isSelectMode ? 'select-mode' : '']"
+          @tap.stop="handleSelectAddress(addressItem)"
+        >
           <view class="text-box">
             <view class="address">
               <view
@@ -26,15 +29,22 @@
             </view>
           </view>
           <view
+            v-if="!isSelectMode"
             class="edit-icon"
             @tap.stop="toEditAddress(addressItem.addrId)"
           >
-            <image src="/static/images/edit.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/edit.png" />
+          </view>
+          <view
+            v-else
+            class="select-icon"
+          >
+            <text class="select-icon-text">选择</text>
           </view>
         </view>
       </block>
       <view
-        v-if="!addressList"
+        v-if="!addressList || addressList.length === 0"
         class="empty-tips"
       >
         暂无数据
@@ -42,25 +52,56 @@
     </view>
     <view class="new-address">
       <view
+        v-if="!isSelectMode"
         class="btn"
         @tap="addAddress"
       >
         新建收货地址
+      </view>
+      <view
+        v-else
+        class="btn cancel-btn"
+        @tap="cancelSelect"
+      >
+        取消选择
       </view>
     </view>
   </view>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 const Data = reactive({
   addressList: []
 })
 const { addressList } = toRefs(Data)
 
+const isSelectMode = ref(false)
+let eventChannel = null
+
+onLoad((options) => {
+  console.log('address-list onLoad options:', options)
+  if (options.type === 'select') {
+    isSelectMode.value = true
+    console.log('select mode enabled')
+  }
+})
+
 onShow(() => {
   getAddressList()
+})
+
+onMounted(() => {
+  const pages = getCurrentPages()
+  const currentPage = pages[pages.length - 1]
+  if (currentPage) {
+    const eventChannels = currentPage.getOpenerEventChannel?.()
+    if (eventChannels) {
+      eventChannel = eventChannels
+      console.log('eventChannel from getOpenerEventChannel:', eventChannel)
+    }
+  }
 })
 
 /**
@@ -75,6 +116,48 @@ const getAddressList = () => {
   http.request(params).then((res) => {
     Data.addressList = res
   })
+}
+
+/**
+ * 处理选择地址
+ */
+const handleSelectAddress = (addressItem) => {
+  console.log('handleSelectAddress called, isSelectMode:', isSelectMode.value)
+  if (!isSelectMode.value) {
+    console.log('Not in select mode, returning')
+    return
+  }
+
+  const addressData = {
+    consignee: addressItem.consignee,
+    mobile: addressItem.mobile,
+    province: addressItem.province,
+    city: addressItem.city,
+    district: addressItem.area,
+    area: addressItem.area,
+    addr: addressItem.addr,
+    addrId: addressItem.addrId,
+    isDefault: addressItem.isDefault
+  }
+
+  console.log('addressData to emit:', addressData)
+  console.log('eventChannel:', eventChannel)
+
+  if (eventChannel && eventChannel.emit) {
+    console.log('Emitting selectAddress event')
+    eventChannel.emit('selectAddress', addressData)
+  } else {
+    console.log('eventChannel.emit not available')
+  }
+
+  uni.navigateBack()
+}
+
+/**
+ * 取消选择
+ */
+const cancelSelect = () => {
+  uni.navigateBack()
 }
 
 // 去编辑地址
@@ -115,6 +198,14 @@ const addAddress = () => {
     padding: 30rpx;
     background: #fff;
     position: relative;
+  }
+
+  .list-box .item.select-mode {
+    background: #fafafa;
+  }
+
+  .list-box .item.select-mode:active {
+    background: #f0f0f0;
   }
 
   .list-box .item::after {
@@ -172,6 +263,22 @@ const addAddress = () => {
     margin-top: 6rpx;
   }
 
+  .list-box .item .select-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10rpx 20rpx;
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+    border-radius: 30rpx;
+    margin-top: 6rpx;
+  }
+
+  .list-box .item .select-icon .select-icon-text {
+    font-size: 24rpx;
+    color: #fff;
+    font-weight: 500;
+  }
+
   .new-address {
     position: fixed;
     bottom: 0;
@@ -190,6 +297,10 @@ const addAddress = () => {
     text-align: center;
     background: #fc1b35;
     border-radius: 70rpx;
+  }
+
+  .new-address .btn.cancel-btn {
+    background: #999;
   }
 
 }

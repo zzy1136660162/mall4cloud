@@ -6,7 +6,7 @@
         class="img"
         @tap="toUserSettings"
       >
-        <image :src="userInfo.pic || '/static/images/head-sculpture.png'" />
+        <image :src="userInfo.pic || 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/head-sculpture.png'" />
       </view>
       <view
         v-if="isNotLogged"
@@ -22,8 +22,16 @@
         class="text-box"
         @tap="toUserSettings"
       >
-        <view class="name">
-          {{ userInfo.nickName }}
+        <view class="name-row">
+          <view class="name">
+            {{ userInfo.nickName }}
+          </view>
+          <view
+            v-if="userInfo.isTalent === 1"
+            class="talent-tag"
+          >
+            达人
+          </view>
         </view>
       </view>
     </view>
@@ -47,7 +55,7 @@
           @tap="toMyOder(1)"
         >
           <view class="img">
-            <image src="/static/images/my-paid.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-paid.png" />
             <view
               v-if="orderCountInfo.unPay"
               class="mark"
@@ -64,7 +72,7 @@
           @tap="toMyOder(2)"
         >
           <view class="img">
-            <image src="/static/images/my-delivered.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-delivered.png" />
             <view
               v-if="orderCountInfo.payed"
               class="mark"
@@ -81,7 +89,7 @@
           @tap="toMyOder(3)"
         >
           <view class="img">
-            <image src="/static/images/my-receiving.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-receiving.png" />
             <view
               v-if="orderCountInfo.consignment"
               class="mark"
@@ -98,7 +106,7 @@
           @tap="notOpen('退换货')"
         >
           <view class="img">
-            <image src="/static/images/my-refund.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-refund.png" />
             <!-- <view class="mark">{{ orderCountInfo.consignment }}</view> -->
           </view>
           <view class="text">
@@ -121,7 +129,7 @@
           @tap="notOpen('会员功能')"
         >
           <view class="img">
-            <image src="/static/images/my-member.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-member.png" />
           </view>
           <view class="text">
             会员中心
@@ -129,35 +137,13 @@
         </view>
         <view
           class="item"
-          @tap="notOpen('分销')"
+          @tap="toSampleList"
         >
           <view class="img">
-            <image src="/static/images/my-share.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-sample.png" />
           </view>
           <view class="text">
-            分销中心
-          </view>
-        </view>
-        <view
-          class="item"
-          @tap="notOpen('领券中心')"
-        >
-          <view class="img">
-            <image src="/static/images/my-coupon.png" />
-          </view>
-          <view class="text">
-            领券中心
-          </view>
-        </view>
-        <view
-          class="item"
-          @tap="notOpen('我的收藏')"
-        >
-          <view class="img">
-            <image src="/static/images/my-collection.png" />
-          </view>
-          <view class="text">
-            我的收藏
+            我的样品
           </view>
         </view>
         <view
@@ -165,7 +151,7 @@
           @tap="toFreeShop"
         >
           <view class="img">
-            <image src="/static/images/my-shop.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-shop.png" />
           </view>
           <view class="text">
             免费开店
@@ -176,7 +162,7 @@
           @tap="toAddressList"
         >
           <view class="img">
-            <image src="/static/images/my-address.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-address.png" />
           </view>
           <view class="text">
             地址管理
@@ -184,29 +170,32 @@
         </view>
         <view
           class="item"
-          @tap="notOpen('我的足迹')"
-        >
-          <view class="img">
-            <image src="/static/images/my-history.png" />
-          </view>
-          <view class="text">
-            我的足迹
-          </view>
-        </view>
-        <view
-          class="item"
           @tap="toUserSettings"
         >
           <view class="img">
-            <image src="/static/images/my-set.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-set.png" />
           </view>
           <view class="text">
             系统设置
           </view>
         </view>
+        <view
+          class="item"
+          @tap="toTalentApply"
+        >
+          <view class="img">
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/my-talent.png" />
+          </view>
+          <view class="text">
+            达人申请
+          </view>
+        </view>
       </view>
     </view>
   </view>
+
+  <!-- 自定义tabbar -->
+  <diy-tabbar :current-index="4" />
 </template>
 
 <script setup>
@@ -330,12 +319,17 @@ const toFreeShop = () => {
   }
 }
 
-const notOpen = (title) => {
-  uni.showModal({
-    title: '提示',
-    content: `${title}暂未开源`,
-    showCancel: false
+// 去我的样品
+const toSampleList = () => {
+  uni.navigateTo({
+    url: '/pages/sample/list/list'
+  })
+}
 
+// 去达人申请
+const toTalentApply = () => {
+  uni.navigateTo({
+    url: '/pages/talent-apply/talent-apply'
   })
 }
 </script>

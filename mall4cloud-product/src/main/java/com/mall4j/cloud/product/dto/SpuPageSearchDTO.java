@@ -1,6 +1,8 @@
 package com.mall4j.cloud.product.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -65,6 +67,62 @@ public class SpuPageSearchDTO {
 	@Schema(description = "创建时间排序 0：倒序 1：顺序" )
 	private Integer createTimeSort;
 
+	@Schema(description = "佣金排序 0：倒序 1：顺序" )
+	private Integer commissionSort;
+
+	@Schema(description = "是否选品 0-否 1-是" )
+	private Integer isSelection;
+
+	@Schema(description = "是否热销 0-否 1-是" )
+	private Integer isHot;
+
+	@Schema(description = "是否新品 0-否 1-是" )
+	private Integer isNew;
+
+	@Schema(description = "是否推荐 0-否 1-是" )
+	private Integer isRecommend;
+
+	@Schema(description = "是否精选 0-否 1-是" )
+	private Integer isSelectionBest;
+
+	@Schema(description = "最低佣金比例" )
+	private BigDecimal minCommissionRate;
+
+	@Schema(description = "最低评分" )
+	private BigDecimal minRating;
+
+	@Schema(description = "排序字段" )
+	private String orderBy;
+
+	@Schema(description = "关键字搜索（商品名、卖点）" )
+	private String keyword;
+
+	@Schema(description = "品牌ID列表，逗号分隔" )
+	private String brandIds;
+
+	@Schema(description = "平台一级分类ID" )
+	private Long primaryCategoryId;
+
+	@Schema(description = "平台二级分类ID" )
+	private Long secondaryCategoryId;
+
+	@Schema(description = "店铺一级分类ID" )
+	private Long shopPrimaryCategoryId;
+
+	@Schema(description = "店铺二级分类ID" )
+	private Long shopSecondaryCategoryId;
+
+	@Schema(description = "属性值ID列表，逗号分隔" )
+	private String attrValueIds;
+
+	@Schema(description = "是否有库存：0/1" )
+	private Integer hasStock;
+
+	@Schema(description = "是否自营店：0/1" )
+	private Integer selfShop;
+
+	@Schema(description = "店铺ID" )
+	private Long shopId;
 
 	public Long getSpuId() {
 		return spuId;
@@ -210,6 +268,158 @@ public class SpuPageSearchDTO {
 		this.createTimeSort = createTimeSort;
 	}
 
+	public Integer getCommissionSort() {
+		return commissionSort;
+	}
+
+	public void setCommissionSort(Integer commissionSort) {
+		this.commissionSort = commissionSort;
+	}
+
+	public Integer getIsSelection() {
+		return isSelection;
+	}
+
+	public void setIsSelection(Integer isSelection) {
+		this.isSelection = isSelection;
+	}
+
+	public Integer getIsHot() {
+		return isHot;
+	}
+
+	public void setIsHot(Integer isHot) {
+		this.isHot = isHot;
+	}
+
+	public Integer getIsNew() {
+		return isNew;
+	}
+
+	public void setIsNew(Integer isNew) {
+		this.isNew = isNew;
+	}
+
+	public Integer getIsRecommend() {
+		return isRecommend;
+	}
+
+	public void setIsRecommend(Integer isRecommend) {
+		this.isRecommend = isRecommend;
+	}
+
+	public Integer getIsSelectionBest() {
+		return isSelectionBest;
+	}
+
+	public void setIsSelectionBest(Integer isSelectionBest) {
+		this.isSelectionBest = isSelectionBest;
+	}
+
+	public BigDecimal getMinCommissionRate() {
+		return minCommissionRate;
+	}
+
+	public void setMinCommissionRate(BigDecimal minCommissionRate) {
+		this.minCommissionRate = minCommissionRate;
+	}
+
+	public BigDecimal getMinRating() {
+		return minRating;
+	}
+
+	public void setMinRating(BigDecimal minRating) {
+		this.minRating = minRating;
+	}
+
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public String getBrandIds() {
+		return brandIds;
+	}
+
+	public void setBrandIds(String brandIds) {
+		this.brandIds = brandIds;
+	}
+
+	public Long getPrimaryCategoryId() {
+		return primaryCategoryId;
+	}
+
+	public void setPrimaryCategoryId(Long primaryCategoryId) {
+		this.primaryCategoryId = primaryCategoryId;
+	}
+
+	public Long getSecondaryCategoryId() {
+		return secondaryCategoryId;
+	}
+
+	public void setSecondaryCategoryId(Long secondaryCategoryId) {
+		this.secondaryCategoryId = secondaryCategoryId;
+	}
+
+	public Long getShopPrimaryCategoryId() {
+		return shopPrimaryCategoryId;
+	}
+
+	public void setShopPrimaryCategoryId(Long shopPrimaryCategoryId) {
+		this.shopPrimaryCategoryId = shopPrimaryCategoryId;
+	}
+
+	public Long getShopSecondaryCategoryId() {
+		return shopSecondaryCategoryId;
+	}
+
+	public void setShopSecondaryCategoryId(Long shopSecondaryCategoryId) {
+		this.shopSecondaryCategoryId = shopSecondaryCategoryId;
+	}
+
+	public String getAttrValueIds() {
+		return attrValueIds;
+	}
+
+	public void setAttrValueIds(String attrValueIds) {
+		this.attrValueIds = attrValueIds;
+	}
+
+	public Integer getHasStock() {
+		return hasStock;
+	}
+
+	public void setHasStock(Integer hasStock) {
+		this.hasStock = hasStock;
+	}
+
+	public Integer getSelfShop() {
+		return selfShop;
+	}
+
+	public void setSelfShop(Integer selfShop) {
+		this.selfShop = selfShop;
+	}
+
+	public Long getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(Long shopId) {
+		this.shopId = shopId;
+	}
+
 	@Override
 	public String toString() {
 		return "SpuPageSearchDTO{" +
@@ -231,6 +441,7 @@ public class SpuPageSearchDTO {
 				", stockSort=" + stockSort +
 				", seqSort=" + seqSort +
 				", createTimeSort=" + createTimeSort +
+				", commissionSort=" + commissionSort +
 				'}';
 	}
 }

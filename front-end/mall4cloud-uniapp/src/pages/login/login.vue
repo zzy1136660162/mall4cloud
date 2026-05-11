@@ -31,7 +31,7 @@
         >
           <text class="error-icon">
             !
-          </text>账号为4~16位字母、数字或下划线组成的用户名 / 11位手机号
+          </text>账号至少6位
         </view>
         <view class="item">
           <input
@@ -60,7 +60,7 @@
             v-model="principal"
             type="text"
             class="text"
-            placeholder="请输入手机号"
+            placeholder="推荐输入手机号"
           >
         </view>
         <view
@@ -124,7 +124,7 @@ const { isAccountLogin, captchaVerification, credentials, principal, errorTips }
 
 // 登录
 const login = () => {
-  if (Data.isAccountLogin && (!Data.principal || !util.checkUserName(Data.principal))) {
+  if (Data.isAccountLogin && (!Data.principal || Data.principal.length < 6)) {
     Data.errorTips = 1
     return
   }
@@ -158,9 +158,26 @@ const login = () => {
   http.request(params).then((res) => {
     uni.setStorageSync('cloudToken', res.accessToken)
     uni.setStorageSync('cloudLoginResult', res) // 保存整个登录数据
-    uni.reLaunch({ // 关闭所有页面，打开首页
-      url: '/pages/index/index'
-    })
+    
+    const pages = getCurrentPages()
+    const prevPage = pages[pages.length - 2]
+    
+    if (prevPage) {
+      const prevData = prevPage.data || {}
+      const hasData = prevData.products?.length || prevData.prodList?.length || prevData.banners?.length
+      
+      if (hasData) {
+        uni.navigateBack()
+      } else {
+        uni.reLaunch({
+          url: '/pages/index/index'
+        })
+      }
+    } else {
+      uni.reLaunch({
+        url: '/pages/index/index'
+      })
+    }
   })
 }
 

@@ -1,7 +1,7 @@
 package com.mall4j.cloud.multishop.vo;
 
 import tools.jackson.databind.annotation.JsonSerialize;
-import com.mall4j.cloud.api.vo.search.SpuSearchVO;
+import com.mall4j.cloud.api.product.vo.SpuVO;
 import com.mall4j.cloud.common.serializer.ImgJsonSerializer;
 import com.mall4j.cloud.common.vo.BaseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -49,7 +49,7 @@ public class ShopDetailAppVO extends BaseVO{
     private String identityCardLater;
 
     @Schema(description = "商品列表" )
-    private List<SpuSearchVO> spuList;
+    private List<SpuVO> spuList;
 
 	public Long getShopId() {
 		return shopId;
@@ -123,11 +123,11 @@ public class ShopDetailAppVO extends BaseVO{
 		this.identityCardLater = identityCardLater;
 	}
 
-	public List<SpuSearchVO> getSpuList() {
+	public List<SpuVO> getSpuList() {
 		return spuList;
 	}
 
-	public void setSpuList(List<SpuSearchVO> spuList) {
+	public void setSpuList(List<SpuVO> spuList) {
 		this.spuList = spuList;
 	}
 

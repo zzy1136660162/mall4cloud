@@ -1,234 +1,629 @@
 <template>
-  <view class="page-shop-prods">
-    <view class="shop-prods">
-      <!-- 头部 -->
-      <view class="header">
-        <view class="bg">
-          <image src="/static/img/banner3.png" />
-        </view>
-        <view class="bg-mask" />
-        <view class="shop-info">
-          <view class="logo">
-            <image :src="shopInfo.shopLogo" />
-          </view>
-          <view class="text-box">
-            <view class="name">
-              {{ shopInfo.shopName }}
-            </view>
-            <view class="focus-box">
-              <view
-                v-if="shopInfo.type"
-                class="self"
-              >
-                自营
-              </view>
-            </view>
-          </view>
-        </view>
-        <view class="sortbar">
-          <view class="item active">
-            默认
-          </view>
-          <view
-            class="list-style"
-            @tap="changeListStyle"
-          >
-            <image
-              v-if="isLineProds"
-              src="/static/images/list-row-w.png"
-            />
-            <image
-              v-else
-              src="/static/images/list-line-w.png"
-            />
-          </view>
-        </view>
-      </view>
+  <view class="shop-prods-page">
+    <DiyTabbar :current-index="3" @change="handleTabChange" />
 
-      <!-- 商品列表 -->
-      <view
-        v-if="prodList.length"
-        class="prods-box"
-        :class="{ 'add-bg': !isLineProds }"
-      >
-        <view :class="[isLineProds ? 'line-prods' : 'prods']">
-          <block
-            v-for="(item, index) in prodList"
-            :key="index"
-          >
-            <view
-              class="item"
-              @tap="detail(item.spuId)"
-            >
-              <view class="img">
-                <image :src="item.mainImgUrl" />
-              </view>
-              <view class="text-box">
-                <view class="name">
-                  {{ item.spuName }}
-                </view>
-                <view class="price-box">
-                  <view class="price">
-                    <view class="symbol">
-                      ￥
-                    </view>
-                    <view class="big">
-                      {{ price(item.priceFee) }}
-                    </view>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </block>
+    <scroll-view class="category-scroll" scroll-x :show-scrollbar="false">
+      <view class="category-list">
+        <view
+          :class="['category-item', { active: currentCategoryId === 0 }]"
+          @tap="onCategoryChange(0)"
+        >
+          <text class="category-name">全部</text>
         </view>
-        <view class="nomore">
-          没有更多了，看看别的吧
+        <view
+          v-for="cat in categories"
+          :key="cat.categoryId"
+          :class="['category-item', { active: currentCategoryId === cat.categoryId }]"
+          @tap="onCategoryChange(cat.categoryId)"
+        >
+          <text class="category-name">{{ cat.name }}</text>
         </view>
       </view>
-      <view
-        v-else
-        class="nomore"
-      >
-        暂无商品，看看别的吧
-      </view>
+    </scroll-view>
 
-      <!-- 店铺tabbar -->
-      <view class="shop-tabbar">
+    <view class="filter-bar">
+      <view class="filter-list">
         <view
-          class="item"
-          @tap="goShopIndex"
+          v-for="filter in filters"
+          :key="filter.id"
+          :class="['filter-item', { active: currentFilterId === filter.id }]"
+          @tap="onFilterChange(filter.id)"
         >
-          <view class="icon">
-            <!-- <image src="/static/images/shop-index-r.png" /> -->
-            <image src="/static/images/shop-index.png" />
-          </view>
-          <view class="text">
-            首页
-          </view>
+          <text>{{ filter.name }}</text>
+          <text class="filter-arrow" v-if="currentFilterId === filter.id">↓</text>
         </view>
-        <view
-          class="item active"
-          @tap="goShopProds"
-        >
-          <view class="icon">
-            <image src="/static/images/shop-prods-r.png" />
-            <!-- <image src="/static/images/shop-prods.png" /> -->
-          </view>
-          <view class="text">
-            商品
-          </view>
-        </view>
-        <view
-          class="item"
-          @tap="goShopCategory"
-        >
-          <view class="icon">
-            <!-- <image src="/static/images/shop-category-r.png" /> -->
-            <image src="/static/images/shop-category.png" />
-          </view>
-          <view class="text">
-            分类
-          </view>
-        </view>
+      </view>
+      <view class="filter-right">
+        <text class="product-count">共{{ prodList.length }}件商品</text>
       </view>
     </view>
+
+    <scroll-view class="product-scroll" scroll-y @scrolltolower="onScrollToLower" :enable-back-to-top="true">
+      <view class="product-grid" v-if="prodList.length > 0">
+        <view
+          class="product-card"
+          v-for="(item, index) in prodList"
+          :key="index"
+          @tap="detail(item.spuId)"
+        >
+          <view class="product-image-wrapper">
+            <image class="product-image" :src="util.getImgUrl(item.mainImgUrl)" mode="aspectFill" :lazy-load="true" />
+            <view class="product-tag" v-if="item.isNew || item.isHot">
+              <text v-if="item.isNew">新品</text>
+              <text v-if="item.isHot">热销</text>
+            </view>
+          </view>
+
+          <view class="product-info">
+            <text class="product-name">{{ item.name }}</text>
+            <view class="product-price-row">
+              <text class="product-price">￥{{ price(item.priceFee) }}</text>
+              <text class="product-original-price" v-if="item.marketPriceFee">￥{{ price(item.marketPriceFee) }}</text>
+            </view>
+            <view class="product-bottom">
+              <text class="product-sales">已售{{ item.totalSales || 0 }}</text>
+              <view class="add-cart-btn" @tap.stop.prevent="addToCart(item)">
+                <text>加购</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="loading-state" v-if="loading">
+        <text class="loading-text">加载中...</text>
+      </view>
+
+      <view class="empty-state" v-if="!loading && prodList.length === 0">
+        <text class="empty-text">暂无商品，看看别的吧</text>
+      </view>
+
+      <view class="no-more-state" v-if="!hasMore && prodList.length > 0">
+        <text class="no-more-text">没有更多了</text>
+      </view>
+    </scroll-view>
   </view>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import util from '@/utils/util.js'
+import DiyTabbar from '@/components/diy-tabbar/diy-tabbar.vue'
 
 const Data = reactive({
-  shopId: 0,
+  shopId: null,
   shopInfo: {},
-  shopSecondaryCategoryId: '',
+  shopSecondaryCategoryId: null,
   keyword: '',
   pageNum: 1,
-  pageSize: 8,
+  pageSize: 20,
   total: 1,
   pages: 1,
   prodList: [],
-  isLineProds: true // 列表格式，默认横排展示
+  loading: false,
+  hasMore: true,
+  categories: [],
+  currentCategoryId: null,
+  currentFilterId: 0,
+  filters: [
+    { id: 0, name: '综合' },
+    { id: 1, name: '销量' },
+    { id: 2, name: '价格升' },
+    { id: 3, name: '价格降' }
+  ]
 })
-const { shopInfo, prodList, isLineProds } = toRefs(Data)
+
+const {
+  shopId,
+  shopInfo,
+  prodList,
+  loading,
+  hasMore,
+  categories,
+  currentCategoryId,
+  currentFilterId,
+  filters
+} = toRefs(Data)
+
+const cartCount = ref(0)
+
+const isLoggedIn = () => {
+  const token = uni.getStorageSync('cloudToken')
+  return !!token
+}
+
+const checkLoginAndAction = (action) => {
+  if (!isLoggedIn()) {
+    uni.showModal({
+      title: '提示',
+      content: '您还未登录，是否立即登录？',
+      success: (res) => {
+        if (res.confirm) {
+          uni.navigateTo({
+            url: '/pages/login/login'
+          })
+        }
+      }
+    })
+    return false
+  }
+  return true
+}
+
+const handleTabChange = ({ item, index }) => {
+  console.log('Tab切换到:', item.text, index)
+}
 
 onReachBottom(() => {
-  if (Data.pageNum < Data.pages) {
+  if (Data.hasMore && !Data.loading) {
     Data.pageNum++
     getProd()
   }
 })
 
+onPullDownRefresh(() => {
+  Data.pageNum = 1
+  Data.hasMore = true
+  getProd().finally(() => {
+    uni.stopPullDownRefresh()
+  })
+})
+
 onLoad((options) => {
-  Data.shopId = options.shopId
-  Data.shopSecondaryCategoryId = options.shopSecondaryCategoryId
-  Data.keyword = options.keyword
+  if (options.shopId) {
+    Data.shopId = Number(options.shopId)
+  }
+  if (options.shopSecondaryCategoryId) {
+    Data.shopSecondaryCategoryId = Number(options.shopSecondaryCategoryId)
+  }
+  if (options.keyword) {
+    Data.keyword = options.keyword
+  }
   Data.shopInfo = uni.getStorageSync('cloudShopInfo')
+  loadCategories()
   getProd()
+})
+
+onShow(() => {
+  loadCartCount()
 })
 
 const price = (value) => {
   return (value / 100).toFixed(2)
 }
 
-// 去商品详情
+async function loadCategories() {
+  try {
+    const res = await http.request({
+      url: '/mall4cloud_product/ua/category/category_list',
+      method: 'GET',
+      data: { parentId: 0, shopId: 0 }
+    })
+    if (res && res.length) {
+      Data.categories = res
+    }
+  } catch (error) {
+    console.error('加载分类失败', error)
+  }
+}
+
+function onCategoryChange(categoryId) {
+  if (categoryId === Data.currentCategoryId) return
+  Data.currentCategoryId = categoryId
+  Data.shopSecondaryCategoryId = categoryId || null
+  Data.pageNum = 1
+  Data.prodList = []
+  Data.hasMore = true
+  getProd()
+}
+
+function onFilterChange(filterId) {
+  if (filterId === Data.currentFilterId) return
+  Data.currentFilterId = filterId
+  Data.pageNum = 1
+  Data.hasMore = true
+  applyFilters()
+}
+
+function applyFilters() {
+  if (Data.pageNum === 1) {
+    let sortedList = [...Data.prodList]
+    if (Data.currentFilterId === 1) {
+      sortedList.sort((a, b) => (b.totalSales || 0) - (a.totalSales || 0))
+    } else if (Data.currentFilterId === 2) {
+      sortedList.sort((a, b) => (a.priceFee || 0) - (b.priceFee || 0))
+    } else if (Data.currentFilterId === 3) {
+      sortedList.sort((a, b) => (b.priceFee || 0) - (a.priceFee || 0))
+    }
+    Data.prodList = sortedList
+  }
+}
+
 const detail = (spuId) => {
   uni.navigateTo({
     url: '/pages/detail/detail?spuId=' + spuId
   })
 }
 
-/**
- * 获取商品列表
- */
 const getProd = () => {
-  const params = {
-    url: '/mall4cloud_search/ua/search/simple_page',
-    method: 'GET',
-    data: {
-      shopId: Data.shopId,
-      pageNum: Data.pageNum,
-      pageSize: Data.pageSize,
-      shopSecondaryCategoryId: Data.shopSecondaryCategoryId
-    }
+  Data.loading = true
 
+  const data = {
+    pageNum: Data.pageNum,
+    pageSize: Data.pageSize
   }
-  http.request(params).then(res => {
-    if (Data.pageNum !== 1) {
-      Data.prodList = Data.prodList.concat(res.list[0].spus)
+
+  if (Data.shopId) {
+    data.shopId = Data.shopId
+  }
+  if (Data.shopSecondaryCategoryId) {
+    data.shopSecondaryCategoryId = Data.shopSecondaryCategoryId
+  }
+  if (Data.keyword) {
+    data.keyword = Data.keyword
+  }
+
+  const params = {
+    url: '/mall4cloud_product/ua/spu/page',
+    method: 'GET',
+    data: data
+  }
+
+  return http.request(params).then(res => {
+    if (res && res.list && res.list.length > 0) {
+      let newProducts = res.list || []
+
+      if (Data.currentFilterId === 1) {
+        newProducts.sort((a, b) => (b.totalSales || 0) - (a.totalSales || 0))
+      } else if (Data.currentFilterId === 2) {
+        newProducts.sort((a, b) => (a.priceFee || 0) - (b.priceFee || 0))
+      } else if (Data.currentFilterId === 3) {
+        newProducts.sort((a, b) => (b.priceFee || 0) - (a.priceFee || 0))
+      }
+
+      if (Data.pageNum !== 1) {
+        Data.prodList = Data.prodList.concat(newProducts)
+      } else {
+        Data.prodList = newProducts
+      }
+      Data.total = res.total
+      Data.pages = res.pages
+      Data.hasMore = Data.prodList.length < res.total
     } else {
-      Data.prodList = res.list[0].spus
+      if (Data.pageNum === 1) {
+        Data.prodList = []
+      }
+      Data.hasMore = false
     }
-    Data.total = res.total
-    Data.pages = res.pages
+    Data.loading = false
+  }).catch(err => {
+    Data.loading = false
+    console.error('加载商品失败', err)
   })
 }
 
-// 切换tabbar
-const goShopIndex = () => {
-  uni.navigateTo({
-    url: `/pages/shop-index/shop-index?shopId=${Data.shopId}`
-  })
+async function loadCartCount() {
+  if (!isLoggedIn()) {
+    return
+  }
+  try {
+    const res = await http.request({
+      url: '/mall4cloud_product/a/shop_cart/info',
+      method: 'GET',
+      data: {}
+    })
+
+    let totalCount = 0
+    if (res && res.shopCarts) {
+      res.shopCarts.forEach(shopItem => {
+        if (shopItem.shopCartItem) {
+          shopItem.shopCartItem.forEach(prodItem => {
+            totalCount += prodItem.count || 0
+          })
+        }
+      })
+    }
+    cartCount.value = totalCount
+  } catch (error) {
+    console.error('加载购物车失败', error)
+    cartCount.value = 0
+  }
 }
 
-const goShopProds = () => {
-  uni.navigateTo({
-    url: `/pages/shop-prods/shop-prods?shopId=${Data.shopId}`
-  })
+async function addToCart(item) {
+  if (!checkLoginAndAction('addToCart')) {
+    return
+  }
+
+  try {
+    const prodRes = await http.request({
+      url: '/mall4cloud_product/ua/spu/detail/' + item.spuId,
+      method: 'GET'
+    })
+
+    if (!prodRes || !prodRes.skus || !prodRes.skus.length) {
+      uni.showToast({
+        title: '商品无规格',
+        icon: 'none'
+      })
+      return
+    }
+
+    const defaultSku = prodRes.skus[0]
+
+    await http.request({
+      url: '/mall4cloud_product/a/shop_cart/change_item',
+      method: 'POST',
+      data: {
+        spuId: item.spuId,
+        skuId: defaultSku.skuId,
+        count: 1
+      }
+    })
+
+    loadCartCount()
+    uni.showToast({
+      title: '加入成功',
+      icon: 'success'
+    })
+  } catch (err) {
+    console.error('加入购物车失败', err)
+    uni.showToast({
+      title: '加入失败',
+      icon: 'none'
+    })
+  }
 }
 
-const goShopCategory = () => {
-  uni.navigateTo({
-    url: `/pages/shop-category/shop-category?shopId=${Data.shopId}`
-  })
-}
-
-// 切换列表样式
-const changeListStyle = () => {
-  Data.isLineProds = !Data.isLineProds
+function onScrollToLower() {
+  if (Data.hasMore && !Data.loading) {
+    Data.pageNum++
+    getProd()
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-@use "../shop-index/shop-index";
+.shop-prods-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+.shop-prods-page :deep(.diy-tabbar) {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+
+.category-scroll {
+  width: 100%;
+  height: 80rpx;
+  background-color: #fff;
+  white-space: nowrap;
+}
+
+.category-list {
+  display: inline-flex;
+  padding: 0 20rpx;
+}
+
+.category-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120rpx;
+  height: 80rpx;
+  padding: 0 30rpx;
+  font-size: 28rpx;
+  color: #666;
+  position: relative;
+}
+
+.category-item.active {
+  color: #ff4d4f;
+  font-weight: 500;
+}
+
+.category-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 4rpx;
+  background-color: #ff4d4f;
+  border-radius: 2rpx;
+}
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80rpx;
+  padding: 0 30rpx;
+  background-color: #fff;
+  border-bottom: 1rpx solid #eee;
+}
+
+.filter-list {
+  display: flex;
+  align-items: center;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 40rpx;
+}
+
+.filter-item.active {
+  color: #ff4d4f;
+  font-weight: 500;
+}
+
+.filter-arrow {
+  margin-left: 8rpx;
+  font-size: 20rpx;
+}
+
+.filter-right {
+  display: flex;
+  align-items: center;
+}
+
+.product-count {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.product-scroll {
+  height: calc(100vh - 160rpx - env(safe-area-inset-bottom));
+}
+
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.product-card {
+  width: 345rpx;
+  flex: 0 0 345rpx;
+  margin-bottom: 20rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 345rpx;
+  background-color: #f8f8f8;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+}
+
+.product-tag {
+  position: absolute;
+  top: 16rpx;
+  left: 16rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-tag text {
+  padding: 4rpx 12rpx;
+  background-color: #ff4d4f;
+  color: #fff;
+  font-size: 20rpx;
+  border-radius: 4rpx;
+  margin-bottom: 8rpx;
+}
+
+.product-tag text:last-child {
+  background-color: #ffa500;
+}
+
+.product-info {
+  padding: 20rpx;
+}
+
+.product-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.4;
+  margin-bottom: 12rpx;
+}
+
+.product-price-row {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 12rpx;
+}
+
+.product-price {
+  font-size: 32rpx;
+  color: #ff4d4f;
+  font-weight: 500;
+}
+
+.product-original-price {
+  font-size: 24rpx;
+  color: #999;
+  text-decoration: line-through;
+  margin-left: 12rpx;
+}
+
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-sales {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.add-cart-btn {
+  padding: 8rpx 16rpx;
+  background-color: #ff4d4f;
+  color: #fff;
+  font-size: 24rpx;
+  border-radius: 8rpx;
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.no-more-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+.no-more-text {
+  font-size: 26rpx;
+  color: #999;
+}
 </style>

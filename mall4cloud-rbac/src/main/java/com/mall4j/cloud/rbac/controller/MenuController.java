@@ -45,10 +45,14 @@ public class MenuController {
 		List<RouteVO> routes = new ArrayList<>(menus.size());
 
 		for (Menu menu : menus) {
+			if (BooleanUtil.isTrue(menu.getHidden())) {
+				continue;
+			}
+
 			RouteVO route = new RouteVO();
 			route.setAlwaysShow(BooleanUtil.isTrue(menu.getAlwaysShow()));
 			route.setComponent(menu.getComponent());
-			route.setHidden(BooleanUtil.isTrue(menu.getHidden()));
+			route.setHidden(false);
 			route.setName(menu.getName());
 			route.setPath(menu.getPath());
 			route.setRedirect(menu.getRedirect());

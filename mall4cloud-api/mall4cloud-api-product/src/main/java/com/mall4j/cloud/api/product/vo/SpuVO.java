@@ -5,6 +5,7 @@ import com.mall4j.cloud.common.serializer.ImgJsonSerializer;
 import com.mall4j.cloud.common.vo.BaseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -71,6 +72,39 @@ public class SpuVO extends BaseVO {
 
 	@Schema(description = "序号" )
 	private Integer seq;
+
+	@Schema(description = "是否选品 0-否 1-是" )
+	private Integer isSelection;
+
+	@Schema(description = "佣金比例（%）" )
+	private BigDecimal commissionRate;
+
+	@Schema(description = "预计佣金金额（分）" )
+	private BigDecimal commissionAmount;
+
+	@Schema(description = "是否热销 0-否 1-是" )
+	private Integer isHot;
+
+	@Schema(description = "是否新品 0-否 1-是" )
+	private Integer isNew;
+
+	@Schema(description = "是否推荐 0-否 1-是" )
+	private Integer isRecommend;
+
+	@Schema(description = "是否精选 0-否 1-是" )
+	private Integer isSelectionBest;
+
+	@Schema(description = "推荐评分 0.0-5.0" )
+	private BigDecimal rating;
+
+	@Schema(description = "累计销量" )
+	private Integer totalSales;
+
+	@Schema(description = "月销量" )
+	private Integer monthSales;
+
+	@Schema(description = "商品视频" )
+	private String video;
 
 	@Schema(description = "品牌信息" )
 	private BrandVO brand;
@@ -242,6 +276,94 @@ public class SpuVO extends BaseVO {
 		this.seq = seq;
 	}
 
+	public Integer getIsSelection() {
+		return isSelection;
+	}
+
+	public void setIsSelection(Integer isSelection) {
+		this.isSelection = isSelection;
+	}
+
+	public BigDecimal getCommissionRate() {
+		return commissionRate;
+	}
+
+	public void setCommissionRate(BigDecimal commissionRate) {
+		this.commissionRate = commissionRate;
+	}
+
+	public BigDecimal getCommissionAmount() {
+		return commissionAmount;
+	}
+
+	public void setCommissionAmount(BigDecimal commissionAmount) {
+		this.commissionAmount = commissionAmount;
+	}
+
+	public Integer getIsHot() {
+		return isHot;
+	}
+
+	public void setIsHot(Integer isHot) {
+		this.isHot = isHot;
+	}
+
+	public Integer getIsNew() {
+		return isNew;
+	}
+
+	public void setIsNew(Integer isNew) {
+		this.isNew = isNew;
+	}
+
+	public Integer getIsRecommend() {
+		return isRecommend;
+	}
+
+	public void setIsRecommend(Integer isRecommend) {
+		this.isRecommend = isRecommend;
+	}
+
+	public Integer getIsSelectionBest() {
+		return isSelectionBest;
+	}
+
+	public void setIsSelectionBest(Integer isSelectionBest) {
+		this.isSelectionBest = isSelectionBest;
+	}
+
+	public BigDecimal getRating() {
+		return rating;
+	}
+
+	public void setRating(BigDecimal rating) {
+		this.rating = rating;
+	}
+
+	public Integer getTotalSales() {
+		return totalSales;
+	}
+
+	public void setTotalSales(Integer totalSales) {
+		this.totalSales = totalSales;
+	}
+
+	public Integer getMonthSales() {
+		return monthSales;
+	}
+
+	public void setMonthSales(Integer monthSales) {
+		this.monthSales = monthSales;
+	}
+
+	public String getVideo() {
+		return video;
+	}
+
+	public void setVideo(String video) {
+		this.video = video;
+	}
+
 	public BrandVO getBrand() {
 		return brand;
 	}
@@ -303,6 +425,17 @@ public class SpuVO extends BaseVO {
 				", spuAttrValues=" + spuAttrValues +
 				", skus=" + skus +
 				", seq=" + seq +
+				", isSelection=" + isSelection +
+				", commissionRate=" + commissionRate +
+				", commissionAmount=" + commissionAmount +
+				", isHot=" + isHot +
+				", isNew=" + isNew +
+				", isRecommend=" + isRecommend +
+				", isSelectionBest=" + isSelectionBest +
+				", rating=" + rating +
+				", totalSales=" + totalSales +
+				", monthSales=" + monthSales +
+				", video='" + video + '\'' +
 				", brand=" + brand +
 				", saleNum=" + saleNum +
 				", shopName='" + shopName + '\'' +

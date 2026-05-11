@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "杰东药业",
+  "navigationBarBackgroundColor": "#134585",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#f5f7fa",
+  "enablePullDownRefresh": true,
+  "usingComponents": {}
+}

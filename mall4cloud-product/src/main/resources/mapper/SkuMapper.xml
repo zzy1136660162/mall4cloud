@@ -139,4 +139,11 @@
     LEFT JOIN `sku_stock` ss ON ss.`sku_id` = sku.`sku_id`
     WHERE sku.`spu_id` = #{spuId} and sku.status = 1
   </select>
+
+  <select id="getTotalStockBySpuId" resultType="java.lang.Integer">
+    SELECT COALESCE(SUM(ss.stock), 0)
+    FROM sku_stock ss
+    INNER JOIN sku s ON ss.sku_id = s.sku_id
+    WHERE s.spu_id = #{spuId}
+  </select>
 </mapper>

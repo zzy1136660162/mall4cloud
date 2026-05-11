@@ -858,10 +858,10 @@ const util = {
           if (res.loginLogoImg) {
             res.loginLogoImg = res.loginLogoImg.indexOf('http') > -1 ? res.loginLogoImg : import.meta.env.VITE_APP_RESOURCES_URL + res.loginLogoImg
           } else {
-            res.loginLogoImg = new URL('@/static/logo.png', import.meta.url).href
+            res.loginLogoImg = 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/logo.png'
           }
-          res.titleContentCn = res.titleContentCn || '蓝海商城'
-          res.titleContentEn = res.titleContentEn || 'Mall4j'
+          res.titleContentCn = res.titleContentCn || '杰东药业'
+          res.titleContentEn = res.titleContentEn || '杰东药业'
           uni.setStorageSync('cloudUniWebConfigData', res)
           uni.setStorageSync('cloudUniLoginLogoImg', res.loginLogoImg)
         } else {
@@ -942,6 +942,67 @@ const util = {
     } else {
       return baseUrl + url
     }
+  },
+
+  /**
+   * 获取带前缀的图片URL（专门用于MinIO图片服务器）
+   * @param imgUrl 图片路径
+   * @returns {String} 带前缀的完整图片URL
+   */
+  getImgUrl: (imgUrl) => {
+    if (!imgUrl) return ''
+    const url = imgUrl.trim()
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('//')) {
+      return url
+    }
+    return import.meta.env.VITE_APP_RESOURCES_URL + url
+  },
+
+  /**
+   * 处理富文本中的图片路径，添加MinIO域名前缀
+   * @param content 富文本HTML内容
+   * @returns {String} 处理后的富文本HTML内容
+   */
+  processRichText: (content) => {
+    if (!content) return ''
+
+    const baseUrl = import.meta.env.VITE_APP_RESOURCES_URL
+
+    // 判断是否为完整的外部URL
+    const isExternalUrl = (url) => {
+      const trimmed = url.trim()
+      return trimmed.startsWith('http://') ||
+             trimmed.startsWith('https://') ||
+             trimmed.startsWith('//') ||
+             trimmed.startsWith('www.')
+    }
+
+    // 处理 img 标签的 src 属性
+    let result = content.replace(/<img([^>]*)src=["']([^"']*)["']([^>]*)>/gi, (match, before, src, after) => {
+      const trimmedSrc = src.trim()
+      // 如果已经是完整URL（包含协议或www），直接返回
+      if (isExternalUrl(trimmedSrc)) {
+        return match
+      }
+      // 添加域名前缀
+      const fullUrl = baseUrl + trimmedSrc
+      return `<img${before}src="${fullUrl}"${after}>`
+    })
+
+    // 处理富文本样式（参考 formatHtml）
+    result = result.replace(/<p/gi, '<p style="max-width:100% !important;word-wrap:break-word;word-break:break-word;" ')
+    result = result.replace(/<ul/gi, '<ul style="list-style-type: none" ')
+    result = result.replace(/<img/gi, '<img style="width: auto; max-width:100% !important;height:auto !important;margin:0;" ')
+    result = result.replace(/style="/gi, 'style="max-width:100% !important;table-layout:fixed;word-wrap:break-word; word-break: break-word;')
+    result = result.replace(/<table/gi, '<table style="table-layout:fixed; word-wrap:break-word; word-break:break-word;" ')
+    result = result.replace(/<td/gi, '<td cellspacing="0" cellpadding="0" border="0" style="display:block;vertical-align:top;margin: 0px; padding: 0px; border: 0px;outline-width:0px;"')
+    result = result.replace(/width=/gi, 'sss=')
+    result = result.replace(/height=/gi, 'sss=')
+    result = result.replace(/ \/>/gi, ' style="max-width:100% !important;height:auto !important;margin:0;display:block;" />')
+    result = result.replace(/\n/gi, '<br>')
+    result = result.replace(/\r\n/gi, '<br>')
+
+    return result
   },
 
   // 获取用户授权
@@ -1039,7 +1100,7 @@ const util = {
           {
             type: 'image',
             // 这个是默认图片，路径错误会导致小程序生成失败
-            src: '/static/images/def.png',
+            src: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/def.png',
             css: {
               width: '540rpx',
               height: '540rpx',

@@ -5,6 +5,12 @@ page {
 .page-detail {
   padding-bottom: calc(130rpx + env(safe-area-inset-bottom));
 
+  :deep(rich-text) {
+    img {
+      width: 100% !important;
+    }
+  }
+
   /* 头部 */
   .det-header {
     position: fixed;
@@ -44,6 +50,28 @@ page {
 
   .det-header .item.active::after {
     background: linear-gradient(to right, #fc1b35, #fff);
+  }
+
+  /* 返回按钮 */
+  .det-header .back-btn {
+    position: absolute;
+    left: 20rpx;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    z-index: 100;
+  }
+
+  .det-header .back-icon {
+    color: #fff;
+    font-size: 32rpx;
+    font-weight: bold;
   }
 
   /* 大图 */
@@ -195,13 +223,105 @@ page {
   /* 名称、价格 */
   .name-box {
     background: #fff;
-    padding: 20rpx 30rpx;
+    padding: 24rpx 30rpx;
     border-radius: 0 0 10rpx 10rpx;
   }
 
   .name-box .name {
-    font-size: 28rpx;
+    font-size: 30rpx;
     font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.5;
+  }
+
+  .name-box .selling-point {
+    display: flex;
+    align-items: center;
+    margin-top: 16rpx;
+    padding: 12rpx 16rpx;
+    background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+    border-radius: 8rpx;
+    border-left: 4rpx solid #ff4d4f;
+
+    .point-icon {
+      font-size: 24rpx;
+      margin-right: 8rpx;
+    }
+
+    .point-text {
+      font-size: 24rpx;
+      color: #e6311c;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .name-box .service-tags {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20rpx;
+    padding: 16rpx 0;
+    border-top: 1rpx solid #f5f5f5;
+    border-bottom: 1rpx solid #f5f5f5;
+
+    .tag-item {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      justify-content: center;
+
+      &:not(:last-child) {
+        border-right: 1rpx solid #eee;
+      }
+
+      .tag-icon {
+        font-size: 22rpx;
+        margin-right: 6rpx;
+      }
+
+      .tag-text {
+        font-size: 22rpx;
+        color: #666;
+      }
+    }
+  }
+
+  .name-box .sales-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16rpx;
+    padding: 12rpx 0;
+
+    .sales-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+
+      .sales-num {
+        font-size: 26rpx;
+        font-weight: 600;
+        color: #ff4d4f;
+      }
+
+      .stock-num {
+        color: #666;
+      }
+
+      .sales-label {
+        font-size: 20rpx;
+        color: #999;
+        margin-top: 4rpx;
+      }
+    }
+
+    .sales-divider {
+      color: #ddd;
+      font-size: 24rpx;
+    }
   }
 
   .name-box .discount-info {
@@ -285,18 +405,17 @@ page {
     margin-top: 6rpx;
   }
 
-  /* 优惠、活动 */
+  /* sku选择 */
   .det-con {
     background: #fff;
     border-radius: 10rpx;
-    padding: 30rpx;
-    margin-top: 30rpx;
+    padding: 24rpx 30rpx;
+    margin-top: 20rpx;
   }
 
   .det-con .item {
     display: flex;
-    align-items: flex-start;
-    margin-top: 24rpx;
+    align-items: center;
     line-height: 32rpx;
   }
 
@@ -305,26 +424,33 @@ page {
   }
 
   .det-con .item .tit {
-    font-weight: 600;
-    margin-right: 30rpx;
+    font-weight: 500;
+    color: #666;
+    margin-right: 20rpx;
+    font-size: 26rpx;
   }
 
   .det-con .item .con {
     flex: 1;
-    padding-right: 50rpx;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 26rpx;
+    color: #333;
+  }
+
+  .det-con .sku-con {
+    .s-item {
+      color: #1a1a1a;
+      margin-right: 8rpx;
+    }
   }
 
   .det-con .item .con::after {
-    position: absolute;
-    top: -6rpx;
-    right: 0;
-    display: block;
-    content: "…";
+    content: ">";
     font-size: 28rpx;
-    line-height: 1;
-    color: #999;
-    font-family: PingFangSC-Medium, tahoma;
+    color: #ccc;
+    margin-left: 16rpx;
   }
 
   .det-con .coupons-con {

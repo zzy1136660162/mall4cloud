@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall4j.cloud.platform.mapper.SelectionApplyMapper">
+
+    <resultMap id="selectionApplyMap" type="com.mall4j.cloud.platform.model.SelectionApply">
+        <id column="apply_id" property="applyId"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="contact_phone" property="contactPhone"/>
+        <result column="delivery_address" property="deliveryAddress"/>
+        <result column="spu_id" property="spuId"/>
+        <result column="spu_name" property="spuName"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="main_img_url" property="mainImgUrl"/>
+        <result column="price_fee" property="priceFee"/>
+        <result column="apply_remark" property="applyRemark"/>
+        <result column="apply_time" property="applyTime"/>
+        <result column="audit_status" property="auditStatus"/>
+        <result column="audit_time" property="auditTime"/>
+        <result column="audit_user_id" property="auditUserId"/>
+        <result column="audit_remark" property="auditRemark"/>
+        <result column="express_company" property="expressCompany"/>
+        <result column="express_no" property="expressNo"/>
+        <result column="ship_time" property="shipTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.mall4j.cloud.platform.model.SelectionApply" useGeneratedKeys="true" keyProperty="applyId">
+        INSERT INTO selection_apply (
+            user_id,
+            user_name,
+            contact_phone,
+            delivery_address,
+            spu_id,
+            spu_name,
+            shop_id,
+            shop_name,
+            main_img_url,
+            price_fee,
+            apply_remark,
+            apply_time,
+            audit_status
+        ) VALUES (
+            #{selectionApply.userId},
+            #{selectionApply.userName},
+            #{selectionApply.contactPhone},
+            #{selectionApply.deliveryAddress},
+            #{selectionApply.spuId},
+            #{selectionApply.spuName},
+            #{selectionApply.shopId},
+            #{selectionApply.shopName},
+            #{selectionApply.mainImgUrl},
+            #{selectionApply.priceFee},
+            #{selectionApply.applyRemark},
+            #{selectionApply.applyTime},
+            #{selectionApply.auditStatus}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.mall4j.cloud.platform.model.SelectionApply">
+        UPDATE selection_apply
+        <set>
+            <if test="selectionApply.auditStatus != null">
+                audit_status = #{selectionApply.auditStatus},
+            </if>
+            <if test="selectionApply.auditTime != null">
+                audit_time = #{selectionApply.auditTime},
+            </if>
+            <if test="selectionApply.auditUserId != null">
+                audit_user_id = #{selectionApply.auditUserId},
+            </if>
+            <if test="selectionApply.auditRemark != null">
+                audit_remark = #{selectionApply.auditRemark},
+            </if>
+            <if test="selectionApply.expressCompany != null">
+                express_company = #{selectionApply.expressCompany},
+            </if>
+            <if test="selectionApply.expressNo != null">
+                express_no = #{selectionApply.expressNo},
+            </if>
+            <if test="selectionApply.shipTime != null">
+                ship_time = #{selectionApply.shipTime},
+            </if>
+        </set>
+        WHERE apply_id = #{selectionApply.applyId}
+    </update>
+
+    <select id="getById" resultMap="selectionApplyMap">
+        SELECT * FROM selection_apply
+        WHERE apply_id = #{applyId}
+    </select>
+
+    <select id="listByPage" resultMap="selectionApplyMap">
+        SELECT * FROM selection_apply
+        WHERE is_deleted = 0
+        <if test="pageDTO.userId != null">
+            AND user_id = #{pageDTO.userId}
+        </if>
+        <if test="pageDTO.spuId != null">
+            AND spu_id = #{pageDTO.spuId}
+        </if>
+        <if test="pageDTO.shopId != null">
+            AND shop_id = #{pageDTO.shopId}
+        </if>
+        <if test="pageDTO.auditStatus != null">
+            AND audit_status = #{pageDTO.auditStatus}
+        </if>
+        <if test="pageDTO.startTime != null">
+            AND apply_time &gt;= #{pageDTO.startTime}
+        </if>
+        <if test="pageDTO.endTime != null">
+            AND apply_time &lt;= #{pageDTO.endTime}
+        </if>
+        ORDER BY apply_time DESC
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+        <if test="pageDTO.userId != null">
+            AND user_id = #{pageDTO.userId}
+        </if>
+        <if test="pageDTO.spuId != null">
+            AND spu_id = #{pageDTO.spuId}
+        </if>
+        <if test="pageDTO.shopId != null">
+            AND shop_id = #{pageDTO.shopId}
+        </if>
+        <if test="pageDTO.auditStatus != null">
+            AND audit_status = #{pageDTO.auditStatus}
+        </if>
+        <if test="pageDTO.startTime != null">
+            AND apply_time &gt;= #{pageDTO.startTime}
+        </if>
+        <if test="pageDTO.endTime != null">
+            AND apply_time &lt;= #{pageDTO.endTime}
+        </if>
+    </select>
+
+    <select id="checkUserApply" resultMap="selectionApplyMap">
+        SELECT * FROM selection_apply
+        WHERE user_id = #{userId}
+          AND spu_id = #{spuId}
+          AND is_deleted = 0
+          AND audit_status IN (1, 2)
+        LIMIT 1
+    </select>
+
+    <select id="listByUserId" resultMap="selectionApplyMap">
+        SELECT * FROM selection_apply
+        WHERE user_id = #{userId}
+          AND is_deleted = 0
+        ORDER BY apply_time DESC
+        LIMIT #{pageNum}, #{pageSize}
+    </select>
+
+    <select id="countByUserId" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE user_id = #{userId}
+          AND is_deleted = 0
+    </select>
+
+    <select id="countTotal" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+    </select>
+
+    <select id="countPending" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+          AND audit_status = 1
+    </select>
+
+    <select id="countApproved" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+          AND audit_status = 2
+    </select>
+
+    <select id="countRejected" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+          AND audit_status = 3
+    </select>
+
+    <select id="countToday" resultType="int">
+        SELECT COUNT(*) FROM selection_apply
+        WHERE is_deleted = 0
+          AND DATE(apply_time) = CURDATE()
+    </select>
+
+</mapper>

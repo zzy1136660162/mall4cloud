@@ -96,4 +96,12 @@ public interface SkuStockMapper {
 	 */
 	void reduceActualStockByCancelOrder(@Param("skuWithStocks") List<SkuWithStockBO> skuWithStocks);
 
+	/**
+	 * 根据spuId查询所有SKU的库存总和
+	 *
+	 * @param spuId 商品id
+	 * @return 库存总和
+	 */
+	Integer getTotalStockBySpuId(@Param("spuId") Long spuId);
+
 }

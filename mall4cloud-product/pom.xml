@@ -72,6 +72,12 @@
             <artifactId>mall4cloud-api-platform</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 显式依赖 common-order，确保 Seata 能正确加载 -->
+        <dependency>
+            <groupId>com.mall4j.cloud</groupId>
+            <artifactId>mall4cloud-common-order</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

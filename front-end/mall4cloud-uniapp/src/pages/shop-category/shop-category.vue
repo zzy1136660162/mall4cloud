@@ -4,7 +4,7 @@
       <!-- 头部 -->
       <view class="header">
         <view class="bg">
-          <image src="/static/img/banner3.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/img/banner3.png" />
         </view>
         <view class="bg-mask" />
         <view class="shop-info">
@@ -54,7 +54,7 @@
               v-if="firstCategoryList.length"
               class="adv-img"
             >
-              <image :src="firstCategoryList[selectedIndex].imgUrl" />
+              <image :src="util.getImgUrl(firstCategoryList[selectedIndex].imgUrl)" />
             </view>
             <block
               v-for="(secondCategory, index) in secondCategoryList"
@@ -69,9 +69,9 @@
                     :data-name="secondCategory.name"
                     @tap="toSearchListPage"
                   >
-                    <view class="img">
-                      <image :src="secondCategory.imgUrl" />
-                    </view>
+                       <view class="img">
+                         <image :src="util.getImgUrl(secondCategory.imgUrl)" />
+                       </view>
                     <view class="text">
                       {{ secondCategory.name }}
                     </view>
@@ -89,8 +89,8 @@
           @tap="goShopIndex"
         >
           <view class="icon">
-            <!-- <image src="/static/images/shop-index-r.png" /> -->
-            <image src="/static/images/shop-index.png" />
+            <!-- <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-index-r.png" /> -->
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-index.png" />
           </view>
           <view class="text">
             首页
@@ -101,8 +101,8 @@
           @tap="goShopProds"
         >
           <view class="icon">
-            <!-- <image src="/static/images/shop-prods-r.png" /> -->
-            <image src="/static/images/shop-prods.png" />
+            <!-- <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-prods-r.png" /> -->
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-prods.png" />
           </view>
           <view class="text">
             商品
@@ -113,8 +113,8 @@
           @tap="goShopCategory"
         >
           <view class="icon">
-            <image src="/static/images/shop-category-r.png" />
-            <!-- <image src="/static/images/shop-category.png" /> -->
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-category-r.png" />
+            <!-- <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-category.png" /> -->
           </view>
           <view class="text">
             分类
@@ -122,7 +122,7 @@
         </view>
         <!-- <view class="item">
       <view class="icon">
-        <image src="/static/images/detail-service.png" />
+        <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/detail-service.png" />
       </view>
       <view class="text">客服</view>
     </view> -->
@@ -133,6 +133,7 @@
 
 <script setup>
 import { reactive } from 'vue'
+import util from '@/utils/util.js'
 
 const Data = reactive({
   shopId: 0,

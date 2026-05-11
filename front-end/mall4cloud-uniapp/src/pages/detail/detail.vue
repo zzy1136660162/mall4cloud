@@ -6,6 +6,10 @@
       class="det-header"
       :style="{ opacity: topTabOpacity, zIndex: topTabOpacity > 0.2 ? '1' : '-1' }"
     >
+      <!-- 返回按钮 -->
+      <view class="back-btn" @tap="goBack">
+        <text class="back-icon">←</text>
+      </view>
       <view
         :class="['item', topTabSts === 0 ? 'active' : '']"
         @tap="hanleTopTabClick(0)"
@@ -34,7 +38,7 @@
         :key="imgIdx"
         class="item"
       >
-        <image :src="img" />
+        <image :src="util.getImgUrl(img)" />
       </swiper-item>
     </swiper>
 
@@ -50,15 +54,49 @@
               ￥
             </view>
             <view class="big">
-              {{ wxs.parsePrice(defaultSku.priceFee)[0] }}
+              {{ wxs.parsePrice(defaultSku.priceFee || prodInfo.priceFee)[0] }}
             </view>
             <view class="symbol">
-              .{{ wxs.parsePrice(defaultSku.priceFee)[1] }}
+              .{{ wxs.parsePrice(defaultSku.priceFee || prodInfo.priceFee)[1] }}
             </view>
           </view>
-          <view class="stock">
-            仅剩{{ defaultSku.stock }}件
-          </view>
+        </view>
+      </view>
+      <!-- 宣传语 -->
+      <!-- <view class="selling-point" v-if="prodInfo.sellingPoint">
+        <text class="point-icon">🎯</text>
+        <text class="point-text">{{ prodInfo.sellingPoint }}</text>
+      </view> -->
+      <!-- 服务标签 -->
+      <view class="service-tags">
+        <view class="tag-item">
+          <text class="tag-icon">⚡</text>
+          <text class="tag-text">24h发货</text>
+        </view>
+        <view class="tag-item">
+          <text class="tag-icon">🛡️</text>
+          <text class="tag-text">正品保障</text>
+        </view>
+        <view class="tag-item">
+          <text class="tag-icon">📦</text>
+          <text class="tag-text">实物一致</text>
+        </view>
+      </view>
+      <!-- 销量信息 -->
+      <view class="sales-info">
+        <view class="sales-item">
+          <text class="sales-num">{{ prodInfo.totalSales || 0 }}</text>
+          <text class="sales-label">累计销量</text>
+        </view>
+        <view class="sales-divider">|</view>
+        <view class="sales-item">
+          <text class="sales-num">{{ prodInfo.monthSales || 0 }}</text>
+          <text class="sales-label">本月销量</text>
+        </view>
+        <view class="sales-divider">|</view>
+        <view class="sales-item">
+          <text class="sales-num stock-num">{{ defaultSku.stock || prodInfo.totalStock || 0 }}</text>
+          <text class="sales-label">剩余库存</text>
         </view>
       </view>
     </view>
@@ -91,43 +129,13 @@
       </view>
     </view>
 
-    <!-- 店铺 -->
-    <view class="shop-box">
-      <view class="shop-info">
-        <view class="info">
-          <view class="img">
-            <image :src="shopInfo.shopLogo" />
-          </view>
-          <view class="text">
-            <view class="name">
-              {{ shopInfo.shopName }}
-            </view>
-            <view class="focus-box">
-              <view
-                v-if="shopInfo.type === 1"
-                class="self"
-              >
-                自营
-              </view>
-            </view>
-          </view>
-        </view>
-        <view
-          class="go-shop"
-          @tap="toShopIndex"
-        >
-          进店逛逛
-        </view>
-      </view>
-    </view>
-
     <!-- 详情 -->
     <div class="det-det">
       <div class="tit">
         商品详情
       </div>
       <div class="con">
-        <rich-text :nodes="prodDetail" />
+        <rich-text  :nodes="prodDetail" />
       </div>
     </div>
 
@@ -139,7 +147,7 @@
           @tap="toIndex"
         >
           <view class="img">
-            <image src="/static/images/detail-index.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/detail-index.png" />
           </view>
           <view class="text">
             首页
@@ -150,7 +158,7 @@
           @tap="toCart"
         >
           <view class="img">
-            <image src="/static/images/detail-cart.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/detail-cart.png" />
             <view
               v-if="cartCount"
               class="mark"
@@ -192,7 +200,7 @@
       <view class="popup-con-bottom check-sku">
         <view class="goods-box">
           <view class="img">
-            <image :src="prodInfo.mainImgUrl" />
+            <image :src="util.getImgUrl(prodInfo.mainImgUrl)" />
           </view>
           <view class="info">
             <view class="name">
@@ -203,10 +211,10 @@
                 ￥
               </view>
               <view class="big">
-                {{ wxs.parsePrice(defaultSku.priceFee)[0] }}
+                {{ wxs.parsePrice(defaultSku.priceFee || prodInfo.priceFee)[0] }}
               </view>
               <view class="symbol">
-                .{{ wxs.parsePrice(defaultSku.priceFee)[1] }}
+                .{{ wxs.parsePrice(defaultSku.priceFee || prodInfo.priceFee)[1] }}
               </view>
             </view>
           </view>
@@ -214,7 +222,7 @@
             class="close"
             @tap="closePopup"
           >
-            <image src="/static/images/close.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/close.png" />
           </view>
         </view>
         <view class="con-box">
@@ -279,6 +287,7 @@
 
 <script setup>
 import { reactive, watch } from 'vue'
+import util from '@/utils/util.js'
 
 const wxs = number()
 
@@ -474,7 +483,7 @@ const getProdInfo = () => {
 
     Data.prodInfo = res
     Data.deliveryModeVO = res.deliveryModeVO
-    Data.prodDetail = util.formatHtml(res.detail)
+    Data.prodDetail = util.processRichText(res.detail)
     Data.imgList = imgList
     Data.skuList = res.skus
   })
@@ -609,6 +618,15 @@ const toChooseItem = (skuLineItem, key) => {
 }
 
 /**
+ * 返回上一页
+ */
+const goBack = () => {
+  uni.navigateBack({
+    delta: 1
+  })
+}
+
+/**
 * 顶部Tab栏点击，页面滚动至指定位置
 * @param {number} type 0页面置顶; 1滚动至评价; 2滚动至详情
 */
@@ -688,7 +706,7 @@ const toIndex = () => {
 * 去购物车
 */
 const toCart = () => {
-  uni.switchTab({
+  uni.navigateTo({
     url: '/pages/cart/cart'
   })
 }

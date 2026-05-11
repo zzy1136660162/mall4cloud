@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mall4j.cloud.platform.mapper.TalentPoolMapper">
+
+    <resultMap id="talentPoolMap" type="com.mall4j.cloud.platform.vo.TalentPoolVO">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="avatar" property="avatar" />
+        <result column="title" property="title" />
+        <result column="region" property="region" />
+        <result column="expertise_areas" property="expertiseAreas" />
+        <result column="skills" property="skills" />
+        <result column="experience_years" property="experienceYears" />
+        <result column="education" property="education" />
+        <result column="intro" property="intro" />
+        <result column="project_experience" property="projectExperience" />
+        <result column="achievements" property="achievements" />
+        <result column="status" property="status" />
+        <result column="sort_order" property="sortOrder" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <sql id="Vo_Column_List">
+        id, `name`, avatar, title, region, expertise_areas, skills,
+        experience_years, education, intro, project_experience, achievements,
+        status, sort_order, created_at, updated_at
+    </sql>
+
+    <select id="list" resultMap="talentPoolMap">
+        SELECT <include refid="Vo_Column_List" />
+        FROM talent_pool
+        WHERE status = 1
+        ORDER BY sort_order DESC, created_at DESC
+    </select>
+
+    <select id="page" resultMap="talentPoolMap">
+        SELECT <include refid="Vo_Column_List" />
+        FROM talent_pool
+        WHERE status = 1
+        <if test="name != null and name != ''">
+            AND name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        ORDER BY sort_order DESC, created_at DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM talent_pool
+        WHERE status = 1
+    </select>
+
+    <select id="getById" resultMap="talentPoolMap">
+        SELECT <include refid="Vo_Column_List" />
+        FROM talent_pool
+        WHERE id = #{id}
+    </select>
+
+</mapper>

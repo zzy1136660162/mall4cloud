@@ -17,6 +17,15 @@
     <result column="price_fee" property="priceFee"/>
     <result column="market_price_fee" property="marketPriceFee"/>
     <result column="status" property="status"/>
+    <result column="is_selection" property="isSelection"/>
+    <result column="commission_rate" property="commissionRate"/>
+    <result column="is_hot" property="isHot"/>
+    <result column="is_new" property="isNew"/>
+    <result column="is_recommend" property="isRecommend"/>
+    <result column="is_selection_best" property="isSelectionBest"/>
+    <result column="rating" property="rating"/>
+    <result column="total_sales" property="totalSales"/>
+    <result column="month_sales" property="monthSales"/>
     <result column="seq" property="seq"/>
     <result column="has_sku_img" property="hasSkuImg"/>
   </resultMap>
@@ -34,7 +43,7 @@
   </resultMap>
   <sql id="Vo_Column_List">
     s.`spu_id`,s.`shop_id`,s.`create_time`,s.`update_time`,s.`brand_id`,s.`shop_category_id`,s.`category_id`,s.`name`,s.`selling_point`,s.`img_urls`,s.`main_img_url`,s.`price_fee`
-    ,s.`market_price_fee`,s.`status`,s.`has_sku_img`,s.`seq`
+    ,s.`market_price_fee`,s.`status`,s.`is_selection`,s.`commission_rate`,s.`is_hot`,s.`is_new`,s.`is_recommend`,s.`is_selection_best`,s.`rating`,s.`total_sales`,s.`month_sales`,s.`has_sku_img`,s.`seq`
   </sql>
   <select id="list" resultType="com.mall4j.cloud.api.product.vo.SpuVO">
     select distinct <include refid="Vo_Column_List"/> ,se.actual_stock as total_stock,se.sale_num from spu s
@@ -54,6 +63,33 @@
     </if>
     <if test="spu.name != null and spu.name != ''">
       and s.name = #{spu.name}
+    </if>
+    <if test="spu.keyword != null and spu.keyword != ''">
+      AND (s.name LIKE CONCAT('%', #{spu.keyword}, '%') OR s.selling_point LIKE CONCAT('%', #{spu.keyword}, '%'))
+    </if>
+    <if test="spu.brandIds != null and spu.brandIds != ''">
+      AND s.brand_id IN (${spu.brandIds})
+    </if>
+    <if test="spu.shopId != null">
+      AND s.shop_id = #{spu.shopId}
+    </if>
+    <if test="spu.primaryCategoryId != null">
+      AND s.category_id = #{spu.primaryCategoryId}
+    </if>
+    <if test="spu.secondaryCategoryId != null">
+      AND s.category_id = #{spu.secondaryCategoryId}
+    </if>
+    <if test="spu.shopPrimaryCategoryId != null">
+      AND s.shop_category_id = #{spu.shopPrimaryCategoryId}
+    </if>
+    <if test="spu.shopSecondaryCategoryId != null">
+      AND s.shop_category_id = #{spu.shopSecondaryCategoryId}
+    </if>
+    <if test="spu.hasStock == 1">
+      AND se.stock > 0
+    </if>
+    <if test="spu.hasStock == 0">
+      AND se.stock = 0
     </if>
     <if test="spu.status != null">
       and s.status = #{spu.status}
@@ -79,6 +115,27 @@
     <if test="spu.minSaleNum != null">
       and se.sale_num &gt;= #{spu.minSaleNum}
     </if>
+    <if test="spu.isSelection != null">
+      and s.is_selection = #{spu.isSelection}
+    </if>
+    <if test="spu.isHot != null">
+      and s.is_hot = #{spu.isHot}
+    </if>
+    <if test="spu.isNew != null">
+      and s.is_new = #{spu.isNew}
+    </if>
+    <if test="spu.isRecommend != null">
+      and s.is_recommend = #{spu.isRecommend}
+    </if>
+    <if test="spu.isSelectionBest != null">
+      and s.is_selection_best = #{spu.isSelectionBest}
+    </if>
+    <if test="spu.minCommissionRate != null">
+      and s.commission_rate &gt;= #{spu.minCommissionRate}
+    </if>
+    <if test="spu.minRating != null">
+      and s.rating &gt;= #{spu.minRating}
+    </if>
     order by
     <trim prefixOverrides=",">
         <if test="spu.priceFeeSort == 0">s.price_fee desc</if>
@@ -93,9 +150,17 @@
         <if test="spu.seqSort == 1">,s.seq</if>
         <if test="spu.createTimeSort == 0">,s.create_time desc</if>
         <if test="spu.createTimeSort == 1">,s.create_time</if>
+        <if test="spu.commissionSort == 0">,s.commission_rate desc</if>
+        <if test="spu.commissionSort == 1">,s.commission_rate</if>
         <if test="spu.priceFeeSort == null and spu.marketPriceFeeSort == null and spu.saleNumSort == null
-            and spu.stockSort == null and spu.seqSort == null and spu.createTimeSort == null">
-          s.update_time desc, s.spu_id
+            and spu.stockSort == null and spu.seqSort == null and spu.createTimeSort == null and spu.commissionSort == null">
+          <choose>
+            <when test="spu.orderBy == 'totalSales'">s.total_sales desc</when>
+            <when test="spu.orderBy == 'monthSales'">s.month_sales desc</when>
+            <when test="spu.orderBy == 'commissionRate'">s.commission_rate desc</when>
+            <when test="spu.orderBy == 'rating'">s.rating desc</when>
+            <otherwise>s.update_time desc, s.spu_id</otherwise>
+          </choose>
         </if>
     </trim>
   </select>
@@ -155,6 +220,33 @@
       </if>
       <if test="spu.seq != null">
         `seq` = #{spu.seq},
+      </if>
+      <if test="spu.isSelection != null">
+        `is_selection` = #{spu.isSelection},
+      </if>
+      <if test="spu.commissionRate != null">
+        `commission_rate` = #{spu.commissionRate},
+      </if>
+      <if test="spu.isHot != null">
+        `is_hot` = #{spu.isHot},
+      </if>
+      <if test="spu.isNew != null">
+        `is_new` = #{spu.isNew},
+      </if>
+      <if test="spu.isRecommend != null">
+        `is_recommend` = #{spu.isRecommend},
+      </if>
+      <if test="spu.isSelectionBest != null">
+        `is_selection_best` = #{spu.isSelectionBest},
+      </if>
+      <if test="spu.rating != null">
+        `rating` = #{spu.rating},
+      </if>
+      <if test="spu.totalSales != null">
+        `total_sales` = #{spu.totalSales},
+      </if>
+      <if test="spu.monthSales != null">
+        `month_sales` = #{spu.monthSales},
       </if>
     </set>
     where spu_id = #{spu.spuId}
@@ -225,6 +317,72 @@
       #{spuId}
     </foreach>
   </update>
+
+  <select id="selectSelectionSpuList" resultType="com.mall4j.cloud.product.model.Spu">
+    SELECT * FROM spu
+    WHERE status = 1
+    <if test="spu.isSelection != null">
+      AND is_selection = #{spu.isSelection}
+    </if>
+    <if test="spu.isHot != null">
+      AND is_hot = #{spu.isHot}
+    </if>
+    <if test="spu.isNew != null">
+      AND is_new = #{spu.isNew}
+    </if>
+    <if test="spu.isRecommend != null">
+      AND is_recommend = #{spu.isRecommend}
+    </if>
+    <if test="spu.isSelectionBest != null">
+      AND is_selection_best = #{spu.isSelectionBest}
+    </if>
+    <if test="spu.minCommissionRate != null">
+      AND commission_rate &gt;= #{spu.minCommissionRate}
+    </if>
+    <if test="spu.minRating != null">
+      AND rating &gt;= #{spu.minRating}
+    </if>
+    ORDER BY
+    <choose>
+      <when test="spu.orderBy == 'totalSales'">total_sales DESC</when>
+      <when test="spu.orderBy == 'monthSales'">month_sales DESC</when>
+      <when test="spu.orderBy == 'commissionRate'">commission_rate DESC</when>
+      <when test="spu.orderBy == 'rating'">rating DESC</when>
+      <otherwise>update_time DESC, spu_id</otherwise>
+    </choose>
+  </select>
+
+  <update id="batchSetSelection">
+    UPDATE spu
+    SET is_selection = #{isSelection}
+    WHERE spu_id IN
+    <foreach collection="spuIds" item="spuId" open="(" close=")" separator=",">
+      #{spuId}
+    </foreach>
+  </update>
+
+  <update id="batchSetTags">
+    UPDATE spu
+    <set>
+      <if test="tagDTO.isHot != null">
+        is_hot = #{tagDTO.isHot},
+      </if>
+      <if test="tagDTO.isNew != null">
+        is_new = #{tagDTO.isNew},
+      </if>
+      <if test="tagDTO.isRecommend != null">
+        is_recommend = #{tagDTO.isRecommend},
+      </if>
+      <if test="tagDTO.isSelectionBest != null">
+        is_selection_best = #{tagDTO.isSelectionBest},
+      </if>
+    </set>
+    WHERE spu_id IN
+    <foreach collection="tagDTO.spuIds" item="spuId" open="(" close=")" separator=",">
+      #{spuId}
+    </foreach>
+  </update>
+
   <select id="listBySpuIds" resultMap="spuDetailMap">
     select spu_id,name,main_img_url,status,price_fee from spu where spu_id in
     <foreach collection="spuIds" item="spuId" open="(" close=")" separator=",">
@@ -289,6 +447,18 @@
     <foreach collection="cidList" item="categoryId" open="(" close=")" separator=",">
       #{categoryId}
     </foreach>
+  </select>
+
+  <select id="listByShopIds" resultType="com.mall4j.cloud.api.product.vo.SpuVO">
+    SELECT s.spu_id, s.shop_id, s.name, s.main_img_url, s.price_fee, s.status, se.sale_num, se.actual_stock as total_stock
+    FROM spu s
+    LEFT JOIN spu_extension se ON s.spu_id = se.spu_id
+    WHERE s.status = 1
+    AND s.shop_id IN
+    <foreach collection="shopIds" item="shopId" open="(" close=")" separator=",">
+      #{shopId}
+    </foreach>
+    ORDER BY s.shop_id, se.sale_num DESC
   </select>
 
 </mapper>

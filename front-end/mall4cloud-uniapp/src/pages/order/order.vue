@@ -3,7 +3,7 @@
     <view class="search-box">
       <view class="search">
         <view class="icon">
-          <image src="/static/images/search.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/search.png" />
         </view>
         <view class="text">
           输入关键字搜索
@@ -52,7 +52,7 @@
           <view class="shop-info">
             <view class="shop">
               <view class="icon">
-                <image src="/static/images/shop.png" />
+                <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop.png" />
               </view>
               <view class="name text-arrow">
                 {{ orderItem.shopName }}
@@ -65,15 +65,15 @@
               v-if="orderItem.status==5"
               class="order-complete"
             >
-              <image src="/static/images/order-finish.png" />
-              <!-- <image src="/static/images/order-cancel.png" /> -->
+              <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/order-finish.png" />
+              <!-- <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/order-cancel.png" /> -->
             </view>
             <view
               v-if="orderItem.status==6"
               class="del"
               @tap="hanldeShowOrderOperPopup(0,orderItem.orderId)"
             >
-              <image src="/static/images/del.png" />
+              <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/del.png" />
             </view>
             <!-- 已完成或已取消时才显示“order-complete”和“del” -->
           </view>
@@ -256,7 +256,7 @@ const Data = reactive({
 const { isShowDelOrderPopup, orderStatus, orderList, operType } = toRefs(Data)
 
 onLoad((options) => {
-  Data.orderStatus = options.orderStatus
+  Data.orderStatus = options.orderStatus ? parseInt(options.orderStatus) : 0
 })
 
 onShow(() => {

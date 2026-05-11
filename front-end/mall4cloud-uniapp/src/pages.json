@@ -1,14 +1,16 @@
 {
+  "lazyCodeLoading": "requiredComponents",
   "easycom": {
 		"custom":{
-    	"^w-(.*)": "@uni-ui/code-ui/components/w-$1/index.vue"//二维码条形码的配置
+    	"^w-(.*)": "@uni-ui/code-ui/components/w-$1/index.vue"
 		}
   },
   "pages": [
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "首页",
+        "navigationStyle": "custom"
       }
     },
     {
@@ -104,7 +106,8 @@
     {
 			"path": "pages/shop-prods/shop-prods",
 			"style": {
-				"navigationBarTitleText": "店铺商品"
+				"navigationBarTitleText": "店铺商品",
+				"disableScroll": true
 			}
 		},
     {
@@ -136,10 +139,105 @@
 			"style": {
 				"navigationBarTitleText": "免费开店"
 			}
+		},
+    {
+			"path": "pages/demand-index/demand-index",
+			"style": {
+				"navigationBarTitleText": "需求中心"
+			}
+		},
+    {
+			"path": "pages/demand-submit/demand-submit",
+			"style": {
+				"navigationBarTitleText": "提交需求"
+			}
+		},
+    {
+			"path": "pages/demand-detail/demand-detail",
+			"style": {
+				"navigationBarTitleText": "需求详情"
+			}
+		},
+    {
+			"path": "pages/demand-list/demand-list",
+			"style": {
+				"navigationBarTitleText": "我的需求",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+    {
+			"path": "pages/sample/selection/selection",
+			"style": {
+				"navigationBarTitleText": "选品中心",
+				"navigationBarBackgroundColor": "#ffffff",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark",
+				"onReachBottomDistance": 100
+			}
+		},
+    {
+			"path": "pages/sample/product/product",
+			"style": {
+				"navigationBarTitleText": "商品详情",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+    {
+			"path": "pages/sample/apply/apply",
+			"style": {
+				"navigationBarTitleText": "申请样品",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+    {
+			"path": "pages/sample/list/list",
+			"style": {
+				"navigationBarTitleText": "我的样品",
+				"navigationBarBackgroundColor": "#ffffff",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+    {
+			"path": "pages/sample/detail/detail",
+			"style": {
+				"navigationBarTitleText": "样品详情",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+    {
+			"path": "pages/chat/chat",
+			"style": {
+				"navigationBarTitleText": "智能客服",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+    {
+			"path": "pages/talent-pool/index/index",
+			"style": {
+				"navigationBarTitleText": "人才库",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+    {
+			"path": "pages/talent-pool/detail/detail",
+			"style": {
+				"navigationBarTitleText": "人才详情"
+			}
+		},
+    {
+			"path": "pages/talent-apply/talent-apply",
+			"style": {
+				"navigationBarTitleText": "达人申请",
+				"navigationBarBackgroundColor": "#fe944d"
+			}
 		}
   ],
   "tabBar": {
     "selectedColor": "#fc1b35",
+ "custom": true,
     "color": "#333333",
     "list": [
       {
@@ -149,16 +247,22 @@
         "selectedIconPath": "/static/tabbar/index-r.png"
       },
       {
-        "pagePath": "pages/category/category",
-        "text": "分类",
-        "iconPath": "/static/tabbar/category.png",
-        "selectedIconPath": "/static/tabbar/category-r.png"
+        "pagePath": "pages/demand-index/demand-index",
+        "text": "研发",
+        "iconPath": "/static/tabbar/dev.png",
+        "selectedIconPath": "/static/tabbar/dev-r.png"
       },
       {
-        "pagePath": "pages/cart/cart",
-        "text": "购物车",
-        "iconPath": "/static/tabbar/cart.png",
-        "selectedIconPath": "/static/tabbar/cart-r.png"
+        "pagePath": "pages/sample/selection/selection",
+        "text": "选品",
+        "iconPath": "/static/tabbar/selection.png",
+        "selectedIconPath": "/static/tabbar/selection-r.png"
+      },
+      {
+        "pagePath": "pages/shop-prods/shop-prods",
+        "text": "商城",
+        "iconPath": "/static/tabbar/mall.png",
+        "selectedIconPath": "/static/tabbar/mall-r.png"
       },
       {
         "pagePath": "pages/my/my",

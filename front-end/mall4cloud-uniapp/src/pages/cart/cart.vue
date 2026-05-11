@@ -7,7 +7,7 @@
     <view class="cart-top">
       <view class="address">
         <view class="img">
-          <image src="/static/images/local.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/local.png" />
         </view>
         <view
           class="text"
@@ -39,7 +39,7 @@
               />
               <view class="info">
                 <view class="icon">
-                  <image src="/static/images/shop.png" />
+                  <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop.png" />
                 </view>
                 <view class="name text-arrow">
                   {{ shopItem.shopName }}
@@ -64,7 +64,7 @@
                     @tap.stop="handleProdItemSelect(shopIndex, prodIndex)"
                   />
                   <view class="prod-img">
-                    <image :src="prodItem.imgUrl" />
+                    <image :src="util.getImgUrl(prodItem.imgUrl)" />
                   </view>
                   <view class="prod-info">
                     <view class="name">
@@ -117,7 +117,7 @@
           class="empty"
         >
           <view class="img">
-            <image src="/static/empty-img/cart-empty.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/empty-img/cart-empty.png" />
           </view>
           <view class="text">
             购物车空空的，去逛逛吧~
@@ -189,7 +189,7 @@
       <view class="popup-con-bottom check-sku">
         <view class="goods-box">
           <view class="img">
-            <image :src="defaultSku ? defaultSku.imgUrl : prodInfo.mainImgUrl" />
+            <image :src="util.getImgUrl(defaultSku ? defaultSku.imgUrl : prodInfo.mainImgUrl)" />
           </view>
           <view class="info">
             <view class="name">
@@ -211,7 +211,7 @@
             class="close"
             @tap="closePopup"
           >
-            <image src="/static/images/close.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/close.png" />
           </view>
         </view>
         <view class="con-box">
@@ -253,6 +253,7 @@
 <script setup>
 import { reactive } from 'vue'
 import * as cartCount from '@/utils/cart-count.js'
+import util from '@/utils/util.js'
 
 const wxs = number()
 

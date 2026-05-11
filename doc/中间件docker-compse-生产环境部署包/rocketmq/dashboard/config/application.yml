@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: rocketmq-dashboard
+
+logging:
+  config: classpath:logback.xml
+
+rocketmq:
+  config:
+    namesrvAddrs:
+      - mall4cloud-rocketmq-namesrv:9876
+    isVIPChannel: false
+    dataPath: /tmp/rocketmq-console/data
+    enableDashBoardCollect: true
+    loginRequired: false
+    useTLS: false
+
+threadpool:
+  config:
+    coreSize: 10
+    maxSize: 10
+    keepAliveTime: 3000
+    queueSize: 5000

@@ -2,6 +2,7 @@ package com.mall4j.cloud.product.mapper;
 
 import com.mall4j.cloud.api.product.bo.EsProductBO;
 import com.mall4j.cloud.common.database.dto.PageDTO;
+import com.mall4j.cloud.product.dto.SelectionTagDTO;
 import com.mall4j.cloud.product.dto.SpuDTO;
 import com.mall4j.cloud.product.dto.SpuPageSearchDTO;
 import com.mall4j.cloud.product.model.Spu;
@@ -131,4 +132,32 @@ public interface SpuMapper {
 	 * @param status
 	 */
 	void batchChangeSpuStatusBySpuIdsAndStatus(@Param("spuIdList") List<Long> spuIdList, @Param("status") Integer status);
+
+	/**
+	 * 查询选品商品列表
+	 * @param searchDTO 查询条件
+	 * @return 商品列表
+	 */
+	List<Spu> selectSelectionSpuList(@Param("spu") SpuPageSearchDTO searchDTO);
+
+	/**
+	 * 批量设置选品状态
+	 * @param spuIds 商品ID列表
+	 * @param isSelection 是否选品
+	 */
+	void batchSetSelection(@Param("spuIds") List<Long> spuIds, @Param("isSelection") Integer isSelection);
+
+	/**
+	 * 批量设置商品标签
+	 * @param tagDTO 标签信息
+	 */
+	void batchSetTags(@Param("tagDTO") SelectionTagDTO tagDTO);
+
+	/**
+	 * 根据店铺ID列表获取商品列表（每个店铺取固定数量）
+	 * @param shopIds 店铺ID列表
+	 * @param size 每个店铺取的商品数量
+	 * @return 商品列表
+	 */
+	List<SpuVO> listByShopIds(@Param("shopIds") List<Long> shopIds, @Param("size") Integer size);
 }

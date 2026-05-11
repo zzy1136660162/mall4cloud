@@ -7,7 +7,7 @@
         @tap="toSearchPage"
       >
         <view class="icon">
-          <image src="/static/images/search.png" />
+          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/search.png" />
         </view>
         <view class="text">
           搜索您想购买的商品或者店铺
@@ -38,7 +38,7 @@
           v-if="firstCategoryList.length"
           class="adv-img"
         >
-          <image :src="firstCategoryList[selectedIndex].imgUrl" />
+          <image :src="util.getImgUrl(firstCategoryList[selectedIndex].imgUrl)" />
         </view>
         <block
           v-for="(secondCategory, index) in secondCategoryList"
@@ -60,7 +60,7 @@
                   @tap="toSearchListPage"
                 >
                   <view class="img">
-                    <image :src="thirdCategory.imgUrl" />
+                    <image :src="util.getImgUrl(thirdCategory.imgUrl)" />
                   </view>
                   <view class="text">
                     {{ thirdCategory.name }}
@@ -78,6 +78,7 @@
 <script setup>
 import * as cartCount from '@/utils/cart-count.js'
 import { reactive } from 'vue'
+import util from '@/utils/util.js'
 
 const Data = reactive({
   selectedIndex: 0, // 选中的分类项(默认为第一个分类)

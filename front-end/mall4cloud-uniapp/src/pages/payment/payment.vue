@@ -37,7 +37,7 @@
       <label class="item">
         <view class="pay-name">
           <view class="img">
-            <image src="/static/images/balancePay.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/balancePay.png" />
           </view>
           <view class="name">模拟支付</view>
         </view>
@@ -49,7 +49,7 @@
       <label class="item">
         <view class="pay-name">
           <view class="img">
-            <image src="/static/images/alipay.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/alipay.png" />
           </view>
           <view class="name">支付宝</view>
         </view>
@@ -62,7 +62,7 @@
       <label class="item">
         <view class="pay-name">
           <view class="img">
-            <image src="/static/images/wxpay.png" />
+            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/wxpay.png" />
           </view>
           <view class="name">微信支付</view>
         </view>
@@ -129,7 +129,26 @@ onLoad((options) => {
 })
 
 onShow(() => {
-  getOrderPaymentInfo()
+  // 只有在没有倒计时运行时才重新获取数据
+  if (!Data.countDown && !Data.endTime) {
+    getOrderPaymentInfo()
+  }
+})
+
+onHide(() => {
+  // 页面隐藏时清除定时器
+  if (Data.timer) {
+    clearTimeout(Data.timer)
+    Data.timer = null
+  }
+})
+
+onUnload(() => {
+  // 页面卸载时清除定时器
+  if (Data.timer) {
+    clearTimeout(Data.timer)
+    Data.timer = null
+  }
 })
 
 /**
@@ -148,7 +167,9 @@ const getOrderPaymentInfo = () => {
     Data.totalScore = res.totalScore
     Data.endTime = res.endTime
     // 生成倒计时
-    getCountDown()
+    if (Data.endTime) {
+      getCountDown()
+    }
   })
 }
 
@@ -156,9 +177,18 @@ const getOrderPaymentInfo = () => {
      * 生成支付倒计时
      */
 const getCountDown = () => {
+  // 清除之前的定时器
+  if (Data.timer) {
+    clearTimeout(Data.timer)
+    Data.timer = null
+  }
+
   const nowTime = new Date().getTime() // 现在时间（时间戳）
   const endTime = new Date(Data.endTime.replace(/-/g, '/')).getTime() // 结束时间（时间戳）
-  const time = (endTime - nowTime) / 1000 // 距离结束的毫秒数
+  const time = (endTime - nowTime) / 1000 // 距离结束的秒数
+
+  console.log('倒计时调试 - endTime:', Data.endTime, 'endTime戳:', endTime, 'nowTime戳:', nowTime, 'time:', time)
+
   // 获取时、分、秒
   let hou = parseInt(time % (60 * 60 * 24) / 3600)
   let min = parseInt(time % (60 * 60 * 24) % 3600 / 60)
@@ -169,16 +199,18 @@ const getCountDown = () => {
   Data.hou = timeFormat(hou)
   Data.min = timeFormat(min)
   Data.sec = timeFormat(sec)
+
   // 每1000ms刷新一次
   if (time > 0) {
     Data.countDown = true
-    Data.timer = setTimeout(Data.getCountDown, 1000)
-  } else {
+    Data.timer = setTimeout(getCountDown, 1000)
+  } else if (!isNaN(time) && time <= 0) {
+    // 只有time是有效数字且小于等于0时才跳转
+    console.log('订单已过期，准备跳转')
     Data.countDown = false
     uni.navigateTo({
       url: '/pages/order/order'
     })
-    // this.$Router.push('/pages/orderList/orderList')
   }
 }
 

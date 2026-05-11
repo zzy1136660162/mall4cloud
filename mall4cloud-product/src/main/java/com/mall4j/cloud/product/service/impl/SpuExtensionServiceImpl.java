@@ -43,6 +43,11 @@ public class SpuExtensionServiceImpl implements SpuExtensionService {
     }
 
     @Override
+    public void setStock(Long spuId, Integer totalStock) {
+        spuExtensionMapper.setStock(spuId, totalStock);
+    }
+
+    @Override
     public void deleteById(Long spuId) {
         spuExtensionMapper.deleteById(spuId);
     }

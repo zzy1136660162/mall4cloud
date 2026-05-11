@@ -3,6 +3,7 @@ page {
 }
 
 .page-my {
+  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
 
   /* 用户资料 */
   .user-box {
@@ -28,6 +29,25 @@ page {
   .user-box .text-box .name {
     font-size: 36rpx;
     font-weight: 600;
+  }
+
+  .user-box .text-box .name-row {
+    display: flex;
+    align-items: center;
+  }
+
+  .user-box .text-box .talent-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6rpx 16rpx;
+    margin-left: 16rpx;
+    font-size: 22rpx;
+    font-weight: 500;
+    color: #fff;
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    border-radius: 20rpx;
+    line-height: 1;
   }
 
   .user-box .text-box .level {

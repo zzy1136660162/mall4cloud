@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mall4j.cloud.platform.mapper.DemandMapper">
+  <resultMap id="demandMap" type="com.mall4j.cloud.platform.model.Demand">
+    <id column="id" property="id" />
+    <result column="demand_no" property="demandNo"/>
+    <result column="title" property="title"/>
+    <result column="functional_appeal" property="functionalAppeal"/>
+    <result column="target_audience" property="targetAudience"/>
+    <result column="dosage_form_preference" property="dosageFormPreference"/>
+    <result column="budget_range" property="budgetRange"/>
+    <result column="expected_delivery_time" property="expectedDeliveryTime"/>
+    <result column="remark" property="remark"/>
+    <result column="submitter_id" property="submitterId"/>
+    <result column="submitter_name" property="submitterName"/>
+    <result column="submitter_phone" property="submitterPhone"/>
+    <result column="status" property="status"/>
+    <result column="status_text" property="statusText"/>
+    <result column="admin_remark" property="adminRemark"/>
+    <result column="handler_name" property="handlerName"/>
+    <result column="submit_time" property="submitTime"/>
+    <result column="update_time" property="updateTime"/>
+    <result column="create_time" property="createTime"/>
+  </resultMap>
+
+  <sql id="Vo_Column_List">
+    `id`,`demand_no`,`title`,`functional_appeal`,`target_audience`,`dosage_form_preference`,
+    `budget_range`,`expected_delivery_time`,`remark`,`submitter_id`,`submitter_name`,
+    `submitter_phone`,`status`,`status_text`,`admin_remark`,`handler_name`,
+    `submit_time`,`update_time`,`create_time`
+  </sql>
+
+  <select id="list" resultType="com.mall4j.cloud.platform.vo.DemandVO">
+    SELECT <include refid="Vo_Column_List"/> FROM rd_demand ORDER BY create_time DESC
+  </select>
+
+  <select id="page" resultType="com.mall4j.cloud.platform.vo.DemandVO">
+    SELECT <include refid="Vo_Column_List"/> FROM rd_demand
+    <where>
+      <if test="demand.title != null and demand.title != ''">
+        AND title LIKE CONCAT('%', #{demand.title}, '%')
+      </if>
+      <if test="demand.status != null">
+        AND status = #{demand.status}
+      </if>
+      <if test="demand.submitterId != null and demand.submitterId != ''">
+        AND submitter_id = #{demand.submitterId}
+      </if>
+    </where>
+    ORDER BY create_time DESC
+  </select>
+
+  <select id="getById" resultType="com.mall4j.cloud.platform.vo.DemandVO">
+    SELECT <include refid="Vo_Column_List"/> FROM rd_demand WHERE id = #{id}
+  </select>
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="demand.id">
+    INSERT INTO rd_demand (
+      `demand_no`,`title`,`functional_appeal`,`target_audience`,`dosage_form_preference`,
+      `budget_range`,`expected_delivery_time`,`remark`,`submitter_id`,`submitter_name`,
+      `submitter_phone`,`status`,`status_text`,`submit_time`,`update_time`
+    ) VALUES (
+      #{demand.demandNo},#{demand.title},#{demand.functionalAppeal},#{demand.targetAudience},#{demand.dosageFormPreference},
+      #{demand.budgetRange},#{demand.expectedDeliveryTime},#{demand.remark},#{demand.submitterId},#{demand.submitterName},
+      #{demand.submitterPhone},#{demand.status},#{demand.statusText},#{demand.submitTime},#{demand.updateTime}
+    )
+  </insert>
+
+  <update id="update">
+    UPDATE rd_demand
+    <set>
+      <if test="demand.title != null">
+        `title` = #{demand.title},
+      </if>
+      <if test="demand.functionalAppeal != null">
+        `functional_appeal` = #{demand.functionalAppeal},
+      </if>
+      <if test="demand.targetAudience != null">
+        `target_audience` = #{demand.targetAudience},
+      </if>
+      <if test="demand.dosageFormPreference != null">
+        `dosage_form_preference` = #{demand.dosageFormPreference},
+      </if>
+      <if test="demand.budgetRange != null">
+        `budget_range` = #{demand.budgetRange},
+      </if>
+      <if test="demand.expectedDeliveryTime != null">
+        `expected_delivery_time` = #{demand.expectedDeliveryTime},
+      </if>
+      <if test="demand.remark != null">
+        `remark` = #{demand.remark},
+      </if>
+      <if test="demand.status != null">
+        `status` = #{demand.status},
+      </if>
+      <if test="demand.statusText != null">
+        `status_text` = #{demand.statusText},
+      </if>
+      <if test="demand.adminRemark != null">
+        `admin_remark` = #{demand.adminRemark},
+      </if>
+      <if test="demand.handlerName != null">
+        `handler_name` = #{demand.handlerName},
+      </if>
+      `update_time` = NOW()
+    </set>
+    WHERE id = #{demand.id}
+  </update>
+
+  <delete id="deleteById">
+    DELETE FROM rd_demand WHERE id = #{id}
+  </delete>
+
+  <select id="listBySubmitterId" resultType="com.mall4j.cloud.platform.vo.DemandVO">
+    SELECT <include refid="Vo_Column_List"/> FROM rd_demand WHERE submitter_id = #{submitterId} ORDER BY create_time DESC
+  </select>
+
+</mapper>
