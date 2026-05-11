@@ -109,6 +109,16 @@
       </view>
     </view>
 
+    <view class="detail-section">
+      <view class="section-title">商品详情</view>
+      <view v-if="productDetail" class="detail-content">
+        <rich-text :nodes="productDetail" />
+      </view>
+      <view v-else class="detail-empty">
+        暂无商品详情
+      </view>
+    </view>
+
     <view class="safe-area"></view>
 
     <view class="bottom-bar">
@@ -220,6 +230,7 @@ const selectedSpecs = reactive({
 const selectedCount = ref(1)
 const totalPrice = ref(0)
 const loading = ref(false)
+const productDetail = ref('')
 
 const isLoggedIn = () => {
   const token = uni.getStorageSync('cloudToken')
@@ -289,6 +300,7 @@ async function loadDetail(spuId) {
         monthDaren: Math.floor(Math.random() * 5000).toString(),
         specs: res.specs || { weight: [] }
       }
+      productDetail.value = normalizeDetail(res.detail)
       totalPrice.value = parseFloat(product.value.price)
     }
   } catch (error) {
@@ -297,6 +309,13 @@ async function loadDetail(spuId) {
   } finally {
     loading.value = false
   }
+}
+
+function normalizeDetail(detail) {
+  if (!detail) {
+    return ''
+  }
+  return detail.replace(/<img\b([^>]*)>/gi, '<img$1 style="max-width:100%;height:auto;display:block;" />')
 }
 
 function previewImage(img) {
@@ -603,11 +622,31 @@ function closeSpecModal() {
   padding: 24rpx 30rpx;
 }
 
+.detail-section {
+  background: #fff;
+  margin-top: 20rpx;
+  padding: 24rpx 30rpx 30rpx;
+}
+
 .section-title {
   font-size: 30rpx;
   color: #333;
   font-weight: 600;
   margin-bottom: 24rpx;
+}
+
+.detail-content {
+  overflow: hidden;
+  color: #333;
+  font-size: 28rpx;
+  line-height: 1.7;
+}
+
+.detail-empty {
+  padding: 40rpx 0;
+  text-align: center;
+  color: #999;
+  font-size: 26rpx;
 }
 
 .data-stats {
