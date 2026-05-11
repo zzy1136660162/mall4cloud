@@ -13,13 +13,13 @@ spring:
         server-addr: ${NACOS_HOST:101.126.90.255}:${NACOS_PORT:8848}
         username: nacos
         password: Gesoft9919.
-        namespace: zzy-dev
+        namespace: ${NACOS_NAMESPACE:zzy-dev}
       config:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yml
         username: ${spring.cloud.nacos.discovery.username}
         password: ${spring.cloud.nacos.discovery.password}
-        namespace: zzy-dev
+        namespace: ${NACOS_NAMESPACE:zzy-dev}
 
 mall4cloud:
   job:

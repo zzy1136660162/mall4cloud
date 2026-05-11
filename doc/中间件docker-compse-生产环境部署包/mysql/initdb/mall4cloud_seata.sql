@@ -82,16 +82,20 @@ CREATE TABLE `lock_table`
 CREATE TABLE IF NOT EXISTS `distributed_lock`
 (
     `lock_key`       CHAR(20) NOT NULL,
-    `lock_value`     VARCHAR(20) NOT NULL,
+    `lock_value`     VARCHAR(128) NOT NULL,
     `expire`         BIGINT,
     PRIMARY KEY (`lock_key`)
     ) ENGINE = INNODB
     DEFAULT CHARSET = utf8mb4;
 
-INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('AsyncCommitting', ' ', 0);
-INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('RetryCommitting', ' ', 0);
-INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('RetryRollbacking', ' ', 0);
-INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('TxTimeoutCheck', ' ', 0);
+INSERT IGNORE INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('AsyncCommitting', ' ', 0);
+INSERT IGNORE INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('Committing', ' ', 0);
+INSERT IGNORE INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('END', ' ', 0);
+INSERT IGNORE INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('RetryCommitting', ' ', 0);
+INSERT IGNORE INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('RetryRollbacking', ' ', 0);
+INSERT IGNORE INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('Rollbacking', ' ', 0);
+INSERT IGNORE INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('TxTimeoutCheck', ' ', 0);
+INSERT IGNORE INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('UndologDelete', ' ', 0);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

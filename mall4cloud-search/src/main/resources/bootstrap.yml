@@ -13,13 +13,13 @@ spring:
         server-addr: ${NACOS_HOST:101.126.90.255}:${NACOS_PORT:8848}
         username: nacos
         password: Gesoft9919.
-        namespace: zzy-dev
+        namespace: ${NACOS_NAMESPACE:zzy-dev}
       config:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yml
         username: ${spring.cloud.nacos.discovery.username}
         password: ${spring.cloud.nacos.discovery.password}
-        namespace: zzy-dev
+        namespace: ${NACOS_NAMESPACE:zzy-dev}
 
 
 # 健康检查失败：Elasticsearch health check failed，对服务运行没有影响，也可通过下面配置强行关闭spring对Elasticsearch的健康检查
