@@ -32,26 +32,25 @@ useHotkeyBindings({
       <Component :is="useSlots('main-sidebar-top')" />
       <Logo :show-title="false" class="sidebar-logo" />
       <Component :is="useSlots('main-sidebar-after-logo')" />
-      <FaScrollArea :scrollbar="false" mask gradient-color="var(--g-main-sidebar-bg)" class="menu overscroll-contain flex-1">
-        <!-- 侧边栏模式（含主导航） -->
+      <FaScrollArea :scrollbar="false" mask class="menu overscroll-contain flex-1">
         <div
           v-if="appSettingsStore.settings.menu.mode === 'side' || (appSettingsStore.mode === 'mobile' && appSettingsStore.settings.menu.mode !== 'single')" class="py-1 flex flex-col w-full transition-all of-hidden -mt-2"
         >
           <template v-for="(item, index) in appMenuStore.allMenus" :key="index">
             <div
-              class="menu-item px-2 py-1 transition-all relative" :class="{
+              class="menu-item relative transition-all" :class="{
                 active: index === appMenuStore.actived,
               }"
             >
-              <FaTooltip v-if="item.children && item.children.length !== 0" :disabled="!generateTitle(item.meta?.title)" :text="generateTitle(item.meta?.title)" side="right">
+              <FaTooltip :disabled="!generateTitle(item.meta?.title)" :text="generateTitle(item.meta?.title)" side="right">
                 <div
-                  class="group menu-item-container text-[var(--g-main-sidebar-menu-color)] py-4 rounded-lg flex gap-1 h-full w-full cursor-pointer transition-colors items-center justify-between relative hover-(text-[var(--g-main-sidebar-menu-hover-color)] bg-[var(--g-main-sidebar-menu-hover-bg)]) px-2!" :class="{
-                    'text-[var(--g-main-sidebar-menu-active-color)]! bg-[var(--g-main-sidebar-menu-active-bg)]!': index === appMenuStore.actived,
+                  class="group menu-item-container relative h-full w-full min-w-0 flex items-center justify-between gap-1 rounded-lg cursor-pointer transition-colors text-[var(--g-sub-sidebar-menu-color)] hover-(bg-[var(--g-sub-sidebar-menu-hover-bg)] text-[var(--g-sub-sidebar-menu-hover-color)]) px-4 py-3!" :class="{
+                    'text-[var(--g-sub-sidebar-menu-active-color)]! bg-[var(--g-sub-sidebar-menu-active-bg)]!': index === appMenuStore.actived,
                   }" @click="switchTo(index)"
                 >
-                  <div class="inline-flex flex-1 flex-col gap-1 w-full items-center justify-center">
-                    <FaIcon v-if="item.meta?.icon" :name="item.meta.icon" class="menu-item-container-icon transition-transform group-hover-scale-120" />
-                    <span class="text-sm text-center flex-1 w-full truncate transition-height transition-opacity transition-width empty:hidden">
+                  <div class="inline-flex min-w-0 flex-1 items-center justify-start gap-3">
+                    <FaIcon v-if="item.meta?.icon" :name="item.meta.icon" class="menu-item-container-icon size-5 transition-transform group-hover-scale-120" />
+                    <span class="block min-w-0 flex-1 truncate text-sm">
                       {{ generateTitle(item.meta?.title) }}
                     </span>
                   </div>
@@ -90,23 +89,21 @@ useHotkeyBindings({
   .menu {
     :deep(.menu-item) {
       .menu-item-container {
-        aspect-ratio: 1 / 1;
-        padding-block: 8px;
-        color: var(--g-main-sidebar-menu-color);
+        color: var(--g-sub-sidebar-menu-color);
 
         &:hover {
-          color: var(--g-main-sidebar-menu-hover-color);
-          background-color: var(--g-main-sidebar-menu-hover-bg);
+          color: var(--g-sub-sidebar-menu-hover-color);
+          background-color: var(--g-sub-sidebar-menu-hover-bg);
         }
 
         .menu-item-container-icon {
-          font-size: 20px !important;
+          flex-shrink: 0;
         }
       }
 
       &.active .menu-item-container {
-        color: var(--g-main-sidebar-menu-active-color) !important;
-        background-color: var(--g-main-sidebar-menu-active-bg) !important;
+        color: var(--g-sub-sidebar-menu-active-color) !important;
+        background-color: var(--g-sub-sidebar-menu-active-bg) !important;
       }
     }
   }
