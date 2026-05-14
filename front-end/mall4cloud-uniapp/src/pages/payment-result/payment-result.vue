@@ -4,7 +4,7 @@
       <view class="img">
         <img
           class="pay-img"
-          :src="sts==1?'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/hook.png':'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/payment-close.png'"
+          :src="sts==1?'https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/hook.png':'https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/payment-close.png'"
           alt=""
         >
       </view>

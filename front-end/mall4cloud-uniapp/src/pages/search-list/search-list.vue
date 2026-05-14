@@ -7,7 +7,7 @@
         @tap="toSearchPage(1)"
       >
         <view class="icon">
-          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/search.png" />
+          <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/search.png" />
         </view>
         <div
           v-if="showKeyword"
@@ -32,11 +32,11 @@
       >
         <image
           v-if="isLineProds"
-          src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/list-row.png"
+          src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/list-row.png"
         />
         <image
           v-else
-          src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/list-line.png"
+          src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/list-line.png"
         />
       </view>
     </view>
@@ -136,7 +136,7 @@
       class="empty"
     >
       <view class="img">
-        <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/empty-img/not-found.png" />
+        <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/empty-img/not-found.png" />
       </view>
       <view class="text">
         没有找到对应商品，看看别的吧
@@ -203,7 +203,7 @@
       class="empty"
     >
       <view class="img">
-        <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/empty-img/not-found.png" />
+        <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/empty-img/not-found.png" />
       </view>
       <view class="text">
         没有找到对应店铺，看看别的吧

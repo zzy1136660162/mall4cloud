@@ -1,175 +1,179 @@
 <template>
   <view class="page">
     <scroll-view class="content-scroll" scroll-y @scrolltolower="onReachBottom">
-    <view class="header">
-      <view class="search-bar" @tap="goToSearch">
-        <view class="search-input-box">
-          <text class="search-icon">🔍</text>
-          <input class="search-input" placeholder="搜索商品" placeholder-class="placeholder" disabled />
-        </view>
-      </view>
-      <scroll-view class="category-scroll" scroll-x :show-scrollbar="false">
-        <view class="category-list">
-          <view
-            :class="['category-item', { active: currentCategory === 0 }]"
-            @tap="switchCategory(0)"
-          >
-            <text class="category-text">首页</text>
-          </view>
-          <view
-            v-for="cat in categories"
-            :key="cat.categoryId"
-            :class="['category-item', { active: currentCategory === cat.categoryId }]"
-            @tap="switchCategory(cat.categoryId)"
-          >
-            <text class="category-text">{{ cat.name }}</text>
+      <view class="header">
+        <view class="search-bar" @tap="goToSearch">
+          <view class="search-input-box">
+            <text class="search-icon">🔍</text>
+            <input class="search-input" placeholder="搜索商品" placeholder-class="placeholder" disabled />
           </view>
         </view>
-      </scroll-view>
-    </view>
 
-    <view class="banner-section">
-      <swiper
-        class="banner-swiper"
-        indicator-dots
-        autoplay
-        circular
-        :interval="3500"
-        :duration="500"
-        indicator-color="rgba(255,255,255,0.5)"
-        indicator-active-color="#ff5000"
-      >
-        <swiper-item v-for="(item, index) in banners" :key="index" @tap="onBannerTap(item)">
-          <image class="banner-image" :src="item.image" mode="aspectFill" />
-        </swiper-item>
-      </swiper>
-    </view>
-
-
-
-    <view class="filter-section">
-      <view class="filter-bar">
-        <view
-          :class="['filter-item', { active: currentFilter === 'all' }]"
-          @tap="switchFilter('all')"
-        >
-          <text>精选</text>
-        </view>
-        <view
-          :class="['filter-item', { active: currentFilter === 'hot' }]"
-          @tap="switchFilter('hot')"
-        >
-          <text>热销</text>
-        </view>
-        <view
-          :class="['filter-item', { active: currentFilter === 'new' }]"
-          @tap="switchFilter('new')"
-        >
-          <text>新品</text>
-        </view>
-        <view
-          :class="['filter-item', { active: currentFilter === 'commission' }]"
-          @tap="switchFilter('commission')"
-        >
-          <text>高佣</text>
-        </view>
-      </view>
-      <view class="filter-more" @tap="toggleFilterPanel">
-        <text>筛选</text>
-        <text class="arrow">▼</text>
-      </view>
-    </view>
-
-    <view class="sub-filter-panel" v-if="showFilterPanel">
-      <view class="sub-filter-section">
-        <text class="sub-filter-title">佣金比例</text>
-        <view class="sub-filter-options">
-          <view
-            v-for="item in filterOptions.commission"
-            :key="item.value"
-            :class="['sub-filter-item', { active: currentFilters.commission === item.value }]"
-            @tap="selectSubFilter('commission', item.value)"
-          >
-            {{ item.label }}
-          </view>
-        </view>
-      </view>
-      <view class="sub-filter-section">
-        <text class="sub-filter-title">价格区间</text>
-        <view class="sub-filter-options">
-          <view
-            v-for="item in filterOptions.price"
-            :key="item.value"
-            :class="['sub-filter-item', { active: currentFilters.price === item.value }]"
-            @tap="selectSubFilter('price', item.value)"
-          >
-            {{ item.label }}
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <view class="product-list">
-      <view class="product-grid">
-        <view
-          class="product-item"
-          v-for="item in products"
-          :key="item.id"
-          @tap="onProductTap(item)"
-        >
-          <view class="product-img-wrap">
-            <image class="product-img" :src="item.image" mode="aspectFill" />
-            <view class="product-tag" v-if="item.tag">{{ item.tag }}</view>
-          </view>
-          <view class="product-info">
-            <view class="product-title">{{ item.title }}</view>
-            <view class="service-tags" v-if="item.tags && item.tags.length">
-              <text class="service-tag" v-for="(tag, idx) in item.tags" :key="idx">{{ tag }}</text>
+        <scroll-view class="category-scroll" scroll-x :show-scrollbar="false">
+          <view class="category-list">
+            <view
+              :class="['category-item', { active: currentCategory === 0 }]"
+              @tap="switchCategory(0)"
+            >
+              <text class="category-text">首页</text>
             </view>
-            <view class="shop-info">
-              <text class="shop-name">{{ item.shop }}</text>
-              <text class="shop-score" v-if="item.shopScore">{{ item.shopScore }}分</text>
+            <view
+              v-for="cat in categories"
+              :key="cat.categoryId"
+              :class="['category-item', { active: currentCategory === cat.categoryId }]"
+              @tap="switchCategory(cat.categoryId)"
+            >
+              <text class="category-text">{{ cat.name }}</text>
             </view>
-            <view class="product-price-wrap">
-              <text class="price-symbol">¥</text>
-              <text class="product-price">{{ item.price }}</text>
-              <text class="product-original" v-if="item.originalPrice">¥{{ item.originalPrice }}</text>
+          </view>
+        </scroll-view>
+      </view>
+
+      <view class="banner-section">
+        <swiper
+          class="banner-swiper"
+          indicator-dots
+          autoplay
+          circular
+          :interval="3500"
+          :duration="500"
+          indicator-color="rgba(255,255,255,0.5)"
+          indicator-active-color="#ff5000"
+        >
+          <swiper-item v-for="(item, index) in banners" :key="index" @tap="onBannerTap(item)">
+            <image class="banner-image" :src="item.image" mode="aspectFill" />
+          </swiper-item>
+        </swiper>
+      </view>
+
+      <view class="filter-section">
+        <view class="filter-bar">
+          <view
+            :class="['filter-item', { active: currentFilter === 'all' }]"
+            @tap="switchFilter('all')"
+          >
+            <text>精选</text>
+          </view>
+          <view
+            :class="['filter-item', { active: currentFilter === 'hot' }]"
+            @tap="switchFilter('hot')"
+          >
+            <text>热销</text>
+          </view>
+          <view
+            :class="['filter-item', { active: currentFilter === 'new' }]"
+            @tap="switchFilter('new')"
+          >
+            <text>新品</text>
+          </view>
+          <view
+            :class="['filter-item', { active: currentFilter === 'commission' }]"
+            @tap="switchFilter('commission')"
+          >
+            <text>高佣</text>
+          </view>
+        </view>
+        <view class="filter-more" @tap="toggleFilterPanel">
+          <text>筛选</text>
+          <text class="arrow">▼</text>
+        </view>
+      </view>
+
+      <view v-if="showFilterPanel" class="sub-filter-panel">
+        <view class="sub-filter-section">
+          <text class="sub-filter-title">佣金比例</text>
+          <view class="sub-filter-options">
+            <view
+              v-for="item in filterOptions.commission"
+              :key="item.value"
+              :class="['sub-filter-item', { active: currentFilters.commission === item.value }]"
+              @tap="selectSubFilter('commission', item.value)"
+            >
+              {{ item.label }}
             </view>
-            <view class="product-commission-wrap">
-              <text class="commission-tag">佣金{{ item.commissionRate }}%</text>
-              <text class="commission-amount">预计赚¥{{ item.commissionAmount }}</text>
+          </view>
+        </view>
+
+        <view class="sub-filter-section">
+          <text class="sub-filter-title">价格区间</text>
+          <view class="sub-filter-options">
+            <view
+              v-for="item in filterOptions.price"
+              :key="item.value"
+              :class="['sub-filter-item', { active: currentFilters.price === item.value }]"
+              @tap="selectSubFilter('price', item.value)"
+            >
+              {{ item.label }}
             </view>
-            <view class="product-bottom">
-              <view class="sales-info">
-                <text class="sales-text">已售{{ item.salesText }}</text>
-                <text class="location" v-if="item.location">{{ item.location }}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="product-list">
+        <view class="product-grid">
+          <view
+            v-for="item in products"
+            :key="item.id"
+            class="product-item"
+            @tap="onProductTap(item)"
+          >
+            <view class="product-img-wrap">
+              <image class="product-img" :src="item.image" mode="aspectFill" />
+              <view v-if="item.tag" class="product-tag">{{ item.tag }}</view>
+            </view>
+
+            <view class="product-info">
+              <view class="product-title">{{ item.title }}</view>
+
+              <view v-if="item.tags && item.tags.length" class="service-tags">
+                <text v-for="(tag, idx) in item.tags" :key="idx" class="service-tag">{{ tag }}</text>
+              </view>
+
+              <view v-if="selectMode" class="shop-info">
+                <text class="shop-name">{{ item.shop }}</text>
+              </view>
+
+              <view class="product-price-wrap">
+                <text class="price-symbol">¥</text>
+                <text class="product-price">{{ item.price }}</text>
+                <text v-if="item.originalPrice" class="product-original">¥{{ item.originalPrice }}</text>
+              </view>
+
+              <view class="product-commission-wrap">
+                <text class="commission-tag">佣金{{ item.commissionRate }}%</text>
+                <text class="commission-amount">预计赚¥{{ item.commissionAmount }}</text>
               </view>
             </view>
-          </view>
-          <view class="btn-apply-wrap" v-if="selectMode">
-            <view class="btn-select" @tap.stop="selectProduct(item)">选择</view>
-          </view>
-          <view class="btn-apply-wrap" v-else>
-            <view class="btn-apply" @tap.stop="applySample(item.id)">申请样品</view>
+
+            <view v-if="selectMode" class="btn-apply-wrap">
+              <view class="btn-select" @tap.stop="selectProduct(item)">选择</view>
+            </view>
+
+            <view v-else class="btn-apply-wrap">
+              <view class="shop-info">
+                <text class="shop-name">{{ item.shop }}</text>
+                <text v-if="item.shopScore" class="bottom-score">{{ item.shopScore }}分</text>
+              </view>
+              <view class="btn-apply" @tap.stop="applySample(item.id)">申请样品</view>
+            </view>
           </view>
         </view>
+
+        <view v-if="loading" class="loading-more">
+          <text>加载中...</text>
+        </view>
+        <view v-if="!hasMore && products.length" class="no-more">
+          <text>没有更多了</text>
+        </view>
       </view>
-      <view class="loading-more" v-if="loading">
-        <text>加载中...</text>
-      </view>
-      <view class="no-more" v-if="!hasMore && products.length">
-        <text>没有更多了</text>
-      </view>
-    </view>
     </scroll-view>
   </view>
 
-  <!-- 自定义tabbar -->
-  <diy-tabbar :current-index="2" v-if="!selectMode" />
+  <diy-tabbar v-if="!selectMode" :current-index="2" />
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import selectionApi from '@/utils/api/selection.js'
 import util from '@/utils/util.js'
@@ -183,47 +187,8 @@ const loading = ref(false)
 const hasMore = ref(true)
 const showFilterPanel = ref(false)
 const categories = ref([])
-
 const banners = ref([])
 const selectMode = ref(false)
-
-onLoad((options) => {
-  console.log('selection.vue 页面加载, options:', options)
-  if (options.mode === 'select') {
-    selectMode.value = true
-    console.log('进入选择模式')
-  }
-
-  // 检查是否有从 apply 页面跳转过来需要处理的商品
-  const selectedProduct = uni.getStorageSync('selectedProductForApply')
-  if (selectedProduct) {
-    uni.removeStorageSync('selectedProductForApply')
-    console.log('检测到待选择的商品:', selectedProduct)
-  }
-})
-
-const isLoggedIn = () => {
-  const token = uni.getStorageSync('cloudToken')
-  return !!token
-}
-
-const checkLogin = () => {
-  if (!isLoggedIn()) {
-    uni.showModal({
-      title: '提示',
-      content: '您还未登录，是否立即登录？',
-      success: (res) => {
-        if (res.confirm) {
-          uni.navigateTo({
-            url: '/pages/login/login'
-          })
-        }
-      }
-    })
-    return false
-  }
-  return true
-}
 
 const filterOptions = {
   commission: [
@@ -248,11 +213,45 @@ const currentFilters = reactive({
   priceMax: null
 })
 
+onLoad((options) => {
+  if (options.mode === 'select') {
+    selectMode.value = true
+  }
+
+  const selectedProduct = uni.getStorageSync('selectedProductForApply')
+  if (selectedProduct) {
+    uni.removeStorageSync('selectedProductForApply')
+  }
+})
+
 onMounted(() => {
   loadCategories()
   loadProducts()
   loadBanners()
 })
+
+function isLoggedIn() {
+  const token = uni.getStorageSync('cloudToken')
+  return !!token
+}
+
+function checkLogin() {
+  if (!isLoggedIn()) {
+    uni.showModal({
+      title: '提示',
+      content: '您还未登录，是否立即登录？',
+      success: (res) => {
+        if (res.confirm) {
+          uni.navigateTo({
+            url: '/pages/login/login'
+          })
+        }
+      }
+    })
+    return false
+  }
+  return true
+}
 
 async function loadCategories() {
   try {
@@ -269,9 +268,9 @@ async function loadBanners() {
   try {
     const res = await selectionApi.getSelectionBanners()
     if (res && res.length) {
-      banners.value = res.map(item => ({
+      banners.value = res.map((item) => ({
         ...item,
-        image: item.imgUrl,
+        image: util.getImgUrl(item.imgUrl),
         title: '精选好物',
         type: item.spuId ? 'product' : 'activity'
       }))
@@ -282,17 +281,19 @@ async function loadBanners() {
 }
 
 async function loadProducts() {
-  if (loading.value) return
+  if (loading.value) {
+    return
+  }
   loading.value = true
 
   try {
     const params = {
       pageNum: page.value,
-      pageSize: pageSize,
+      pageSize,
       categoryId: currentCategory.value || null
     }
 
-    if (currentFilters.commission && currentFilters.commission !== 'all') {
+    if (currentFilters.commission !== 'all') {
       params.minCommissionRate = parseFloat(currentFilters.commission)
     }
 
@@ -312,19 +313,18 @@ async function loadProducts() {
     }
 
     const res = await selectionApi.getSelectionProducts(params)
-
     if (res && res.list) {
-      const formattedProducts = res.list.map(item => ({
+      const formattedProducts = res.list.map((item) => ({
         ...item,
         id: item.spuId,
         image: util.getImgUrl(item.mainImgUrl),
         title: item.name,
-        price: (item.priceFee / 100).toFixed(2),
-        originalPrice: item.marketPriceFee ? (item.marketPriceFee / 100).toFixed(2) : null,
-        commissionRate: item.commissionRate,
+        price: ((item.priceFee || 0) / 100).toFixed(2),
+        originalPrice: item.marketPriceFee ? (item.marketPriceFee / 100).toFixed(2) : '',
+        commissionRate: item.commissionRate ?? 0,
         commissionAmount: item.commissionAmount ? (item.commissionAmount / 100).toFixed(2) : '0.00',
-        salesText: `${Math.floor((item.totalSales || 0) / 10000)}万+`,
-        shop: item.shopName || '旗舰店',
+        salesText: formatSales(item.totalSales),
+        shop: item.shopName || '评分',
         shopScore: item.rating || '4.9',
         location: item.location || '',
         tag: item.isSelectionBest ? '精选' : ''
@@ -335,7 +335,7 @@ async function loadProducts() {
       } else {
         products.value = [...products.value, ...formattedProducts]
       }
-      hasMore.value = products.value.length < res.total
+      hasMore.value = products.value.length < (res.total || 0)
     } else {
       if (page.value === 1) {
         products.value = []
@@ -348,6 +348,14 @@ async function loadProducts() {
   } finally {
     loading.value = false
   }
+}
+
+function formatSales(totalSales) {
+  const sales = Number(totalSales || 0)
+  if (sales >= 10000) {
+    return `${(sales / 10000).toFixed(1)}万`
+  }
+  return `${sales}`
 }
 
 function switchCategory(categoryId) {
@@ -369,16 +377,14 @@ function toggleFilterPanel() {
 function selectSubFilter(type, value) {
   if (type === 'commission') {
     currentFilters.commission = value
-    page.value = 1
-    loadProducts()
   } else if (type === 'price') {
     currentFilters.price = value
     if (value === 'all') {
       currentFilters.priceMin = null
       currentFilters.priceMax = null
     } else if (value === '50') {
-      currentFilters.priceMax = 50
       currentFilters.priceMin = null
+      currentFilters.priceMax = 50
     } else if (value === '500') {
       currentFilters.priceMin = 500
       currentFilters.priceMax = null
@@ -387,9 +393,10 @@ function selectSubFilter(type, value) {
       currentFilters.priceMin = parseInt(min)
       currentFilters.priceMax = parseInt(max)
     }
-    page.value = 1
-    loadProducts()
   }
+
+  page.value = 1
+  loadProducts()
 }
 
 function goToSearch() {
@@ -413,8 +420,6 @@ function onProductTap(item) {
 }
 
 function selectProduct(item) {
-  console.log('点击了选择按钮, 商品数据:', item)
-
   const productData = {
     id: item.id,
     image: item.image,
@@ -424,11 +429,7 @@ function selectProduct(item) {
     commissionAmount: item.commissionAmount
   }
 
-  // 使用本地存储传递数据到 apply 页面
   uni.setStorageSync('selectedProductForApply', productData)
-  console.log('商品已保存到存储，准备切换到 apply 页面')
-
-  // 切换到 apply 页面
   uni.switchTab({
     url: '/pages/sample/apply/apply'
   })
@@ -438,27 +439,17 @@ function applySample(spuId) {
   if (!checkLogin()) {
     return
   }
-  
-  // 使用本地存储传递要申请的 spuId
+
   uni.setStorageSync('applySpuId', spuId)
-  console.log('保存申请样品 spuId:', spuId)
-  
-  // 返回到之前的 apply 页面，而不是创建新的
+
   const pages = getCurrentPages()
-  console.log('当前页面栈长度:', pages.length)
-  console.log('当前页面栈:', pages.map(p => p.route))
-  
-  // 查找 apply 页面（可能有多个实例）
-  const applyPageIndex = pages.findIndex(page => page.route && page.route.includes('apply/apply'))
-  console.log('apply 页面索引:', applyPageIndex)
-  
+  const applyPageIndex = pages.findIndex((pageItem) => pageItem.route && pageItem.route.includes('apply/apply'))
+
   if (applyPageIndex !== -1) {
-    console.log('找到已存在的 apply 页面，返回，delta:', pages.length - 1 - applyPageIndex)
     uni.navigateBack({
       delta: pages.length - 1 - applyPageIndex
     })
   } else {
-    console.log('没有找到 apply 页面，创建新的')
     uni.navigateTo({
       url: `/pages/sample/apply/apply?spuId=${spuId}`
     })
@@ -468,31 +459,18 @@ function applySample(spuId) {
 function onBannerTap(item) {
   if (item.spuId) {
     goToProductDetail(item.spuId)
-  } else {
-    uni.showToast({
-      title: item.title || '精选好物',
-      icon: 'none'
-    })
+    return
   }
-}
 
-function onEntryTap(type) {
   uni.showToast({
-    title: `快捷入口: ${type}`,
+    title: item.title || '精选好物',
     icon: 'none'
-  })
-}
-
-function onPullDownRefresh() {
-  page.value = 1
-  loadProducts().finally(() => {
-    uni.stopPullDownRefresh()
   })
 }
 
 function onReachBottom() {
   if (hasMore.value && !loading.value) {
-    page.value++
+    page.value += 1
     loadProducts()
   }
 }
@@ -589,37 +567,6 @@ function onReachBottom() {
   height: 100%;
 }
 
-.quick-entry {
-  margin: 16rpx 20rpx;
-  padding: 20rpx 30rpx;
-  background-color: #fff;
-  border-radius: 16rpx;
-}
-
-.entry-list {
-  display: flex;
-  justify-content: space-around;
-}
-
-.entry-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 20%;
-}
-
-.entry-icon {
-  width: 70rpx;
-  height: 70rpx;
-  margin-bottom: 8rpx;
-}
-
-.entry-name {
-  font-size: 22rpx;
-  color: #333;
-  text-align: center;
-}
-
 .filter-section {
   display: flex;
   align-items: center;
@@ -678,11 +625,11 @@ function onReachBottom() {
 }
 
 .sub-filter-title {
+  display: block;
+  margin-bottom: 16rpx;
   font-size: 26rpx;
   color: #333;
   font-weight: 500;
-  margin-bottom: 16rpx;
-  display: block;
 }
 
 .sub-filter-options {
@@ -751,16 +698,16 @@ function onReachBottom() {
 }
 
 .product-title {
-  font-size: 26rpx;
+  margin-bottom: 12rpx;
+  font-size: 30rpx;
   color: #333;
+  font-weight: 600;
   line-height: 1.4;
-  height: 72rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  margin-bottom: 12rpx;
 }
 
 .service-tags {
@@ -781,18 +728,13 @@ function onReachBottom() {
 .shop-info {
   display: flex;
   align-items: center;
-  margin-bottom: 12rpx;
+  min-width: 0;
 }
 
 .shop-name {
   font-size: 22rpx;
   color: #999;
   margin-right: 12rpx;
-}
-
-.shop-score {
-  font-size: 22rpx;
-  color: #ff5000;
 }
 
 .product-price-wrap {
@@ -823,16 +765,15 @@ function onReachBottom() {
 .product-commission-wrap {
   display: flex;
   align-items: center;
-  margin-bottom: 16rpx;
 }
 
 .commission-tag {
+  margin-right: 12rpx;
   background: linear-gradient(135deg, #fff5f0, #ffe8e0);
   color: #ff5000;
   font-size: 22rpx;
   padding: 6rpx 12rpx;
   border-radius: 8rpx;
-  margin-right: 12rpx;
 }
 
 .commission-amount {
@@ -840,32 +781,20 @@ function onReachBottom() {
   color: #ff5000;
 }
 
-.product-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sales-info {
-  display: flex;
-  align-items: center;
-}
-
-.sales-text {
-  font-size: 22rpx;
-  color: #999;
-  margin-right: 12rpx;
-}
-
-.location {
-  font-size: 22rpx;
-  color: #999;
-}
-
 .btn-apply-wrap {
   padding: 0 20rpx 20rpx;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16rpx;
+  min-height: 56rpx;
+}
+
+.bottom-score {
+  font-size: 22rpx;
+  color: #ff5000;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
 .btn-apply {
@@ -874,6 +803,7 @@ function onReachBottom() {
   font-size: 24rpx;
   padding: 12rpx 24rpx;
   border-radius: 28rpx;
+  flex-shrink: 0;
 }
 
 .btn-select {

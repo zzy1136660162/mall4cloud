@@ -3,7 +3,7 @@
     <!-- 订单状态 -->
     <view class="status-box">
       <view class="bg">
-        <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/status-bg.jpg" />
+        <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/status-bg.jpg" />
       </view>
       <view class="text">
         <block v-if="status === 1">
@@ -29,27 +29,27 @@
       <view class="icon">
         <image
           v-if="status === 1"
-          src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/det-paid.png"
+          src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/det-paid.png"
         />
         <!-- 待付款 -->
         <image
           v-if="status === 2"
-          src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/det-delivered.png"
+          src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/det-delivered.png"
         />
         <!-- 待发货 -->
         <image
           v-if="status === 3"
-          src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/det-received.png"
+          src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/det-received.png"
         />
         <!-- 带收货 -->
         <image
           v-if="status === 5"
-          src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/det-finish.png"
+          src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/det-finish.png"
         />
         <!-- 已完成 -->
         <image
           v-if="status === 6"
-          src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/det-cancel.png"
+          src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/det-cancel.png"
         />
         <!-- 已取消 -->
       </view>
@@ -61,7 +61,7 @@
       class="address-box"
     >
       <view class="icon">
-        <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/local.png" />
+        <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/local.png" />
       </view>
       <view class="text-box">
         <view class="user">
@@ -82,7 +82,7 @@
     <view class="prods-box">
       <view class="shop">
         <view class="icon">
-          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop.png" />
+          <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/shop.png" />
         </view>
         <view class="name text-arrow">
           {{ shopName }}

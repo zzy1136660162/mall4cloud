@@ -858,7 +858,7 @@ const util = {
           if (res.loginLogoImg) {
             res.loginLogoImg = res.loginLogoImg.indexOf('http') > -1 ? res.loginLogoImg : import.meta.env.VITE_APP_RESOURCES_URL + res.loginLogoImg
           } else {
-            res.loginLogoImg = 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/logo.png'
+            res.loginLogoImg = 'https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/logo.png'
           }
           res.titleContentCn = res.titleContentCn || '杰东药业'
           res.titleContentEn = res.titleContentEn || '杰东药业'
@@ -1100,7 +1100,7 @@ const util = {
           {
             type: 'image',
             // 这个是默认图片，路径错误会导致小程序生成失败
-            src: 'https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/def.png',
+            src: 'https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/def.png',
             css: {
               width: '540rpx',
               height: '540rpx',

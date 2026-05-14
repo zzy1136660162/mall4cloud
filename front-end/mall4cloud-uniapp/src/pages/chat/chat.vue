@@ -17,7 +17,15 @@
 
                 <view class="message-content">
                     <view :class="'bubble ' + item.type">
-                        <rich-text v-if="item.type === 'agent' || item.type === 'system'" class="message-text" :nodes="item.htmlContent || item.content" />
+                        <mp-html
+                            v-if="item.type === 'agent' || item.type === 'system'"
+                            class="message-text markdown-body"
+                            :content="item.htmlContent || item.content"
+                            :copy-link="false"
+                            :preview-img="false"
+                            :show-img-menu="false"
+                            container-style="white-space: normal; word-break: break-word;"
+                        />
                         <text v-else class="message-text">{{ item.content }}</text>
                     </view>
 
@@ -67,13 +75,24 @@
 </template>
 
 <script>
+import MarkdownIt from 'markdown-it'
+import mpHtml from 'mp-html/dist/uni-app/components/mp-html/mp-html'
 import chatService from '@/utils/chatService.js'
+
+const md = new MarkdownIt({
+    html: false,
+    linkify: true,
+    breaks: true
+})
 
 const log = (tag, data) => {
     console.log(`[ChatPage] ${tag}:`, data)
 }
 
 export default {
+    components: {
+        mpHtml
+    },
     data() {
         return {
             messages: [],
@@ -141,12 +160,13 @@ export default {
                 log('检测到重复消息，跳过添加')
                 return
             }
-            message.id = Date.now()
-            message.time = this.formatTime(new Date())
-            messages.push(message)
+            const normalizedMessage = this.normalizeMessage(message)
+            normalizedMessage.id = Date.now()
+            normalizedMessage.time = this.formatTime(new Date())
+            messages.push(normalizedMessage)
             log('当前消息列表长度', messages.length)
             this.messages = messages
-            this.scrollToMessage = `msg-${message.id}`
+            this.scrollToMessage = `msg-${normalizedMessage.id}`
         },
 
         formatTime(date) {
@@ -191,6 +211,7 @@ export default {
                     this.addMessage({
                         type: 'agent',
                         content: reply,
+                        htmlContent: this.renderMarkdown(reply),
                         suggestions: res.suggestions || []
                     })
                 } else {
@@ -275,6 +296,29 @@ export default {
                 }
             }
             return uniqueLines.join('\n')
+        },
+
+        renderMarkdown(content) {
+            if (typeof content !== 'string') {
+                return ''
+            }
+            return md.render(content)
+        },
+
+        normalizeMessage(message) {
+            const normalizedMessage = {
+                ...message
+            }
+
+            if (typeof normalizedMessage.content !== 'string') {
+                normalizedMessage.content = normalizedMessage.content == null ? '' : String(normalizedMessage.content)
+            }
+
+            if ((normalizedMessage.type === 'agent' || normalizedMessage.type === 'system') && !normalizedMessage.htmlContent) {
+                normalizedMessage.htmlContent = this.renderMarkdown(normalizedMessage.content)
+            }
+
+            return normalizedMessage
         }
     }
 }
@@ -407,6 +451,102 @@ page {
 .message-text {
     font-size: 30rpx;
     line-height: 1.6;
+}
+
+.markdown-body {
+    display: block;
+}
+
+.markdown-body :deep(p) {
+    margin: 0 0 16rpx;
+    line-height: 1.7;
+}
+
+.markdown-body :deep(p:last-child) {
+    margin-bottom: 0;
+}
+
+.markdown-body :deep(h1),
+.markdown-body :deep(h2),
+.markdown-body :deep(h3),
+.markdown-body :deep(h4) {
+    margin: 0 0 16rpx;
+    color: #333;
+    font-weight: 700;
+    line-height: 1.45;
+}
+
+.markdown-body :deep(h1) {
+    font-size: 36rpx;
+}
+
+.markdown-body :deep(h2) {
+    font-size: 34rpx;
+}
+
+.markdown-body :deep(h3),
+.markdown-body :deep(h4) {
+    font-size: 32rpx;
+}
+
+.markdown-body :deep(ul),
+.markdown-body :deep(ol) {
+    margin: 0 0 16rpx;
+    padding-left: 34rpx;
+}
+
+.markdown-body :deep(li) {
+    margin-bottom: 10rpx;
+    line-height: 1.7;
+}
+
+.markdown-body :deep(li:last-child) {
+    margin-bottom: 0;
+}
+
+.markdown-body :deep(blockquote) {
+    margin: 0 0 16rpx;
+    padding: 12rpx 16rpx;
+    border-left: 6rpx solid #f5d547;
+    background: #fffbe6;
+    color: #666;
+    border-radius: 0 12rpx 12rpx 0;
+}
+
+.markdown-body :deep(pre) {
+    margin: 0 0 16rpx;
+    padding: 16rpx 18rpx;
+    background: #1f2430;
+    color: #f3f4f6;
+    border-radius: 12rpx;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.6;
+}
+
+.markdown-body :deep(pre code) {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    font-size: 24rpx;
+}
+
+.markdown-body :deep(code) {
+    padding: 4rpx 10rpx;
+    margin: 0 4rpx;
+    background: rgba(245, 213, 71, 0.18);
+    color: #8c6d1f;
+    border-radius: 8rpx;
+    font-size: 24rpx;
+    word-break: break-all;
+}
+
+.markdown-body :deep(a) {
+    color: #1677ff;
+    text-decoration: underline;
+    word-break: break-all;
 }
 
 .message-time {

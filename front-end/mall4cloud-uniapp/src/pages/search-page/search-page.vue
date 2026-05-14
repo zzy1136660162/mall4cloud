@@ -4,7 +4,7 @@
     <view class="search-top">
       <view class="search-box">
         <view class="icon">
-          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/search.png" />
+          <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/search.png" />
         </view>
         <input
           placeholder="输入商品名或店铺名"
@@ -35,7 +35,7 @@
           class="del"
           @tap="clearSearchHistory"
         >
-          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/del.png" />
+          <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/del.png" />
         </view>
       </view>
       <view class="search-history">
@@ -63,7 +63,7 @@
         <view class="text">
           热门搜索
           <view class="hot-icon">
-            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/search-hot.png" />
+            <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/search-hot.png" />
           </view>
         </view>
       </view>

@@ -30,11 +30,18 @@
           @tap="onFilterChange(filter.id)"
         >
           <text>{{ filter.name }}</text>
-          <text class="filter-arrow" v-if="currentFilterId === filter.id">↓</text>
+          <text
+            v-if="filter.id === 1 && currentFilterId === 1"
+            class="filter-arrow"
+          >{{ saleNumSort === 1 ? '↑' : '↓' }}</text>
+          <text
+            v-if="filter.id === 2 && currentFilterId === 2"
+            class="filter-arrow"
+          >{{ priceFeeSort === 1 ? '↑' : '↓' }}</text>
         </view>
       </view>
       <view class="filter-right">
-        <text class="product-count">共{{ prodList.length }}件商品</text>
+        <text class="product-count">共{{ total }}件商品</text>
       </view>
     </view>
 
@@ -86,7 +93,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, toRefs } from 'vue'
 import util from '@/utils/util.js'
 import DiyTabbar from '@/components/diy-tabbar/diy-tabbar.vue'
 
@@ -97,31 +104,33 @@ const Data = reactive({
   keyword: '',
   pageNum: 1,
   pageSize: 20,
-  total: 1,
+  total: 0,
   pages: 1,
   prodList: [],
   loading: false,
   hasMore: true,
   categories: [],
-  currentCategoryId: null,
+  currentCategoryId: 0,
   currentFilterId: 0,
+  saleNumSort: null,
+  priceFeeSort: null,
   filters: [
     { id: 0, name: '综合' },
     { id: 1, name: '销量' },
-    { id: 2, name: '价格升' },
-    { id: 3, name: '价格降' }
+    { id: 2, name: '价格' }
   ]
 })
 
 const {
-  shopId,
-  shopInfo,
   prodList,
   loading,
   hasMore,
+  total,
   categories,
   currentCategoryId,
   currentFilterId,
+  saleNumSort,
+  priceFeeSort,
   filters
 } = toRefs(Data)
 
@@ -132,7 +141,7 @@ const isLoggedIn = () => {
   return !!token
 }
 
-const checkLoginAndAction = (action) => {
+const checkLoginAndAction = () => {
   if (!isLoggedIn()) {
     uni.showModal({
       title: '提示',
@@ -150,9 +159,7 @@ const checkLoginAndAction = (action) => {
   return true
 }
 
-const handleTabChange = ({ item, index }) => {
-  console.log('Tab切换到:', item.text, index)
-}
+const handleTabChange = () => {}
 
 onReachBottom(() => {
   if (Data.hasMore && !Data.loading) {
@@ -162,8 +169,7 @@ onReachBottom(() => {
 })
 
 onPullDownRefresh(() => {
-  Data.pageNum = 1
-  Data.hasMore = true
+  resetListState()
   getProd().finally(() => {
     uni.stopPullDownRefresh()
   })
@@ -174,7 +180,9 @@ onLoad((options) => {
     Data.shopId = Number(options.shopId)
   }
   if (options.shopSecondaryCategoryId) {
-    Data.shopSecondaryCategoryId = Number(options.shopSecondaryCategoryId)
+    const categoryId = Number(options.shopSecondaryCategoryId)
+    Data.shopSecondaryCategoryId = categoryId
+    Data.currentCategoryId = categoryId
   }
   if (options.keyword) {
     Data.keyword = options.keyword
@@ -192,51 +200,70 @@ const price = (value) => {
   return (value / 100).toFixed(2)
 }
 
-async function loadCategories() {
-  try {
-    const res = await http.request({
-      url: '/mall4cloud_product/ua/category/category_list',
-      method: 'GET',
-      data: { parentId: 0, shopId: 0 }
-    })
-    if (res && res.length) {
-      Data.categories = res
-    }
-  } catch (error) {
-    console.error('加载分类失败', error)
-  }
+function resetListState () {
+  Data.pageNum = 1
+  Data.pages = 1
+  Data.total = 0
+  Data.prodList = []
+  Data.hasMore = true
 }
 
-function onCategoryChange(categoryId) {
+function loadCategories () {
+  return http.request({
+    url: '/mall4cloud_product/ua/category/category_list',
+    method: 'GET',
+    data: {
+      parentId: 0,
+      shopId: Data.shopId || 0
+    }
+  }).then(res => {
+    Data.categories = res || []
+  }).catch(() => {
+    Data.categories = []
+  })
+}
+
+function onCategoryChange (categoryId) {
   if (categoryId === Data.currentCategoryId) return
   Data.currentCategoryId = categoryId
   Data.shopSecondaryCategoryId = categoryId || null
-  Data.pageNum = 1
-  Data.prodList = []
-  Data.hasMore = true
+  resetListState()
   getProd()
 }
 
-function onFilterChange(filterId) {
-  if (filterId === Data.currentFilterId) return
-  Data.currentFilterId = filterId
-  Data.pageNum = 1
-  Data.hasMore = true
-  applyFilters()
-}
+function onFilterChange (filterId) {
+  const prevFilterId = Data.currentFilterId
+  const prevSaleNumSort = Data.saleNumSort
+  const prevPriceFeeSort = Data.priceFeeSort
 
-function applyFilters() {
-  if (Data.pageNum === 1) {
-    let sortedList = [...Data.prodList]
-    if (Data.currentFilterId === 1) {
-      sortedList.sort((a, b) => (b.totalSales || 0) - (a.totalSales || 0))
-    } else if (Data.currentFilterId === 2) {
-      sortedList.sort((a, b) => (a.priceFee || 0) - (b.priceFee || 0))
-    } else if (Data.currentFilterId === 3) {
-      sortedList.sort((a, b) => (b.priceFee || 0) - (a.priceFee || 0))
-    }
-    Data.prodList = sortedList
+  if (filterId === 0) {
+    Data.currentFilterId = 0
+    Data.saleNumSort = null
+    Data.priceFeeSort = null
+  } else if (filterId === 1) {
+    Data.currentFilterId = 1
+    Data.priceFeeSort = null
+    Data.saleNumSort = prevFilterId === 1 ? (prevSaleNumSort === 0 ? 1 : 0) : 0
+  } else if (filterId === 2) {
+    Data.currentFilterId = 2
+    Data.saleNumSort = null
+    Data.priceFeeSort = prevFilterId === 2 ? (prevPriceFeeSort === 0 ? 1 : 0) : 0
   }
+
+  if (
+    prevFilterId === Data.currentFilterId &&
+    prevSaleNumSort === Data.saleNumSort &&
+    prevPriceFeeSort === Data.priceFeeSort
+  ) {
+    return
+  }
+
+  resetListState()
+  uni.pageScrollTo({
+    duration: 0,
+    scrollTop: 0
+  })
+  getProd()
 }
 
 const detail = (spuId) => {
@@ -262,39 +289,29 @@ const getProd = () => {
   if (Data.keyword) {
     data.keyword = Data.keyword
   }
+  if (Data.saleNumSort !== null && Data.saleNumSort !== undefined) {
+    data.saleNumSort = Data.saleNumSort
+  }
+  if (Data.priceFeeSort !== null && Data.priceFeeSort !== undefined) {
+    data.priceFeeSort = Data.priceFeeSort
+  }
 
   const params = {
     url: '/mall4cloud_product/ua/spu/page',
     method: 'GET',
-    data: data
+    data
   }
 
   return http.request(params).then(res => {
-    if (res && res.list && res.list.length > 0) {
-      let newProducts = res.list || []
-
-      if (Data.currentFilterId === 1) {
-        newProducts.sort((a, b) => (b.totalSales || 0) - (a.totalSales || 0))
-      } else if (Data.currentFilterId === 2) {
-        newProducts.sort((a, b) => (a.priceFee || 0) - (b.priceFee || 0))
-      } else if (Data.currentFilterId === 3) {
-        newProducts.sort((a, b) => (b.priceFee || 0) - (a.priceFee || 0))
-      }
-
-      if (Data.pageNum !== 1) {
-        Data.prodList = Data.prodList.concat(newProducts)
-      } else {
-        Data.prodList = newProducts
-      }
-      Data.total = res.total
-      Data.pages = res.pages
-      Data.hasMore = Data.prodList.length < res.total
+    const newProducts = res?.list || []
+    if (Data.pageNum !== 1) {
+      Data.prodList = Data.prodList.concat(newProducts)
     } else {
-      if (Data.pageNum === 1) {
-        Data.prodList = []
-      }
-      Data.hasMore = false
+      Data.prodList = newProducts
     }
+    Data.total = res?.total || 0
+    Data.pages = res?.pages || 0
+    Data.hasMore = Data.prodList.length < Data.total
     Data.loading = false
   }).catch(err => {
     Data.loading = false
@@ -302,7 +319,7 @@ const getProd = () => {
   })
 }
 
-async function loadCartCount() {
+async function loadCartCount () {
   if (!isLoggedIn()) {
     return
   }
@@ -330,8 +347,8 @@ async function loadCartCount() {
   }
 }
 
-async function addToCart(item) {
-  if (!checkLoginAndAction('addToCart')) {
+async function addToCart (item) {
+  if (!checkLoginAndAction()) {
     return
   }
 
@@ -375,7 +392,7 @@ async function addToCart(item) {
   }
 }
 
-function onScrollToLower() {
+function onScrollToLower () {
   if (Data.hasMore && !Data.loading) {
     Data.pageNum++
     getProd()
@@ -519,9 +536,10 @@ function onScrollToLower() {
 .product-tag {
   position: absolute;
   top: 16rpx;
-  left: 16rpx;
+  right: 16rpx;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 }
 
 .product-tag text {
@@ -546,8 +564,9 @@ function onScrollToLower() {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  font-size: 28rpx;
+  font-size: 32rpx;
   color: #333;
+  font-weight: 600;
   line-height: 1.4;
   margin-bottom: 12rpx;
 }

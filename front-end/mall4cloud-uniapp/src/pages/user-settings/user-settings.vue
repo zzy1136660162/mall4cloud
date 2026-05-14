@@ -15,7 +15,7 @@
           />
           <image
             v-else
-            src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/head-sculpture.png"
+            src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/head-sculpture.png"
           />
         </view>
         <view class="text-arrow" />

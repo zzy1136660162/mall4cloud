@@ -46,6 +46,7 @@ services:
       - "8848:8848"
       - "9848:9848"
       - "9849:9849"
+      - "8080:8080"
     environment:
       - JVM_XMS=256m
       - JVM_XMX=256m
@@ -147,6 +148,8 @@ services:
     image: nginx:1.25-alpine
     container_name: mall4cloud-nginx
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "80:80"
       - "443:443"
@@ -158,4 +161,3 @@ services:
       - /mnt/web-services/mall4cloud-multishop-ui:/usr/share/nginx/mall4cloud-multishop-ui:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
       - ./nginx/logs:/var/log/nginx
-

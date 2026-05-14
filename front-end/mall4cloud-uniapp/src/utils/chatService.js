@@ -1,4 +1,5 @@
-const CHAT_API_URL = 'http://agent.yuntuoengine.com/api'
+const CHAT_API_URL = (import.meta.env.VITE_APP_AGENT_URL || '').replace(/\/$/, '')+'/api'
+console.log(import.meta.env.VITE_APP_AGENT_URL,'VITE_APP_AGENT_URL')
 const API_KEY = 'fastgpt-bDgdD1cREGZz88WOqfbN2W4tkxQ2y5txUVzgneMjfM8DdE80B9h9llt'
 const DEBUG = true
 

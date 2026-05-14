@@ -113,10 +113,11 @@ public class AccountFeignController implements AccountFeignClient {
 
     private ServerResponseEntity<AuthAccount> verify(AuthAccountDTO authAccountDTO) {
 
-        // 用户名
-        if (!PrincipalUtil.isUserName(authAccountDTO.getUsername())) {
-            return ServerResponseEntity.showFailMsg("用户名格式不正确");
-        }
+        // 用户名格式校验暂时关闭：
+        // 如需恢复原来的用户名规则校验，请重新启用下面这段 PrincipalUtil.isUserName(...) 判断。
+//        if (!PrincipalUtil.isUserName(authAccountDTO.getUsername())) {
+//            return ServerResponseEntity.showFailMsg("用户名格式不正确");
+//        }
 
         AuthAccountInVerifyBO userNameBo = authAccountMapper.getAuthAccountInVerifyByInputUserName(InputUserNameEnum.USERNAME.value(), authAccountDTO.getUsername(), authAccountDTO.getSysType());
         if (userNameBo != null && !Objects.equals(userNameBo.getUserId(), authAccountDTO.getUserId())) {

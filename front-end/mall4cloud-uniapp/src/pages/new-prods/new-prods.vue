@@ -2,7 +2,7 @@
   <view class="new-prods">
     <!-- banner -->
     <view class="banner">
-      <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/img/banner2.png" />
+      <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/img/banner2.png" />
     </view>
 
     <!-- 新品分类 -->
@@ -71,7 +71,7 @@
       class="empty"
     >
       <view class="img">
-        <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/empty-img/not-found.png" />
+        <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/empty-img/not-found.png" />
       </view>
       <view class="text">
         没有找到对应商品，看看别的吧

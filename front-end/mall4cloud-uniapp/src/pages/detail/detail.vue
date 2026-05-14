@@ -147,7 +147,7 @@
           @tap="toIndex"
         >
           <view class="img">
-            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/detail-index.png" />
+            <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/detail-index.png" />
           </view>
           <view class="text">
             首页
@@ -158,7 +158,7 @@
           @tap="toCart"
         >
           <view class="img">
-            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/detail-cart.png" />
+            <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/detail-cart.png" />
             <view
               v-if="cartCount"
               class="mark"
@@ -222,7 +222,7 @@
             class="close"
             @tap="closePopup"
           >
-            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/close.png" />
+            <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/close.png" />
           </view>
         </view>
         <view class="con-box">

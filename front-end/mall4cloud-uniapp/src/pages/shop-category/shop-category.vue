@@ -4,7 +4,7 @@
       <!-- 头部 -->
       <view class="header">
         <view class="bg">
-          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/img/banner3.png" />
+          <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/img/banner3.png" />
         </view>
         <view class="bg-mask" />
         <view class="shop-info">
@@ -89,8 +89,8 @@
           @tap="goShopIndex"
         >
           <view class="icon">
-            <!-- <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-index-r.png" /> -->
-            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-index.png" />
+            <!-- <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/shop-index-r.png" /> -->
+            <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/shop-index.png" />
           </view>
           <view class="text">
             首页
@@ -101,8 +101,8 @@
           @tap="goShopProds"
         >
           <view class="icon">
-            <!-- <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-prods-r.png" /> -->
-            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-prods.png" />
+            <!-- <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/shop-prods-r.png" /> -->
+            <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/shop-prods.png" />
           </view>
           <view class="text">
             商品
@@ -113,8 +113,8 @@
           @tap="goShopCategory"
         >
           <view class="icon">
-            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-category-r.png" />
-            <!-- <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop-category.png" /> -->
+            <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/shop-category-r.png" />
+            <!-- <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/shop-category.png" /> -->
           </view>
           <view class="text">
             分类
@@ -122,7 +122,7 @@
         </view>
         <!-- <view class="item">
       <view class="icon">
-        <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/detail-service.png" />
+        <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/detail-service.png" />
       </view>
       <view class="text">客服</view>
     </view> -->

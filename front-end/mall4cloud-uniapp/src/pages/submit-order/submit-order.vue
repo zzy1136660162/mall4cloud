@@ -112,7 +112,7 @@
           class="c-edit"
           @tap="editAddress"
         >
-          <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/edit.png" />
+          <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/edit.png" />
         </view>
       </view>
     </view>
@@ -135,7 +135,7 @@
             class="close"
             @tap="closePopup"
           >
-            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/close.png" />
+            <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/close.png" />
           </view>
         </view>
         <radio-group
@@ -186,7 +186,7 @@
       >
         <view class="shop-box">
           <view class="shop-icon">
-            <image src="https://yuntuoengine.com/host_assets_files/jiedong_weapp_static/images/shop.png" />
+            <image src="https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/images/shop.png" />
           </view>
           <view class="shop-name">
             {{ shopItem.shopName }}
