@@ -176,6 +176,7 @@ onPullDownRefresh(() => {
 })
 
 onLoad((options) => {
+  enableShareMenu()
   if (options.shopId) {
     Data.shopId = Number(options.shopId)
   }
@@ -195,6 +196,14 @@ onLoad((options) => {
 onShow(() => {
   loadCartCount()
 })
+
+const enableShareMenu = () => {
+  // #ifdef MP-WEIXIN
+  wx.showShareMenu({
+    menus: ['shareAppMessage', 'shareTimeline']
+  })
+  // #endif
+}
 
 const price = (value) => {
   return (value / 100).toFixed(2)
@@ -398,6 +407,46 @@ function onScrollToLower () {
     getProd()
   }
 }
+
+const getShopProdShareInfo = () => {
+  const titlePrefix = Data.shopInfo?.shopName || '商品列表'
+  const category = categories.value.find(item => item.categoryId === Data.currentCategoryId)
+  let title = titlePrefix
+  if (Data.keyword) {
+    title = `${titlePrefix} - ${Data.keyword}`
+  } else if (category) {
+    title = `${titlePrefix} - ${category.name}`
+  }
+  const query = []
+  if (Data.shopId) {
+    query.push(`shopId=${Data.shopId}`)
+  }
+  if (Data.currentCategoryId) {
+    query.push(`shopSecondaryCategoryId=${Data.currentCategoryId}`)
+  }
+  if (Data.keyword) {
+    query.push(`keyword=${encodeURIComponent(Data.keyword)}`)
+  }
+  const firstProduct = prodList.value[0]
+  return {
+    title,
+    path: `/pages/shop-prods/shop-prods${query.length ? `?${query.join('&')}` : ''}`,
+    imageUrl: firstProduct?.mainImgUrl ? util.getImgUrl(firstProduct.mainImgUrl) : ''
+  }
+}
+
+onShareAppMessage(() => {
+  return getShopProdShareInfo()
+})
+
+onShareTimeline(() => {
+  const shareInfo = getShopProdShareInfo()
+  return {
+    title: shareInfo.title,
+    query: shareInfo.path.split('?')[1] || '',
+    imageUrl: shareInfo.imageUrl
+  }
+})
 </script>
 
 <style lang="scss" scoped>

@@ -2,8 +2,8 @@
   <view class="page-register">
     <view class="register-hero">
       <view class="hero-badge">新账号注册</view>
-      <view class="hero-title">创建您的平台账号</view>
-      <view class="hero-desc">设置登录信息后即可进入平台，继续浏览商品、提交需求和管理订单。</view>
+      <view class="hero-title">创建您的杰东优选账号</view>
+      <view class="hero-desc">设置登录信息后即可进入杰东优选平台，继续浏览商品、提交需求和管理订单。</view>
     </view>
 
     <view class="register-card">

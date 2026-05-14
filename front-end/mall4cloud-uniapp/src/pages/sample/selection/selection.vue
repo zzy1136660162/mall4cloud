@@ -214,8 +214,12 @@ const currentFilters = reactive({
 })
 
 onLoad((options) => {
+  enableShareMenu()
   if (options.mode === 'select') {
     selectMode.value = true
+  }
+  if (options.categoryId) {
+    currentCategory.value = Number(options.categoryId) || 0
   }
 
   const selectedProduct = uni.getStorageSync('selectedProductForApply')
@@ -474,6 +478,38 @@ function onReachBottom() {
     loadProducts()
   }
 }
+
+function enableShareMenu() {
+  // #ifdef MP-WEIXIN
+  wx.showShareMenu({
+    menus: ['shareAppMessage', 'shareTimeline']
+  })
+  // #endif
+}
+
+function getSelectionShareInfo() {
+  const category = categories.value.find(item => item.categoryId === currentCategory.value)
+  const title = category ? `选品中心 - ${category.name}` : '选品中心'
+  const query = currentCategory.value ? `categoryId=${currentCategory.value}` : ''
+  return {
+    title,
+    path: `/pages/sample/selection/selection${query ? `?${query}` : ''}`,
+    imageUrl: banners.value[0]?.image || products.value[0]?.image || ''
+  }
+}
+
+onShareAppMessage(() => {
+  return getSelectionShareInfo()
+})
+
+onShareTimeline(() => {
+  const shareInfo = getSelectionShareInfo()
+  return {
+    title: shareInfo.title,
+    query: shareInfo.path.split('?')[1] || '',
+    imageUrl: shareInfo.imageUrl
+  }
+})
 </script>
 
 <style lang="scss" scoped>

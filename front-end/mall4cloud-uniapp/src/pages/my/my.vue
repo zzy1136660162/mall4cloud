@@ -36,18 +36,18 @@
       </view>
     </view>
 
-    <!-- 我的订单 -->
+
+    <!-- 我的订单  @tap="toMyOder(0)" -->
     <view class="my-con my-orders">
       <view
         class="tit"
-        @tap="toMyOder(0)"
       >
         <view class="text">
           我的订单
         </view>
-        <view class="more text-arrow">
+<!--        <view class="more text-arrow">
           全部
-        </view>
+        </view>-->
       </view>
       <view class="con-box">
         <view
@@ -124,6 +124,7 @@
         </view>
       </view>
       <view class="con-box">
+        <!-- 暂时隐藏会员中心入口，后续如需恢复可直接取消这段注释
         <view
           class="item"
           @tap="notOpen('会员功能')"
@@ -135,6 +136,7 @@
             会员中心
           </view>
         </view>
+        -->
         <view
           class="item"
           @tap="toSampleList"
@@ -146,6 +148,7 @@
             我的样品
           </view>
         </view>
+        <!-- 暂时隐藏免费开店入口，后续如需恢复可直接取消这段注释
         <view
           class="item"
           @tap="toFreeShop"
@@ -157,6 +160,7 @@
             免费开店
           </view>
         </view>
+        -->
         <view
           class="item"
           @tap="toAddressList"

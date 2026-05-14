@@ -331,6 +331,7 @@ const { isShowSkuPopup, prodInfo, shopInfo, imgList, prodDetail, topTabSts, topT
  * 生命周期函数--监听页面加载
  */
 onLoad((options) => {
+  enableShareMenu()
   if (options.spuId) {
     Data.spuId = options.spuId
   }
@@ -719,6 +720,37 @@ const toShopIndex = () => {
     url: `/pages/shop-index/shop-index?shopId=${Data.shopId}`
   })
 }
+
+const enableShareMenu = () => {
+  // #ifdef MP-WEIXIN
+  wx.showShareMenu({
+    menus: ['shareAppMessage', 'shareTimeline']
+  })
+  // #endif
+}
+
+const getDetailShareInfo = () => {
+  const shareTitle = Data.prodInfo?.name || '商品详情'
+  const shareImage = Data.imgList?.length ? util.getImgUrl(Data.imgList[0]) : ''
+  return {
+    title: shareTitle,
+    path: `/pages/detail/detail?spuId=${Data.spuId}`,
+    imageUrl: shareImage
+  }
+}
+
+onShareAppMessage(() => {
+  return getDetailShareInfo()
+})
+
+onShareTimeline(() => {
+  const shareInfo = getDetailShareInfo()
+  return {
+    title: shareInfo.title,
+    query: `spuId=${Data.spuId}`,
+    imageUrl: shareInfo.imageUrl
+  }
+})
 </script>
 
 <style lang="scss" scoped>

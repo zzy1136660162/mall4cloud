@@ -574,6 +574,44 @@ const goToTalentPool = () => {
     url: '/pages/talent-pool/index/index'
   })
 }
+
+const shareImage = 'https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/logo.png'
+
+const enableShareMenu = () => {
+  // #ifdef MP-WEIXIN
+  wx.showShareMenu({
+    menus: ['shareAppMessage', 'shareTimeline']
+  })
+  // #endif
+}
+
+onLoad((options) => {
+  if (options.tab !== undefined) {
+    const tab = Number(options.tab)
+    if ([0, 1, 2].includes(tab)) {
+      currentTab.value = tab
+    }
+  }
+  enableShareMenu()
+})
+
+onShareAppMessage(() => {
+  const tabTitles = ['首页', '杰东智造', '杰东优品']
+  return {
+    title: `杰东优选平台 - ${tabTitles[currentTab.value] || '首页'}`,
+    path: `/pages/index/index?tab=${currentTab.value}`,
+    imageUrl: shareImage
+  }
+})
+
+onShareTimeline(() => {
+  const tabTitles = ['首页', '杰东智造', '杰东优品']
+  return {
+    title: `杰东优选平台 - ${tabTitles[currentTab.value] || '首页'}`,
+    query: `tab=${currentTab.value}`,
+    imageUrl: shareImage
+  }
+})
 </script>
 
 <style lang="scss" scoped>

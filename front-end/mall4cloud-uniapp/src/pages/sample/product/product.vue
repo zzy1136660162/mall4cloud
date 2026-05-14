@@ -235,6 +235,7 @@ const checkLogin = () => {
 }
 
 onMounted(() => {
+  enableShareMenu()
   const pages = getCurrentPages()
   const currentPage = pages[pages.length - 1]
   const options = currentPage.options || currentPage.$page?.options || {}
@@ -506,6 +507,35 @@ function formatDecimal(value) {
   const decimal = Number(value || 0)
   return decimal.toFixed(2)
 }
+
+function enableShareMenu() {
+  // #ifdef MP-WEIXIN
+  wx.showShareMenu({
+    menus: ['shareAppMessage', 'shareTimeline']
+  })
+  // #endif
+}
+
+function getSelectionProductShareInfo() {
+  return {
+    title: product.value.title || '选品详情',
+    path: `/pages/sample/product/product?spuId=${product.value.spuId || ''}`,
+    imageUrl: product.value.images[0] || ''
+  }
+}
+
+onShareAppMessage(() => {
+  return getSelectionProductShareInfo()
+})
+
+onShareTimeline(() => {
+  const shareInfo = getSelectionProductShareInfo()
+  return {
+    title: shareInfo.title,
+    query: `spuId=${product.value.spuId || ''}`,
+    imageUrl: shareInfo.imageUrl
+  }
+})
 </script>
 
 <style lang="scss" scoped>

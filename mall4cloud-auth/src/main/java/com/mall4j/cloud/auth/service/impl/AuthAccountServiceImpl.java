@@ -47,16 +47,20 @@ public class AuthAccountServiceImpl implements AuthAccountService {
 			return ServerResponseEntity.showFailMsg("密码不能为空");
 		}
 
-		InputUserNameEnum inputUserNameEnum = null;
-
-		// 用户名
-		if (PrincipalUtil.isUserName(inputUserName)) {
-			inputUserNameEnum = InputUserNameEnum.USERNAME;
-		}
-
-		if (inputUserNameEnum == null) {
-			return ServerResponseEntity.showFailMsg("请输入正确的用户名");
-		}
+		// 用户名格式校验暂时关闭：
+		// 当前统一按 USERNAME 处理登录输入。
+		// 如需恢复原来的格式校验与识别逻辑，请还原下面被注释的 PrincipalUtil.isUserName(...) 代码块。
+		InputUserNameEnum inputUserNameEnum = InputUserNameEnum.USERNAME;
+//		InputUserNameEnum inputUserNameEnum = null;
+//
+//		// 用户名
+//		if (PrincipalUtil.isUserName(inputUserName)) {
+//			inputUserNameEnum = InputUserNameEnum.USERNAME;
+//		}
+//
+//		if (inputUserNameEnum == null) {
+//			return ServerResponseEntity.showFailMsg("请输入正确的用户名");
+//		}
 
 		AuthAccountInVerifyBO authAccountInVerifyBO = authAccountMapper
 				.getAuthAccountInVerifyByInputUserName(inputUserNameEnum.value(), inputUserName, sysType);
