@@ -575,7 +575,7 @@ const goToTalentPool = () => {
   })
 }
 
-const shareImage = 'https://www.jiedongyouxuan.com/public-files/jiedong_weapp_static/logo.png'
+const shareImage = 'http://jiedong.yuntuoengine.com/public-files/jiedong_weapp_static/images/homepage.png'
 
 const enableShareMenu = () => {
   // #ifdef MP-WEIXIN

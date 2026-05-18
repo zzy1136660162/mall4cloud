@@ -96,7 +96,7 @@
     <view class="popup-min" :class="{ show: isShowSuccessPopup }">
       <view class="popup-mask" />
       <view class="popup-con-middle register-success">
-        <view class="img" />
+<!--        <view class="img" />-->
         <view class="text">注册成功</view>
         <view class="des">正在进入首页 {{ loCount }}s</view>
       </view>
