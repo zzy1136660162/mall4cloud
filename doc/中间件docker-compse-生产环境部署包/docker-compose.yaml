@@ -161,3 +161,18 @@ services:
       - /mnt/web-services/mall4cloud-multishop-ui:/usr/share/nginx/mall4cloud-multishop-ui:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
       - ./nginx/logs:/var/log/nginx
+
+  jiedong-cert:
+    image: node:22-alpine
+    container_name: jiedong-cert
+    restart: always
+    working_dir: /app
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    volumes:
+      - /mnt/web-services/jiedong-cert:/app:ro
+    command: ["node", ".output/server/index.mjs"]
