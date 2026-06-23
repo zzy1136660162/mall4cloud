@@ -30,7 +30,7 @@ defineProps<{
       <div>
         <h3 class="text-sm font-semibold uppercase tracking-[0.22em] text-brand-accent">联系咨询</h3>
         <ul class="mt-4 space-y-3 text-sm text-white/72">
-          <li v-if="footer.contactName" class="flex gap-2"><MaterialIcon name="person" class="mt-0.5 text-[18px]" />联系人：{{ footer.contactName }}</li>
+          <li v-if="footer.contactName" class="flex gap-2"><MaterialIcon name="groups" class="mt-0.5 text-[18px]" />联系人：{{ footer.contactName }}</li>
           <li v-if="footer.phone" class="flex gap-2"><MaterialIcon name="call" class="mt-0.5 text-[18px]" />电话：{{ footer.phone }}</li>
           <li v-if="footer.email" class="flex gap-2"><MaterialIcon name="mail" class="mt-0.5 text-[18px]" />邮箱：{{ footer.email }}</li>
           <li v-if="footer.address" class="flex gap-2"><MaterialIcon name="location_on" class="mt-0.5 text-[18px]" />地址：{{ footer.address }}</li>

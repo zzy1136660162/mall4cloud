@@ -100,7 +100,7 @@ export const homeData = {
       { icon: 'verified', title: '批号代办', summary: '消字号、保健用品号、健字号资料路径咨询' },
       { icon: 'fact_check', title: '资料审核', summary: '围绕清单、标签、检测报告与申请资料逐项核对' },
       { icon: 'monitoring', title: '节点跟进', summary: '申报递交、补正反馈、过程沟通节点化管理' },
-      { icon: 'precision_manufacturing', title: '代加工协同', summary: '支持 OEM、ODM 代加工方案沟通与资料衔接' }
+      { icon: 'handshake', title: '代加工协同', summary: '支持 OEM、ODM 代加工方案沟通与资料衔接' }
     ] satisfies HeroCard[],
     stats: [
       { value: '4类', label: '核心业务方向' },
@@ -134,7 +134,7 @@ export const homeData = {
       details: ['目标批号与申办条件梳理', '产品资料、标签说明和证明材料核对', '补正反馈、资料归档和后续维护建议']
     },
     {
-      icon: 'precision_manufacturing',
+      icon: 'handshake',
       slug: 'oem-odm',
       title: 'OEM、ODM代加工',
       summary: '对接医药健康相关产品代加工需求，协助沟通产品定位、生产资料、包装标签和交付节点。',
@@ -363,11 +363,11 @@ export const pageData = {
       ]
     } satisfies PageHero,
     methods: [
-      { icon: 'person', title: '联系人', summary: homeData.footer.contactName },
-      { icon: 'call', title: '电话咨询', summary: homeData.footer.phone },
-      { icon: 'alternate_email', title: '邮件沟通', summary: homeData.footer.email },
-      { icon: 'location_on', title: '公司地址', summary: homeData.footer.address },
-      { icon: 'qr_code_2', title: '公众号二维码', summary: '扫码关注公众号', image: homeData.footer.wechatQr, imageAlt: '杰东药业公众号二维码' }
+      { icon: 'groups', title: '联系人', summary: homeData.footer.contactName, items: [] },
+      { icon: 'call', title: '电话咨询', summary: homeData.footer.phone, items: [] },
+      { icon: 'alternate_email', title: '邮件沟通', summary: homeData.footer.email, items: [] },
+      { icon: 'location_on', title: '公司地址', summary: homeData.footer.address, items: [] },
+      { icon: 'map', title: '公众号二维码', summary: '扫码关注公众号', items: [], image: homeData.footer.wechatQr, imageAlt: '杰东药业公众号二维码' }
     ] satisfies DetailBlock[],
     consultationTypes: [
       '消字号代办',

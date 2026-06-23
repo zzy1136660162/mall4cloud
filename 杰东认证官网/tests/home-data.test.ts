@@ -8,7 +8,7 @@ describe('site data', () => {
     expect(homeData.hero.title).toContain('批文批号');
     expect(homeData.hero.image).toBe('/images/hero-compliance.png');
     expect(homeData.hero.cards).toHaveLength(4);
-    expect(homeData.services).toHaveLength(6);
+    expect(homeData.services).toHaveLength(4);
     expect(homeData.advantages).toHaveLength(4);
     expect(homeData.processSteps).toHaveLength(5);
     expect(homeData.news.length).toBeGreaterThanOrEqual(4);
@@ -31,7 +31,7 @@ describe('site data', () => {
     expect(pageData.process.documents).toHaveLength(3);
     expect(pageData.news.topics).toHaveLength(3);
     expect(pageData.cases.safeguards).toHaveLength(3);
-    expect(pageData.contact.methods).toHaveLength(3);
+    expect(pageData.contact.methods).toHaveLength(5);
   });
 
   it('uses local SVG icon files for every declared icon name', () => {
