@@ -73,6 +73,8 @@ export interface DetailBlock {
   title: string;
   summary: string;
   items?: string[];
+  image?: string;
+  imageAlt?: string;
 }
 
 export const siteNav: NavItem[] = [
@@ -88,72 +90,56 @@ export const siteNav: NavItem[] = [
 export const homeData = {
   hero: {
     eyebrow: 'Healthcare Compliance Service',
-    title: '医药健康产品批文批号申办服务伙伴',
+    title: '医药健康产品批文批号代办服务伙伴',
     description:
-      '聚焦保健食品、化妆品、消毒产品、医疗器械等注册备案与合规咨询，提供资料审核、申报路径设计和全过程节点跟进服务。',
+      '聚焦消字号代办、保健用品号代办、健字号代办与 OEM、ODM 代加工，提供资料审核、申报路径设计和全过程节点跟进服务。',
     image: '/images/hero-compliance.png',
     primaryAction: { label: '咨询服务', href: '/contact' } satisfies HeroAction,
     secondaryAction: { label: '查看申办流程', href: '/process' } satisfies HeroAction,
     cards: [
-      { icon: 'verified', title: '注册备案', summary: '保健食品、化妆品、消毒产品等资料路径咨询' },
+      { icon: 'verified', title: '批号代办', summary: '消字号、保健用品号、健字号资料路径咨询' },
       { icon: 'fact_check', title: '资料审核', summary: '围绕清单、标签、检测报告与申请资料逐项核对' },
       { icon: 'monitoring', title: '节点跟进', summary: '申报递交、补正反馈、过程沟通节点化管理' },
-      { icon: 'policy', title: '法规跟踪', summary: '持续关注医药健康行业监管政策变化' }
+      { icon: 'precision_manufacturing', title: '代加工协同', summary: '支持 OEM、ODM 代加工方案沟通与资料衔接' }
     ] satisfies HeroCard[],
     stats: [
-      { value: '20+', label: '细分申报方向' },
+      { value: '4类', label: '核心业务方向' },
       { value: '5步', label: '标准化服务流程' },
       { value: '7类', label: '政策资讯专题' }
     ] satisfies HeroStat[]
   },
   services: [
     {
-      icon: 'medication',
-      slug: 'health-food',
-      title: '保健食品注册与备案',
-      summary: '围绕国食健字、保健食品资料整理、配方与标签合规进行申报路径设计。',
-      tags: ['国食健字', '资料清单', '标签合规'],
-      details: ['产品属性初判与申报路径建议', '配方依据、功效声称、标签样稿核对', '注册备案材料目录与归档支持']
-    },
-    {
-      icon: 'spa',
-      slug: 'cosmetics',
-      title: '化妆品备案与申报',
-      summary: '支持国产非特殊化妆品备案、特殊化妆品申报资料梳理与法规要点核对。',
-      tags: ['化妆品备案', '功效宣称', '配方审核'],
-      details: ['备案主体与产品基础信息梳理', '功效宣称依据资料核对', '安全评估、标签和配方材料协同整理']
-    },
-    {
       icon: 'science',
-      slug: 'disinfection',
-      title: '消毒产品卫生安全评价',
-      summary: '协助消毒产品评价报告、卫消字相关资料准备及生产许可要求梳理。',
-      tags: ['卫消字', '评价报告', '许可资料'],
-      details: ['产品类别与评价要求初步判断', '检测报告、标签说明书和评价资料整理', '生产条件、委托关系与归档资料核对']
+      slug: 'disinfection-number',
+      title: '消字号代办',
+      summary: '围绕消毒产品、卫生用品等相关备案与评价资料，协助梳理申报路径和材料清单。',
+      tags: ['消字号', '资料清单', '评价资料'],
+      details: ['产品类别与申报路径初步判断', '检测报告、标签说明书和评价资料整理', '生产条件、委托关系与归档资料核对']
     },
     {
-      icon: 'medical_services',
-      slug: 'medical-device',
-      title: '医疗器械注册备案',
-      summary: '面向一类医疗器械备案、产品分类判断和注册资料路径提供咨询支持。',
-      tags: ['器械分类', '备案路径', '资料辅导'],
-      details: ['产品分类与管理类别建议', '技术要求、说明书、标签资料核对', '备案路径、递交流程和补正沟通支持']
+      icon: 'health_and_safety',
+      slug: 'health-care-number',
+      title: '保健用品号代办',
+      summary: '面向保健用品号相关申办需求，协助完成产品资料梳理、标签口径核对和申报节点跟进。',
+      tags: ['保健用品号', '资料整理', '标签核对'],
+      details: ['产品属性、适用范围和资料现状评估', '配方依据、标签样稿、检测资料协同整理', '申办材料目录与递交节点跟进']
     },
     {
       icon: 'local_pharmacy',
-      slug: 'medicine',
-      title: '药品相关批号咨询',
-      summary: '围绕国药准字、药品广告审查、说明书标签等方向提供政策解读。',
-      tags: ['国药准字', '药品知识', '政策解读'],
-      details: ['药品相关资质与申报条件梳理', '广告审查、说明书标签要点提示', '政策资料和申报节点咨询']
+      slug: 'jianzi-number',
+      title: '健字号代办',
+      summary: '针对健字号申办相关资料要求，提供路径研判、材料整理、文本核对和过程沟通支持。',
+      tags: ['健字号', '路径研判', '过程跟进'],
+      details: ['目标批号与申办条件梳理', '产品资料、标签说明和证明材料核对', '补正反馈、资料归档和后续维护建议']
     },
     {
-      icon: 'assignment_turned_in',
-      slug: 'food-permit',
-      title: '食字号与特殊批文咨询',
-      summary: '覆盖食品生产许可、QS、药食同源、新食品原料等健康产品准入问题。',
-      tags: ['食字号', 'QS', '新食品原料'],
-      details: ['食品类准入路径和许可资料梳理', '药食同源、新资源食品政策要点提示', '生产许可与标签合规材料核对']
+      icon: 'precision_manufacturing',
+      slug: 'oem-odm',
+      title: 'OEM、ODM代加工',
+      summary: '对接医药健康相关产品代加工需求，协助沟通产品定位、生产资料、包装标签和交付节点。',
+      tags: ['OEM', 'ODM', '代加工'],
+      details: ['产品方向、规格形态和合作模式沟通', '生产资料、包装标签和备案资料衔接', '打样、生产、交付过程节点协同']
     }
   ] satisfies ServiceItem[],
   advantages: [
@@ -170,7 +156,7 @@ export const homeData = {
     {
       icon: 'travel_explore',
       title: '政策法规跟踪',
-      summary: '持续关注医药健康、食品、化妆品、消毒产品与医疗器械监管动态。'
+      summary: '持续关注消字号、保健用品号、健字号与代加工相关监管动态。'
     },
     {
       icon: 'timeline',
@@ -187,63 +173,65 @@ export const homeData = {
   ] satisfies ProcessStep[],
   news: [
     {
-      category: '政策法规',
-      title: '中医药标准化研究转化与管理要求持续完善',
+      category: '消字号',
+      title: '消字号产品资料准备需要关注的基础清单',
       date: '2026-06-18',
-      summary: '关注行业标准更新对健康产品申报资料和合规表述的影响。'
+      summary: '围绕检测报告、标签说明、生产条件和评价资料梳理申办前置准备。'
     },
     {
-      category: '医疗器械',
-      title: '第一类医疗器械备案资料准备要点',
+      category: '保健用品号',
+      title: '保健用品号申办前的资料梳理要点',
       date: '2026-06-12',
-      summary: '从产品分类、说明书、技术要求等角度梳理备案前置准备。'
+      summary: '从产品属性、适用范围、标签样稿和检测资料等角度降低补正风险。'
     },
     {
-      category: '化妆品',
-      title: '国产非特殊化妆品备案流程关注事项',
+      category: '健字号',
+      title: '健字号申办过程中的文本合规关注事项',
       date: '2026-06-06',
-      summary: '整理配方、功效宣称、标签与安全评估资料的常见问题。'
+      summary: '关注产品说明、标签表述、证明材料和申报表内容的一致性。'
     },
     {
-      category: '消毒产品',
-      title: '消毒产品卫生安全评价报告资料清单',
+      category: 'OEM、ODM',
+      title: '代加工合作中的资料衔接和交付节点',
       date: '2026-05-28',
-      summary: '围绕检测、标签、生产条件和评价报告进行申报资料说明。'
+      summary: '梳理产品定位、包装标签、生产资料和批号申办之间的协同关系。'
     }
   ] satisfies NewsItem[],
   cases: [
     {
-      type: '保健食品',
-      title: '保健食品注册资料整理项目',
+      type: '消字号',
+      title: '消字号产品申办资料整理项目',
       status: '资料归档',
-      summary: '协助企业梳理配方依据、标签样稿和申报资料目录。'
+      summary: '协助企业梳理检测资料、标签说明和评价资料目录。'
     },
     {
-      type: '化妆品',
-      title: '国产非特殊化妆品备案咨询',
+      type: '保健用品号',
+      title: '保健用品号申办咨询',
       status: '流程完成',
-      summary: '围绕产品备案路径、功效宣称和基础资料进行合规咨询。'
+      summary: '围绕产品资料、标签口径和申办材料进行合规咨询。'
     },
     {
-      type: '消毒产品',
-      title: '卫生安全评价资料辅导',
+      type: '健字号',
+      title: '健字号资料辅导',
       status: '节点跟进',
-      summary: '支持检测资料、标签内容和评价报告文件的准备工作。'
+      summary: '支持产品说明、证明材料和申报文本的准备工作。'
     },
     {
-      type: '医疗器械',
-      title: '一类医疗器械备案路径咨询',
+      type: 'OEM、ODM',
+      title: '代加工资料衔接服务',
       status: '方案交付',
-      summary: '协助判断产品分类并形成备案资料准备建议。'
+      summary: '协助梳理产品定位、包装标签和生产资料衔接方案。'
     }
   ] satisfies CaseItem[],
   footer: {
     company: '北京杰东认证服务有限公司',
-    description: '专注医药健康产品批文批号、注册备案与合规咨询服务。',
-    phone: '010-0000-0000',
-    email: 'service@bjjdjy.com.cn',
-    address: '北京市朝阳区医药健康产业服务示范地址',
-    icp: '京ICP备12045069号-1'
+    description: '专注消字号、保健用品号、健字号代办及 OEM、ODM 代加工服务。',
+    contactName: '高经理',
+    phone: '15039055716',
+    email: '1044349157@qq.com',
+    address: '北京市丰台区造甲街南里11号楼11-3幢1层20111号',
+    wechatQr: '/images/公众号二维码.jpg',
+    icp: ''
   }
 };
 
@@ -285,10 +273,10 @@ export const pageData = {
       icon: 'lan',
       title: '围绕产品准入建立分层服务体系',
       description:
-        '不同产品类别对应不同监管路径。杰东认证以品类判断、资料清单、法规口径和递交节点为主线，为企业建立可推进的申报计划。',
+        '不同产品类别对应不同监管路径。杰东认证以消字号、保健用品号、健字号和 OEM、ODM 代加工为核心方向，为企业建立可推进的申报与协同计划。',
       metrics: [
-        { value: '6大类', label: '核心业务方向' },
-        { value: '20+', label: '细分服务事项' },
+        { value: '4大类', label: '核心业务方向' },
+        { value: '全流程', label: '资料与节点跟进' },
         { value: '1套', label: '统一资料管理逻辑' }
       ]
     } satisfies PageHero,
@@ -337,7 +325,7 @@ export const pageData = {
       ]
     } satisfies PageHero,
     topics: [
-      { icon: 'policy', title: '监管政策', summary: '跟踪医药、食品、化妆品和器械相关政策更新。' },
+      { icon: 'policy', title: '监管政策', summary: '跟踪消字号、保健用品号、健字号相关政策更新。' },
       { icon: 'description', title: '资料清单', summary: '整理不同品类申报过程中的常用资料结构。' },
       { icon: 'health_and_safety', title: '风险提示', summary: '关注标签、功效、适用范围和宣传表述风险。' }
     ] satisfies DetailBlock[]
@@ -375,17 +363,17 @@ export const pageData = {
       ]
     } satisfies PageHero,
     methods: [
-      { icon: 'call', title: '电话咨询', summary: homeData.footer.phone, items: ['工作日 09:00-18:00', '适合快速确认服务方向'] },
-      { icon: 'alternate_email', title: '邮件沟通', summary: homeData.footer.email, items: ['可发送产品资料概要', '适合整理清单和问题'] },
-      { icon: 'location_on', title: '服务地址', summary: homeData.footer.address, items: ['支持预约沟通', '请提前确认拜访时间'] }
+      { icon: 'person', title: '联系人', summary: homeData.footer.contactName },
+      { icon: 'call', title: '电话咨询', summary: homeData.footer.phone },
+      { icon: 'alternate_email', title: '邮件沟通', summary: homeData.footer.email },
+      { icon: 'location_on', title: '公司地址', summary: homeData.footer.address },
+      { icon: 'qr_code_2', title: '公众号二维码', summary: '扫码关注公众号', image: homeData.footer.wechatQr, imageAlt: '杰东药业公众号二维码' }
     ] satisfies DetailBlock[],
     consultationTypes: [
-      '保健食品注册备案',
-      '化妆品备案申报',
-      '消毒产品卫生安全评价',
-      '医疗器械注册备案',
-      '药品相关批号咨询',
-      '食字号与特殊批文咨询'
+      '消字号代办',
+      '保健用品号代办',
+      '健字号代办',
+      'OEM、ODM代加工'
     ]
   }
 };
