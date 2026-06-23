@@ -7,7 +7,7 @@ const data = pageData.contact;
 
 useSeoMeta({
   title: '联系我们 - 杰东认证',
-  description: '联系杰东认证，沟通保健食品、化妆品、消毒产品、医疗器械等批文批号申办需求。'
+  description: '联系杰东认证，沟通消字号代办、保健用品号代办、健字号代办及 OEM、ODM 代加工需求。'
 });
 </script>
 
@@ -16,14 +16,15 @@ useSeoMeta({
     <PageHero :hero="data.hero" />
 
     <section class="bg-white py-20">
-      <div class="mx-auto grid max-w-7xl gap-6 px-5 sm:px-6 lg:grid-cols-3 lg:px-8">
+      <div class="mx-auto grid max-w-7xl gap-6 px-5 sm:px-6 md:grid-cols-2 xl:grid-cols-5 lg:px-8">
         <article v-for="method in data.methods" :key="method.title" class="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
           <span class="flex size-12 items-center justify-center rounded-md bg-brand-soft text-brand-primary">
             <MaterialIcon :name="method.icon" class="text-[26px]" />
           </span>
           <h2 class="mt-5 text-xl font-semibold text-brand-ink">{{ method.title }}</h2>
           <p class="mt-3 text-lg font-semibold text-brand-primary">{{ method.summary }}</p>
-          <ul class="mt-5 space-y-2 text-sm leading-6 text-slate-600">
+          <img v-if="method.image" :src="method.image" :alt="method.imageAlt || method.title" class="mt-5 size-32 rounded-md border border-slate-100 object-cover p-1" width="128" height="128">
+          <ul v-if="method.items?.length" class="mt-5 space-y-2 text-sm leading-6 text-slate-600">
             <li v-for="item in method.items" :key="item" class="flex gap-2">
               <MaterialIcon name="check_circle" class="mt-1 text-[16px] text-brand-primary" />
               <span>{{ item }}</span>

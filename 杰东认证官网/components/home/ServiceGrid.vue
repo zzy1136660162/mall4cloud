@@ -11,10 +11,10 @@ defineProps<{ services: ServiceItem[] }>();
       <div class="max-w-3xl">
         <p class="text-sm font-semibold uppercase tracking-[0.24em] text-brand-primary">Service Fields</p>
         <h2 class="mt-4 text-3xl font-bold text-brand-ink sm:text-4xl">服务领域</h2>
-        <p class="mt-4 leading-8 text-slate-600">围绕医药健康产品上市准入中的批文批号、注册备案与资料合规问题，建立清晰的服务分类。</p>
+        <p class="mt-4 leading-8 text-slate-600">围绕消字号、保健用品号、健字号代办及 OEM、ODM 代加工需求，建立清晰的服务分类。</p>
       </div>
 
-      <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         <article v-for="service in services" :key="service.title" class="group rounded-lg border border-slate-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-soft">
           <div class="flex items-start justify-between gap-4">
             <span class="flex size-12 items-center justify-center rounded-md bg-brand-soft text-brand-primary">

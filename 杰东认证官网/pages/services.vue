@@ -7,7 +7,7 @@ const data = pageData.services;
 
 useSeoMeta({
   title: '服务领域 - 杰东认证',
-  description: '杰东认证提供保健食品、化妆品、消毒产品、医疗器械、药品相关批号和食字号等合规咨询服务。'
+  description: '杰东认证提供消字号代办、保健用品号代办、健字号代办及 OEM、ODM 代加工服务。'
 });
 </script>
 
