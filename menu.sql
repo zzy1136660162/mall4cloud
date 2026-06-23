@@ -1,10 +1,10 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 101.126.90.255
+ Source Server         : 167.88.180.246
  Source Server Type    : MySQL
  Source Server Version : 80045 (8.0.45)
- Source Host           : 101.126.90.255:63306
+ Source Host           : 167.88.180.246:63306
  Source Schema         : mall4cloud_rbac
 
  Target Server Type    : MySQL

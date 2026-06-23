@@ -1,17 +1,12 @@
-version: "3.5"
-
 services:
-
-
   mall4cloud-mysql:
     image: mysql:8.0
     container_name: mall4cloud-mysql
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=Gesoft9919.
-    network_mode: "host"
-    expose:
-      - 3306
+    ports:
+      - "3306:3306"
     volumes:
       - ./mysql/data:/var/lib/mysql
       - ./mysql/conf.d:/etc/mysql/conf.d
@@ -22,25 +17,23 @@ services:
     container_name: mall4cloud-minio
     restart: always
     command: server /data --console-address ":9001"
-    network_mode: "host"
-    expose:
-      - 9000
-      - 9001
+    ports:
+      - "9000:9000"
+      - "9001:9001"
     volumes:
       - ./minio/data:/data
     environment:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=Gesoft9919.
-      - MINIO_BROWSER_REDIRECT_URL=http://167.88.180.246:9001
+      - MINIO_BROWSER_REDIRECT_URL=http://127.0.0.1:9001
 
   mall4cloud-redis:
     image: redis:7.0
     container_name: mall4cloud-redis
     restart: always
-    network_mode: "host"
     command: redis-server --requirepass Gesoft9919.
-    expose:
-      - 6379
+    ports:
+      - "6379:6379"
 
 
   mall4cloud-nacos:
@@ -49,22 +42,25 @@ services:
     restart: always
     depends_on:
       - mall4cloud-mysql
-    network_mode: "host"
-    expose:
-      - 8848
-      - 9848
-      - 9849
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+      - "8080:8080"
     environment:
       - JVM_XMS=256m
       - JVM_XMX=256m
       - MODE=standalone
       - PREFER_HOST_MODE=hostname
       - SPRING_DATASOURCE_PLATFORM=mysql
-      - MYSQL_SERVICE_HOST=167.88.180.246
+      - MYSQL_SERVICE_HOST=mall4cloud-mysql
       - MYSQL_SERVICE_DB_NAME=mall4cloud_nacos
       - MYSQL_SERVICE_USER=root
       - MYSQL_SERVICE_PASSWORD=Gesoft9919.
       - NACOS_AUTH_ENABLE=true
+      - NACOS_AUTH_TOKEN=TWFsbDRqTWFsbDRjbG91ZE1hbGw0ak1hbGw0Y2xvdWRNYWxsNGpNYWxsNGNsb3Vk
+      - NACOS_AUTH_IDENTITY_KEY=mall4jmall4jmall4jmall4jmall4jmall4jmall4jmall4j
+      - NACOS_AUTH_IDENTITY_VALUE=mall4cloudmall4cloudmall4cloudmall4cloudmall4cloudmall4cloudmall4cloud
       - NACOS_CORE_AUTH_PLUGIN_NACOS_TOKEN_SECRET_KEY=TWFsbDRqTWFsbDRjbG91ZE1hbGw0ak1hbGw0Y2xvdWRNYWxsNGpNYWxsNGNsb3Vk
       - NACOS_CORE_AUTH_SERVER_IDENTITY_KEY=mall4jmall4jmall4jmall4jmall4jmall4jmall4jmall4j
       - NACOS_CORE_AUTH_SERVER_IDENTITY_VALUE=mall4cloudmall4cloudmall4cloudmall4cloudmall4cloudmall4cloudmall4cloud
@@ -76,9 +72,9 @@ services:
     image: canal/canal-server:v1.1.7
     container_name: mall4cloud-canal
     restart: always
-    network_mode: "host"
-    expose:
-      - 11111
+    ports:
+      - "11111:11111"
+      - "11112:11112"
     volumes:
       - ./canal/conf/example:/home/admin/canal-server/conf/example
       - ./canal/conf/canal.properties:/home/admin/canal-server/conf/canal.properties
@@ -89,9 +85,8 @@ services:
     image: apache/rocketmq:5.2.0
     container_name: mall4cloud-rocketmq-namesrv
     restart: always
-    network_mode: "host"
-    expose:
-      - 9876
+    ports:
+      - "9876:9876"
     volumes:
       - ./rocketmq/namesrv/logs:/home/rocketmq/logs
       - ./rocketmq/namesrv/store:/home/rocketmq/store
@@ -103,17 +98,17 @@ services:
     image: apache/rocketmq:5.2.0
     container_name: mall4cloud-rocketmq-broker
     restart: always
-    network_mode: "host"
-    expose:
-      - 10909
-      - 10911
+    user: "0:0"
+    ports:
+      - "10909:10909"
+      - "10911:10911"
     volumes:
       - ./rocketmq/broker/logs:/home/rocketmq/logs
       - ./rocketmq/broker/store:/home/rocketmq/store
       - ./rocketmq/broker/conf/broker.conf:/etc/rocketmq/broker.conf
     environment:
       JAVA_OPT_EXT: "-Duser.home=/home/rocketmq -Xms512M -Xmx512M -Xmn128M -XX:-AssumeMP"
-    command: ["sh","mqbroker","-c","/etc/rocketmq/broker.conf","-n","167.88.180.246:9876","autoCreateTopicEnable=true"]
+    command: ["sh","mqbroker","-c","/etc/rocketmq/broker.conf","-n","mall4cloud-rocketmq-namesrv:9876"]
     depends_on:
       - mall4cloud-rocketmq-namesrv
 
@@ -123,24 +118,28 @@ services:
     container_name: mall4cloud-rocketmq-dashboard
     restart: always
     ports:
-      - 8180:8080
+      - "8180:8080"
+    volumes:
+      - ./rocketmq/dashboard/config/application.yml:/config/application.yml:ro
     environment:
-      JAVA_OPTS: "-Drocketmq.namesrv.addr=167.88.180.246:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
+      JAVA_OPTS: ""
     depends_on:
       - mall4cloud-rocketmq-namesrv
   mall4cloud-seata:
     image: apache/seata-server:2.6.0
     container_name: mall4cloud-seata
     restart: always
-    network_mode: "host"
-    expose:
-      - 8091
-      - 7091
+    ports:
+      - "8091:8091"
+      - "7091:7091"
     environment:
       - TZ
       - STORE_MODE=db
-      - SEATA_IP=167.88.180.246
+      - SEATA_IP=mall4cloud-seata
       - SEATA_PORT=8091
+      - JVM_XMS=512m
+      - JVM_XMX=512m
+      - JVM_MaxDirectMemorySize=256m
     volumes:
       - ./seata/application.yml:/seata-server/resources/application.yml
 
@@ -149,13 +148,16 @@ services:
     image: nginx:1.25-alpine
     container_name: mall4cloud-nginx
     restart: always
-    network_mode: "host"
-    expose:
-      - 80
-      - 443
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8021:8021"
     volumes:
       - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf_d:/etc/nginx/conf.d:ro
       - ./nginx/public-files:/usr/share/nginx/html:ro
+      - /mnt/web-services/mall4cloud-multishop-ui:/usr/share/nginx/mall4cloud-multishop-ui:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
       - ./nginx/logs:/var/log/nginx
-    
