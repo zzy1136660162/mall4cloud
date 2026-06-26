@@ -1,0 +1,408 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>专家详情页</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "inverse-on-surface": "#eaf1ff",
+                "surface-container": "#e5eeff",
+                "on-error-container": "#93000a",
+                "primary": "#0058be",
+                "surface-variant": "#d3e4fe",
+                "background": "#f8f9ff",
+                "secondary-container": "#6cf8bb",
+                "surface-dim": "#cbdbf5",
+                "surface-container-low": "#eff4ff",
+                "inverse-primary": "#adc6ff",
+                "on-tertiary-container": "#fffbff",
+                "inverse-surface": "#213145",
+                "on-error": "#ffffff",
+                "surface-container-high": "#dce9ff",
+                "surface-container-highest": "#d3e4fe",
+                "secondary-fixed": "#6ffbbe",
+                "primary-fixed-dim": "#adc6ff",
+                "surface-tint": "#005ac2",
+                "on-secondary": "#ffffff",
+                "secondary-fixed-dim": "#4edea3",
+                "secondary": "#006c49",
+                "on-primary-container": "#fefcff",
+                "on-tertiary-fixed-variant": "#2f2ebe",
+                "on-primary": "#ffffff",
+                "error-container": "#ffdad6",
+                "primary-container": "#2170e4",
+                "on-primary-fixed": "#001a42",
+                "surface": "#f8f9ff",
+                "on-surface": "#0b1c30",
+                "on-tertiary": "#ffffff",
+                "tertiary": "#4648d4",
+                "on-secondary-container": "#00714d",
+                "tertiary-container": "#6063ee",
+                "on-surface-variant": "#424754",
+                "error": "#ba1a1a",
+                "on-primary-fixed-variant": "#004395",
+                "tertiary-fixed": "#e1e0ff",
+                "surface-bright": "#f8f9ff",
+                "on-tertiary-fixed": "#07006c",
+                "outline-variant": "#c2c6d6",
+                "primary-fixed": "#d8e2ff",
+                "on-secondary-fixed": "#002113",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#005236",
+                "tertiary-fixed-dim": "#c0c1ff",
+                "on-background": "#0b1c30",
+                "outline": "#727785"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "container-padding": "16px",
+                "gutter": "12px",
+                "section-margin": "24px",
+                "stack-gap": "12px",
+                "base": "4px"
+        },
+        "fontFamily": {
+                "display-lg": [
+                        "Plus Jakarta Sans"
+                ],
+                "headline-md": [
+                        "Plus Jakarta Sans"
+                ],
+                "display-lg-mobile": [
+                        "Plus Jakarta Sans"
+                ],
+                "body-md": [
+                        "Work Sans"
+                ],
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "body-lg": [
+                        "Work Sans"
+                ]
+        },
+        "fontSize": {
+                "display-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-md": [
+                        "20px",
+                        {
+                                "lineHeight": "1.4",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "14px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-lg": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;family=Work+Sans:wght@400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+
+        .ambient-shadow-surface-1 {
+            box-shadow: 0px 2px 4px rgba(26, 54, 93, 0.05);
+            border: 1px solid theme('colors.outline-variant');
+        }
+        
+        .ambient-shadow-surface-2 {
+            box-shadow: 0px 10px 20px rgba(26, 54, 93, 0.1);
+            border: 1px solid theme('colors.outline-variant');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-20 md:pb-0 font-body-md text-body-md">
+<!-- TopAppBar -->
+
+<main class="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Profile Header Section (Bento style grid on desktop) -->
+<section class="md:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Main Info Card -->
+<div class="md:col-span-2 bg-surface-container-lowest rounded-xl p-6 ambient-shadow-surface-1 flex flex-col sm:flex-row gap-6 items-start">
+<div class="w-32 h-32 rounded-full overflow-hidden flex-shrink-0 border-4 border-surface-container-high relative">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a senior tech expert in a modern, light-mode environment. The lighting is crisp and soft, emphasizing expertise and technical competence. The subject is wearing business casual attire. Background is a subtle gradient of light gray." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEaowe6oAysGjc688N7MDHf4XNthoUz6EWcliasvZqz6oLAEqQeOUKkizNqbeWOcp-_s8pffhxw0IwPYjtAgZbgN9wQMWy9qUjf-QMvV3bjg1079HKNnaYIzYVZ5spTNe1dWvMg_Yk9F6FHdRHscij4As-RAkOoktBPJWUOI18n9zdQyOd_CntY2NAZKI2DFmv93FAh6jF43DhkD7_nTp2B8e6pRbzSeSexM27OivQ14Not0s8IoTpa118nUIUrCQ97cahUK_UB-SB">
+<div class="absolute bottom-0 right-0 bg-secondary text-on-secondary rounded-full p-1 border-2 border-white flex items-center justify-center" title="认证专家">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary mb-2">Dr. 林致远</h2>
+<p class="font-headline-md text-headline-md text-on-surface-variant mb-1">首席科学家 / 高级工程师</p>
+<p class="font-body-lg text-body-lg text-outline flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="business" data-weight="regular">business</span>
+                                国家前沿材料技术联合实验室
+                            </p>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm px-6 py-2 rounded-full transition-colors active:scale-95 duration-150 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="mail" data-weight="regular">mail</span>
+                                联系专家
+                            </button>
+<button class="border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary font-label-sm text-label-sm px-6 py-2 rounded-full transition-colors active:scale-95 duration-150 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="bookmark" data-weight="regular">bookmark</span>
+                                关注
+                            </button>
+</div>
+</div>
+<div class="mt-6 flex flex-wrap gap-3">
+<span class="bg-secondary-fixed/20 text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                            材料科学
+                        </span>
+<span class="bg-tertiary-fixed/20 text-on-tertiary-container px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                            纳米技术
+                        </span>
+<span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+                            产业化落地
+                        </span>
+</div>
+</div>
+</div>
+<!-- Stats Highlight Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 ambient-shadow-surface-1 flex flex-col justify-between">
+<h3 class="font-headline-md text-headline-md text-primary border-b border-outline-variant pb-2 mb-4">核心影响</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-surface-container-low rounded-lg">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">主导成果转化</p>
+<p class="font-display-lg-mobile text-display-lg-mobile text-secondary">12<span class="text-body-md text-outline ml-1">项</span></p>
+</div>
+<div class="p-4 bg-surface-container-low rounded-lg">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">产业化价值</p>
+<p class="font-display-lg-mobile text-display-lg-mobile text-secondary">¥3.5<span class="text-body-md text-outline ml-1">亿+</span></p>
+</div>
+<div class="p-4 bg-surface-container-low rounded-lg">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">授权专利</p>
+<p class="font-display-lg-mobile text-display-lg-mobile text-primary">45<span class="text-body-md text-outline ml-1">件</span></p>
+</div>
+<div class="p-4 bg-surface-container-low rounded-lg">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">学术论文</p>
+<p class="font-display-lg-mobile text-display-lg-mobile text-primary">80<span class="text-body-md text-outline ml-1">篇</span></p>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content Area (Tabs + Content) -->
+<section class="md:col-span-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column: Detailed Bio & Capabilities -->
+<div class="lg:col-span-1 flex flex-col gap-6">
+<div class="bg-surface-container-lowest rounded-xl p-4 ambient-shadow-surface-1">
+<h3 class="font-headline-md text-headline-md text-primary border-b border-outline-variant pb-2 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="psychology" data-weight="regular">psychology</span>
+                         能力评估
+                     </h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-1">
+<span class="text-on-surface">技术研发深度</span>
+<span class="text-secondary">95%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary" style="width: 95%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-1">
+<span class="text-on-surface">产业化经验</span>
+<span class="text-secondary">88%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary" style="width: 88%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-1">
+<span class="text-on-surface">跨界协同能力</span>
+<span class="text-secondary">90%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary" style="width: 90%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-4 ambient-shadow-surface-1">
+<h3 class="font-headline-md text-headline-md text-primary border-b border-outline-variant pb-2 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="menu_book" data-weight="regular">menu_book</span>
+                         个人简介
+                     </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                         林致远博士在先进纳米材料的合成及其在新能源领域的应用方面拥有超过15年的研发与产业化经验。曾主持多项国家级重点研发计划，成功将3项实验室级技术转化为规模化量产产品，与多家行业头部企业保持深度技术合作关系。致力于打破科研与产业的壁垒，实现技术价值的最大化。
+                     </p>
+</div>
+</div>
+<!-- Right Column: Projects & Honors (Bento Vertical) -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<!-- Project Experience List -->
+<div class="bg-surface-container-lowest rounded-xl p-6 ambient-shadow-surface-1">
+<div class="flex justify-between items-end border-b border-outline-variant pb-2 mb-6">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="work_history" data-weight="regular">work_history</span>
+                              重点项目经验
+                          </h3>
+<a class="font-label-sm text-label-sm text-secondary hover:underline" href="#">查看全部</a>
+</div>
+<div class="space-y-6">
+<!-- Project Item 1 -->
+<div class="group relative pl-6 border-l-2 border-surface-container-high pb-6 hover:border-secondary transition-colors">
+<div class="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-surface-container-lowest border-2 border-secondary"></div>
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+<h4 class="font-headline-md text-headline-md text-on-surface">新型固态电池电解质中试及量产研究</h4>
+<span class="font-label-sm text-label-sm text-outline whitespace-nowrap bg-surface-container-low px-2 py-1 rounded">2021.05 - 2023.12</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-3">
+                                  作为首席技术负责人，主导了从实验室克级制备到百公斤级中试产线的全流程工艺开发。解决了关键材料的分散性问题，使得电池整体能量密度提升了20%。
+                              </p>
+<div class="flex flex-wrap gap-2">
+<span class="text-xs bg-surface-variant text-on-surface px-2 py-1 rounded border border-outline-variant">百公斤级中试</span>
+<span class="text-xs bg-surface-variant text-on-surface px-2 py-1 rounded border border-outline-variant">固态电池</span>
+<span class="text-xs bg-secondary-fixed/30 text-on-secondary-container px-2 py-1 rounded border border-secondary-fixed-dim">已结项 (成功转化)</span>
+</div>
+</div>
+<!-- Project Item 2 -->
+<div class="group relative pl-6 border-l-2 border-surface-container-high pb-2 hover:border-secondary transition-colors">
+<div class="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-surface-container-lowest border-2 border-outline-variant group-hover:border-secondary"></div>
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+<h4 class="font-headline-md text-headline-md text-on-surface">高效柔性光伏组件封装材料开发</h4>
+<span class="font-label-sm text-label-sm text-outline whitespace-nowrap bg-surface-container-low px-2 py-1 rounded">2018.03 - 2020.10</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-3">
+                                  带领团队开发出新型高透光、耐候性强的柔性封装胶膜。该技术成果已独家授权给某头部光伏企业，实现年新增产值破亿元。
+                              </p>
+<div class="flex flex-wrap gap-2">
+<span class="text-xs bg-surface-variant text-on-surface px-2 py-1 rounded border border-outline-variant">独家授权</span>
+<span class="text-xs bg-surface-variant text-on-surface px-2 py-1 rounded border border-outline-variant">柔性光伏</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Honors & Patents List -->
+<div class="bg-surface-container-lowest rounded-xl p-6 ambient-shadow-surface-1">
+<h3 class="font-headline-md text-headline-md text-primary border-b border-outline-variant pb-2 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="emoji_events" data-weight="regular">emoji_events</span>
+                         成果与荣誉
+                     </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Honor Card 1 -->
+<div class="border border-outline-variant rounded-lg p-4 hover:ambient-shadow-surface-2 transition-shadow bg-surface-bright">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="workspace_premium" data-weight="regular">workspace_premium</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface">国家科技进步二等奖</h4>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">表彰在新能源材料领域的突破性贡献，及其带来的显著经济效益。</p>
+<p class="font-label-sm text-label-sm text-outline mt-2 text-right">2022年度</p>
+</div>
+<!-- Honor Card 2 -->
+<div class="border border-outline-variant rounded-lg p-4 hover:ambient-shadow-surface-2 transition-shadow bg-surface-bright">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="patent_recheck" data-weight="regular">local_police</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface">PCT国际专利授权</h4>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">一种高安全性固态电解质的制备方法及应用 (PCT/CN2021/xxxxx)</p>
+<p class="font-label-sm text-label-sm text-outline mt-2 text-right">授权日: 2021.08</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface-container dark:bg-surface-dim border-t border-outline-variant dark:border-outline shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="home" data-weight="regular">home</span>
+<span class="font-label-sm text-label-sm">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim bg-secondary-fixed/20 rounded-full px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="database" data-weight="fill" style="font-variation-settings: 'FILL' 1;">database</span>
+<span class="font-label-sm text-label-sm">专家库</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="search" data-weight="regular">search</span>
+<span class="font-label-sm text-label-sm">查询</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="person" data-weight="regular">person</span>
+<span class="font-label-sm text-label-sm">我的</span>
+</a>
+</nav>
+
+
+</body></html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html><html class="light" lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>需求查询 - 成果转化与产业协同平台</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "inverse-on-surface": "#eaf1ff",
+                "surface-container": "#e5eeff",
+                "on-error-container": "#93000a",
+                "primary": "#0058be",
+                "surface-variant": "#d3e4fe",
+                "background": "#f8f9ff",
+                "secondary-container": "#6cf8bb",
+                "surface-dim": "#cbdbf5",
+                "surface-container-low": "#eff4ff",
+                "inverse-primary": "#adc6ff",
+                "on-tertiary-container": "#fffbff",
+                "inverse-surface": "#213145",
+                "on-error": "#ffffff",
+                "surface-container-high": "#dce9ff",
+                "surface-container-highest": "#d3e4fe",
+                "secondary-fixed": "#6ffbbe",
+                "primary-fixed-dim": "#adc6ff",
+                "surface-tint": "#005ac2",
+                "on-secondary": "#ffffff",
+                "secondary-fixed-dim": "#4edea3",
+                "secondary": "#006c49",
+                "on-primary-container": "#fefcff",
+                "on-tertiary-fixed-variant": "#2f2ebe",
+                "on-primary": "#ffffff",
+                "error-container": "#ffdad6",
+                "primary-container": "#2170e4",
+                "on-primary-fixed": "#001a42",
+                "surface": "#f8f9ff",
+                "on-surface": "#0b1c30",
+                "on-tertiary": "#ffffff",
+                "tertiary": "#4648d4",
+                "on-secondary-container": "#00714d",
+                "tertiary-container": "#6063ee",
+                "on-surface-variant": "#424754",
+                "error": "#ba1a1a",
+                "on-primary-fixed-variant": "#004395",
+                "tertiary-fixed": "#e1e0ff",
+                "surface-bright": "#f8f9ff",
+                "on-tertiary-fixed": "#07006c",
+                "outline-variant": "#c2c6d6",
+                "primary-fixed": "#d8e2ff",
+                "on-secondary-fixed": "#002113",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#005236",
+                "tertiary-fixed-dim": "#c0c1ff",
+                "on-background": "#0b1c30",
+                "outline": "#727785"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "container-padding": "16px",
+                "gutter": "12px",
+                "section-margin": "24px",
+                "stack-gap": "12px",
+                "base": "4px"
+        },
+        "fontFamily": {
+                "display-lg": [
+                        "Plus Jakarta Sans"
+                ],
+                "headline-md": [
+                        "Plus Jakarta Sans"
+                ],
+                "display-lg-mobile": [
+                        "Plus Jakarta Sans"
+                ],
+                "body-md": [
+                        "Work Sans"
+                ],
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "body-lg": [
+                        "Work Sans"
+                ]
+        },
+        "fontSize": {
+                "display-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-md": [
+                        "20px",
+                        {
+                                "lineHeight": "1.4",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "14px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-lg": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopAppBar -->
+
+<!-- Main Canvas -->
+<main class="flex-1 mb-20 md:mb-0 px-gutter w-full max-w-7xl mx-auto flex items-center justify-center py-section-margin relative overflow-hidden">
+<!-- Ambient decorative blur for tech feel -->
+<div class="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] bg-secondary-container/10 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+<!-- Search Form Card -->
+<div class="w-full max-w-[480px] bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm p-section-margin flex flex-col relative z-10 backdrop-blur-sm">
+<div class="mb-section-margin text-center">
+<h2 class="font-display-lg text-display-lg text-on-surface mb-stack-gap">进度追踪查询</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">输入立项手机号及需求编号，实时获取转化节点状态。</p>
+</div>
+<form class="flex flex-col gap-section-margin" onsubmit="event.preventDefault();">
+<!-- Phone Input -->
+<div class="flex flex-col gap-base group">
+<label class="font-body-md text-body-md text-on-surface-variant group-focus-within:text-primary transition-colors" for="phone-input">联系手机号</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-stack-gap text-outline-variant group-focus-within:text-primary transition-colors text-[20px]">smartphone</span>
+<input autocomplete="tel" class="w-full bg-surface-bright border border-outline-variant rounded-lg pl-12 pr-stack-gap py-3 font-body-lg text-on-surface placeholder:text-outline focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-container/50 transition-all shadow-sm" id="phone-input" placeholder="请输入11位手机号码" type="tel">
+</div>
+</div>
+<!-- Requirement ID Input -->
+<div class="flex flex-col gap-base group">
+<div class="flex justify-between items-center">
+<label class="font-body-md text-body-md text-on-surface-variant group-focus-within:text-primary transition-colors" for="id-input">需求编号</label>
+<span class="font-label-sm text-label-sm text-outline">SR-XXX格式</span>
+</div>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-stack-gap text-outline-variant group-focus-within:text-primary transition-colors text-[20px]">tag</span>
+<input class="w-full bg-surface-bright border border-outline-variant rounded-lg pl-12 pr-stack-gap py-3 font-label-sm text-label-sm text-on-surface placeholder:text-outline placeholder:font-body-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-container/50 transition-all shadow-sm uppercase" id="id-input" placeholder="例如: SR-202310-001" type="text">
+</div>
+</div>
+<!-- Submit Button -->
+<div class="mt-stack-gap">
+<button class="w-full flex items-center justify-center gap-base bg-primary text-on-primary font-headline-md text-headline-md rounded-full py-3 hover:bg-primary-container shadow-sm hover:shadow-md transition-all active:scale-[0.98] duration-150" type="submit">
+<span class="material-symbols-outlined text-[20px]">search</span>
+                        立即查询
+                    </button>
+</div>
+<div class="mt-section-margin text-center">
+<a class="font-body-md text-body-md text-primary hover:text-primary-container transition-colors underline-offset-4 hover:underline" href="#">忘记编号？联系专属技术经理</a>
+</div>
+</form>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface-container rounded-t-xl border-t border-outline-variant shadow-lg">
+<!-- Item 1: Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 transition-transform duration-200 w-16 group" href="#">
+<span class="material-symbols-outlined mb-base group-hover:bg-surface-variant rounded-full px-4 py-1 transition-colors" data-icon="home">home</span>
+<span class="font-body-md text-body-md">首页</span>
+</a>
+<!-- Item 2: Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 transition-transform duration-200 w-16 group" href="#">
+<span class="material-symbols-outlined mb-base group-hover:bg-surface-variant rounded-full px-4 py-1 transition-colors" data-icon="database">database</span>
+<span class="font-body-md text-body-md">成果库</span>
+</a>
+<!-- Item 3: Active (查询) -->
+<a class="flex flex-col items-center justify-center text-primary bg-primary-fixed/20 rounded-full px-4 py-1 w-16 active:scale-90 transition-transform duration-200 pointer-events-none" href="#">
+<span class="material-symbols-outlined mb-base" data-icon="search" data-weight="fill" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="font-body-md text-body-md font-bold">查询</span>
+</a>
+<!-- Item 4: Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 transition-transform duration-200 w-16 group" href="#">
+<span class="material-symbols-outlined mb-base group-hover:bg-surface-variant rounded-full px-4 py-1 transition-colors" data-icon="person">person</span>
+<span class="font-body-md text-body-md">我的</span>
+</a>
+</nav>
+<script>
+        // Simple input formatting/interaction logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const idInput = document.getElementById('id-input');
+            if(idInput) {
+                idInput.addEventListener('input', function(e) {
+                    // Auto uppercase for standard ID format feel
+                    this.value = this.value.toUpperCase();
+                });
+            }
+        });
+    </script>
+
+
+</body></html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>研发申请 - 成果转化与产业协同平台</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;family=Work+Sans:wght@400&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Design System Configuration -->
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "inverse-on-surface": "#eaf1ff",
+                "surface-container": "#e5eeff",
+                "on-error-container": "#93000a",
+                "primary": "#0058be",
+                "surface-variant": "#d3e4fe",
+                "background": "#f8f9ff",
+                "secondary-container": "#6cf8bb",
+                "surface-dim": "#cbdbf5",
+                "surface-container-low": "#eff4ff",
+                "inverse-primary": "#adc6ff",
+                "on-tertiary-container": "#fffbff",
+                "inverse-surface": "#213145",
+                "on-error": "#ffffff",
+                "surface-container-high": "#dce9ff",
+                "surface-container-highest": "#d3e4fe",
+                "secondary-fixed": "#6ffbbe",
+                "primary-fixed-dim": "#adc6ff",
+                "surface-tint": "#005ac2",
+                "on-secondary": "#ffffff",
+                "secondary-fixed-dim": "#4edea3",
+                "secondary": "#006c49",
+                "on-primary-container": "#fefcff",
+                "on-tertiary-fixed-variant": "#2f2ebe",
+                "on-primary": "#ffffff",
+                "error-container": "#ffdad6",
+                "primary-container": "#2170e4",
+                "on-primary-fixed": "#001a42",
+                "surface": "#f8f9ff",
+                "on-surface": "#0b1c30",
+                "on-tertiary": "#ffffff",
+                "tertiary": "#4648d4",
+                "on-secondary-container": "#00714d",
+                "tertiary-container": "#6063ee",
+                "on-surface-variant": "#424754",
+                "error": "#ba1a1a",
+                "on-primary-fixed-variant": "#004395",
+                "tertiary-fixed": "#e1e0ff",
+                "surface-bright": "#f8f9ff",
+                "on-tertiary-fixed": "#07006c",
+                "outline-variant": "#c2c6d6",
+                "primary-fixed": "#d8e2ff",
+                "on-secondary-fixed": "#002113",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#005236",
+                "tertiary-fixed-dim": "#c0c1ff",
+                "on-background": "#0b1c30",
+                "outline": "#727785"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "container-padding": "16px",
+                "gutter": "12px",
+                "section-margin": "24px",
+                "stack-gap": "12px",
+                "base": "4px"
+        },
+        "fontFamily": {
+                "display-lg": [
+                        "Plus Jakarta Sans"
+                ],
+                "headline-md": [
+                        "Plus Jakarta Sans"
+                ],
+                "display-lg-mobile": [
+                        "Plus Jakarta Sans"
+                ],
+                "body-md": [
+                        "Work Sans"
+                ],
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "body-lg": [
+                        "Work Sans"
+                ]
+        },
+        "fontSize": {
+                "display-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-md": [
+                        "20px",
+                        {
+                                "lineHeight": "1.4",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "14px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-lg": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen font-body-lg antialiased">
+<!-- TopAppBar -->
+
+<!-- Main Content Canvas -->
+<!-- BottomNavBar is suppressed due to the transactional nature of a form page (Focus on Task) -->
+<main class="pb-section-margin px-container-padding md:px-section-margin max-w-7xl mx-auto pt-container-padding">
+<div class="mb-section-margin flex items-center gap-base">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center" onclick="window.history.back()">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+<span class="font-label-sm text-label-sm ml-base">返回</span>
+</button>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary ml-base">研发立项申请</h2>
+</div>
+<form class="space-y-section-margin">
+<!-- Section 1: Basic Information -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-container-padding md:p-section-margin shadow-sm">
+<h3 class="font-headline-md text-headline-md text-primary-container mb-container-padding flex items-center gap-base border-b border-outline-variant pb-base">
+<span class="material-symbols-outlined text-secondary">info</span>
+                    基本信息
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-gap">
+<!-- Project Name -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="project_name">项目/产品名称 <span class="text-error">*</span></label>
+<input class="h-10 px-container-padding rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline" id="project_name" placeholder="请输入明确的项目或产品名称" required="" type="text">
+</div>
+<!-- Product Category -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="product_category">产品品类 <span class="text-error">*</span></label>
+<div class="relative">
+<select class="w-full h-10 pl-container-padding pr-10 appearance-none rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md text-on-surface" id="product_category" required="">
+<option disabled="" selected="" value="">请选择品类</option>
+<option value="hardware">智能硬件</option>
+<option value="software">软件系统</option>
+<option value="material">新材料</option>
+<option value="bio">生物医药</option>
+</select>
+<span class="material-symbols-outlined absolute right-container-padding top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<!-- Product Form -->
+<div class="flex flex-col gap-base md:col-span-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="product_form">产品形态</label>
+<input class="h-10 px-container-padding rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline" id="product_form" placeholder="例如：SaaS平台、嵌入式模块、原型机等" type="text">
+</div>
+</div>
+</section>
+<!-- Section 2: Requirements & Scenarios -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-container-padding md:p-section-margin shadow-sm">
+<h3 class="font-headline-md text-headline-md text-primary-container mb-container-padding flex items-center gap-base border-b border-outline-variant pb-base">
+<span class="material-symbols-outlined text-secondary">psychology</span>
+                    技术诉求与场景
+                </h3>
+<div class="grid grid-cols-1 gap-stack-gap">
+<!-- Expected Docking Field -->
+<div class="flex flex-col gap-base md:w-1/2">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="docking_field">期望对接领域 <span class="text-error">*</span></label>
+<div class="relative">
+<select class="w-full h-10 pl-container-padding pr-10 appearance-none rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md text-on-surface" id="docking_field" required="">
+<option disabled="" selected="" value="">选择技术领域</option>
+<option value="ai">人工智能与大数据</option>
+<option value="iot">物联网</option>
+<option value="manufacturing">先进制造</option>
+<option value="energy">新能源</option>
+</select>
+<span class="material-symbols-outlined absolute right-container-padding top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<!-- R&D Goal & Functional Requirements -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="rd_goal">研发目标与功能诉求 <span class="text-error">*</span></label>
+<textarea class="p-container-padding rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline resize-y" id="rd_goal" placeholder="详细描述项目所需突破的技术难点、期望实现的核心功能指标等..." required="" rows="4"></textarea>
+</div>
+<!-- Target User / Application Scenario -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="scenario">目标用户/应用场景</label>
+<textarea class="p-container-padding rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline resize-y" id="scenario" placeholder="描述该产品或技术最终服务的对象及具体使用的业务场景..." rows="3"></textarea>
+</div>
+</div>
+</section>
+<!-- Section 3: Expected Service Type (Chips) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-container-padding md:p-section-margin shadow-sm">
+<h3 class="font-headline-md text-headline-md text-primary-container mb-container-padding flex items-center gap-base border-b border-outline-variant pb-base">
+<span class="material-symbols-outlined text-secondary">handshake</span>
+                    期望服务类型
+                </h3>
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-base">可多选</label>
+<div class="flex flex-wrap gap-stack-gap">
+<!-- Chip 1 -->
+<label class="cursor-pointer">
+<input class="peer sr-only" name="service_type" type="checkbox" value="联合研发">
+<div class="px-container-padding py-2 rounded-full border border-outline-variant bg-surface-bright text-on-surface-variant font-body-md text-body-md hover:bg-surface-container transition-colors select-none peer-checked:bg-primary-container peer-checked:text-on-primary-container peer-checked:border-primary peer-checked:font-medium">
+                                联合研发
+                            </div>
+</label>
+<!-- Chip 2 -->
+<label class="cursor-pointer">
+<input class="peer sr-only" name="service_type" type="checkbox" value="技术咨询">
+<div class="px-container-padding py-2 rounded-full border border-outline-variant bg-surface-bright text-on-surface-variant font-body-md text-body-md hover:bg-surface-container transition-colors select-none peer-checked:bg-primary-container peer-checked:text-on-primary-container peer-checked:border-primary peer-checked:font-medium">
+                                技术咨询
+                            </div>
+</label>
+<!-- Chip 3 -->
+<label class="cursor-pointer">
+<input class="peer sr-only" name="service_type" type="checkbox" value="成果授权">
+<div class="px-container-padding py-2 rounded-full border border-outline-variant bg-surface-bright text-on-surface-variant font-body-md text-body-md hover:bg-surface-container transition-colors select-none peer-checked:bg-primary-container peer-checked:text-on-primary-container peer-checked:border-primary peer-checked:font-medium">
+                                成果授权
+                            </div>
+</label>
+<!-- Chip 4 -->
+<label class="cursor-pointer">
+<input class="peer sr-only" name="service_type" type="checkbox" value="外包开发">
+<div class="px-container-padding py-2 rounded-full border border-outline-variant bg-surface-bright text-on-surface-variant font-body-md text-body-md hover:bg-surface-container transition-colors select-none peer-checked:bg-primary-container peer-checked:text-on-primary-container peer-checked:border-primary peer-checked:font-medium">
+                                外包开发
+                            </div>
+</label>
+</div>
+</div>
+</section>
+<!-- Section 4: Budget & Timeline -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-container-padding md:p-section-margin shadow-sm">
+<h3 class="font-headline-md text-headline-md text-primary-container mb-container-padding flex items-center gap-base border-b border-outline-variant pb-base">
+<span class="material-symbols-outlined text-secondary">payments</span>
+                    预算与周期
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-gap">
+<!-- Budget -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="budget">预算金额 (万元)</label>
+<div class="relative">
+<input class="w-full h-10 pl-container-padding pr-10 rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline" id="budget" min="0" placeholder="输入预估金额" step="1" type="number">
+<span class="absolute right-container-padding top-1/2 -translate-y-1/2 font-body-md text-on-surface-variant pointer-events-none">万</span>
+</div>
+</div>
+<!-- Expected Delivery Time -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="delivery_time">期望交付时间 <span class="text-error">*</span></label>
+<div class="relative">
+<input class="w-full h-10 px-container-padding rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md text-on-surface" id="delivery_time" required="" type="date">
+</div>
+</div>
+</div>
+</section>
+<!-- Section 5: Contact Information -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-container-padding md:p-section-margin shadow-sm">
+<h3 class="font-headline-md text-headline-md text-primary-container mb-container-padding flex items-center gap-base border-b border-outline-variant pb-base">
+<span class="material-symbols-outlined text-secondary">contacts</span>
+                    联系信息
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-gap">
+<!-- Contact Person -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="contact_person">联系人 <span class="text-error">*</span></label>
+<input class="h-10 px-container-padding rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline" id="contact_person" placeholder="填写项目接口人姓名" required="" type="text">
+</div>
+<!-- Contact Phone -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="contact_phone">联系电话 <span class="text-error">*</span></label>
+<input class="h-10 px-container-padding rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline" id="contact_phone" placeholder="填写手机号或座机号" required="" type="tel">
+</div>
+</div>
+</section>
+<!-- Submit Actions -->
+<div class="flex flex-col md:flex-row items-center justify-end gap-stack-gap pt-container-padding">
+<button class="w-full md:w-auto px-section-margin py-2 rounded-lg font-headline-md text-headline-md text-primary hover:bg-surface-container-high transition-colors border border-transparent" type="button">
+                    保存草稿
+                </button>
+<button class="w-full md:w-auto px-section-margin py-3 rounded-lg font-headline-md text-headline-md bg-primary text-on-primary shadow-sm hover:bg-primary-container hover:shadow-md active:scale-95 transition-all flex justify-center items-center gap-base" type="submit">
+                    提交申请
+                    <span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</form>
+</main>
+
+
+</body></html>

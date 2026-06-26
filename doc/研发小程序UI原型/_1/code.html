@@ -1,0 +1,330 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>成果转化与产业协同平台</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Work+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "inverse-on-surface": "#eaf1ff",
+                "surface-container": "#e5eeff",
+                "on-error-container": "#93000a",
+                "primary": "#0058be",
+                "surface-variant": "#d3e4fe",
+                "background": "#f8f9ff",
+                "secondary-container": "#6cf8bb",
+                "surface-dim": "#cbdbf5",
+                "surface-container-low": "#eff4ff",
+                "inverse-primary": "#adc6ff",
+                "on-tertiary-container": "#fffbff",
+                "inverse-surface": "#213145",
+                "on-error": "#ffffff",
+                "surface-container-high": "#dce9ff",
+                "surface-container-highest": "#d3e4fe",
+                "secondary-fixed": "#6ffbbe",
+                "primary-fixed-dim": "#adc6ff",
+                "surface-tint": "#005ac2",
+                "on-secondary": "#ffffff",
+                "secondary-fixed-dim": "#4edea3",
+                "secondary": "#006c49",
+                "on-primary-container": "#fefcff",
+                "on-tertiary-fixed-variant": "#2f2ebe",
+                "on-primary": "#ffffff",
+                "error-container": "#ffdad6",
+                "primary-container": "#2170e4",
+                "on-primary-fixed": "#001a42",
+                "surface": "#f8f9ff",
+                "on-surface": "#0b1c30",
+                "on-tertiary": "#ffffff",
+                "tertiary": "#4648d4",
+                "on-secondary-container": "#00714d",
+                "tertiary-container": "#6063ee",
+                "on-surface-variant": "#424754",
+                "error": "#ba1a1a",
+                "on-primary-fixed-variant": "#004395",
+                "tertiary-fixed": "#e1e0ff",
+                "surface-bright": "#f8f9ff",
+                "on-tertiary-fixed": "#07006c",
+                "outline-variant": "#c2c6d6",
+                "primary-fixed": "#d8e2ff",
+                "on-secondary-fixed": "#002113",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#005236",
+                "tertiary-fixed-dim": "#c0c1ff",
+                "on-background": "#0b1c30",
+                "outline": "#727785"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "container-padding": "16px",
+                "gutter": "12px",
+                "section-margin": "24px",
+                "stack-gap": "12px",
+                "base": "4px"
+        },
+        "fontFamily": {
+                "display-lg": [
+                        "Plus Jakarta Sans"
+                ],
+                "headline-md": [
+                        "Plus Jakarta Sans"
+                ],
+                "display-lg-mobile": [
+                        "Plus Jakarta Sans"
+                ],
+                "body-md": [
+                        "Work Sans"
+                ],
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "body-lg": [
+                        "Work Sans"
+                ]
+        },
+        "fontSize": {
+                "display-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-md": [
+                        "20px",
+                        {
+                                "lineHeight": "1.4",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "14px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-lg": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        body { font-family: 'Work Sans', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-20 md:pb-0">
+<!-- TopAppBar -->
+
+<!-- Main Content -->
+<main class="max-w-[1280px] mx-auto px-4 md:px-gutter py-section-margin flex flex-col gap-section-margin">
+<!-- Hero Section / 8 Stage Indicator -->
+<section class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant shadow-sm flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<h2 class="font-headline-md text-headline-md text-primary">转化流程概览</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">标准化的八步转化路径，确保科研成果高效、安全落地。</p>
+</div>
+<div class="relative flex justify-between items-center w-full mt-4 overflow-x-auto pb-4">
+<!-- Connector Line -->
+<div class="absolute top-1/2 left-0 w-full h-1 bg-surface-variant -translate-y-1/2 z-0 hidden md:block"></div>
+<!-- Stages -->
+<div class="flex md:w-full justify-between gap-4 md:gap-0 z-10 min-w-[800px]">
+<!-- Stage 1 -->
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-headline-md text-headline-md shadow-sm border-2 border-surface-container-lowest group-hover:scale-110 transition-transform">1</div>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold text-center w-20">资源入库</span>
+</div>
+<!-- Stage 2 -->
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-headline-md text-headline-md shadow-sm border-2 border-surface-container-lowest group-hover:scale-110 transition-transform">2</div>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold text-center w-20">需求征集</span>
+</div>
+<!-- Stage 3 -->
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-headline-md text-headline-md shadow-sm border-2 border-secondary ring-2 ring-secondary/30 group-hover:scale-110 transition-transform">3</div>
+<span class="font-label-sm text-label-sm text-secondary font-bold text-center w-20">项目立项</span>
+</div>
+<!-- Stage 4 -->
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-headline-md text-headline-md shadow-sm border-2 border-surface-container-lowest group-hover:scale-110 transition-transform">4</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center w-20">概念验证</span>
+</div>
+<!-- Stage 5 -->
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-headline-md text-headline-md shadow-sm border-2 border-surface-container-lowest group-hover:scale-110 transition-transform">5</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center w-20">CDMO 转化</span>
+</div>
+<!-- Stage 6 -->
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-headline-md text-headline-md shadow-sm border-2 border-surface-container-lowest group-hover:scale-110 transition-transform">6</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center w-20">IP 运营</span>
+</div>
+<!-- Stage 7 -->
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-headline-md text-headline-md shadow-sm border-2 border-surface-container-lowest group-hover:scale-110 transition-transform">7</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center w-20">科学传播</span>
+</div>
+<!-- Stage 8 -->
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-headline-md text-headline-md shadow-sm border-2 border-surface-container-lowest group-hover:scale-110 transition-transform">8</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center w-20">市场转化</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Business Modules (Bento Grid) -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Module 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm hover:shadow-md transition-shadow flex flex-col gap-4 lg:col-span-2 group cursor-pointer relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[32px]">group_work</span>
+<h3 class="font-headline-md text-headline-md">高校专家与成果协同</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow">连接顶尖高校科研团队，整合优质前沿成果，打破信息壁垒，实现产学研高效对接与资源共享。</p>
+<div class="flex items-center text-secondary font-label-sm text-label-sm mt-auto group-hover:translate-x-1 transition-transform">
+<span class="">进入成果库</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+<!-- Module 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm hover:shadow-md transition-shadow flex flex-col gap-4 group cursor-pointer relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 w-24 h-24 bg-secondary/5 rounded-full blur-xl group-hover:bg-secondary/10 transition-colors"></div>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[32px]">science</span>
+<h3 class="font-headline-md text-headline-md">概念验证与 CDMO 协同</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">提供从实验室到中试生产的全面技术支持，降低转化风险。</p>
+</div>
+<!-- Module 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm hover:shadow-md transition-shadow flex flex-col gap-4 group cursor-pointer relative overflow-hidden">
+<div class="absolute -left-4 -top-4 w-20 h-20 bg-tertiary/5 rounded-full blur-xl group-hover:bg-tertiary/10 transition-colors"></div>
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-[32px]">gavel</span>
+<h3 class="font-headline-md text-headline-md">知识产权运营</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">专业化的专利布局、价值评估及技术交易服务，保障核心资产。</p>
+</div>
+<!-- Module 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm hover:shadow-md transition-shadow flex flex-col gap-4 lg:col-span-4 group cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-surface-container-lowest to-surface-container-low opacity-50 pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[32px]">campaign</span>
+<h3 class="font-headline-md text-headline-md">专业应用评议与科学传播</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">基于行业专家的深度评议，结合多元渠道进行精准的科学普及与市场化传播，提升成果影响力。</p>
+</div>
+<button class="shrink-0 px-4 py-2 border border-outline text-on-surface hover:bg-surface-variant rounded-lg font-label-sm text-label-sm transition-colors flex items-center gap-1">
+                        了解详情 <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Capabilities Showcase -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Cap 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant shadow-sm group">
+<div class="h-48 relative bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A modern, high-tech laboratory setting bathed in bright, clean white and soft cyan lighting. Scientists in cleanroom suits are operating advanced conceptual testing equipment. The aesthetic is corporate, professional, and utilitarian, featuring sleek metallic surfaces and clear glass panels. The mood conveys precision, safety, and cutting-edge innovation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJlqQl5UrjOHOEo7UxFw5p6bwZzmyQzyQsR8nIvJ3WYBael8iZ811wwJ1Ckb4y5qXFb-8hmTaGSdC3Gs3C5SUK0a4tu0mt6ZhxBPGxAcm68cgGVV7ciZGibCADaRYp_ySnKErUnjSwPQ8DagVYo90BmoEUFoEfHhKmayRpU3CUNGc2fTsrk7VSUaHcfa8XS7-5j9QXhrQaxifR4O6Ze6a-fGHZoYwfrVddNg3o2M0tcqtzX8wKFUjBwBeoQUBwEMrG8ckrkL8Bg-ho">
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h4 class="font-headline-md text-headline-md text-on-surface">概念验证能力</h4>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-1">
+<p class="font-body-md text-body-md text-on-surface-variant">配备先进的软硬件设施，针对早期科研成果进行技术可行性与商业潜力的初步验证，提供详实的数据报告。</p>
+<ul class="flex flex-col gap-1 mt-2">
+<li class="flex items-center gap-2 text-body-md text-on-surface"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> 原型开发支持</li>
+<li class="flex items-center gap-2 text-body-md text-on-surface"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> 技术指标测试</li>
+</ul>
+</div>
+</div>
+<!-- Cap 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant shadow-sm group">
+<div class="h-48 relative bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A large-scale, automated industrial pharmaceutical or chemical production facility. The environment is illuminated by bright, cool-toned lighting, emphasizing cleanliness and efficiency. Complex networks of stainless steel pipes and bioreactors are visible. The corporate modern style is evident in the structured grid lines and sterile, professional atmosphere. Deep blues and whites dominate the color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcT5fRP51dlAQ4VF1oOXvSVwyKzs08UoqaCtSrcrcfuV103oJQZzSxZ64mlfvh5WnbsTJ37naNho4j-Xui_WB9cyPS6bgUi8FJgof5Vy5iFvX9O1ISdNdlroYe4WpF8YQ6DYOiFMy7aBO27pdfjsGSfikAB261vHbmPWNg3LFDE-kUkI3MklfhyYkwLWPf157NyLN2zdBpiQvC6Ey4kTKMVTovbReQ0Da7jeTzOQUmRqvTVylaNLBphv3r-3O8yRhoii2nBsePSAsf">
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h4 class="font-headline-md text-headline-md text-on-surface">CDMO 转化能力</h4>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-1">
+<p class="font-body-md text-body-md text-on-surface-variant">提供从工艺研发、工艺放大到商业化生产的一站式服务，遵循严格的质量管理体系，加速产品上市进程。</p>
+<ul class="flex flex-col gap-1 mt-2">
+<li class="flex items-center gap-2 text-body-md text-on-surface"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> GMP 标准产线</li>
+<li class="flex items-center gap-2 text-body-md text-on-surface"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> 规模化量产方案</li>
+</ul>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button (Web) / Bottom Sticky (Mobile fallback handled by structure) -->
+<div class="fixed bottom-24 md:bottom-8 right-4 md:right-8 z-50">
+<button class="bg-primary hover:bg-primary-container text-on-primary rounded-full px-6 py-4 shadow-lg flex items-center gap-2 active:scale-95 transition-all group">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform">add_circle</span>
+<span class="font-headline-md text-headline-md font-bold">提交研发需求</span>
+</button>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container dark:bg-surface-dim fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 rounded-t-xl border-t border-outline-variant dark:border-outline shadow-lg">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim bg-secondary-fixed/20 rounded-full px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-label-sm text-label-sm">成果库</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-label-sm">查询</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">我的</span>
+</a>
+</nav>
+
+
+</body></html>
