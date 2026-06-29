@@ -1,0 +1,98 @@
+{
+  "easycom": {
+    "autoscan": true
+  },
+  "pages": [
+    {
+      "path": "pages/achievement/achievement",
+      "style": {
+        "navigationBarTitleText": "成果库",
+        "navigationStyle": "custom",
+        "backgroundColor": "#f8f9ff"
+      }
+    },
+    {
+      "path": "pages/experts/experts",
+      "style": {
+        "navigationBarTitleText": "专家与成果库",
+        "navigationStyle": "custom",
+        "backgroundColor": "#f8f9ff"
+      }
+    },
+    {
+      "path": "pages/expert-detail/expert-detail",
+      "style": {
+        "navigationBarTitleText": "专家详情",
+        "navigationStyle": "custom",
+        "backgroundColor": "#eff4ff"
+      }
+    },
+    {
+      "path": "pages/track/track",
+      "style": {
+        "navigationBarTitleText": "需求查询",
+        "navigationStyle": "custom",
+        "backgroundColor": "#f8f9ff"
+      }
+    },
+    {
+      "path": "pages/demand-submit/demand-submit",
+      "style": {
+        "navigationBarTitleText": "研发立项申请",
+        "navigationBarBackgroundColor": "#eff4ff"
+      }
+    },
+    {
+      "path": "pages/submit-success/submit-success",
+      "style": {
+        "navigationBarTitleText": "提交成功",
+        "navigationBarBackgroundColor": "#f8f9ff"
+      }
+    },
+    {
+      "path": "pages/my/my",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    }
+  ],
+  "tabBar": {
+    "color": "#5b6275",
+    "selectedColor": "#0058be",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/achievement/achievement",
+        "text": "成果库",
+        "iconPath": "static/tabbar/database.png",
+        "selectedIconPath": "static/tabbar/database-active.png"
+      },
+      {
+        "pagePath": "pages/experts/experts",
+        "text": "专家",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/track/track",
+        "text": "查询",
+        "iconPath": "static/tabbar/search.png",
+        "selectedIconPath": "static/tabbar/search-active.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的",
+        "iconPath": "static/tabbar/person.png",
+        "selectedIconPath": "static/tabbar/person-active.png"
+      }
+    ]
+  },
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "成果转化与产业协同",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f8f9ff"
+  }
+}

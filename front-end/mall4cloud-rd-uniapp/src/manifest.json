@@ -1,0 +1,36 @@
+{
+  "name": "成果转化与产业协同",
+  "appid": "__UNI__RDMPWX",
+  "description": "成果转化与产业协同平台小程序",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "app-plus": {
+    "usingComponents": true,
+    "nvueStyleCompiler": "uni-app",
+    "compilerVersion": 3,
+    "splashscreen": {
+      "alwaysShowBeforeRender": true,
+      "waiting": true,
+      "autoclose": true,
+      "delay": 0
+    }
+  },
+  "mp-weixin": {
+    "appid": "touristappid",
+    "setting": {
+      "urlCheck": false,
+      "minified": true,
+      "es6": true
+    },
+    "usingComponents": true,
+    "permission": {}
+  },
+  "h5": {
+    "title": "成果转化与产业协同",
+    "router": {
+      "mode": "hash"
+    }
+  },
+  "vueVersion": "3"
+}

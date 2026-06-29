@@ -1,0 +1,171 @@
+/* ==================== Dynamic Synergy 全局样式 ==================== */
+
+/* Design Tokens - Color */
+$primary: #0058be;
+$primary-container: #2170e4;
+$primary-fixed: #d8e2ff;
+$primary-fixed-dim: #adc6ff;
+$on-primary: #ffffff;
+$on-primary-container: #fefcff;
+$on-primary-fixed: #001a42;
+$on-primary-fixed-variant: #004395;
+
+$secondary: #006c49;
+$secondary-container: #6cf8bb;
+$secondary-fixed: #6ffbbe;
+$secondary-fixed-dim: #4edea3;
+$on-secondary: #ffffff;
+$on-secondary-container: #00714d;
+$on-secondary-fixed: #002113;
+$on-secondary-fixed-variant: #005236;
+
+$tertiary: #4648d4;
+$tertiary-container: #6063ee;
+$on-tertiary: #ffffff;
+$on-tertiary-container: #fffbff;
+$tertiary-fixed: #e1e0ff;
+$tertiary-fixed-dim: #c0c1ff;
+
+$error: #ba1a1a;
+$error-container: #ffdad6;
+$on-error: #ffffff;
+$on-error-container: #93000a;
+
+$background: #f8f9ff;
+$surface: #f8f9ff;
+$surface-bright: #f8f9ff;
+$surface-dim: #cbdbf5;
+$surface-container-lowest: #ffffff;
+$surface-container-low: #eff4ff;
+$surface-container: #e5eeff;
+$surface-container-high: #dce9ff;
+$surface-container-highest: #d3e4fe;
+$surface-variant: #d3e4fe;
+$inverse-surface: #213145;
+$on-surface: #0b1c30;
+$on-surface-variant: #424754;
+$on-background: #0b1c30;
+
+$outline: #727785;
+$outline-variant: #c2c6d6;
+
+/* Spacing */
+$space-base: 4rpx;
+$space-stack-gap: 12rpx;
+$space-container-padding: 16rpx;
+$space-gutter: 12rpx;
+$space-section-margin: 24rpx;
+
+/* Radius */
+$radius-sm: 8rpx;
+$radius-md: 12rpx;
+$radius-lg: 16rpx;
+$radius-xl: 24rpx;
+$radius-full: 9999rpx;
+
+/* Shadow */
+$shadow-1: 0 2rpx 4rpx rgba(26, 54, 93, 0.05);
+$shadow-2: 0 4rpx 12rpx rgba(0, 88, 190, 0.08);
+$shadow-3: 0 10rpx 20rpx rgba(26, 54, 93, 0.1);
+
+/* Typography */
+$font-display: 'Plus Jakarta Sans', 'PingFang SC', sans-serif;
+$font-body: 'Work Sans', 'PingFang SC', sans-serif;
+$font-mono: 'JetBrains Mono', 'Menlo', monospace;
+
+/* ==================== 全局类 ==================== */
+.surface-card {
+  background: $surface-container-lowest;
+  border: 1rpx solid $outline-variant;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-1;
+}
+
+.surface-card-hover {
+  background: $surface-container-lowest;
+  border: 1rpx solid $outline-variant;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-1;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.surface-card-hover:active {
+  box-shadow: $shadow-3;
+  transform: scale(0.99);
+}
+
+.text-headline {
+  font-family: $font-display;
+  font-weight: 600;
+  font-size: 40rpx;
+  line-height: 1.4;
+  color: $on-surface;
+}
+
+.text-display {
+  font-family: $font-display;
+  font-weight: 700;
+  font-size: 48rpx;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $primary;
+}
+
+.text-label {
+  font-family: $font-mono;
+  font-weight: 500;
+  font-size: 24rpx;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.text-body {
+  font-family: $font-body;
+  font-weight: 400;
+  font-size: 28rpx;
+  line-height: 1.5;
+  color: $on-surface-variant;
+}
+
+.text-error {
+  color: $error;
+}
+
+.amber-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40rpx);
+  pointer-events: none;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 6rpx 16rpx;
+  border-radius: $radius-full;
+  font-family: $font-mono;
+  font-size: 22rpx;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  border: 1rpx solid transparent;
+}
+
+.tag-primary { background: rgba(0, 88, 190, 0.1); color: $primary; border-color: rgba(0, 88, 190, 0.2); }
+.tag-secondary { background: rgba(0, 108, 73, 0.1); color: $secondary; border-color: rgba(0, 108, 73, 0.2); }
+.tag-tertiary { background: rgba(70, 72, 212, 0.1); color: $tertiary; border-color: rgba(70, 72, 212, 0.2); }
+.tag-surface { background: $surface-variant; color: $on-surface-variant; border-color: $outline-variant; }
+.tag-mono { font-family: $font-mono; }
+
+/* Material Symbols icon 默认样式（占位 - 小程序使用 text 字符代替） */
+.material-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Material Symbols Outlined', 'Material Icons', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+}

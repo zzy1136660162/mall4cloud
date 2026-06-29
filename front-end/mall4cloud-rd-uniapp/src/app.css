@@ -1,0 +1,149 @@
+/* 全局样式 - 复刻原型图设计 */
+
+page {
+  background-color: #f8f9ff;
+  color: #0b1c30;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+/* 主色 - 在 page 上定义变量 (兼容 WXSS) */
+page {
+  --primary: #0058be;
+  --primary-container: #2170e4;
+  --primary-light: #d8e2ff;
+  --primary-soft: #eaf1ff;
+  --on-primary: #ffffff;
+  --on-primary-container: #fefcff;
+  --secondary: #006c49;
+  --secondary-container: #6cf8bb;
+  --tertiary: #4648d4;
+  --tertiary-container: #6063ee;
+  --surface: #f8f9ff;
+  --surface-container-low: #eff4ff;
+  --surface-container: #e5eeff;
+  --surface-container-high: #dce9ff;
+  --surface-variant: #d3e4fe;
+  --surface-dim: #cbdbf5;
+  --on-surface: #0b1c30;
+  --on-surface-variant: #424754;
+  --outline: #727785;
+  --outline-variant: #c2c6d6;
+  --error: #ba1a1a;
+  --bg-page: #f8f9ff;
+  --card-bg: #ffffff;
+}
+
+view, text, button, input, textarea, scroll-view, swiper, swiper-item {
+  box-sizing: border-box;
+}
+
+button::after {
+  border: none;
+}
+
+.rounded-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  border: 2rpx solid var(--outline-variant);
+  box-shadow: 0 4rpx 12rpx rgba(11, 28, 48, 0.04);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.tag-primary {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.tag-secondary {
+  background: #d6f5e7;
+  color: var(--secondary);
+}
+
+.tag-outline {
+  background: #ffffff;
+  color: var(--on-surface-variant);
+  border: 2rpx solid var(--outline-variant);
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: #ffffff;
+  border-radius: 999rpx;
+  font-weight: 600;
+  height: 88rpx;
+  font-size: 30rpx;
+}
+
+.btn-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: var(--primary);
+  border-radius: 999rpx;
+  border: 2rpx solid var(--primary);
+  font-weight: 500;
+  height: 88rpx;
+  font-size: 30rpx;
+}
+
+.btn-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 999rpx;
+  font-weight: 500;
+  height: 72rpx;
+  font-size: 28rpx;
+  padding: 0 28rpx;
+}
+
+.divider {
+  width: 100%;
+  height: 1rpx;
+  background: var(--outline-variant);
+}
+
+.text-muted {
+  color: var(--on-surface-variant);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-secondary {
+  color: var(--secondary);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--on-surface);
+  margin-bottom: 16rpx;
+}
+
+.section-title-bar {
+  width: 8rpx;
+  height: 28rpx;
+  background: var(--primary);
+  border-radius: 4rpx;
+}

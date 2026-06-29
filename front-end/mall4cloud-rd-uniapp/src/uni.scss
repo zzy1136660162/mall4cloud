@@ -1,0 +1,46 @@
+/**
+ * 研发小程序主题变量（基于 Dynamic Synergy 设计系统）
+ */
+
+/* 行为相关颜色 - 主品牌色 */
+$uni-color-primary: #0058be;
+$uni-color-primary-container: #2170e4;
+$uni-color-success: #006c49;
+$uni-color-success-container: #6cf8bb;
+$uni-color-warning: #ba1a1a;
+$uni-color-error: #ba1a1a;
+$uni-color-info: #4648d4;
+
+/* 文字基本颜色 */
+$uni-text-color: #0b1c30;
+$uni-text-color-inverse: #ffffff;
+$uni-text-color-grey: #727785;
+$uni-text-color-placeholder: #727785;
+$uni-text-color-disable: #c2c6d6;
+$uni-text-color-on-surface-variant: #424754;
+
+/* 背景颜色 */
+$uni-bg-color: #f8f9ff;
+$uni-bg-color-grey: #eff4ff;
+$uni-bg-color-hover: #dce9ff;
+$uni-bg-color-mask: rgba(0, 0, 0, 0.4);
+
+/* 边框颜色 */
+$uni-border-color: #c2c6d6;
+$uni-border-color-light: #d3e4fe;
+
+/* 字号 */
+$uni-font-size-display-lg: 32px;
+$uni-font-size-display-lg-mobile: 24px;
+$uni-font-size-headline-md: 20px;
+$uni-font-size-body-lg: 16px;
+$uni-font-size-body-md: 14px;
+$uni-font-size-label-sm: 12px;
+
+/* 圆角 */
+$uni-border-radius-sm: 8rpx;
+$uni-border-radius-base: 12rpx;
+$uni-border-radius-lg: 16rpx;
+$uni-border-radius-xl: 24rpx;
+$uni-border-radius-circle: 50%;
+$uni-border-radius-full: 9999rpx;
