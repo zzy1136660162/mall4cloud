@@ -29,7 +29,7 @@
       </scroll-view>
     </view>
 
-    <scroll-view scroll-y class="content">
+    <view class="content">
       <!-- 专家列表 -->
       <view class="expert-list">
         <view class="expert-card" v-for="e in filteredExperts" :key="e.id" @tap="onCardTap(e)">
@@ -67,7 +67,7 @@
           <text>暂无匹配专家</text>
         </view>
       </view>
-    </scroll-view>
+    </view>
   </view>
 </template>
 
@@ -116,10 +116,11 @@ export default {
 .page {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background: var(--bg-page);
   display: flex;
   flex-direction: column;
+  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
 }
 
 /* 搜索栏 */
@@ -183,9 +184,7 @@ export default {
 /* 列表 */
 .content {
   width: 100%;
-  flex: 1;
-  height: 0;
-  padding: 8rpx 32rpx 220rpx;
+  padding: 8rpx 32rpx 0;
   box-sizing: border-box;
 }
 .expert-list {

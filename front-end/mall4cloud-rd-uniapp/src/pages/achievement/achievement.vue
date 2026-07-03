@@ -4,8 +4,9 @@
     <view class="top-bg"></view>
 
     <scroll-view scroll-y class="content">
-      <!-- 转化流程概览 -->
-      <view class="rounded-card flow">
+      <view class="content-inner">
+        <!-- 转化流程概览 -->
+        <view class="rounded-card flow">
         <view class="flow-head">
           <view class="flow-title">转化流程概览</view>
           <view class="flow-desc">标准化的八步转化路径，确保科研成果高效、安全落地。</view>
@@ -69,6 +70,7 @@
         <text class="submit-icon">📝</text>
         <text class="submit-text">提交研发需求</text>
       </view>
+      </view>
     </scroll-view>
   </view>
 </template>
@@ -99,7 +101,7 @@ export default {
 .page {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background: var(--bg-page);
 }
 
@@ -117,8 +119,12 @@ export default {
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 100%;
-  padding: 80rpx 32rpx 220rpx;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.content-inner {
+  padding: 120rpx 32rpx 0;
   box-sizing: border-box;
 }
 

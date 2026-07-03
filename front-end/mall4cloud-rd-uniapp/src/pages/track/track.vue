@@ -91,7 +91,7 @@ export default {
   width: 100%;
   min-height: 100vh;
   background: var(--bg-page);
-  padding-bottom: 200rpx;
+  padding-bottom: 0;
 }
 
 .hero-bg {

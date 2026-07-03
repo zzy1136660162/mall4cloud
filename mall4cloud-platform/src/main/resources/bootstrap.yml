@@ -5,20 +5,61 @@ spring:
     name: @artifactId@
   config:
     import:
-      - nacos:application.${spring.cloud.nacos.config.file-extension}?refreshEnabled=true
-      - nacos:${spring.application.name}.${spring.cloud.nacos.config.file-extension}?refreshEnabled=true
+      - optional:nacos:application.${spring.cloud.nacos.config.file-extension}?refreshEnabled=true
+      - optional:nacos:${spring.application.name}.${spring.cloud.nacos.config.file-extension}?refreshEnabled=true
+  datasource:
+    url: jdbc:mysql://167.88.180.246:63306/mall4cloud_platform?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: Gesoft9919.
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 167.88.180.246
+      port: 6379
+      password:
+      database: 0
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
   cloud:
     nacos:
       discovery:
+        enabled: false
         server-addr: ${NACOS_HOST:167.88.180.246}:${NACOS_PORT:8848}
         username: nacos
         password: Gesoft9919.
         namespace: ${NACOS_NAMESPACE:zzy-dev}
       config:
+        enabled: false
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yml
         username: ${spring.cloud.nacos.discovery.username}
         password: ${spring.cloud.nacos.discovery.password}
         namespace: ${NACOS_NAMESPACE:zzy-dev}
+        import-check:
+          enabled: false
+
+seata:
+  enabled: false
+  client:
+    rm:
+      async-commit-buffer-limit: 10000
+
+feign:
+  inside:
+    key: mall4cloud-inside-key-2024
+    secret: mall4cloud-inside-secret-2024
+
+biz:
+  oss:
+    resources-url: https://example.com
+
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 

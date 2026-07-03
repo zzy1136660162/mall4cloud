@@ -36,6 +36,21 @@ public class Demand extends BaseModel implements Serializable {
     private String functionalAppeal;
 
     /**
+     * 产品品类: 1-体表健康产品 2-功能性食品
+     */
+    private Integer productCategory;
+
+    /**
+     * 期望服务类型(JSON数组)
+     */
+    private String serviceType;
+
+    /**
+     * 期望对接领域
+     */
+    private String expertiseField;
+
+    /**
      * 目标人群
      */
     private String targetAudience;
@@ -140,6 +155,30 @@ public class Demand extends BaseModel implements Serializable {
 
     public void setFunctionalAppeal(String functionalAppeal) {
         this.functionalAppeal = functionalAppeal;
+    }
+
+    public Integer getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(Integer productCategory) {
+        this.productCategory = productCategory;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    public String getExpertiseField() {
+        return expertiseField;
+    }
+
+    public void setExpertiseField(String expertiseField) {
+        this.expertiseField = expertiseField;
     }
 
     public String getTargetAudience() {
@@ -269,6 +308,9 @@ public class Demand extends BaseModel implements Serializable {
                 ", demandNo=" + demandNo +
                 ", title=" + title +
                 ", functionalAppeal=" + functionalAppeal +
+                ", productCategory=" + productCategory +
+                ", serviceType=" + serviceType +
+                ", expertiseField=" + expertiseField +
                 ", targetAudience=" + targetAudience +
                 ", dosageFormPreference=" + dosageFormPreference +
                 ", budgetRange=" + budgetRange +

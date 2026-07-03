@@ -1,0 +1,7 @@
+import uni from '@dcloudio/vite-plugin-uni'
+
+export default {
+  plugins: [
+    uni()
+  ]
+}

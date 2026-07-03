@@ -200,7 +200,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 24rpx;
-  padding-bottom: 200rpx;
+  padding-bottom: 0;
 }
 
 /* Stage Section */

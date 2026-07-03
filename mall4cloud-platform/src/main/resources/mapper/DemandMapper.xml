@@ -7,6 +7,9 @@
     <result column="demand_no" property="demandNo"/>
     <result column="title" property="title"/>
     <result column="functional_appeal" property="functionalAppeal"/>
+    <result column="product_category" property="productCategory"/>
+    <result column="service_type" property="serviceType"/>
+    <result column="expertise_field" property="expertiseField"/>
     <result column="target_audience" property="targetAudience"/>
     <result column="dosage_form_preference" property="dosageFormPreference"/>
     <result column="budget_range" property="budgetRange"/>
@@ -25,7 +28,7 @@
   </resultMap>
 
   <sql id="Vo_Column_List">
-    `id`,`demand_no`,`title`,`functional_appeal`,`target_audience`,`dosage_form_preference`,
+    `id`,`demand_no`,`title`,`functional_appeal`,`product_category`,`service_type`,`expertise_field`,`target_audience`,`dosage_form_preference`,
     `budget_range`,`expected_delivery_time`,`remark`,`submitter_id`,`submitter_name`,
     `submitter_phone`,`status`,`status_text`,`admin_remark`,`handler_name`,
     `submit_time`,`update_time`,`create_time`
@@ -57,11 +60,11 @@
 
   <insert id="save" useGeneratedKeys="true" keyProperty="demand.id">
     INSERT INTO rd_demand (
-      `demand_no`,`title`,`functional_appeal`,`target_audience`,`dosage_form_preference`,
+      `demand_no`,`title`,`functional_appeal`,`product_category`,`service_type`,`expertise_field`,`target_audience`,`dosage_form_preference`,
       `budget_range`,`expected_delivery_time`,`remark`,`submitter_id`,`submitter_name`,
       `submitter_phone`,`status`,`status_text`,`submit_time`,`update_time`
     ) VALUES (
-      #{demand.demandNo},#{demand.title},#{demand.functionalAppeal},#{demand.targetAudience},#{demand.dosageFormPreference},
+      #{demand.demandNo},#{demand.title},#{demand.functionalAppeal},#{demand.productCategory},#{demand.serviceType},#{demand.expertiseField},#{demand.targetAudience},#{demand.dosageFormPreference},
       #{demand.budgetRange},#{demand.expectedDeliveryTime},#{demand.remark},#{demand.submitterId},#{demand.submitterName},
       #{demand.submitterPhone},#{demand.status},#{demand.statusText},#{demand.submitTime},#{demand.updateTime}
     )
@@ -75,6 +78,15 @@
       </if>
       <if test="demand.functionalAppeal != null">
         `functional_appeal` = #{demand.functionalAppeal},
+      </if>
+      <if test="demand.productCategory != null">
+        `product_category` = #{demand.productCategory},
+      </if>
+      <if test="demand.serviceType != null">
+        `service_type` = #{demand.serviceType},
+      </if>
+      <if test="demand.expertiseField != null">
+        `expertise_field` = #{demand.expertiseField},
       </if>
       <if test="demand.targetAudience != null">
         `target_audience` = #{demand.targetAudience},

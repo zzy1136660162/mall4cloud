@@ -529,7 +529,7 @@ export default {
 /* Main Content */
 .main-content {
   padding: 24rpx;
-  padding-bottom: 160rpx;
+  padding-bottom: 0;
 }
 
 .list-container {

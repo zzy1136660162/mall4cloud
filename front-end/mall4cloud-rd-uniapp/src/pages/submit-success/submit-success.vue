@@ -32,15 +32,18 @@
 export default {
   data() {
     return {
-      demandNo: 'RD-20231024-001'
+      demandNo: ''
     }
+  },
+  onLoad(options) {
+    this.demandNo = options.demandNo || ''
   },
   methods: {
     onBackHome() {
       uni.switchTab({ url: '/pages/achievement/achievement' })
     },
     onQuery() {
-      uni.redirectTo({ url: '/pages/progress/progress' })
+      uni.redirectTo({ url: `/pages/demand-query/demand-query?demandNo=${this.demandNo}` })
     }
   }
 }

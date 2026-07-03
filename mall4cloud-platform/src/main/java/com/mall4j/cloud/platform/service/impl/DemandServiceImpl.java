@@ -91,28 +91,21 @@ public class DemandServiceImpl implements DemandService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long submit(DemandSubmitDTO demandSubmitDTO) {
-        Long demandNoId;
-        try {
-            ServerResponseEntity<Long> segmentIdResponse = segmentFeignClient.getSegmentId(DEMAND_ID_KEY);
-            if (segmentIdResponse.isSuccess() && segmentIdResponse.getData() != null) {
-                demandNoId = segmentIdResponse.getData();
-            } else {
-                demandNoId = generateSimpleId();
-            }
-        } catch (Exception e) {
-            demandNoId = generateSimpleId();
-        }
+        Long demandNoId = generateSimpleId();
 
         Demand demand = new Demand();
         demand.setDemandNo("D" + demandNoId);
         demand.setTitle(demandSubmitDTO.getTitle());
         demand.setFunctionalAppeal(demandSubmitDTO.getFunctionalAppeal());
+        demand.setProductCategory(demandSubmitDTO.getProductCategory());
+        demand.setServiceType(demandSubmitDTO.getServiceType());
+        demand.setExpertiseField(demandSubmitDTO.getExpertiseField());
         demand.setTargetAudience(demandSubmitDTO.getTargetAudience());
         demand.setDosageFormPreference(demandSubmitDTO.getDosageFormPreference());
         demand.setBudgetRange(demandSubmitDTO.getBudgetRange());
         demand.setExpectedDeliveryTime(parseDate(demandSubmitDTO.getExpectedDeliveryTime()));
         demand.setRemark(demandSubmitDTO.getRemark());
-        demand.setSubmitterId(demandSubmitDTO.getSubmitterId());
+        demand.setSubmitterId(demandSubmitDTO.getSubmitterId() != null && !demandSubmitDTO.getSubmitterId().isEmpty() ? demandSubmitDTO.getSubmitterId() : demandSubmitDTO.getSubmitterPhone());
         demand.setSubmitterName(demandSubmitDTO.getSubmitterName());
         demand.setSubmitterPhone(demandSubmitDTO.getSubmitterPhone());
         demand.setStatus(0);

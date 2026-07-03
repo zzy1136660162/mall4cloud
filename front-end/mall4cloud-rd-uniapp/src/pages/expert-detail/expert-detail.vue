@@ -180,7 +180,7 @@ export default {
   width: 100%;
   flex: 1;
   height: 0;
-  padding: 60rpx 32rpx 220rpx;
+  padding: 60rpx 32rpx 0;
   box-sizing: border-box;
 }
 

@@ -9,19 +9,23 @@
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>项目/产品名称</view>
-          <input v-model="form.name" class="form-input" placeholder="请输入明确的项目或产品名称" placeholder-class="ph" />
+          <input v-model="form.title" class="form-input" placeholder="请输入明确的项目或产品名称" placeholder-class="ph" />
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>产品品类</view>
           <view class="form-input select" @tap="onPickCategory">
-            <text v-if="!form.category" class="ph">请选择品类</text>
-            <text v-else>{{ form.category }}</text>
+            <text v-if="!form.productCategory" class="ph">请选择品类</text>
+            <text v-else>{{ productCategoryLabel }}</text>
             <text class="caret">▾</text>
           </view>
         </view>
         <view class="form-item">
-          <view class="form-label">产品形态</view>
-          <input v-model="form.form" class="form-input" placeholder="例如：SaaS 平台、嵌入式模块、原型机等" placeholder-class="ph" />
+          <view class="form-label">产品形态偏好</view>
+          <view class="form-input select" @tap="onPickDosageForm">
+            <text v-if="!form.dosageFormPreference" class="ph">请选择产品形态</text>
+            <text v-else>{{ dosageFormLabel }}</text>
+            <text class="caret">▾</text>
+          </view>
         </view>
       </view>
 
@@ -32,17 +36,17 @@
           <text class="block-title-text">技术诉求与场景</text>
         </view>
         <view class="form-item">
-          <view class="form-label"><text class="req">*</text>期望对接领域</view>
+          <view class="form-label">期望对接领域</view>
           <view class="form-input select" @tap="onPickDomain">
-            <text v-if="!form.domain" class="ph">选择技术领域</text>
-            <text v-else>{{ form.domain }}</text>
+            <text v-if="!form.expertiseField" class="ph">选择技术领域</text>
+            <text v-else>{{ expertiseFieldLabel }}</text>
             <text class="caret">▾</text>
           </view>
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>研发目标与功能诉求</view>
           <textarea
-            v-model="form.goal"
+            v-model="form.functionalAppeal"
             class="form-textarea"
             placeholder="详细描述项目所需要解决的技术难点、期望实现的核心功能/指标等..."
             placeholder-class="ph"
@@ -50,9 +54,9 @@
           ></textarea>
         </view>
         <view class="form-item">
-          <view class="form-label">目标用户/应用场景</view>
+          <view class="form-label"><text class="req">*</text>目标用户/应用场景</view>
           <textarea
-            v-model="form.scene"
+            v-model="form.targetAudience"
             class="form-textarea"
             placeholder="描述该产品或技术最终服务的对象及具体使用的业务场景..."
             placeholder-class="ph"
@@ -70,12 +74,12 @@
           <view class="form-label">可多选</view>
           <view class="tag-list">
             <view
-              v-for="t in serviceTypes"
-              :key="t"
+              v-for="t in serviceTypeOptions"
+              :key="t.value"
               class="tag-item"
-              :class="{ active: form.services.includes(t) }"
-              @tap="toggleService(t)"
-            >{{ t }}</view>
+              :class="{ active: form.serviceType.includes(t.value) }"
+              @tap="toggleService(t.value)"
+            >{{ t.label }}</view>
           </view>
         </view>
       </view>
@@ -87,17 +91,18 @@
           <text class="block-title-text">预算与周期</text>
         </view>
         <view class="form-item">
-          <view class="form-label">预算金额（万元）</view>
-          <view class="form-input with-suffix">
-            <input v-model="form.budget" type="digit" placeholder="输入预估金额" placeholder-class="ph" />
-            <text class="suffix">万</text>
+          <view class="form-label"><text class="req">*</text>预算范围</view>
+          <view class="form-input select" @tap="onPickBudget">
+            <text v-if="!form.budgetRange" class="ph">请选择预算范围</text>
+            <text v-else>{{ budgetRangeLabel }}</text>
+            <text class="caret">▾</text>
           </view>
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>期望交付时间</view>
           <view class="form-input with-suffix" @tap="onPickDate">
-            <text v-if="!form.deliverDate" class="ph">yyyy/mm/dd</text>
-            <text v-else>{{ form.deliverDate }}</text>
+            <text v-if="!form.expectedDeliveryTime" class="ph">yyyy/mm/dd</text>
+            <text v-else>{{ expectedDeliveryTimeLabel }}</text>
             <text class="suffix icon">📅</text>
           </view>
         </view>
@@ -111,11 +116,20 @@
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>联系人</view>
-          <input v-model="form.contact" class="form-input" placeholder="填写项目接口人姓名" placeholder-class="ph" />
+          <input v-model="form.submitterName" class="form-input" placeholder="填写项目接口人姓名" placeholder-class="ph" />
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>联系电话</view>
-          <input v-model="form.phone" class="form-input" type="number" maxlength="11" placeholder="填写手机号或座机号" placeholder-class="ph" />
+          <input v-model="form.submitterPhone" class="form-input" type="number" maxlength="11" placeholder="填写手机号或座机号" placeholder-class="ph" />
+        </view>
+        <view class="form-item">
+          <view class="form-label">补充说明</view>
+          <textarea
+            v-model="form.remark"
+            class="form-textarea"
+            placeholder="其他需要补充的信息..."
+            placeholder-class="ph"
+          ></textarea>
         </view>
       </view>
 
@@ -129,71 +143,133 @@
 </template>
 
 <script>
+import {
+  PRODUCT_CATEGORY_OPTIONS,
+  SERVICE_TYPE_OPTIONS,
+  EXPERTISE_FIELD_OPTIONS,
+  BUDGET_RANGE_OPTIONS,
+  DOSAGE_FORM_OPTIONS
+} from '@/utils/dict.js'
+import { submitDemand } from '@/utils/api/demand.js'
+
 export default {
   data() {
     return {
-      serviceTypes: ['联合研发', '技术咨询', '成果投放', '外包开发'],
+      productCategoryOptions: PRODUCT_CATEGORY_OPTIONS,
+      serviceTypeOptions: SERVICE_TYPE_OPTIONS,
+      expertiseFieldOptions: EXPERTISE_FIELD_OPTIONS,
+      budgetRangeOptions: BUDGET_RANGE_OPTIONS,
+      dosageFormOptions: DOSAGE_FORM_OPTIONS,
       form: {
-        name: '',
-        category: '',
-        form: '',
-        domain: '',
-        goal: '',
-        scene: '',
-        services: [],
-        budget: '',
-        deliverDate: '',
-        contact: '',
-        phone: ''
+        title: '',
+        productCategory: null,
+        dosageFormPreference: '',
+        expertiseField: '',
+        functionalAppeal: '',
+        targetAudience: '',
+        serviceType: [],
+        budgetRange: '',
+        expectedDeliveryTime: '',
+        remark: '',
+        submitterName: '',
+        submitterPhone: ''
       }
     }
   },
+  computed: {
+    productCategoryLabel() {
+      const item = this.productCategoryOptions.find(i => i.value === this.form.productCategory)
+      return item ? item.label : ''
+    },
+    expertiseFieldLabel() {
+      const item = this.expertiseFieldOptions.find(i => i.value === this.form.expertiseField)
+      return item ? item.label : ''
+    },
+    budgetRangeLabel() {
+      const item = this.budgetRangeOptions.find(i => i.value === this.form.budgetRange)
+      return item ? item.label : ''
+    },
+    dosageFormLabel() {
+      const item = this.dosageFormOptions.find(i => i.value === this.form.dosageFormPreference)
+      return item ? item.label : ''
+    },
+    expectedDeliveryTimeLabel() {
+      return this.form.expectedDeliveryTime || ''
+    }
+  },
   methods: {
-    toggleService(t) {
-      const idx = this.form.services.indexOf(t)
-      if (idx === -1) this.form.services.push(t)
-      else this.form.services.splice(idx, 1)
+    toggleService(value) {
+      const idx = this.form.serviceType.indexOf(value)
+      if (idx === -1) this.form.serviceType.push(value)
+      else this.form.serviceType.splice(idx, 1)
     },
     onPickCategory() {
       uni.showActionSheet({
-        itemList: ['软件类', '硬件类', '材料类', '生物医药类', '其他'],
+        itemList: this.productCategoryOptions.map(i => i.label),
         success: (res) => {
-          const list = ['软件类', '硬件类', '材料类', '生物医药类', '其他']
-          this.form.category = list[res.tapIndex]
+          this.form.productCategory = this.productCategoryOptions[res.tapIndex].value
         }
       })
     },
     onPickDomain() {
       uni.showActionSheet({
-        itemList: ['人工智能', '生物医药', '新能源材料', '智能制造', '航空航天', '其他'],
+        itemList: this.expertiseFieldOptions.map(i => i.label),
         success: (res) => {
-          const list = ['人工智能', '生物医药', '新能源材料', '智能制造', '航空航天', '其他']
-          this.form.domain = list[res.tapIndex]
+          this.form.expertiseField = this.expertiseFieldOptions[res.tapIndex].value
+        }
+      })
+    },
+    onPickBudget() {
+      uni.showActionSheet({
+        itemList: this.budgetRangeOptions.map(i => i.label),
+        success: (res) => {
+          this.form.budgetRange = this.budgetRangeOptions[res.tapIndex].value
+        }
+      })
+    },
+    onPickDosageForm() {
+      uni.showActionSheet({
+        itemList: this.dosageFormOptions.map(i => i.label),
+        success: (res) => {
+          this.form.dosageFormPreference = this.dosageFormOptions[res.tapIndex].value
         }
       })
     },
     onPickDate() {
-      uni.showActionSheet({
-        itemList: ['1 个月内', '3 个月内', '6 个月内', '12 个月内'],
+      uni.showDatePicker({
         success: (res) => {
-          const list = ['1 个月内', '3 个月内', '6 个月内', '12 个月内']
-          this.form.deliverDate = list[res.tapIndex]
+          this.form.expectedDeliveryTime = res.date
         }
       })
     },
     onSave() {
       uni.showToast({ title: '草稿已保存', icon: 'success' })
     },
-    onSubmit() {
-      if (!this.form.name) return uni.showToast({ title: '请填写项目名称', icon: 'none' })
-      if (!this.form.goal) return uni.showToast({ title: '请填写研发目标', icon: 'none' })
-      if (!this.form.contact) return uni.showToast({ title: '请填写联系人', icon: 'none' })
-      if (!this.form.phone) return uni.showToast({ title: '请填写联系电话', icon: 'none' })
+    async onSubmit() {
+      if (!this.form.title) return uni.showToast({ title: '请填写项目名称', icon: 'none' })
+      if (!this.form.productCategory) return uni.showToast({ title: '请选择产品品类', icon: 'none' })
+      if (!this.form.functionalAppeal) return uni.showToast({ title: '请填写研发目标与功能诉求', icon: 'none' })
+      if (!this.form.targetAudience) return uni.showToast({ title: '请填写目标用户/应用场景', icon: 'none' })
+      if (!this.form.budgetRange) return uni.showToast({ title: '请选择预算范围', icon: 'none' })
+      if (!this.form.expectedDeliveryTime) return uni.showToast({ title: '请选择期望交付时间', icon: 'none' })
+      if (!this.form.submitterName) return uni.showToast({ title: '请填写联系人', icon: 'none' })
+      if (!this.form.submitterPhone) return uni.showToast({ title: '请填写联系电话', icon: 'none' })
+
       uni.showLoading({ title: '提交中...' })
-      setTimeout(() => {
+      try {
+        const payload = {
+          ...this.form,
+          serviceType: JSON.stringify(this.form.serviceType)
+        }
+        const res = await submitDemand(payload)
         uni.hideLoading()
-        uni.redirectTo({ url: '/pages/submit-success/submit-success' })
-      }, 800)
+        uni.redirectTo({
+          url: `/pages/submit-success/submit-success?demandNo=${res && res.demandNo ? res.demandNo : ''}`
+        })
+      } catch (err) {
+        uni.hideLoading()
+        uni.showToast({ title: err && err.message ? err.message : '提交失败，请重试', icon: 'none' })
+      }
     }
   }
 }
@@ -213,7 +289,7 @@ export default {
   width: 100%;
   flex: 1;
   height: 0;
-  padding: 24rpx 32rpx 220rpx;
+  padding: 24rpx 32rpx 0;
   box-sizing: border-box;
 }
 

@@ -283,7 +283,7 @@ export default {
 
 .main-content {
   padding: 24rpx;
-  padding-bottom: 160rpx;
+  padding-bottom: 0;
 }
 
 /* Search Section */
