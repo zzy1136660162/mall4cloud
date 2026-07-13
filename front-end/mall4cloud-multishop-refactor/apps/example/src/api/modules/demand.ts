@@ -5,6 +5,9 @@ export interface DemandVO {
   demandNo: string
   title: string
   functionalAppeal: string
+  productCategory: number
+  serviceType: string
+  expertiseField: string
   targetAudience: string
   dosageFormPreference: string
   budgetRange: string
@@ -34,7 +37,6 @@ export interface DemandHandleDTO {
   demandId: number
   status: number
   adminRemark?: string
-  handlerName?: string
 }
 
 export const demandApi = {

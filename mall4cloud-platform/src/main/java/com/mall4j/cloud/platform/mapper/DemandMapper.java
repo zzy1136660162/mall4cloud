@@ -34,6 +34,16 @@ public interface DemandMapper {
     DemandVO getById(@Param("id") Long id);
 
     /**
+     * 使用需求编号和联系电话查询单条需求。
+     *
+     * @param demandNo 需求编号
+     * @param submitterPhone 提交人手机号
+     * @return 需求详情
+     */
+    DemandVO getByDemandNoAndPhone(@Param("demandNo") String demandNo,
+                                   @Param("submitterPhone") String submitterPhone);
+
+    /**
      * 保存需求
      * @param demand 需求
      */
@@ -45,11 +55,21 @@ public interface DemandMapper {
      */
     void update(@Param("demand") Demand demand);
 
+    int updateStatusIfCurrent(@Param("id") Long id,
+                              @Param("submitterId") String submitterId,
+                              @Param("expectedStatus") Integer expectedStatus,
+                              @Param("status") Integer status,
+                              @Param("statusText") String statusText);
+
     /**
      * 删除需求
      * @param id 需求ID
      */
     void deleteById(@Param("id") Long id);
+
+    int deleteByIdAndSubmitterAndStatus(@Param("id") Long id,
+                                        @Param("submitterId") String submitterId,
+                                        @Param("status") Integer status);
 
     /**
      * 根据提交人ID获取需求列表

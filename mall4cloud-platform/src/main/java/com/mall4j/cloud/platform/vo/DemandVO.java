@@ -260,6 +260,9 @@ public class DemandVO extends BaseVO {
                 ", demandNo=" + demandNo +
                 ", title=" + title +
                 ", functionalAppeal=" + functionalAppeal +
+                ", productCategory=" + productCategory +
+                ", serviceType=" + serviceType +
+                ", expertiseField=" + expertiseField +
                 ", targetAudience=" + targetAudience +
                 ", dosageFormPreference=" + dosageFormPreference +
                 ", budgetRange=" + budgetRange +

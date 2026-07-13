@@ -4,7 +4,6 @@
       <!-- 区块 1 基本信息 -->
       <view class="rounded-card block">
         <view class="block-title">
-          <view class="block-title-icon">🔍</view>
           <text class="block-title-text">基本信息</text>
         </view>
         <view class="form-item">
@@ -32,7 +31,6 @@
       <!-- 区块 2 技术诉求与场景 -->
       <view class="rounded-card block">
         <view class="block-title">
-          <view class="block-title-icon">🧪</view>
           <text class="block-title-text">技术诉求与场景</text>
         </view>
         <view class="form-item">
@@ -67,11 +65,10 @@
       <!-- 区块 3 期望服务类型 -->
       <view class="rounded-card block">
         <view class="block-title">
-          <view class="block-title-icon">📋</view>
           <text class="block-title-text">期望服务类型</text>
         </view>
         <view class="form-item">
-          <view class="form-label">可多选</view>
+          <view class="form-label"><text class="req">*</text>可多选</view>
           <view class="tag-list">
             <view
               v-for="t in serviceTypeOptions"
@@ -87,7 +84,6 @@
       <!-- 区块 4 预算与周期 -->
       <view class="rounded-card block">
         <view class="block-title">
-          <view class="block-title-icon">💰</view>
           <text class="block-title-text">预算与周期</text>
         </view>
         <view class="form-item">
@@ -100,18 +96,19 @@
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>期望交付时间</view>
-          <view class="form-input with-suffix" @tap="onPickDate">
-            <text v-if="!form.expectedDeliveryTime" class="ph">yyyy/mm/dd</text>
-            <text v-else>{{ expectedDeliveryTimeLabel }}</text>
-            <text class="suffix icon">📅</text>
-          </view>
+          <picker mode="date" :value="form.expectedDeliveryTime" :start="today" @change="onDateChange">
+            <view class="form-input with-suffix">
+              <text v-if="!form.expectedDeliveryTime" class="ph">yyyy-mm-dd</text>
+              <text v-else>{{ expectedDeliveryTimeLabel }}</text>
+              <text class="suffix">选择日期</text>
+            </view>
+          </picker>
         </view>
       </view>
 
       <!-- 区块 5 联系信息 -->
       <view class="rounded-card block">
         <view class="block-title">
-          <view class="block-title-icon">📞</view>
           <text class="block-title-text">联系信息</text>
         </view>
         <view class="form-item">
@@ -120,7 +117,7 @@
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>联系电话</view>
-          <input v-model="form.submitterPhone" class="form-input" type="number" maxlength="11" placeholder="填写手机号或座机号" placeholder-class="ph" />
+          <input v-model="form.submitterPhone" class="form-input" type="number" maxlength="11" placeholder="填写11位手机号" placeholder-class="ph" />
         </view>
         <view class="form-item">
           <view class="form-label">补充说明</view>
@@ -136,8 +133,9 @@
       <!-- 底部按钮 -->
       <view class="footer">
         <view class="btn-save" @tap="onSave">保存草稿</view>
-        <view class="btn-submit" @tap="onSubmit">提交申请 ▸</view>
+        <view class="btn-submit" :class="{ disabled: submitting }" @tap="onSubmit">{{ submitting ? '提交中...' : '提交申请' }}</view>
       </view>
+      <view class="footer-spacer"></view>
     </scroll-view>
   </view>
 </template>
@@ -152,6 +150,16 @@ import {
 } from '@/utils/dict.js'
 import { submitDemand } from '@/utils/api/demand.js'
 
+const DRAFT_KEY = 'rd_demand_draft'
+
+function getLocalDate() {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 export default {
   data() {
     return {
@@ -160,6 +168,8 @@ export default {
       expertiseFieldOptions: EXPERTISE_FIELD_OPTIONS,
       budgetRangeOptions: BUDGET_RANGE_OPTIONS,
       dosageFormOptions: DOSAGE_FORM_OPTIONS,
+      submitting: false,
+      today: getLocalDate(),
       form: {
         title: '',
         productCategory: null,
@@ -174,6 +184,12 @@ export default {
         submitterName: '',
         submitterPhone: ''
       }
+    }
+  },
+  onLoad() {
+    const draft = uni.getStorageSync(DRAFT_KEY)
+    if (draft && typeof draft === 'object') {
+      this.form = { ...this.form, ...draft, serviceType: Array.isArray(draft.serviceType) ? draft.serviceType : [] }
     }
   },
   computed: {
@@ -235,40 +251,50 @@ export default {
         }
       })
     },
-    onPickDate() {
-      uni.showDatePicker({
-        success: (res) => {
-          this.form.expectedDeliveryTime = res.date
-        }
-      })
+    onDateChange(event) {
+      this.form.expectedDeliveryTime = event.detail.value
     },
     onSave() {
+      uni.setStorageSync(DRAFT_KEY, { ...this.form })
       uni.showToast({ title: '草稿已保存', icon: 'success' })
     },
     async onSubmit() {
-      if (!this.form.title) return uni.showToast({ title: '请填写项目名称', icon: 'none' })
+      if (this.submitting) return
+      const phone = String(this.form.submitterPhone || '').trim()
+      if (!this.form.title.trim()) return uni.showToast({ title: '请填写项目名称', icon: 'none' })
       if (!this.form.productCategory) return uni.showToast({ title: '请选择产品品类', icon: 'none' })
-      if (!this.form.functionalAppeal) return uni.showToast({ title: '请填写研发目标与功能诉求', icon: 'none' })
-      if (!this.form.targetAudience) return uni.showToast({ title: '请填写目标用户/应用场景', icon: 'none' })
+      if (!this.form.functionalAppeal.trim()) return uni.showToast({ title: '请填写研发目标与功能诉求', icon: 'none' })
+      if (!this.form.targetAudience.trim()) return uni.showToast({ title: '请填写目标用户/应用场景', icon: 'none' })
+      if (!this.form.serviceType.length) return uni.showToast({ title: '请选择期望服务类型', icon: 'none' })
       if (!this.form.budgetRange) return uni.showToast({ title: '请选择预算范围', icon: 'none' })
       if (!this.form.expectedDeliveryTime) return uni.showToast({ title: '请选择期望交付时间', icon: 'none' })
-      if (!this.form.submitterName) return uni.showToast({ title: '请填写联系人', icon: 'none' })
-      if (!this.form.submitterPhone) return uni.showToast({ title: '请填写联系电话', icon: 'none' })
+      if (!this.form.submitterName.trim()) return uni.showToast({ title: '请填写联系人', icon: 'none' })
+      if (!/^1[3-9]\d{9}$/.test(phone)) return uni.showToast({ title: '请输入正确的11位手机号', icon: 'none' })
 
+      this.submitting = true
       uni.showLoading({ title: '提交中...' })
       try {
         const payload = {
           ...this.form,
+          title: this.form.title.trim(),
+          functionalAppeal: this.form.functionalAppeal.trim(),
+          targetAudience: this.form.targetAudience.trim(),
+          submitterName: this.form.submitterName.trim(),
+          submitterPhone: phone,
           serviceType: JSON.stringify(this.form.serviceType)
         }
         const res = await submitDemand(payload)
         uni.hideLoading()
+        uni.removeStorageSync(DRAFT_KEY)
+        if (!res || !res.demandNo) throw new Error('提交结果缺少需求编号')
         uni.redirectTo({
-          url: `/pages/submit-success/submit-success?demandNo=${res && res.demandNo ? res.demandNo : ''}`
+          url: `/pages/submit-success/submit-success?demandNo=${encodeURIComponent(res.demandNo)}&phone=${encodeURIComponent(phone)}`
         })
       } catch (err) {
         uni.hideLoading()
         uni.showToast({ title: err && err.message ? err.message : '提交失败，请重试', icon: 'none' })
+      } finally {
+        this.submitting = false
       }
     }
   }
@@ -445,5 +471,11 @@ export default {
   color: #ffffff;
   font-size: 32rpx;
   font-weight: 600;
+}
+.btn-submit.disabled {
+  opacity: 0.6;
+}
+.footer-spacer {
+  height: 250rpx;
 }
 </style>

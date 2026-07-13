@@ -18,11 +18,15 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * 研发需求Service实现
@@ -40,6 +44,8 @@ public class DemandServiceImpl implements DemandService {
 
     private static final String DEMAND_ID_KEY = "mall4cloud-demand";
 
+    private static final DateTimeFormatter DEMAND_DATE_FORMATTER = DateTimeFormatter.BASIC_ISO_DATE;
+
     private static final Map<Integer, String> STATUS_TEXT_MAP = new HashMap<>();
     static {
         STATUS_TEXT_MAP.put(0, "待处理");
@@ -51,18 +57,37 @@ public class DemandServiceImpl implements DemandService {
     }
 
     private Date parseDate(String dateStr) {
-        if (dateStr == null || dateStr.isEmpty()) {
-            return null;
-        }
         try {
-            return new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
-        } catch (Exception e) {
-            return null;
+            return java.sql.Date.valueOf(LocalDate.parse(dateStr));
+        } catch (DateTimeParseException | IllegalArgumentException e) {
+            throw new Mall4cloudException(ResponseEnum.SHOW_FAIL, "期望交付时间格式不正确");
         }
     }
 
-    private synchronized Long generateSimpleId() {
-        return System.currentTimeMillis() + (int)(Math.random() * 1000);
+    private String generateDemandNo() {
+        String uniqueCode;
+        try {
+            ServerResponseEntity<Long> response = segmentFeignClient.getSegmentId(DEMAND_ID_KEY);
+            if (response.isSuccess() && response.getData() != null) {
+                uniqueCode = Long.toUnsignedString(response.getData(), 36).toUpperCase();
+                return formatDemandNo(uniqueCode);
+            }
+        } catch (Exception ignored) {
+            // Leaf 暂时不可用时使用 UUID 片段，日期与随机码组合后仍保持较好的可读性和唯一性。
+        }
+        uniqueCode = UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
+        return formatDemandNo(uniqueCode);
+    }
+
+    private String formatDemandNo(String uniqueCode) {
+        String normalizedCode = uniqueCode.length() > 8
+                ? uniqueCode.substring(uniqueCode.length() - 8)
+                : "00000000".substring(uniqueCode.length()) + uniqueCode;
+        return "RD" + LocalDate.now().format(DEMAND_DATE_FORMATTER) + "-" + normalizedCode;
+    }
+
+    private String trim(String value) {
+        return value == null ? null : value.trim();
     }
 
     @Override
@@ -89,25 +114,35 @@ public class DemandServiceImpl implements DemandService {
     }
 
     @Override
+    public DemandVO getByDemandNoAndPhone(String demandNo, String submitterPhone) {
+        DemandVO demand = demandMapper.getByDemandNoAndPhone(trim(demandNo), trim(submitterPhone));
+        if (demand == null) {
+            throw new Mall4cloudException(ResponseEnum.SHOW_FAIL, "未查询到需求，请核对手机号和需求编号");
+        }
+        // 公开查询不返回内部提交人标识。
+        demand.setSubmitterId(null);
+        return demand;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public Long submit(DemandSubmitDTO demandSubmitDTO) {
-        Long demandNoId = generateSimpleId();
-
         Demand demand = new Demand();
-        demand.setDemandNo("D" + demandNoId);
-        demand.setTitle(demandSubmitDTO.getTitle());
-        demand.setFunctionalAppeal(demandSubmitDTO.getFunctionalAppeal());
+        demand.setDemandNo(generateDemandNo());
+        demand.setTitle(trim(demandSubmitDTO.getTitle()));
+        demand.setFunctionalAppeal(trim(demandSubmitDTO.getFunctionalAppeal()));
         demand.setProductCategory(demandSubmitDTO.getProductCategory());
-        demand.setServiceType(demandSubmitDTO.getServiceType());
-        demand.setExpertiseField(demandSubmitDTO.getExpertiseField());
-        demand.setTargetAudience(demandSubmitDTO.getTargetAudience());
-        demand.setDosageFormPreference(demandSubmitDTO.getDosageFormPreference());
-        demand.setBudgetRange(demandSubmitDTO.getBudgetRange());
+        demand.setServiceType(trim(demandSubmitDTO.getServiceType()));
+        demand.setExpertiseField(trim(demandSubmitDTO.getExpertiseField()));
+        demand.setTargetAudience(trim(demandSubmitDTO.getTargetAudience()));
+        demand.setDosageFormPreference(trim(demandSubmitDTO.getDosageFormPreference()));
+        demand.setBudgetRange(trim(demandSubmitDTO.getBudgetRange()));
         demand.setExpectedDeliveryTime(parseDate(demandSubmitDTO.getExpectedDeliveryTime()));
-        demand.setRemark(demandSubmitDTO.getRemark());
-        demand.setSubmitterId(demandSubmitDTO.getSubmitterId() != null && !demandSubmitDTO.getSubmitterId().isEmpty() ? demandSubmitDTO.getSubmitterId() : demandSubmitDTO.getSubmitterPhone());
-        demand.setSubmitterName(demandSubmitDTO.getSubmitterName());
-        demand.setSubmitterPhone(demandSubmitDTO.getSubmitterPhone());
+        demand.setRemark(trim(demandSubmitDTO.getRemark()));
+        demand.setSubmitterId(trim(demandSubmitDTO.getSubmitterId()) != null && !trim(demandSubmitDTO.getSubmitterId()).isEmpty()
+                ? trim(demandSubmitDTO.getSubmitterId()) : trim(demandSubmitDTO.getSubmitterPhone()));
+        demand.setSubmitterName(trim(demandSubmitDTO.getSubmitterName()));
+        demand.setSubmitterPhone(trim(demandSubmitDTO.getSubmitterPhone()));
         demand.setStatus(0);
         demand.setStatusText(STATUS_TEXT_MAP.get(0));
         Date now = new Date();
@@ -129,7 +164,11 @@ public class DemandServiceImpl implements DemandService {
         Demand demand = new Demand();
         demand.setId(demandHandleDTO.getDemandId());
         demand.setStatus(demandHandleDTO.getStatus());
-        demand.setStatusText(STATUS_TEXT_MAP.get(demandHandleDTO.getStatus()));
+        String statusText = STATUS_TEXT_MAP.get(demandHandleDTO.getStatus());
+        if (statusText == null) {
+            throw new Mall4cloudException(ResponseEnum.SHOW_FAIL, "需求状态不正确");
+        }
+        demand.setStatusText(statusText);
         demand.setAdminRemark(demandHandleDTO.getAdminRemark());
         demand.setHandlerName(demandHandleDTO.getHandlerName());
         demand.setUpdateTime(new Date());
@@ -144,20 +183,17 @@ public class DemandServiceImpl implements DemandService {
         if (demandVO == null) {
             throw new Mall4cloudException(ResponseEnum.DATA_ERROR);
         }
-        if (!demandVO.getSubmitterId().equals(submitterId)) {
+        if (!Objects.equals(demandVO.getSubmitterId(), submitterId)) {
             throw new Mall4cloudException(ResponseEnum.UNAUTHORIZED);
         }
         if (demandVO.getStatus() != 0) {
             throw new Mall4cloudException(ResponseEnum.SHOW_FAIL, "当前状态不允许撤回");
         }
 
-        Demand demand = new Demand();
-        demand.setId(demandId);
-        demand.setStatus(5);
-        demand.setStatusText(STATUS_TEXT_MAP.get(5));
-        demand.setUpdateTime(new Date());
-
-        demandMapper.update(demand);
+        int updated = demandMapper.updateStatusIfCurrent(demandId, submitterId, 0, 5, STATUS_TEXT_MAP.get(5));
+        if (updated == 0) {
+            throw new Mall4cloudException(ResponseEnum.SHOW_FAIL, "需求状态已变化，请刷新后重试");
+        }
     }
 
     @Override
@@ -167,29 +203,20 @@ public class DemandServiceImpl implements DemandService {
         if (demandVO == null) {
             throw new Mall4cloudException(ResponseEnum.DATA_ERROR);
         }
-        if (!demandVO.getSubmitterId().equals(submitterId)) {
+        if (!Objects.equals(demandVO.getSubmitterId(), submitterId)) {
             throw new Mall4cloudException(ResponseEnum.UNAUTHORIZED);
         }
         if (demandVO.getStatus() != 5) {
             throw new Mall4cloudException(ResponseEnum.SHOW_FAIL, "当前状态不允许重新申请");
         }
 
-        Long newDemandNoId;
-        try {
-            ServerResponseEntity<Long> segmentIdResponse = segmentFeignClient.getSegmentId(DEMAND_ID_KEY);
-            if (segmentIdResponse.isSuccess() && segmentIdResponse.getData() != null) {
-                newDemandNoId = segmentIdResponse.getData();
-            } else {
-                newDemandNoId = generateSimpleId();
-            }
-        } catch (Exception e) {
-            newDemandNoId = generateSimpleId();
-        }
-
         Demand demand = new Demand();
-        demand.setDemandNo("D" + newDemandNoId);
+        demand.setDemandNo(generateDemandNo());
         demand.setTitle(demandVO.getTitle());
         demand.setFunctionalAppeal(demandVO.getFunctionalAppeal());
+        demand.setProductCategory(demandVO.getProductCategory());
+        demand.setServiceType(demandVO.getServiceType());
+        demand.setExpertiseField(demandVO.getExpertiseField());
         demand.setTargetAudience(demandVO.getTargetAudience());
         demand.setDosageFormPreference(demandVO.getDosageFormPreference());
         demand.setBudgetRange(demandVO.getBudgetRange());
@@ -214,14 +241,17 @@ public class DemandServiceImpl implements DemandService {
         if (demandVO == null) {
             throw new Mall4cloudException(ResponseEnum.DATA_ERROR);
         }
-        if (!demandVO.getSubmitterId().equals(submitterId)) {
+        if (!Objects.equals(demandVO.getSubmitterId(), submitterId)) {
             throw new Mall4cloudException(ResponseEnum.UNAUTHORIZED);
         }
         if (demandVO.getStatus() != 5) {
             throw new Mall4cloudException(ResponseEnum.SHOW_FAIL, "当前状态不允许删除");
         }
 
-        demandMapper.deleteById(demandId);
+        int deleted = demandMapper.deleteByIdAndSubmitterAndStatus(demandId, submitterId, 5);
+        if (deleted == 0) {
+            throw new Mall4cloudException(ResponseEnum.SHOW_FAIL, "需求状态已变化，请刷新后重试");
+        }
     }
 
     @Override

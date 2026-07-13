@@ -9,7 +9,6 @@
         <view class="form-block">
           <view class="form-label">联系手机号</view>
           <view class="form-input">
-            <text class="input-icon">📱</text>
             <input
               v-model="phone"
               class="real-input"
@@ -24,21 +23,20 @@
         <view class="form-block">
           <view class="form-row">
             <view class="form-label">需求编号</view>
-            <view class="form-hint">SR-XXX格式</view>
+            <view class="form-hint">D开头编号</view>
           </view>
           <view class="form-input">
-            <text class="input-icon">#</text>
             <input
               v-model="demandNo"
               class="real-input"
-              placeholder="例如：SR-202310-001"
+              placeholder="例如：RD20260713-A1B2C3D4"
               placeholder-class="ph"
+              @confirm="onQuery"
             />
           </view>
         </view>
 
-        <view class="query-btn" @tap="onQuery">
-          <text class="query-icon">🔍</text>
+        <view class="query-btn" :class="{ disabled: loading }" @tap="onQuery">
           <text>立即查询</text>
         </view>
 
@@ -49,35 +47,61 @@
 </template>
 
 <script>
+import { queryDemand } from '@/utils/api/demand-query.js'
+
 export default {
   data() {
     return {
       phone: '',
-      demandNo: ''
+      demandNo: '',
+      loading: false
+    }
+  },
+  onLoad(options) {
+    if (options && options.demandNo) this.demandNo = decodeURIComponent(options.demandNo)
+  },
+  onShow() {
+    const prefill = uni.getStorageSync('rd_query_prefill')
+    if (prefill && typeof prefill === 'object') {
+      this.demandNo = prefill.demandNo || this.demandNo
+      this.phone = prefill.phone || this.phone
+      uni.removeStorageSync('rd_query_prefill')
     }
   },
   methods: {
-    onQuery() {
-      if (!/^1\d{10}$/.test(this.phone)) {
+    async onQuery() {
+      const phone = this.phone.trim()
+      const demandNo = this.demandNo.trim().toUpperCase().replace(/\s+/g, '')
+      if (this.loading) return
+      if (!/^1[3-9]\d{9}$/.test(phone)) {
         return uni.showToast({ title: '请输入正确的11位手机号', icon: 'none' })
       }
-      if (!this.demandNo) {
+      if (!demandNo) {
         return uni.showToast({ title: '请输入需求编号', icon: 'none' })
       }
+      this.loading = true
       uni.showLoading({ title: '查询中...' })
-      setTimeout(() => {
+      try {
+        const result = await queryDemand(demandNo, phone)
         uni.hideLoading()
-        uni.showModal({
-          title: '查询结果',
-          content: `需求 ${this.demandNo} 当前进度：项目立项阶段（3/8）`,
-          showCancel: false
+        if (!result) {
+          uni.showToast({ title: '未查询到需求，请核对手机号和需求编号', icon: 'none', duration: 2500 })
+          return
+        }
+        uni.navigateTo({
+          url: `/pages/demand-detail/demand-detail?demandNo=${encodeURIComponent(demandNo)}&submitterPhone=${encodeURIComponent(phone)}`
         })
-      }, 600)
+      } catch (error) {
+        uni.hideLoading()
+        uni.showToast({ title: error && error.message ? error.message : '查询失败，请稍后重试', icon: 'none' })
+      } finally {
+        this.loading = false
+      }
     },
     onForgot() {
       uni.showModal({
         title: '联系专属技术经理',
-        content: '客服电话：400-888-1234\n服务时间：9:00-18:00',
+        content: '客服电话：400-123-4567\n服务时间：9:00-18:00',
         showCancel: false
       })
     }
@@ -194,6 +218,9 @@ export default {
   font-weight: 600;
   margin-top: 56rpx;
   box-shadow: 0 6rpx 16rpx rgba(0, 88, 190, 0.25);
+}
+.query-btn.disabled {
+  opacity: 0.65;
 }
 
 .query-icon {

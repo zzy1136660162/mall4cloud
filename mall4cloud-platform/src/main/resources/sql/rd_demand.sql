@@ -5,6 +5,9 @@ CREATE TABLE IF NOT EXISTS `rd_demand`
     `demand_no`              varchar(50)                        not null comment '需求编号',
     `title`                  varchar(200)                       not null comment '需求标题',
     `functional_appeal`      text                               not null comment '功能诉求',
+    `product_category`       tinyint                            not null comment '产品品类: 1-体表健康产品 2-功能性食品',
+    `service_type`           varchar(200)                       not null comment '期望服务类型(JSON数组)',
+    `expertise_field`        varchar(100)                       null comment '期望对接领域',
     `target_audience`        varchar(200)                       not null comment '目标人群',
     `dosage_form_preference` varchar(100)                       null comment '剂型偏好',
     `budget_range`           varchar(50)                        not null comment '预算范围',
@@ -31,15 +34,3 @@ CREATE INDEX `idx_status`
 
 CREATE INDEX `idx_submitter_id`
     ON `rd_demand` (`submitter_id`);
-
--- 2024-07 新增业务字段
-ALTER TABLE `rd_demand`
-    ADD COLUMN `product_category` tinyint DEFAULT NULL
-        COMMENT '产品品类: 1-体表健康产品 2-功能性食品'
-        AFTER `functional_appeal`,
-    ADD COLUMN `service_type` varchar(200) DEFAULT NULL
-        COMMENT '期望服务类型(JSON数组)'
-        AFTER `product_category`,
-    ADD COLUMN `expertise_field` varchar(100) DEFAULT NULL
-        COMMENT '期望对接领域'
-        AFTER `service_type`;

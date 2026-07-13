@@ -1,149 +1,165 @@
 <template>
   <view class="page">
-    <!-- 顶部蓝色渐变背景 -->
-    <view class="top-bg"></view>
-
-    <scroll-view scroll-y class="content" :style="{ paddingBottom: '180rpx' }">
-      <!-- 用户卡片 -->
-      <view class="user-card">
-        <view class="avatar">
-          <text class="avatar-text">科学家</text>
-        </view>
-        <view class="user-info">
-          <view class="name">{{ userInfo.name }}</view>
-          <view class="title">{{ userInfo.title }}</view>
-          <view class="org">就职于 {{ userInfo.org }}</view>
-        </view>
-        <view class="cert-no">证书编号 {{ userInfo.certNo }}</view>
-      </view>
-
-      <!-- 操作按钮 -->
-      <view class="action-row">
-        <view class="action-btn primary" @tap="goTrack">
-          <text class="action-icon">📝</text>
-          <text>查看需求</text>
-        </view>
-        <view class="action-btn outline" @tap="goSubmit">
-          <text class="action-icon">＋</text>
-          <text>提交研发立项</text>
-        </view>
-      </view>
-
-      <!-- 核心概览 -->
-      <view class="rounded-card stats">
-        <view class="section-title">
-          <view class="section-title-bar"></view>
-          <text>核心概览</text>
-        </view>
-        <view class="stats-grid">
-          <view class="stat-item">
-            <view class="stat-label">本领域硬科技</view>
-            <view class="stat-value primary">{{ userInfo.projectCount }}<text class="stat-unit">项</text></view>
+    <view v-if="loading" class="state-panel">正在加载专家信息...</view>
+    <view v-else-if="errorMessage" class="state-panel error-state">
+      <text>{{ errorMessage }}</text>
+      <view class="retry-btn" @tap="loadDetail">重新加载</view>
+    </view>
+    <scroll-view v-else-if="talent" scroll-y class="content">
+      <view class="profile-card card">
+        <view class="profile-head">
+          <view class="avatar">
+            <image v-if="talent.avatar" class="avatar-image" :src="talent.avatar" mode="aspectFill" />
+            <text v-else>{{ talent.name ? talent.name.slice(0, 1) : '专' }}</text>
           </view>
-          <view class="stat-item">
-            <view class="stat-label">产研经费</view>
-            <view class="stat-value primary">¥ <text>{{ userInfo.researchFund }}</text><text class="stat-unit">万</text></view>
+          <view class="profile-main">
+            <view class="name">{{ talent.name || '姓名暂未填写' }}</view>
+            <view class="title">{{ talent.title || '职称暂未填写' }}</view>
+            <view class="region">{{ talent.region || '地区暂未填写' }}</view>
           </view>
-          <view class="stat-item">
-            <view class="stat-label">服务专利</view>
-            <view class="stat-value tertiary">{{ userInfo.patentCount }}<text class="stat-unit">件</text></view>
-          </view>
-          <view class="stat-item">
-            <view class="stat-label">发表论文</view>
-            <view class="stat-value tertiary">{{ userInfo.paperCount }}<text class="stat-unit">篇</text></view>
-          </view>
+        </view>
+        <view class="tags">
+          <view v-for="tag in expertiseAreas" :key="tag" class="tag">{{ tag }}</view>
+          <text v-if="expertiseAreas.length === 0" class="empty-inline">暂无能力标签</text>
+        </view>
+        <view class="action-row">
+          <view class="action-btn primary" @tap="goSubmit">提交研发需求</view>
+          <view class="action-btn outline" @tap="goTrack">查询需求进度</view>
         </view>
       </view>
 
-      <!-- 能力评估 -->
-      <view class="rounded-card ability">
-        <view class="section-title">
-          <view class="section-title-bar"></view>
-          <text>能力评估</text>
+      <view class="summary-grid">
+        <view class="summary-item">
+          <text class="summary-value">{{ talent.experienceYears || 0 }}</text>
+          <text class="summary-label">从业年限</text>
         </view>
-        <view class="ability-list">
-          <view class="ability-item" v-for="(item, idx) in abilityList" :key="idx">
-            <view class="ability-row">
-              <text class="ability-label">{{ item.label }}</text>
-              <text class="ability-score">{{ item.score }}%</text>
-            </view>
-            <view class="ability-bar-bg">
-              <view class="ability-bar-fg" :style="{ width: item.score + '%', background: item.color }"></view>
-            </view>
-          </view>
+        <view class="summary-item">
+          <text class="summary-value">{{ projects.length }}</text>
+          <text class="summary-label">项目经验</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-value">{{ achievements.length }}</text>
+          <text class="summary-label">成果荣誉</text>
         </view>
       </view>
 
-      <!-- 个人简介 -->
-      <view class="rounded-card profile">
-        <view class="section-title">
-          <view class="section-title-bar"></view>
-          <text>个人简介</text>
-        </view>
-        <view class="profile-text">
-          材料化学与人工智能算法交叉领域融合创新的青年学者，长期致力于应用导向的基础研究与应用系统设计。致力于新材料计算、高通量合成与智能分析，曾在多项重大横向课题中担任技术负责人，主导 5 项国家级研究专项的可行性论证与产业化路径规划，为多家行业头部企业提供技术服务。已发表论文 60 余篇，授权发明专利 30 余项。
+      <view class="card">
+        <view class="section-title">专业技能</view>
+        <view class="tags">
+          <view v-for="skill in skills" :key="skill" class="tag skill-tag">{{ skill }}</view>
+          <text v-if="skills.length === 0" class="empty-inline">暂无专业技能信息</text>
         </view>
       </view>
 
-      <!-- 重点项目经验 -->
-      <view class="rounded-card projects">
-        <view class="section-title">
-          <view class="section-title-bar"></view>
-          <text>重点项目经验</text>
-          <view class="more" @tap="goSubmit">查看全部</view>
-        </view>
-        <view class="project-item" v-for="(p, idx) in projects" :key="p.id">
-          <view class="project-head">
-            <view class="project-bullet"></view>
-            <view class="project-title">{{ p.title }}</view>
-          </view>
-          <view class="project-period">{{ p.period }}</view>
-          <view class="project-desc">{{ p.desc }}</view>
-          <view class="project-tags">
-            <view
-              class="project-tag"
-              v-for="(t, tidx) in p.tags"
-              :key="tidx"
-              :style="{ background: p.tagColors[tidx], color: p.tagTextColors[tidx] }"
-            >{{ t }}</view>
-          </view>
-        </view>
+      <view class="card">
+        <view class="section-title">个人简介</view>
+        <view class="paragraph">{{ talent.intro || '该专家暂未填写个人简介。' }}</view>
+        <view v-if="talent.education" class="education">学历：{{ talent.education }}</view>
       </view>
 
-      <!-- 成果与荣誉 -->
-      <view class="rounded-card honors">
-        <view class="section-title">
-          <view class="section-title-bar"></view>
-          <text>成果与荣誉</text>
-        </view>
-        <view class="honor-item" v-for="(h, idx) in achievements" :key="h.id">
-          <view class="honor-badge">
-            <text class="honor-badge-text">🏆</text>
-          </view>
-          <view class="honor-info">
-            <view class="honor-title">{{ h.title }}</view>
-            <view class="honor-desc">{{ h.desc }}</view>
-            <view class="honor-date">{{ h.date }}</view>
+      <view class="card">
+        <view class="section-title">重点项目经验</view>
+        <view v-for="(project, index) in projects" :key="index" class="record-item">
+          <view class="record-dot"></view>
+          <view class="record-main">
+            <view class="record-title">{{ itemTitle(project, `项目经验 ${index + 1}`) }}</view>
+            <view v-if="itemPeriod(project)" class="record-period">{{ itemPeriod(project) }}</view>
+            <view class="record-desc">{{ itemDescription(project) }}</view>
           </view>
         </view>
+        <view v-if="projects.length === 0" class="empty-block">暂无项目经验</view>
+      </view>
+
+      <view class="card last-card">
+        <view class="section-title">成果与荣誉</view>
+        <view v-for="(achievement, index) in achievements" :key="index" class="achievement-item">
+          <view class="record-main">
+            <view class="record-title">{{ itemTitle(achievement, `成果荣誉 ${index + 1}`) }}</view>
+            <view class="record-desc">{{ itemDescription(achievement) }}</view>
+            <view v-if="itemPeriod(achievement)" class="record-period">{{ itemPeriod(achievement) }}</view>
+          </view>
+        </view>
+        <view v-if="achievements.length === 0" class="empty-block">暂无成果荣誉</view>
       </view>
     </scroll-view>
   </view>
 </template>
 
 <script>
-import { userInfo, abilityList, projects, achievements } from '@/utils/data.js'
+import { getTalentDetail } from '@/utils/api/talent-pool.js'
+
+function parseArray(value) {
+  if (Array.isArray(value)) return value
+  if (!value) return []
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch (e) {
+    return String(value).split(/[,，、]/).map(item => item.trim()).filter(Boolean)
+  }
+}
 
 export default {
   data() {
     return {
-      userInfo,
-      abilityList,
-      projects,
-      achievements
+      id: '',
+      talent: null,
+      loading: true,
+      errorMessage: ''
     }
   },
+  computed: {
+    expertiseAreas() {
+      return parseArray(this.talent && this.talent.expertiseAreas).map(item => this.itemText(item)).filter(Boolean)
+    },
+    skills() {
+      return parseArray(this.talent && this.talent.skills).map(item => this.itemText(item)).filter(Boolean)
+    },
+    projects() {
+      return parseArray(this.talent && this.talent.projectExperience)
+    },
+    achievements() {
+      return parseArray(this.talent && this.talent.achievements)
+    }
+  },
+  onLoad(options) {
+    this.id = options && options.id ? decodeURIComponent(options.id) : ''
+    this.loadDetail()
+  },
   methods: {
+    async loadDetail() {
+      if (!this.id) {
+        this.loading = false
+        this.errorMessage = '缺少专家编号，无法加载详情'
+        return
+      }
+      this.loading = true
+      this.errorMessage = ''
+      try {
+        this.talent = await getTalentDetail(this.id)
+      } catch (error) {
+        this.errorMessage = error && error.message ? error.message : '专家信息加载失败，请稍后重试'
+      } finally {
+        this.loading = false
+      }
+    },
+    itemText(item) {
+      if (item === null || item === undefined) return ''
+      if (typeof item !== 'object') return String(item)
+      return item.name || item.label || item.title || item.skill || item.area || ''
+    },
+    itemTitle(item, fallback) {
+      if (typeof item !== 'object' || item === null) return String(item || fallback)
+      return item.title || item.name || item.projectName || item.achievementName || fallback
+    },
+    itemDescription(item) {
+      if (typeof item !== 'object' || item === null) return String(item || '')
+      return item.desc || item.description || item.content || item.detail || '暂无详细说明'
+    },
+    itemPeriod(item) {
+      if (typeof item !== 'object' || item === null) return ''
+      return item.period || item.date || item.time || item.year || ''
+    },
     goSubmit() {
       uni.navigateTo({ url: '/pages/demand-submit/demand-submit' })
     },
@@ -155,363 +171,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  background: var(--bg-page);
-  display: flex;
-  flex-direction: column;
-}
-
-.top-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 360rpx;
-  background: linear-gradient(180deg, #d8e2ff 0%, #eaf1ff 60%, #f8f9ff 100%);
-  z-index: 0;
-}
-
-.content {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  flex: 1;
-  height: 0;
-  padding: 60rpx 32rpx 0;
-  box-sizing: border-box;
-}
-
-/* 用户卡片 */
-.user-card {
-  background: #ffffff;
-  border-radius: 28rpx;
-  padding: 40rpx 32rpx;
-  margin-bottom: 28rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 6rpx 18rpx rgba(11, 28, 48, 0.06);
-  position: relative;
-}
-
-.avatar {
-  width: 140rpx;
-  height: 140rpx;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #d3e4fe 0%, #adc6ff 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: -100rpx;
-  border: 6rpx solid #ffffff;
-}
-
-.avatar-text {
-  color: #0058be;
-  font-size: 28rpx;
-  font-weight: 600;
-}
-
-.user-info {
-  text-align: center;
-  margin-top: 16rpx;
-}
-
-.name {
-  font-size: 44rpx;
-  font-weight: 700;
-  color: var(--on-surface);
-}
-
-.title {
-  font-size: 28rpx;
-  color: var(--on-surface-variant);
-  margin-top: 8rpx;
-}
-
-.org {
-  font-size: 24rpx;
-  color: var(--on-surface-variant);
-  margin-top: 6rpx;
-}
-
-.cert-no {
-  font-size: 22rpx;
-  color: var(--on-surface-variant);
-  margin-top: 12rpx;
-}
-
-/* 操作按钮 */
-.action-row {
-  display: flex;
-  gap: 20rpx;
-  margin-bottom: 28rpx;
-}
-
-.action-btn {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12rpx;
-  height: 80rpx;
-  border-radius: 999rpx;
-  font-size: 28rpx;
-  font-weight: 500;
-}
-
-.action-btn.primary {
-  background: var(--primary);
-  color: #ffffff;
-}
-
-.action-btn.outline {
-  background: #ffffff;
-  color: var(--primary);
-  border: 2rpx solid var(--primary);
-}
-
-.action-icon {
-  font-size: 28rpx;
-}
-
-/* 通用卡片 */
-.rounded-card {
-  background: #ffffff;
-  border-radius: 24rpx;
-  border: 2rpx solid var(--outline-variant);
-  padding: 32rpx;
-  margin-bottom: 24rpx;
-  box-shadow: 0 4rpx 12rpx rgba(11, 28, 48, 0.04);
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-  font-size: 30rpx;
-  font-weight: 600;
-  color: var(--on-surface);
-  margin-bottom: 24rpx;
-}
-
-.section-title-bar {
-  width: 8rpx;
-  height: 28rpx;
-  background: var(--primary);
-  border-radius: 4rpx;
-}
-
-.more {
-  margin-left: auto;
-  font-size: 24rpx;
-  color: var(--on-surface-variant);
-  font-weight: 400;
-}
-
-/* 概览数据 */
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32rpx 24rpx;
-}
-
-.stat-item {
-  text-align: left;
-}
-
-.stat-label {
-  font-size: 24rpx;
-  color: var(--on-surface-variant);
-  margin-bottom: 8rpx;
-}
-
-.stat-value {
-  font-size: 44rpx;
-  font-weight: 700;
-  display: flex;
-  align-items: baseline;
-  gap: 4rpx;
-}
-
-.stat-value.primary {
-  color: var(--primary);
-}
-
-.stat-value.tertiary {
-  color: var(--tertiary);
-}
-
-.stat-unit {
-  font-size: 24rpx;
-  font-weight: 400;
-  color: var(--on-surface-variant);
-  margin-left: 4rpx;
-}
-
-/* 能力评估 */
-.ability-list {
-  display: flex;
-  flex-direction: column;
-  gap: 24rpx;
-}
-
-.ability-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12rpx;
-}
-
-.ability-label {
-  font-size: 28rpx;
-  color: var(--on-surface);
-}
-
-.ability-score {
-  font-size: 26rpx;
-  color: var(--primary);
-  font-weight: 600;
-}
-
-.ability-bar-bg {
-  height: 12rpx;
-  background: var(--surface-container);
-  border-radius: 6rpx;
-  overflow: hidden;
-}
-
-.ability-bar-fg {
-  height: 100%;
-  border-radius: 6rpx;
-  transition: width 0.3s ease;
-}
-
-/* 个人简介 */
-.profile-text {
-  font-size: 26rpx;
-  line-height: 1.7;
-  color: var(--on-surface-variant);
-}
-
-/* 重点项目 */
-.project-item {
-  padding: 24rpx 0;
-  border-bottom: 1rpx solid var(--outline-variant);
-}
-.project-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-.project-item:first-child {
-  padding-top: 0;
-}
-
-.project-head {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-  margin-bottom: 8rpx;
-}
-
-.project-bullet {
-  width: 12rpx;
-  height: 12rpx;
-  border-radius: 50%;
-  background: var(--primary);
-  flex-shrink: 0;
-}
-
-.project-title {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: var(--on-surface);
-  flex: 1;
-}
-
-.project-period {
-  font-size: 22rpx;
-  color: var(--on-surface-variant);
-  margin-bottom: 12rpx;
-  margin-left: 24rpx;
-}
-
-.project-desc {
-  font-size: 24rpx;
-  line-height: 1.65;
-  color: var(--on-surface-variant);
-  margin-bottom: 16rpx;
-  margin-left: 24rpx;
-}
-
-.project-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12rpx;
-  margin-left: 24rpx;
-}
-
-.project-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 6rpx 16rpx;
-  border-radius: 8rpx;
-  font-size: 22rpx;
-}
-
-/* 成果与荣誉 */
-.honor-item {
-  display: flex;
-  gap: 20rpx;
-  padding: 24rpx 0;
-  border-bottom: 1rpx solid var(--outline-variant);
-}
-.honor-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-.honor-item:first-child {
-  padding-top: 0;
-}
-
-.honor-badge {
-  width: 72rpx;
-  height: 72rpx;
-  border-radius: 18rpx;
-  background: var(--primary-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.honor-badge-text {
-  font-size: 36rpx;
-}
-
-.honor-info {
-  flex: 1;
-}
-
-.honor-title {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: var(--on-surface);
-  margin-bottom: 6rpx;
-}
-
-.honor-desc {
-  font-size: 24rpx;
-  line-height: 1.6;
-  color: var(--on-surface-variant);
-  margin-bottom: 8rpx;
-}
-
-.honor-date {
-  font-size: 22rpx;
-  color: var(--on-surface-variant);
-  text-align: right;
-}
+.page { min-height: 100vh; background: var(--bg-page); }
+.content { height: 100vh; box-sizing: border-box; padding: 28rpx 28rpx 80rpx; }
+.card { background: #fff; border-radius: 24rpx; padding: 30rpx; margin-bottom: 24rpx; box-shadow: 0 6rpx 20rpx rgba(60, 90, 170, 0.08); }
+.profile-head { display: flex; align-items: center; gap: 24rpx; }
+.avatar { width: 132rpx; height: 132rpx; border-radius: 50%; overflow: hidden; background: var(--surface-variant); color: var(--primary); font-size: 38rpx; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.avatar-image { width: 100%; height: 100%; }
+.profile-main { flex: 1; min-width: 0; }
+.name { color: var(--primary); font-size: 38rpx; font-weight: 700; }
+.title { margin-top: 8rpx; color: var(--on-surface); font-size: 27rpx; }
+.region { margin-top: 6rpx; color: var(--on-surface-variant); font-size: 23rpx; }
+.tags { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 24rpx; }
+.tag { padding: 8rpx 18rpx; border-radius: 999rpx; background: var(--secondary-container); color: var(--secondary); font-size: 22rpx; }
+.skill-tag { background: var(--primary-light); color: var(--primary); }
+.action-row { display: flex; gap: 18rpx; margin-top: 28rpx; }
+.action-btn { flex: 1; height: 76rpx; border-radius: 999rpx; display: flex; align-items: center; justify-content: center; font-size: 24rpx; font-weight: 600; }
+.action-btn.primary { background: var(--primary); color: #fff; }
+.action-btn.outline { color: var(--secondary); border: 2rpx solid var(--secondary); }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16rpx; margin-bottom: 24rpx; }
+.summary-item { background: #fff; border-radius: 20rpx; padding: 24rpx 8rpx; text-align: center; }
+.summary-value { display: block; color: var(--primary); font-size: 36rpx; font-weight: 700; }
+.summary-label { display: block; margin-top: 6rpx; color: var(--on-surface-variant); font-size: 21rpx; }
+.section-title { color: var(--primary); font-size: 30rpx; font-weight: 700; padding-bottom: 16rpx; margin-bottom: 20rpx; border-bottom: 1rpx solid var(--outline-variant); }
+.paragraph, .record-desc { color: var(--on-surface-variant); font-size: 25rpx; line-height: 1.75; }
+.education { margin-top: 20rpx; color: var(--primary); font-size: 24rpx; }
+.record-item, .achievement-item { display: flex; gap: 18rpx; padding: 18rpx 0; border-bottom: 1rpx solid var(--outline-variant); }
+.record-item:last-child, .achievement-item:last-child { border-bottom: 0; }
+.record-dot { width: 18rpx; height: 18rpx; border-radius: 50%; background: var(--secondary); margin-top: 10rpx; flex-shrink: 0; }
+.award-icon { width: 52rpx; height: 52rpx; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.record-main { flex: 1; min-width: 0; }
+.record-title { color: var(--on-surface); font-size: 27rpx; font-weight: 600; }
+.record-period { display: inline-block; margin: 10rpx 0; padding: 4rpx 12rpx; background: var(--surface-container); color: var(--on-surface-variant); font-size: 21rpx; }
+.empty-inline, .empty-block { color: var(--on-surface-variant); font-size: 24rpx; }
+.empty-block { padding: 40rpx 0; text-align: center; }
+.last-card { margin-bottom: 80rpx; }
+.state-panel { margin: 220rpx 32rpx 0; padding: 70rpx 32rpx; background: #fff; border-radius: 24rpx; text-align: center; color: var(--on-surface-variant); font-size: 26rpx; }
+.error-state { color: var(--error); }
+.retry-btn { display: inline-flex; margin-top: 24rpx; padding: 14rpx 30rpx; border-radius: 999rpx; background: var(--primary); color: #fff; }
 </style>

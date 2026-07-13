@@ -1,10 +1,7 @@
 /**
  * 研发需求相关接口
  */
-import { http } from '../http'
-
-// mall4cloud-platform 模块路径
-const PLATFORM_PREFIX = '/mall4cloud_platform'
+import { http, PLATFORM_PREFIX } from '../http'
 
 /**
  * 免登录提交研发需求

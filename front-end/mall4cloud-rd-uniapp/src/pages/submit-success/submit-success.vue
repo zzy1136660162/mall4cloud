@@ -11,11 +11,13 @@
       <view class="desc">您的需求已成功提交至系统。我们的科研转化专员将尽快进行评估并与您联系。</view>
       <view class="demand-box">
         <view class="demand-label">需求编号</view>
-        <view class="demand-no">{{ demandNo }}</view>
+        <view class="demand-no-row" @tap="copyDemandNo">
+          <text class="demand-no">{{ demandNo }}</text>
+          <text class="copy-action">复制</text>
+        </view>
         <view class="warn"><text class="warn-icon">!</text> 请保存编号用于查询</view>
       </view>
       <view class="service">
-        <text class="svc-icon">📞</text>
         <text class="svc-text">客服咨询：</text>
         <text class="svc-phone">400-123-4567</text>
       </view>
@@ -32,18 +34,31 @@
 export default {
   data() {
     return {
-      demandNo: ''
+      demandNo: '',
+      phone: ''
     }
   },
   onLoad(options) {
-    this.demandNo = options.demandNo || ''
+    this.demandNo = options.demandNo ? decodeURIComponent(options.demandNo) : ''
+    this.phone = options.phone || ''
   },
   methods: {
+    copyDemandNo() {
+      if (!this.demandNo) return
+      uni.setClipboardData({
+        data: this.demandNo,
+        success: () => uni.showToast({ title: '需求编号已复制', icon: 'success' })
+      })
+    },
     onBackHome() {
       uni.switchTab({ url: '/pages/achievement/achievement' })
     },
     onQuery() {
-      uni.redirectTo({ url: `/pages/demand-query/demand-query?demandNo=${this.demandNo}` })
+      uni.setStorageSync('rd_query_prefill', {
+        demandNo: this.demandNo,
+        phone: this.phone
+      })
+      uni.switchTab({ url: '/pages/track/track' })
     }
   }
 }
@@ -116,18 +131,36 @@ export default {
   color: #424754;
   margin-bottom: 12rpx;
 }
+.demand-no-row {
+  width: 100%;
+  min-height: 72rpx;
+  padding: 10rpx 16rpx;
+  margin-bottom: 16rpx;
+  border: 2rpx solid #0058be;
+  border-radius: 10rpx;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14rpx;
+  box-sizing: border-box;
+}
 .demand-no {
+  min-width: 0;
   font-size: 32rpx;
   font-weight: 700;
   color: #0058be;
   font-family: 'Courier New', monospace;
-  letter-spacing: 2rpx;
-  background: #ffffff;
-  border: 2rpx solid #0058be;
-  display: inline-block;
-  padding: 8rpx 24rpx;
-  border-radius: 8rpx;
-  margin-bottom: 16rpx;
+  letter-spacing: 1rpx;
+  overflow-wrap: anywhere;
+}
+.copy-action {
+  flex-shrink: 0;
+  padding-left: 14rpx;
+  border-left: 1rpx solid #c2c6d6;
+  color: #0058be;
+  font-size: 23rpx;
+  font-weight: 600;
 }
 .warn {
   display: flex;

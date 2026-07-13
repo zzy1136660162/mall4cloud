@@ -27,8 +27,17 @@ public class TalentPoolServiceImpl implements TalentPoolService {
         if (pageSize == null || pageSize < 1) {
             pageSize = 10;
         }
+        pageSize = Math.min(pageSize, 100);
+        name = name == null ? null : name.trim();
+        if (name != null && name.length() > 50) {
+            name = name.substring(0, 50);
+        }
 
-        int offset = (page - 1) * pageSize;
+        long offsetValue = ((long) page - 1L) * pageSize;
+        if (offsetValue > Integer.MAX_VALUE) {
+            return new TalentPoolVO[0];
+        }
+        int offset = (int) offsetValue;
         List<TalentPoolVO> talentList = talentPoolMapper.page(offset, pageSize, name);
 
         if (talentList == null) {

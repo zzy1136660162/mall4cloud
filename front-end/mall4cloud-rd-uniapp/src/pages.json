@@ -36,6 +36,14 @@
       }
     },
     {
+      "path": "pages/demand-detail/demand-detail",
+      "style": {
+        "navigationBarTitleText": "需求详情",
+        "navigationBarBackgroundColor": "#eff4ff",
+        "backgroundColor": "#f8f9ff"
+      }
+    },
+    {
       "path": "pages/demand-submit/demand-submit",
       "style": {
         "navigationBarTitleText": "研发立项申请",
@@ -48,13 +56,6 @@
         "navigationBarTitleText": "提交成功",
         "navigationBarBackgroundColor": "#f8f9ff"
       }
-    },
-    {
-      "path": "pages/my/my",
-      "style": {
-        "navigationBarTitleText": "我的",
-        "navigationBarBackgroundColor": "#ffffff"
-      }
     }
   ],
   "tabBar": {
@@ -65,27 +66,21 @@
     "list": [
       {
         "pagePath": "pages/achievement/achievement",
-        "text": "成果库",
-        "iconPath": "static/tabbar/database.png",
-        "selectedIconPath": "static/tabbar/database-active.png"
+        "text": "首页",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png"
       },
       {
         "pagePath": "pages/experts/experts",
-        "text": "专家",
-        "iconPath": "static/tabbar/home.png",
-        "selectedIconPath": "static/tabbar/home-active.png"
+        "text": "成果库",
+        "iconPath": "static/tabbar/database.png",
+        "selectedIconPath": "static/tabbar/database-active.png"
       },
       {
         "pagePath": "pages/track/track",
         "text": "查询",
         "iconPath": "static/tabbar/search.png",
         "selectedIconPath": "static/tabbar/search-active.png"
-      },
-      {
-        "pagePath": "pages/my/my",
-        "text": "我的",
-        "iconPath": "static/tabbar/person.png",
-        "selectedIconPath": "static/tabbar/person-active.png"
       }
     ]
   },

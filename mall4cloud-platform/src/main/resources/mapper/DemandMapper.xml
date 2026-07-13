@@ -58,6 +58,14 @@
     SELECT <include refid="Vo_Column_List"/> FROM rd_demand WHERE id = #{id}
   </select>
 
+  <select id="getByDemandNoAndPhone" resultType="com.mall4j.cloud.platform.vo.DemandVO">
+    SELECT <include refid="Vo_Column_List"/>
+    FROM rd_demand
+    WHERE demand_no = #{demandNo}
+      AND submitter_phone = #{submitterPhone}
+    LIMIT 1
+  </select>
+
   <insert id="save" useGeneratedKeys="true" keyProperty="demand.id">
     INSERT INTO rd_demand (
       `demand_no`,`title`,`functional_appeal`,`product_category`,`service_type`,`expertise_field`,`target_audience`,`dosage_form_preference`,
@@ -120,8 +128,25 @@
     WHERE id = #{demand.id}
   </update>
 
+  <update id="updateStatusIfCurrent">
+    UPDATE rd_demand
+    SET status = #{status},
+        status_text = #{statusText},
+        update_time = NOW()
+    WHERE id = #{id}
+      AND submitter_id = #{submitterId}
+      AND status = #{expectedStatus}
+  </update>
+
   <delete id="deleteById">
     DELETE FROM rd_demand WHERE id = #{id}
+  </delete>
+
+  <delete id="deleteByIdAndSubmitterAndStatus">
+    DELETE FROM rd_demand
+    WHERE id = #{id}
+      AND submitter_id = #{submitterId}
+      AND status = #{status}
   </delete>
 
   <select id="listBySubmitterId" resultType="com.mall4j.cloud.platform.vo.DemandVO">

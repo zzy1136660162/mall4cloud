@@ -3,9 +3,9 @@
  * 统一处理请求头、错误、业务码
  */
 
-// 后端网关地址
-// HBuilderX 本地调试可改为 LAN IP 或 远程测试地址
-const BASE_URL = 'http://115.191.79.224:8000'
+// 后端网关地址由构建环境注入，避免正式小程序继续请求 HTTP 测试地址。
+const BASE_URL = (import.meta.env.VITE_APP_BASE_API || 'http://127.0.0.1:9112').replace(/\/$/, '')
+const PLATFORM_PREFIX = (import.meta.env.VITE_APP_PLATFORM_PREFIX || '').replace(/^([^/])/, '/$1').replace(/\/$/, '')
 
 const TOKEN_KEY = 'rd_token'
 const USER_INFO_KEY = 'rd_user_info'
@@ -40,7 +40,7 @@ function removeToken() {
  * @param {boolean} [options.noAuth=false] 免登录接口
  */
 export function request(options) {
-  const { url, method = 'POST', data, header = {}, noAuth = false } = options
+  const { url, method = 'POST', data, header = {}, noAuth = true } = options
 
   return new Promise((resolve, reject) => {
     const finalHeader = {
@@ -62,30 +62,27 @@ export function request(options) {
       timeout: 15000,
       success: (res) => {
         const body = res.data || {}
-        // 业务码约定：0 成功
-        if (res.statusCode === 200 && (body.code === 0 || body.success || body.data !== undefined)) {
+        const successCode = body.code === '00000' || body.code === 0 || body.code === '0'
+        if (res.statusCode >= 200 && res.statusCode < 300 && successCode) {
           resolve(body)
         } else if (res.statusCode === 401) {
           removeToken()
-          uni.showToast({ title: '请先登录', icon: 'none' })
-          reject(body)
+          reject(new Error(body.msg || body.message || '请求未授权，请稍后重试'))
         } else {
           const msg = body.msg || body.message || '请求失败'
-          uni.showToast({ title: msg, icon: 'none' })
-          reject(body)
+          reject(new Error(msg))
         }
       },
       fail: (err) => {
-        uni.showToast({ title: '网络异常', icon: 'none' })
-        reject(err)
+        reject(new Error(err && err.errMsg ? err.errMsg : '网络异常'))
       }
     })
   })
 }
 
 export const http = {
-  get: (url, data, opts = {}) => request({ url, method: 'GET', data, ...opts }),
-  post: (url, data, opts = {}) => request({ url, method: 'POST', data, ...opts })
+  get: (url, data, opts = {}) => request({ url, method: 'GET', data, noAuth: true, ...opts }),
+  post: (url, data, opts = {}) => request({ url, method: 'POST', data, noAuth: true, ...opts })
 }
 
 export function getStoredToken() {
@@ -100,4 +97,4 @@ export function clearToken() {
   removeToken()
 }
 
-export { BASE_URL, TOKEN_KEY, USER_INFO_KEY }
+export { BASE_URL, PLATFORM_PREFIX, TOKEN_KEY, USER_INFO_KEY }

@@ -5,6 +5,11 @@
 
     <scroll-view scroll-y class="content">
       <view class="content-inner">
+        <view class="portal-head">
+          <view class="portal-kicker">研发门户</view>
+          <view class="portal-title">成果转化与产业协同平台</view>
+          <view class="portal-desc">连接科研资源与产业需求，让创新成果更高效地走向市场。</view>
+        </view>
         <!-- 转化流程概览 -->
         <view class="rounded-card flow">
         <view class="flow-head">
@@ -32,9 +37,7 @@
       <!-- 协同能力 4 项 -->
       <view class="rounded-card caps">
         <view class="cap-item" v-for="(c, idx) in capabilities" :key="c.id">
-          <view class="cap-icon-wrap">
-            <view class="cap-icon">{{ ['🤝', '🧪', '©', '🛰️'][idx] || '📑' }}</view>
-          </view>
+          <view class="cap-order">0{{ idx + 1 }}</view>
           <view class="cap-info">
             <view class="cap-title">{{ c.title }}</view>
             <view class="cap-desc">{{ c.desc }}</view>
@@ -50,11 +53,9 @@
         </view>
       </view>
 
-      <!-- 能力卡片 2 项（灰色占位 + 描述） -->
+      <!-- 公司研发能力静态展示 -->
       <view class="rounded-card ability-card" v-for="(a, i) in abilityCards" :key="a.id">
-        <view class="ability-img">
-          <text class="img-label">img</text>
-        </view>
+        <view class="ability-eyebrow">{{ i === 0 ? 'PROOF OF CONCEPT' : 'CDMO TRANSFORMATION' }}</view>
         <view class="ability-title">{{ a.title }}</view>
         <view class="ability-desc">{{ a.desc }}</view>
         <view class="ability-points">
@@ -67,7 +68,6 @@
 
       <!-- 提交研发需求 按钮 -->
       <view class="rounded-card submit-card" @tap="onSubmitDemand">
-        <text class="submit-icon">📝</text>
         <text class="submit-text">提交研发需求</text>
       </view>
       </view>
@@ -88,7 +88,9 @@ export default {
   },
   methods: {
     onCapTap(c) {
-      uni.showToast({ title: '进入: ' + c.title, icon: 'none' })
+      if (c.id === 1) {
+        uni.switchTab({ url: '/pages/experts/experts' })
+      }
     },
     onSubmitDemand() {
       uni.navigateTo({ url: '/pages/demand-submit/demand-submit' })
@@ -124,8 +126,36 @@ export default {
 }
 
 .content-inner {
-  padding: 120rpx 32rpx 0;
+  padding: calc(44rpx + env(safe-area-inset-top)) 32rpx 0;
   box-sizing: border-box;
+}
+
+.portal-head {
+  padding: 44rpx 20rpx 40rpx;
+  color: var(--on-surface);
+}
+.portal-kicker {
+  display: inline-flex;
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--primary);
+  font-size: 22rpx;
+  font-weight: 600;
+  margin-bottom: 18rpx;
+}
+.portal-title {
+  font-size: 44rpx;
+  line-height: 1.25;
+  font-weight: 750;
+  letter-spacing: 1rpx;
+}
+.portal-desc {
+  margin-top: 16rpx;
+  max-width: 610rpx;
+  color: var(--on-surface-variant);
+  font-size: 25rpx;
+  line-height: 1.65;
 }
 
 .rounded-card {
@@ -238,18 +268,18 @@ export default {
 .cap-item:first-child {
   padding-top: 0;
 }
-.cap-icon-wrap {
-  width: 72rpx;
-  height: 72rpx;
+.cap-order {
+  width: 62rpx;
+  height: 62rpx;
   border-radius: 18rpx;
   background: var(--primary-light);
+  color: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-}
-.cap-icon {
-  font-size: 36rpx;
+  font-size: 22rpx;
+  font-weight: 700;
 }
 .cap-info {
   flex: 1;
@@ -281,19 +311,12 @@ export default {
 .ability-card {
   background: #ffffff;
 }
-.ability-img {
-  width: 100%;
-  height: 240rpx;
-  background: #e8edf5;
-  border-radius: 12rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20rpx;
-}
-.img-label {
-  color: #8c93a4;
-  font-size: 24rpx;
+.ability-eyebrow {
+  color: var(--primary);
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  margin-bottom: 16rpx;
 }
 .ability-title {
   font-size: 30rpx;

@@ -3,13 +3,13 @@
     <!-- 搜索栏 -->
     <view class="search-bar">
       <view class="search-box">
-        <text class="search-icon">🔍</text>
         <input
           v-model="keyword"
           class="search-input"
           placeholder="搜索专家姓名、研究方向、技术关键词"
           placeholder-class="ph"
           confirm-type="search"
+          @confirm="onSearch"
         />
       </view>
     </view>
@@ -31,11 +31,19 @@
 
     <view class="content">
       <!-- 专家列表 -->
-      <view class="expert-list">
+      <view v-if="loading && experts.length === 0" class="state-card">
+        <text>正在加载专家信息...</text>
+      </view>
+      <view v-else-if="errorMessage && experts.length === 0" class="state-card error-state">
+        <text>{{ errorMessage }}</text>
+        <view class="retry-btn" @tap="loadExperts(true)">重新加载</view>
+      </view>
+      <view v-else class="expert-list">
         <view class="expert-card" v-for="e in filteredExperts" :key="e.id" @tap="onCardTap(e)">
           <view class="expert-head">
             <view class="expert-avatar">
-              <text class="avatar-text">img</text>
+              <image v-if="e.avatar" class="avatar-image" :src="e.avatar" mode="aspectFill" />
+              <text v-else class="avatar-text">{{ e.name ? e.name.slice(0, 1) : '专' }}</text>
             </view>
             <view class="expert-main">
               <view class="expert-name">{{ e.name }}</view>
@@ -53,12 +61,10 @@
           <view class="expert-desc">{{ e.desc }}</view>
           <view class="expert-footer">
             <view class="ach-row">
-              <text class="ach-icon">📋</text>
               <text class="ach-text">转化成果：{{ e.achievements }}项</text>
             </view>
-            <view class="contact-btn" @tap="onContact(e)">
+            <view class="contact-btn" @tap.stop="onContact(e)">
               <text>联系专家</text>
-              <text class="contact-arrow">→</text>
             </view>
           </view>
         </view>
@@ -66,31 +72,71 @@
         <view v-if="filteredExperts.length === 0" class="empty">
           <text>暂无匹配专家</text>
         </view>
+        <view v-else-if="loading" class="list-tip">加载中...</view>
+        <view v-else-if="!hasMore" class="list-tip">没有更多了</view>
       </view>
     </view>
   </view>
 </template>
 
 <script>
-import { domains, experts } from '@/utils/data.js'
+import { getTalentList } from '@/utils/api/talent-pool.js'
+
+const domains = ['全部领域', '化妆品研发', '功能性食品', '天然原料', '项目管理', '功效评测', '包装研发', '品质控制']
+
+function parseArray(value) {
+  if (Array.isArray(value)) return value
+  if (!value) return []
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch (e) {
+    return String(value).split(/[,，、]/).map(item => item.trim()).filter(Boolean)
+  }
+}
+
+function normalizeTalent(item) {
+  const expertiseAreas = parseArray(item.expertiseAreas)
+  const skills = parseArray(item.skills)
+  const achievements = parseArray(item.achievements)
+  return {
+    ...item,
+    org: item.region || '地区暂未填写',
+    tags: [...new Set([...expertiseAreas, ...skills])].slice(0, 4),
+    desc: item.intro || '该专家暂未填写个人简介',
+    achievements: achievements.length,
+    expertiseAreas,
+    skills
+  }
+}
 
 export default {
   data() {
     return {
       domains,
-      experts,
+      experts: [],
       activeDomain: '全部领域',
-      keyword: ''
+      keyword: '',
+      page: 1,
+      pageSize: 10,
+      hasMore: true,
+      loading: false,
+      errorMessage: ''
     }
+  },
+  onLoad() {
+    this.loadExperts(true)
+  },
+  onReachBottom() {
+    this.loadExperts(false)
   },
   computed: {
     filteredExperts() {
       let list = this.experts
       if (this.activeDomain !== '全部领域') {
-        list = list.filter(e => e.tags.some(t => t.includes(this.activeDomain.slice(0, 2))) || e.org.includes(this.activeDomain))
+        list = list.filter(e => e.tags.some(t => String(t).includes(this.activeDomain)) || e.org.includes(this.activeDomain))
       }
       if (this.keyword) {
-        const kw = this.keyword.toLowerCase()
         list = list.filter(e =>
           e.name.includes(this.keyword) ||
           e.title.includes(this.keyword) ||
@@ -102,11 +148,42 @@ export default {
     }
   },
   methods: {
+    async loadExperts(reset) {
+      if (this.loading || (!reset && !this.hasMore)) return
+      if (reset) {
+        this.page = 1
+        this.hasMore = true
+        this.errorMessage = ''
+      }
+      this.loading = true
+      try {
+        const list = await getTalentList({
+          page: this.page,
+          pageSize: this.pageSize,
+          name: this.keyword.trim()
+        })
+        const normalized = list.map(normalizeTalent)
+        this.experts = reset ? normalized : this.experts.concat(normalized)
+        this.hasMore = list.length >= this.pageSize
+        if (this.hasMore) this.page += 1
+      } catch (error) {
+        this.errorMessage = error && error.message ? error.message : '专家信息加载失败，请稍后重试'
+      } finally {
+        this.loading = false
+      }
+    },
+    onSearch() {
+      this.loadExperts(true)
+    },
     onContact(e) {
-      uni.navigateTo({ url: '/pages/expert-detail/expert-detail' })
+      this.openDetail(e)
     },
     onCardTap(e) {
-      uni.navigateTo({ url: '/pages/expert-detail/expert-detail' })
+      this.openDetail(e)
+    },
+    openDetail(e) {
+      if (!e || e.id === undefined || e.id === null) return
+      uni.navigateTo({ url: `/pages/expert-detail/expert-detail?id=${encodeURIComponent(e.id)}` })
     }
   }
 }
@@ -214,6 +291,11 @@ export default {
   justify-content: center;
   flex-shrink: 0;
 }
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 12rpx;
+}
 .avatar-text {
   color: #8c93a4;
   font-size: 22rpx;
@@ -299,5 +381,31 @@ export default {
   color: var(--on-surface-variant);
   padding: 80rpx 0;
   font-size: 26rpx;
+}
+.state-card {
+  margin-top: 24rpx;
+  padding: 80rpx 32rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  color: var(--on-surface-variant);
+  text-align: center;
+  font-size: 26rpx;
+}
+.error-state {
+  color: var(--error);
+}
+.retry-btn {
+  display: inline-flex;
+  margin-top: 24rpx;
+  padding: 14rpx 30rpx;
+  border-radius: 999rpx;
+  background: var(--primary);
+  color: #ffffff;
+}
+.list-tip {
+  padding: 24rpx;
+  text-align: center;
+  color: var(--on-surface-variant);
+  font-size: 24rpx;
 }
 </style>

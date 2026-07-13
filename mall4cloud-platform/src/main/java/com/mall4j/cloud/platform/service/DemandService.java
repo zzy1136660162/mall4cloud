@@ -36,6 +36,15 @@ public interface DemandService {
     DemandVO getById(Long id);
 
     /**
+     * 通过需求编号和提交手机号查询需求。
+     *
+     * @param demandNo 需求编号
+     * @param submitterPhone 提交手机号
+     * @return 需求详情
+     */
+    DemandVO getByDemandNoAndPhone(String demandNo, String submitterPhone);
+
+    /**
      * 提交需求
      * @param demandSubmitDTO 需求信息
      * @return 需求ID

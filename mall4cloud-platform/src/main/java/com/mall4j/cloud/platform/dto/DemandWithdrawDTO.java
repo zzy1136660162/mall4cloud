@@ -1,6 +1,7 @@
 package com.mall4j.cloud.platform.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 研发需求撤回/删除DTO
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class DemandWithdrawDTO {
 
     @Schema(description = "需求ID" )
+    @NotNull(message = "需求ID不能为空")
     private Long demandId;
 
     @Schema(description = "提交人ID" )

@@ -74,6 +74,9 @@
             <el-tag :type="getStatusType(detail.status)">{{ detail.statusText }}</el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="需求标题" :span="2">{{ detail.title }}</el-descriptions-item>
+          <el-descriptions-item label="产品品类">{{ getProductCategoryText(detail.productCategory) }}</el-descriptions-item>
+          <el-descriptions-item label="期望对接领域">{{ detail.expertiseField || '-' }}</el-descriptions-item>
+          <el-descriptions-item label="期望服务" :span="2">{{ getServiceTypeText(detail.serviceType) }}</el-descriptions-item>
           <el-descriptions-item label="功能诉求" :span="2">
             <div style="white-space: pre-wrap;">{{ detail.functionalAppeal }}</div>
           </el-descriptions-item>
@@ -113,9 +116,6 @@
                   :value="item.value"
                 />
               </el-select>
-            </el-form-item>
-            <el-form-item label="处理人：">
-              <el-input v-model="handleForm.handlerName" placeholder="请输入处理人姓名" />
             </el-form-item>
             <el-form-item label="处理备注：">
               <el-input v-model="handleForm.adminRemark" type="textarea" :rows="3" placeholder="请输入处理备注" />
@@ -159,7 +159,6 @@ const detail = ref<any>(null)
 
 const handleForm = reactive({
   status: '' as number | '',
-  handlerName: '',
   adminRemark: '',
 })
 
@@ -181,7 +180,7 @@ const getDataList = () => {
   demandApi.page({
     ...pageQuery,
     title: dataForm.title || undefined,
-    status: dataForm.status || undefined,
+    status: dataForm.status === null ? undefined : dataForm.status,
   }).then((res: any) => {
     pageVO.list = res.list || []
     pageVO.total = res.total || 0
@@ -199,8 +198,10 @@ const clear = () => {
   searchChange()
 }
 
-const getStatusType = (status: number) => {
-  const typeMap: Record<number, string> = {
+type TagType = 'warning' | 'info' | 'success' | 'primary' | 'danger'
+
+const getStatusType = (status: number): TagType | undefined => {
+  const typeMap: Record<number, TagType> = {
     0: 'warning',
     1: 'primary',
     2: 'info',
@@ -208,14 +209,34 @@ const getStatusType = (status: number) => {
     4: 'success',
     5: 'info',
   }
-  return typeMap[status] || ''
+  return typeMap[status]
+}
+
+const getProductCategoryText = (category?: number) => {
+  return ({ 1: '体表健康产品', 2: '功能性食品' } as Record<number, string>)[category || 0] || '-'
+}
+
+const getServiceTypeText = (serviceType?: string) => {
+  if (!serviceType) return '-'
+  const labels: Record<string, string> = {
+    1: '专家匹配',
+    2: '概念验证',
+    3: 'CDMO 转化',
+    4: 'IP 运营',
+    5: '科学传播',
+  }
+  try {
+    const values = JSON.parse(serviceType)
+    return Array.isArray(values) ? values.map((value) => labels[String(value)] || value).join('、') : serviceType
+  } catch {
+    return serviceType
+  }
 }
 
 const openDetail = (id: number) => {
   demandApi.get(id).then((res: any) => {
     detail.value = res
     handleForm.status = res.status
-    handleForm.handlerName = res.handlerName || ''
     handleForm.adminRemark = res.adminRemark || ''
     dialogVisible.value = true
   })
@@ -231,7 +252,6 @@ const submitHandle = () => {
   demandApi.handle({
     demandId: detail.value.id,
     status: handleForm.status,
-    handlerName: handleForm.handlerName || undefined,
     adminRemark: handleForm.adminRemark || undefined,
   }).then(() => {
     ElMessage.success('处理成功')
