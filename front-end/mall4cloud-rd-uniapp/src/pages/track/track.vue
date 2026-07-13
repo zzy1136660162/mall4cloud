@@ -31,7 +31,7 @@
         <view class="form-block">
           <view class="form-row">
             <view class="form-label">需求编号</view>
-            <view class="form-hint">区分大小写：否</view>
+            <view class="form-hint">不区分大小写</view>
           </view>
           <view class="form-input number-input">
             <input
@@ -46,7 +46,7 @@
             />
           </view>
           <view class="number-guide">
-            <view class="guide-title">新需求编号格式</view>
+            <view class="guide-title">需求编号格式</view>
             <view class="number-parts">
               <view class="number-part">
                 <text class="part-value">RD</text>
@@ -63,7 +63,6 @@
                 <text class="part-label">识别码</text>
               </view>
             </view>
-            <view class="legacy-tip">历史 D 开头编号仍可直接查询</view>
           </view>
         </view>
 
@@ -119,8 +118,7 @@ export default {
         return uni.showToast({ title: '请输入需求编号', icon: 'none' })
       }
       const isCurrentNo = /^RD\d{8}-[0-9A-Z]{8}$/.test(demandNo)
-      const isLegacyNo = /^D[0-9A-Z-]{6,40}$/.test(demandNo)
-      if (!isCurrentNo && !isLegacyNo) {
+      if (!isCurrentNo) {
         return uni.showToast({ title: '需求编号格式不正确，请核对后重试', icon: 'none', duration: 2500 })
       }
       this.demandNo = demandNo
@@ -334,15 +332,6 @@ export default {
   margin-top: 2rpx;
   color: var(--outline);
   font-size: 20rpx;
-}
-
-.legacy-tip {
-  margin-top: 14rpx;
-  padding-top: 12rpx;
-  border-top: 1rpx solid var(--outline-variant);
-  color: var(--on-surface-variant);
-  font-size: 20rpx;
-  text-align: center;
 }
 
 .ph {
