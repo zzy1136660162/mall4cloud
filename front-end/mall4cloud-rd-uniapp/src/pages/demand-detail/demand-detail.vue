@@ -179,10 +179,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page { min-height: 100vh; background: var(--bg-page); }
-.content { height: 100vh; box-sizing: border-box; padding: 28rpx 28rpx 90rpx; }
-.card { background: #fff; border-radius: 24rpx; padding: 30rpx; margin-bottom: 24rpx; box-shadow: 0 6rpx 20rpx rgba(60, 90, 170, 0.08); }
-.status-card { border-top: 8rpx solid var(--primary); }
+.page { min-height: 100vh; background: linear-gradient(180deg, #dce9ff 0%, var(--bg-page) 360rpx); }
+.content { height: 100vh; box-sizing: border-box; padding: 24rpx 20rpx 70rpx; }
+.card { background: #fff; border: 1rpx solid var(--outline-variant); border-radius: 22rpx; padding: 30rpx; margin-bottom: 20rpx; box-shadow: 0 8rpx 24rpx rgba(60, 90, 170, 0.07); }
+.status-card { border-top: 0; background: linear-gradient(145deg, #ffffff 0%, var(--primary-light) 100%); }
 .status-card.completed { border-top-color: var(--secondary); }
 .status-card.cancelled { border-top-color: var(--error); }
 .status-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20rpx; }
@@ -198,7 +198,7 @@ export default {
 .completed .progress-value { background: var(--secondary); }
 .cancelled .progress-value { background: var(--error); }
 .status-caption { margin-top: 10rpx; color: var(--on-surface-variant); font-size: 21rpx; }
-.section-title { color: var(--primary); font-size: 29rpx; font-weight: 700; padding-bottom: 16rpx; margin-bottom: 8rpx; border-bottom: 1rpx solid var(--outline-variant); }
+.section-title { color: var(--on-surface); font-size: 29rpx; font-weight: 750; padding-bottom: 16rpx; margin-bottom: 8rpx; border-bottom: 1rpx solid var(--outline-variant); }
 .info-row { display: flex; justify-content: space-between; gap: 30rpx; padding: 20rpx 0; border-bottom: 1rpx solid var(--outline-variant); font-size: 25rpx; }
 .info-row:last-child { border-bottom: 0; }
 .label { color: var(--on-surface-variant); flex-shrink: 0; }
@@ -207,7 +207,7 @@ export default {
 .gap-top { margin-top: 30rpx; }
 .paragraph { margin-top: 12rpx; color: var(--on-surface-variant); font-size: 25rpx; line-height: 1.75; white-space: pre-wrap; }
 .handle-card { margin-bottom: 90rpx; }
-.handle-content { padding: 24rpx; margin-top: 20rpx; border-radius: 16rpx; background: var(--surface-container-low); color: var(--on-surface); font-size: 25rpx; line-height: 1.7; }
+.handle-content { padding: 24rpx; margin-top: 20rpx; border: 1rpx solid var(--outline-variant); border-radius: 16rpx; background: var(--surface-container-low); color: var(--on-surface); font-size: 25rpx; line-height: 1.7; }
 .handler { margin-top: 16rpx; color: var(--on-surface-variant); font-size: 23rpx; text-align: right; }
 .state-panel { margin: 220rpx 32rpx 0; padding: 70rpx 32rpx; background: #fff; border-radius: 24rpx; text-align: center; color: var(--on-surface-variant); font-size: 26rpx; }
 .error-state { color: var(--error); }

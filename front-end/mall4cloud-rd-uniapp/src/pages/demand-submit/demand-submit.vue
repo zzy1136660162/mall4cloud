@@ -1,9 +1,15 @@
 <template>
   <view class="page">
     <scroll-view scroll-y class="content">
+      <view class="form-intro">
+        <view class="intro-kicker">R&amp;D APPLICATION</view>
+        <view class="intro-title">研发立项申请</view>
+        <view class="intro-desc">清晰描述研发目标与交付预期，帮助平台更快匹配专家及转化资源。</view>
+      </view>
       <!-- 区块 1 基本信息 -->
       <view class="rounded-card block">
         <view class="block-title">
+          <text class="block-index">01</text>
           <text class="block-title-text">基本信息</text>
         </view>
         <view class="form-item">
@@ -12,34 +18,41 @@
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>产品品类</view>
-          <view class="form-input select" @tap="onPickCategory">
-            <text v-if="!form.productCategory" class="ph">请选择品类</text>
-            <text v-else>{{ productCategoryLabel }}</text>
-            <text class="caret">▾</text>
-          </view>
+          <picker mode="selector" :range="productCategoryOptions" range-key="label" @change="onCategoryChange">
+            <view class="form-input select">
+              <text v-if="!form.productCategory" class="ph">请选择品类</text>
+              <text v-else>{{ productCategoryLabel }}</text>
+              <text class="select-action">选择</text>
+            </view>
+          </picker>
         </view>
         <view class="form-item">
           <view class="form-label">产品形态偏好</view>
-          <view class="form-input select" @tap="onPickDosageForm">
-            <text v-if="!form.dosageFormPreference" class="ph">请选择产品形态</text>
-            <text v-else>{{ dosageFormLabel }}</text>
-            <text class="caret">▾</text>
-          </view>
+          <picker mode="selector" :range="dosageFormOptions" range-key="label" @change="onDosageFormChange">
+            <view class="form-input select">
+              <text v-if="!form.dosageFormPreference" class="ph">请选择产品形态</text>
+              <text v-else>{{ dosageFormLabel }}</text>
+              <text class="select-action">选择</text>
+            </view>
+          </picker>
         </view>
       </view>
 
       <!-- 区块 2 技术诉求与场景 -->
       <view class="rounded-card block">
         <view class="block-title">
+          <text class="block-index">02</text>
           <text class="block-title-text">技术诉求与场景</text>
         </view>
         <view class="form-item">
           <view class="form-label">期望对接领域</view>
-          <view class="form-input select" @tap="onPickDomain">
-            <text v-if="!form.expertiseField" class="ph">选择技术领域</text>
-            <text v-else>{{ expertiseFieldLabel }}</text>
-            <text class="caret">▾</text>
-          </view>
+          <picker mode="selector" :range="expertiseFieldOptions" range-key="label" @change="onDomainChange">
+            <view class="form-input select">
+              <text v-if="!form.expertiseField" class="ph">选择技术领域</text>
+              <text v-else>{{ expertiseFieldLabel }}</text>
+              <text class="select-action">选择</text>
+            </view>
+          </picker>
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>研发目标与功能诉求</view>
@@ -65,6 +78,7 @@
       <!-- 区块 3 期望服务类型 -->
       <view class="rounded-card block">
         <view class="block-title">
+          <text class="block-index">03</text>
           <text class="block-title-text">期望服务类型</text>
         </view>
         <view class="form-item">
@@ -84,15 +98,18 @@
       <!-- 区块 4 预算与周期 -->
       <view class="rounded-card block">
         <view class="block-title">
+          <text class="block-index">04</text>
           <text class="block-title-text">预算与周期</text>
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>预算范围</view>
-          <view class="form-input select" @tap="onPickBudget">
-            <text v-if="!form.budgetRange" class="ph">请选择预算范围</text>
-            <text v-else>{{ budgetRangeLabel }}</text>
-            <text class="caret">▾</text>
-          </view>
+          <picker mode="selector" :range="budgetRangeOptions" range-key="label" @change="onBudgetChange">
+            <view class="form-input select">
+              <text v-if="!form.budgetRange" class="ph">请选择预算范围</text>
+              <text v-else>{{ budgetRangeLabel }}</text>
+              <text class="select-action">选择</text>
+            </view>
+          </picker>
         </view>
         <view class="form-item">
           <view class="form-label"><text class="req">*</text>期望交付时间</view>
@@ -109,6 +126,7 @@
       <!-- 区块 5 联系信息 -->
       <view class="rounded-card block">
         <view class="block-title">
+          <text class="block-index">05</text>
           <text class="block-title-text">联系信息</text>
         </view>
         <view class="form-item">
@@ -131,11 +149,9 @@
       </view>
 
       <!-- 底部按钮 -->
-      <view class="footer">
-        <view class="btn-save" @tap="onSave">保存草稿</view>
-        <view class="btn-submit" :class="{ disabled: submitting }" @tap="onSubmit">{{ submitting ? '提交中...' : '提交申请' }}</view>
-      </view>
-      <view class="footer-spacer"></view>
+      <view class="btn-save" @tap="onSave">保存草稿</view>
+      <view class="btn-submit" :class="{ disabled: submitting }" @tap="onSubmit">{{ submitting ? '提交中...' : '提交申请' }}</view>
+      <view class="bottom-safe-space"></view>
     </scroll-view>
   </view>
 </template>
@@ -219,37 +235,21 @@ export default {
       if (idx === -1) this.form.serviceType.push(value)
       else this.form.serviceType.splice(idx, 1)
     },
-    onPickCategory() {
-      uni.showActionSheet({
-        itemList: this.productCategoryOptions.map(i => i.label),
-        success: (res) => {
-          this.form.productCategory = this.productCategoryOptions[res.tapIndex].value
-        }
-      })
+    onCategoryChange(event) {
+      const item = this.productCategoryOptions[Number(event.detail.value)]
+      if (item) this.form.productCategory = item.value
     },
-    onPickDomain() {
-      uni.showActionSheet({
-        itemList: this.expertiseFieldOptions.map(i => i.label),
-        success: (res) => {
-          this.form.expertiseField = this.expertiseFieldOptions[res.tapIndex].value
-        }
-      })
+    onDomainChange(event) {
+      const item = this.expertiseFieldOptions[Number(event.detail.value)]
+      if (item) this.form.expertiseField = item.value
     },
-    onPickBudget() {
-      uni.showActionSheet({
-        itemList: this.budgetRangeOptions.map(i => i.label),
-        success: (res) => {
-          this.form.budgetRange = this.budgetRangeOptions[res.tapIndex].value
-        }
-      })
+    onBudgetChange(event) {
+      const item = this.budgetRangeOptions[Number(event.detail.value)]
+      if (item) this.form.budgetRange = item.value
     },
-    onPickDosageForm() {
-      uni.showActionSheet({
-        itemList: this.dosageFormOptions.map(i => i.label),
-        success: (res) => {
-          this.form.dosageFormPreference = this.dosageFormOptions[res.tapIndex].value
-        }
-      })
+    onDosageFormChange(event) {
+      const item = this.dosageFormOptions[Number(event.detail.value)]
+      if (item) this.form.dosageFormPreference = item.value
     },
     onDateChange(event) {
       this.form.expectedDeliveryTime = event.detail.value
@@ -315,9 +315,13 @@ export default {
   width: 100%;
   flex: 1;
   height: 0;
-  padding: 24rpx 32rpx 0;
+  padding: 24rpx 24rpx 0;
   box-sizing: border-box;
 }
+.form-intro { margin-bottom: 24rpx; padding: 32rpx 30rpx; border-radius: 24rpx; background: linear-gradient(135deg, #064b9a 0%, #006c75 100%); color: #fff; box-shadow: 0 10rpx 28rpx rgba(0, 88, 190, 0.18); }
+.intro-kicker { font-size: 19rpx; font-weight: 700; letter-spacing: 2rpx; opacity: 0.74; }
+.intro-title { margin-top: 10rpx; font-size: 36rpx; font-weight: 750; }
+.intro-desc { margin-top: 12rpx; font-size: 23rpx; line-height: 1.65; opacity: 0.86; }
 
 .rounded-card {
   background: #ffffff;
@@ -437,19 +441,6 @@ export default {
 }
 
 /* 底部按钮 */
-.footer {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #ffffff;
-  padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
-  box-shadow: 0 -4rpx 16rpx rgba(11, 28, 48, 0.06);
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-}
-
 .btn-save {
   display: flex;
   align-items: center;
@@ -459,6 +450,9 @@ export default {
   font-size: 30rpx;
   color: var(--primary);
   font-weight: 600;
+  margin-top: 8rpx;
+  border: 1rpx solid var(--primary);
+  background: #ffffff;
 }
 
 .btn-submit {
@@ -471,11 +465,28 @@ export default {
   color: #ffffff;
   font-size: 32rpx;
   font-weight: 600;
+  margin-top: 16rpx;
+  margin-bottom: 0;
 }
 .btn-submit.disabled {
   opacity: 0.6;
 }
-.footer-spacer {
-  height: 250rpx;
+.bottom-safe-space {
+  width: 100%;
+  height: calc(100rpx + env(safe-area-inset-bottom));
+  flex-shrink: 0;
 }
+.rounded-card { border-width: 1rpx; box-shadow: 0 8rpx 22rpx rgba(60, 90, 170, 0.07); }
+.block-title { color: var(--on-surface); font-weight: 700; }
+.form-input, .form-textarea { border-width: 1rpx; background: #ffffff; }
+.btn-submit { box-shadow: 0 7rpx 18rpx rgba(0, 88, 190, 0.22); }
+.block-title { gap: 14rpx; }
+.block-index { width: 48rpx; height: 48rpx; border-radius: 13rpx; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-family: monospace; font-size: 20rpx; font-weight: 700; }
+.block-title-text { font-size: 30rpx; font-weight: 750; }
+.form-label { font-weight: 600; }
+.form-item picker { display: block; width: 100%; }
+.select-action { flex-shrink: 0; margin-left: 18rpx; padding: 7rpx 14rpx; border-radius: 9rpx; background: var(--primary-light); color: var(--primary); font-size: 21rpx; font-weight: 700; }
+.form-textarea { background: #fbfdff; }
+.tag-item.active { background: linear-gradient(135deg, var(--primary) 0%, #006c75 100%); }
+.btn-save { box-shadow: 0 5rpx 16rpx rgba(60, 90, 170, 0.06); }
 </style>

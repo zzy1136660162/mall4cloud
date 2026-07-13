@@ -1,5 +1,13 @@
 <template>
   <view class="page">
+    <view class="expert-hero">
+    <image class="hero-image" src="/static/rd-experts-hero.jpg" mode="aspectFill" />
+    <view class="hero-overlay"></view>
+    <view class="page-head">
+      <view class="page-kicker">EXPERT NETWORK</view>
+      <view class="page-title">专家与成果库</view>
+      <view class="page-desc">汇聚研发、验证与产业转化专家，快速找到适配项目需求的专业能力。</view>
+    </view>
     <!-- 搜索栏 -->
     <view class="search-bar">
       <view class="search-box">
@@ -11,7 +19,9 @@
           confirm-type="search"
           @confirm="onSearch"
         />
+        <view class="search-action" @tap="onSearch">搜索</view>
       </view>
+    </view>
     </view>
 
     <!-- 领域筛选 -->
@@ -30,6 +40,10 @@
     </view>
 
     <view class="content">
+      <view v-if="!loading || experts.length" class="list-head">
+        <text class="list-title">专家资源</text>
+        <text class="list-count">当前展示 {{ filteredExperts.length }} 位</text>
+      </view>
       <!-- 专家列表 -->
       <view v-if="loading && experts.length === 0" class="state-card">
         <text>正在加载专家信息...</text>
@@ -64,7 +78,7 @@
               <text class="ach-text">转化成果：{{ e.achievements }}项</text>
             </view>
             <view class="contact-btn" @tap.stop="onContact(e)">
-              <text>联系专家</text>
+              <text>查看专家详情</text>
             </view>
           </view>
         </view>
@@ -197,8 +211,14 @@ export default {
   background: var(--bg-page);
   display: flex;
   flex-direction: column;
+  padding-top: 40rpx;
   padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
 }
+.page-head { padding: 20rpx 32rpx 10rpx; }
+.page-kicker { color: var(--primary); font-size: 19rpx; font-weight: 700; letter-spacing: 2rpx; }
+.page-title { margin-top: 8rpx; color: var(--on-surface); font-size: 40rpx; font-weight: 750; }
+.page-desc { max-width: 650rpx; margin-top: 10rpx; color: var(--on-surface-variant); font-size: 23rpx; line-height: 1.6; }
 
 /* 搜索栏 */
 .search-bar {
@@ -209,10 +229,11 @@ export default {
   display: flex;
   align-items: center;
   background: #ffffff;
-  border: 2rpx solid var(--outline-variant);
-  border-radius: 999rpx;
+  border: 1rpx solid var(--outline-variant);
+  border-radius: 16rpx;
   padding: 0 28rpx;
   height: 80rpx;
+  box-shadow: 0 5rpx 16rpx rgba(60, 90, 170, 0.06);
 }
 .search-icon {
   font-size: 28rpx;
@@ -250,7 +271,7 @@ export default {
   color: var(--on-surface-variant);
   border-radius: 999rpx;
   font-size: 26rpx;
-  border: 2rpx solid transparent;
+  border: 1rpx solid var(--outline-variant);
 }
 .domain-chip.active {
   background: var(--primary);
@@ -272,9 +293,9 @@ export default {
 .expert-card {
   background: #ffffff;
   border-radius: 24rpx;
-  border: 2rpx solid var(--outline-variant);
-  padding: 28rpx;
-  box-shadow: 0 4rpx 12rpx rgba(11, 28, 48, 0.04);
+  border: 1rpx solid var(--outline-variant);
+  padding: 30rpx;
+  box-shadow: 0 8rpx 22rpx rgba(60, 90, 170, 0.07);
 }
 .expert-head {
   display: flex;
@@ -408,4 +429,23 @@ export default {
   color: var(--on-surface-variant);
   font-size: 24rpx;
 }
+.page { padding-top: 0; }
+.expert-hero { position: relative; overflow: hidden; padding-top: 40rpx; padding-bottom: 26rpx; background: #dce9ff; box-shadow: 0 10rpx 30rpx rgba(25, 70, 140, 0.06); }
+.hero-image { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(248, 249, 255, 0) 46%, var(--bg-page) 100%), linear-gradient(90deg, rgba(244, 249, 255, 0.98) 0%, rgba(244, 249, 255, 0.9) 48%, rgba(244, 249, 255, 0.1) 100%); }
+.page-head { position: relative; z-index: 1; width: 70%; padding-bottom: 8rpx; box-sizing: border-box; }
+.search-bar { position: relative; z-index: 1; padding-top: 22rpx; background: transparent; }
+.search-box { padding: 0 10rpx 0 26rpx; }
+.search-action { height: 62rpx; padding: 0 24rpx; border-radius: 12rpx; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 23rpx; font-weight: 700; }
+.domain-filter { padding-top: 28rpx; }
+.content { padding-left: 24rpx; padding-right: 24rpx; }
+.list-head { display: flex; align-items: center; justify-content: space-between; margin: 4rpx 4rpx 18rpx; }
+.list-title { color: var(--on-surface); font-size: 28rpx; font-weight: 750; }
+.list-count { color: var(--on-surface-variant); font-size: 21rpx; }
+.expert-card:active { transform: scale(0.995); background: #fbfdff; }
+.expert-avatar { width: 112rpx; height: 112rpx; border: 4rpx solid #ffffff; border-radius: 18rpx; box-shadow: 0 6rpx 18rpx rgba(0, 88, 190, 0.12); }
+.avatar-image { border-radius: 14rpx; }
+.expert-title { color: var(--primary); font-weight: 600; }
+.ach-row { padding: 8rpx 14rpx; border-radius: 10rpx; background: var(--surface-container-low); }
+.contact-btn { background: var(--primary); color: #ffffff; border-radius: 12rpx; font-weight: 700; }
 </style>

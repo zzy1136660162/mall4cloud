@@ -67,50 +67,56 @@ export default {
 <style scoped>
 .page {
   min-height: 100vh;
-  background: #f8f9ff;
-  padding: 80rpx 48rpx 48rpx;
+  background: linear-gradient(180deg, #dce9ff 0%, #f8f9ff 46%);
+  padding: 70rpx 32rpx 48rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .success-icon {
-  width: 320rpx;
-  height: 320rpx;
-  background: #e5eeff;
-  border-radius: 24rpx;
+  width: 168rpx;
+  height: 168rpx;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2rpx solid rgba(0, 108, 73, 0.22);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 10rpx 28rpx rgba(0, 108, 73, 0.11);
 }
 .circle {
-  width: 140rpx;
-  height: 140rpx;
+  width: 112rpx;
+  height: 112rpx;
   border-radius: 50%;
-  background: #6cf8bb;
+  background: #006c49;
+  border: 6rpx solid #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4rpx 12rpx rgba(108, 248, 187, 0.3);
+  box-shadow: 0 0 0 2rpx rgba(0, 108, 73, 0.24), 0 6rpx 16rpx rgba(0, 108, 73, 0.2);
 }
 .check {
-  font-size: 80rpx;
-  color: #006c49;
-  font-weight: 700;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 62rpx;
+  font-weight: 600;
+  line-height: 1;
 }
 .title {
   font-size: 40rpx;
-  font-weight: 700;
-  color: #0058be;
+  font-weight: 750;
+  color: #0b1c30;
   margin-bottom: 32rpx;
 }
 .desc-card {
   width: 100%;
   background: #ffffff;
   border-radius: 24rpx;
-  border: 2rpx solid #c2c6d6;
+  border: 1rpx solid #c2c6d6;
   padding: 40rpx 32rpx;
-  margin-bottom: 60rpx;
+  margin-bottom: 36rpx;
+  box-shadow: 0 10rpx 30rpx rgba(60, 90, 170, 0.09);
 }
 .desc {
   font-size: 28rpx;
@@ -207,7 +213,7 @@ export default {
 .btn-outline {
   height: 88rpx;
   border: 2rpx solid #0058be;
-  border-radius: 999rpx;
+  border-radius: 16rpx;
   color: #0058be;
   font-size: 30rpx;
   font-weight: 600;
@@ -219,12 +225,13 @@ export default {
 .btn-primary {
   height: 88rpx;
   background: #0058be;
-  border-radius: 999rpx;
+  border-radius: 16rpx;
   color: #ffffff;
   font-size: 30rpx;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 7rpx 18rpx rgba(0, 88, 190, 0.22);
 }
 </style>
