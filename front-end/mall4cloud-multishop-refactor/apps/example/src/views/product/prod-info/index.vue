@@ -1,9 +1,18 @@
 <template>
   <div class="page-prod-info">
-    <div class="title">{{ dataForm.spuId ? '编辑商品信息' : '发布新商品' }}</div>
+    <FaPageHeader
+      :title="dataForm.spuId ? '编辑商品' : '发布商品'"
+      :description="dataForm.spuId ? '完善商品信息、库存与选品设置' : '按步骤填写商品资料并完成发布'"
+    >
+      <el-button @click="router.push('/product/list')">
+        <FaIcon name="i-ep:arrow-left" />
+        返回列表
+      </el-button>
+    </FaPageHeader>
 
-    <el-form ref="dataFormRef" :model="dataForm" :rules="rules" label-width="120px" class="part-form">
-      <div class="info-box">
+    <FaPageMain class="product-form-card" main-class="p-0">
+      <el-form ref="dataFormRef" :model="dataForm" :rules="rules" label-width="120px" class="part-form">
+        <div class="info-box">
         <div class="part-content">
           <div class="part-tit">
             <span class="part-tit-num">1</span>
@@ -43,7 +52,7 @@
               v-model.trim="dataForm.name"
               placeholder="商品标题组成：商品描述+属性"
               :disabled="!dataForm.categoryId"
-              style="width: 90%"
+              style="width: 90%;"
             />
           </el-form-item>
 
@@ -53,7 +62,7 @@
               type="textarea"
               placeholder="商品卖点"
               :disabled="!dataForm.categoryId"
-              style="width: 90%"
+              style="width: 90%;"
             />
           </el-form-item>
 
@@ -102,12 +111,7 @@
             <span class="part-tit-name">商品详情</span>
           </div>
           <div class="product-details">
-            <el-input
-              v-model="dataForm.detail"
-              type="textarea"
-              :rows="10"
-              placeholder="请输入商品详情"
-            />
+            <RichTextEditor v-model="dataForm.detail" />
           </div>
         </div>
 
@@ -168,13 +172,20 @@
             <div class="form-tip">销量数据可在选品中心展示，手动设置可快速提升商品曝光</div>
           </el-form-item>
         </div>
-      </div>
+        </div>
 
-      <div class="foot-btn">
-        <el-button type="primary" @click="changeFormatOfFormData">立即发布</el-button>
-        <el-button @click="resetForm">重置</el-button>
-      </div>
-    </el-form>
+        <div class="foot-btn">
+          <el-button type="primary" @click="changeFormatOfFormData">
+            <FaIcon name="i-ep:check" />
+            {{ dataForm.spuId ? '保存修改' : '立即发布' }}
+          </el-button>
+          <el-button @click="resetForm">
+            <FaIcon name="i-ep:refresh-left" />
+            重置
+          </el-button>
+        </div>
+      </el-form>
+    </FaPageMain>
   </div>
 </template>
 
@@ -187,6 +198,7 @@ import ImgUpload from '@/components/ImgUpload/index.vue'
 import ImgsUpload from '@/components/ImgsUpload/index.vue'
 import CategorySelector from '@/components/CategorySelector/index.vue'
 import BrandSelector from '@/components/BrandSelector/index.vue'
+import RichTextEditor from '@/components/RichTextEditor/index.vue'
 import SkuSelector from '@/components/SkuSelector/index.vue'
 
 const route = useRoute()
@@ -232,7 +244,6 @@ const brandName = ref('')
 const brandImgUrl = ref('')
 const brandSelectVisible = ref(false)
 const basicAttrs = ref<any[]>([])
-const salesAttrs = ref<any[]>([])
 const categorySelectorVisible = ref(false)
 const selectedCategorys = ref<string[]>([])
 const selectedShopCategorys = ref<string[]>([])
@@ -286,10 +297,6 @@ const handleCloseBrand = () => {
   brandImgUrl.value = ''
   brandName.value = ''
   dataForm.brandId = 0
-}
-
-const changeSkuGroupData = (data: any[]) => {
-  salesAttrs.value = data
 }
 
 const toYuan = (fee?: number | null) => {
@@ -482,7 +489,7 @@ const resetForm = () => {
 }
 
 const init = async () => {
-  const spuId = route.query.spuId
+  const spuId = Array.isArray(route.query.spuId) ? route.query.spuId[0] : route.query.spuId
   if (!spuId) return
 
   try {
@@ -519,42 +526,48 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .page-prod-info {
-  color: #606266;
+  min-width: 0;
+  color: var(--el-text-color-regular);
 
   .star::before {
-    content: "*";
-    color: #ff4949;
     margin-right: 4px;
+    color: var(--el-color-danger);
+    content: "*";
   }
 
-  .title {
-    padding: 0 20px;
-    font-weight: bold;
-    font-size: 16px;
-    height: 50px;
-    line-height: 50px;
+  .product-form-card {
+    overflow: visible;
   }
 
   .info-box {
-    margin: 0 auto;
-    border: 1px solid #eee;
-    margin-bottom: 45px;
+    margin: 0;
 
     .part-content {
-      padding: 20px;
+      padding: 28px 32px 30px;
 
       .part-tit {
-        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 24px;
 
         .part-tit-num {
-          color: #02a1e9;
-          font-size: 25px;
-          font-style: italic;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          height: 28px;
+          font-size: 14px;
+          font-weight: 700;
+          color: var(--el-color-primary);
+          background: var(--el-color-primary-light-9);
+          border-radius: 8px;
         }
 
         .part-tit-name {
-          font-size: 15px;
-          margin: 0 10px;
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--el-text-color-primary);
         }
       }
 
@@ -563,49 +576,54 @@ onMounted(() => {
         align-items: center;
 
         .brand-img {
-          width: auto;
-          max-width: 60px;
-          height: auto;
-          max-height: 40px;
-          margin-right: 6px;
+          width: 48px;
+          height: 48px;
+          margin-right: 8px;
+          object-fit: contain;
+          border: 1px solid var(--el-border-color-lighter);
+          border-radius: 8px;
         }
       }
 
       .warning {
-        color: #e43130;
         margin-left: 10px;
+        color: var(--el-color-danger);
       }
 
       .banner-tips {
         margin-top: 10px;
-        font-size: 13px;
-        color: #999;
+        font-size: 12px;
+        color: var(--el-text-color-secondary);
       }
     }
 
     .part-content:not(:first-child) {
-      border-top: 1px solid #eee;
+      border-top: 1px solid var(--el-border-color-lighter);
     }
   }
 
   .foot-btn {
-    position: fixed;
+    position: sticky;
     bottom: 0;
-    width: calc(100% - 270px);
-    padding: 15px 0;
+    z-index: 10;
     display: flex;
+    gap: 4px;
     justify-content: center;
-    background: #fff;
-    box-shadow: 0 -2px 3px rgba(139, 139, 139, 0.1);
-    z-index: 111;
+    padding: 14px 24px;
+    background: color-mix(in srgb, var(--el-bg-color) 94%, transparent);
+    border-top: 1px solid var(--el-border-color-lighter);
+    box-shadow: 0 -8px 24px rgb(15 23 42 / 6%);
+    backdrop-filter: blur(12px);
   }
 }
 
 .category-tag {
-  margin-right: 10px;
-  padding: 4px 12px;
-  background: #f0f0f0;
-  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--el-text-color-regular);
+  background: var(--el-fill-color-light);
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 6px;
 }
 
 .category-tags {
@@ -619,21 +637,20 @@ onMounted(() => {
 }
 
 .product-details {
-  :deep(.el-textarea) {
-    width: 90%;
-  }
+  width: 100%;
+  min-width: 0;
 }
 
 .form-tip {
-  color: #909399;
-  font-size: 12px;
-  margin-top: 5px;
+  margin-top: 4px;
   margin-left: 12px;
+  font-size: 12px;
+  color: var(--el-text-color-secondary);
 }
 
 .unit {
   margin-left: 8px;
-  color: #606266;
+  color: var(--el-text-color-regular);
 }
 
 .tag-group {
@@ -656,7 +673,47 @@ onMounted(() => {
 }
 
 .sales-inputs .input-item label {
-  white-space: nowrap;
   margin-right: 8px;
+  white-space: nowrap;
+}
+
+@media (width <= 767px) {
+  .page-prod-info {
+    .info-box .part-content {
+      padding: 22px 16px 24px;
+    }
+
+    :deep(.el-form) {
+      .el-form-item {
+        display: block;
+      }
+
+      .el-form-item__label {
+        width: auto !important;
+        height: 32px;
+        line-height: 32px;
+      }
+
+      .el-form-item__content {
+        margin-left: 0 !important;
+      }
+    }
+
+    .foot-btn {
+      justify-content: flex-end;
+      padding-inline: 16px;
+    }
+  }
+
+  .sales-inputs {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .tag-group {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
 }
 </style>
