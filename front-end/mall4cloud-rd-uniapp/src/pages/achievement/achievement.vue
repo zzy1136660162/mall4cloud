@@ -253,6 +253,10 @@ export default {
   grid-template-columns: repeat(4, 1fr);
   row-gap: 30rpx;
 }
+.flow {
+  background: linear-gradient(145deg, #ffffff 0%, #f4f8ff 54%, #f1faf7 100%);
+  border-color: #dce8f5;
+}
 .stage {
   display: flex;
   flex-direction: column;
@@ -262,23 +266,32 @@ export default {
   width: 58rpx;
   height: 58rpx;
   border-radius: 16rpx;
-  background: var(--surface-variant);
-  color: var(--on-surface-variant);
+  background: #eaf3ff;
+  color: #315f91;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 28rpx;
   font-weight: 700;
-  border: 3rpx solid #ffffff;
+  border: 2rpx solid #d8e8fa;
+  box-shadow: 0 5rpx 14rpx rgba(37, 91, 151, 0.08);
+}
+.stage:nth-child(n + 5) .stage-circle {
+  background: #e8f7f2;
+  color: #28705e;
+  border-color: #d2ece3;
 }
 .stage.done .stage-circle {
-  background: var(--secondary);
+  background: linear-gradient(145deg, #168bc3 0%, #20a98d 100%);
   color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 7rpx 16rpx rgba(20, 139, 166, 0.2);
 }
 .stage.active .stage-circle {
-  background: var(--secondary-container);
-  color: var(--secondary);
-  box-shadow: 0 0 0 4rpx rgba(108, 248, 187, 0.3);
+  background: linear-gradient(145deg, #0058be 0%, #168bd2 100%);
+  color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 0 0 5rpx rgba(0, 88, 190, 0.12), 0 9rpx 20rpx rgba(0, 88, 190, 0.24);
 }
 .stage-name {
   margin-top: 10rpx;
@@ -290,12 +303,15 @@ export default {
   width: 130rpx;
 }
 .stage.done .stage-name {
-  color: var(--on-surface);
+  color: #176f79;
   font-weight: 600;
 }
 .stage.active .stage-name {
-  color: var(--secondary);
+  color: var(--primary);
   font-weight: 700;
+}
+.stage:nth-child(n + 5) .stage-name {
+  color: #3c6d62;
 }
 
 .caps-grid {
