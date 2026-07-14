@@ -1,24 +1,8 @@
 <script setup lang="ts">
 import TinymceEditor from '@tinymce/tinymce-vue'
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useAppSettingsStore } from '@/store/modules/app/settings'
-import 'tinymce/tinymce'
-import 'tinymce/themes/silver/theme'
-import 'tinymce/icons/default/icons'
-import 'tinymce/models/dom'
-import 'tinymce/plugins/autolink'
-import 'tinymce/plugins/autoresize'
-import 'tinymce/plugins/code'
-import 'tinymce/plugins/fullscreen'
-import 'tinymce/plugins/image'
-import 'tinymce/plugins/insertdatetime'
-import 'tinymce/plugins/link'
-import 'tinymce/plugins/lists'
-import 'tinymce/plugins/media'
-import 'tinymce/plugins/preview'
-import 'tinymce/plugins/searchreplace'
-import 'tinymce/plugins/table'
-import 'tinymce/plugins/wordcount'
+import { loadTinyMce } from './loadTinyMce'
 
 defineOptions({
   name: 'RichTextEditor',
@@ -36,6 +20,8 @@ const props = withDefaults(defineProps<{
 
 const modelValue = defineModel<string>({ default: '' })
 const appSettingsStore = useAppSettingsStore()
+const editorReady = ref(false)
+const editorLoadError = ref(false)
 
 const colorScheme = computed(() => appSettingsStore.currentColorScheme || 'light')
 
@@ -48,7 +34,7 @@ const editorOptions = computed(() => ({
   min_height: props.minHeight,
   max_height: 720,
   placeholder: props.placeholder,
-  plugins: 'autolink autoresize code fullscreen image insertdatetime link lists media preview searchreplace table wordcount',
+  plugins: 'autolink autoresize code fullscreen image insertdatetime link lists media preview table wordcount',
   toolbar: 'undo redo | blocks | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor removeformat | link image media table | preview code fullscreen',
   branding: false,
   promotion: false,
@@ -72,16 +58,31 @@ const editorOptions = computed(() => ({
     return Promise.resolve(`data:${mimeType};base64,${blobInfo.base64()}`)
   },
 }))
+
+onMounted(async () => {
+  try {
+    await loadTinyMce()
+    editorReady.value = true
+  } catch (error) {
+    editorLoadError.value = true
+    console.error('富文本编辑器加载失败', error)
+  }
+})
 </script>
 
 <template>
   <div class="rich-text-editor">
     <TinymceEditor
+      v-if="editorReady"
       :key="colorScheme"
       v-model="modelValue"
       :disabled="disabled"
       :init="editorOptions"
     />
+    <div v-else class="editor-loading" :class="{ 'is-error': editorLoadError }">
+      <FaIcon :name="editorLoadError ? 'i-ep:warning-filled' : 'i-ep:loading'" :class="{ 'is-loading': !editorLoadError }" />
+      {{ editorLoadError ? '富文本编辑器加载失败，请刷新页面重试' : '正在加载富文本编辑器…' }}
+    </div>
     <div class="editor-hint">
       <FaIcon name="i-ep:info-filled" />
       商品详情将以 HTML 富文本保存，已有图片和排版会在编辑器内直接显示。
@@ -103,6 +104,32 @@ const editorOptions = computed(() => ({
   :deep(.tox-tinymce:focus-within) {
     border-color: var(--el-color-primary);
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--el-color-primary) 12%, transparent);
+  }
+}
+
+.editor-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+  gap: 8px;
+  color: var(--el-text-color-secondary);
+  background: var(--el-fill-color-lighter);
+  border: 1px solid var(--el-border-color);
+  border-radius: 8px;
+
+  &.is-error {
+    color: var(--el-color-danger);
+  }
+
+  .is-loading {
+    animation: editor-loading-rotate 1s linear infinite;
+  }
+}
+
+@keyframes editor-loading-rotate {
+  to {
+    transform: rotate(360deg);
   }
 }
 
