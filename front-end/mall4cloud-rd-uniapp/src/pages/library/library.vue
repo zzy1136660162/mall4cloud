@@ -16,7 +16,7 @@
         <view 
           class="filter-tab" 
           :class="{ active: activeTab === 'experts' }"
-          @click="activeTab = 'experts'"
+          @click="switchTab('experts')"
         >
           <text class="material-icon tab-icon">person</text>
           专家库
@@ -24,7 +24,7 @@
         <view 
           class="filter-tab" 
           :class="{ active: activeTab === 'achievements' }"
-          @click="activeTab = 'achievements'"
+          @click="switchTab('achievements')"
         >
           <text class="material-icon tab-icon">lightbulb</text>
           成果库
@@ -109,47 +109,58 @@
             <text class="material-icon title-icon">group</text>
             专家人才库
           </h3>
-          <p class="list-count">共 {{ expertList.length }} 位专家</p>
+          <p class="list-count" v-if="!expertLoading">共 {{ expertList.length }} 位专家</p>
         </view>
-        <view class="card-list">
+
+        <!-- 加载中 -->
+        <view v-if="expertLoading" class="state-card">正在加载专家信息...</view>
+
+        <!-- 加载失败 -->
+        <view v-else-if="expertError" class="state-card error-state">
+          <text>{{ expertError }}</text>
+          <view class="retry-btn" @tap="loadExperts(true)">重新加载</view>
+        </view>
+
+        <!-- 专家列表 -->
+        <view v-else class="card-list">
           <view 
             v-for="item in expertList" 
             :key="item.id" 
             class="expert-card"
             @click="goDetail(item)"
           >
-            <image class="card-avatar" :src="item.avatar" mode="aspectFill"></image>
+            <view class="card-avatar-wrap">
+              <image v-if="item.avatar" class="card-avatar" :src="item.avatar" mode="aspectFill"></image>
+              <text v-else class="avatar-placeholder">{{ item.name ? item.name.slice(0, 1) : '专' }}</text>
+            </view>
             <view class="card-body">
               <view class="card-header">
                 <div class="card-title-wrap">
-                  <h4 class="card-name">{{ item.name }}</h4>
-                  <view class="verified-badge" v-if="item.verified">
-                    <text class="material-icon verified-icon">verified</text>
-                  </view>
+                  <h4 class="card-name">{{ item.name || '未填写' }}</h4>
                 </div>
-                <text class="card-rating">{{ item.rating }}<text class="material-icon star-icon">star</text></text>
               </view>
-              <p class="card-title">{{ item.title }}</p>
-              <p class="card-org">{{ item.org }}</p>
+              <p class="card-title">{{ item.title || '未填写' }}</p>
+              <p class="card-org">{{ item.org || item.region || '未填写' }}</p>
               <view class="card-tags">
                 <text v-for="tag in item.tags" :key="tag" class="card-tag">{{ tag }}</text>
               </view>
               <view class="card-footer">
                 <view class="card-stat">
-                  <text class="stat-num">{{ item.projects }}</text>
+                  <text class="stat-num">{{ item.experienceYears || 0 }}</text>
+                  <text class="stat-label">从业年限</text>
+                </view>
+                <view class="card-stat">
+                  <text class="stat-num">{{ item.achievements || 0 }}</text>
+                  <text class="stat-label">成果荣誉</text>
+                </view>
+                <view class="card-stat">
+                  <text class="stat-num">{{ item.projects || 0 }}</text>
                   <text class="stat-label">项目经验</text>
-                </view>
-                <view class="card-stat">
-                  <text class="stat-num">{{ item.patents }}</text>
-                  <text class="stat-label">专利</text>
-                </view>
-                <view class="card-stat">
-                  <text class="stat-num">{{ item.papers }}</text>
-                  <text class="stat-label">论文</text>
                 </view>
               </view>
             </view>
           </view>
+          <view v-if="expertList.length === 0" class="empty">暂无专家数据</view>
         </view>
       </view>
 
@@ -160,9 +171,19 @@
             <text class="material-icon title-icon">workspace_premium</text>
             科技成果库
           </h3>
-          <p class="list-count">共 {{ achievementList.length }} 项成果</p>
         </view>
-        <view class="achievement-grid">
+
+        <!-- 加载中 -->
+        <view v-if="achieveLoading" class="state-card">正在加载科技成果...</view>
+
+        <!-- 加载失败 -->
+        <view v-else-if="achieveError" class="state-card error-state">
+          <text>{{ achieveError }}</text>
+          <view class="retry-btn" @tap="loadAchievements">重新加载</view>
+        </view>
+
+        <!-- 成果列表 -->
+        <view v-else class="achievement-grid">
           <view 
             v-for="item in achievementList" 
             :key="item.id" 
@@ -192,6 +213,7 @@
               </view>
             </view>
           </view>
+          <view v-if="achievementList.length === 0" class="empty">暂无科技成果数据</view>
         </view>
       </view>
     </main>
@@ -202,6 +224,33 @@
 </template>
 
 <script>
+import { getTalentList } from '@/utils/api/talent-pool.js'
+
+function parseArray(value) {
+  if (Array.isArray(value)) return value
+  if (!value) return []
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch (e) {
+    return String(value).split(/[,，、]/).map(item => item.trim()).filter(Boolean)
+  }
+}
+
+function normalizeTalent(item) {
+  const expertiseAreas = parseArray(item.expertiseAreas)
+  const skills = parseArray(item.skills)
+  const achievements = parseArray(item.achievements)
+  const projects = parseArray(item.projectExperience)
+  return {
+    ...item,
+    org: item.region || '',
+    tags: [...new Set([...expertiseAreas, ...skills])].slice(0, 4),
+    achievements: achievements.length,
+    projects: projects.length
+  }
+}
+
 export default {
   data() {
     return {
@@ -213,11 +262,12 @@ export default {
       selectedStage: '',
       techOptions: [
         { label: '全部', value: '' },
-        { label: '新材料', value: 'materials' },
-        { label: '新能源', value: 'energy' },
+        { label: '化妆品研发', value: 'cosmetics' },
+        { label: '功能性食品', value: 'food' },
+        { label: '天然原料', value: 'natural' },
         { label: '生物医药', value: 'biomed' },
-        { label: '智能制造', value: 'smart' },
-        { label: '信息技术', value: 'it' }
+        { label: '功效评测', value: 'efficacy' },
+        { label: '品质控制', value: 'qc' }
       ],
       typeOptions: [
         { label: '全部', value: '' },
@@ -233,24 +283,55 @@ export default {
         { label: '可量产', value: 'mass' },
         { label: '已转化', value: 'converted' }
       ],
-      expertList: [
-        { id: 1, name: '林致远', title: '首席科学家 / 高级工程师', org: '国家前沿材料技术联合实验室', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAEaowe6oAysGjc688N7MDHf4XNthoUz6EWcliasvZqz6oLAEqQeOUKkizNqbeWOcp-_s8pffhxw0IwPYjtAgZbgN9wQMWy9qUjf-QMvV3bjg1079HKNnaYIzYVZ5spTNe1dWvMg_Yk9F6FHdRHscij4As-RAkOoktBPJWUOI18n9zdQyOd_CntY2NAZKI2DFmv93FAh6jF43DhkD7_nTp2B8e6pRbzSeSexM27OivQ14Not0s8IoTpa118nUIUrCQ97cahUK_UB-SB', verified: true, rating: 4.9, tags: ['材料科学', '纳米技术', '产业化'], projects: 12, patents: 45, papers: 80 },
-        { id: 2, name: '张雪梅', title: '教授 / 博士生导师', org: '清华大学材料学院', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAEm9n1DkM0Xt0V9N4V0L0Q0W0E0R0T0Y0U0I0O0P0A0S0D0F0G0H0J0K0L0M0N0O0P0Q0R0S0T0U0V0W0X0Y0Z', verified: true, rating: 4.8, tags: ['新能源', '固态电池', '储能'], projects: 8, patents: 32, papers: 65 },
-        { id: 3, name: '王建国', title: '研究员 / 项目负责人', org: '中国科学院上海硅酸盐研究所', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAEaowe6oAysGjc688N7MDHf4XNthoUz6EWcliasvZqz6oLAEqQeOUKkizNqbeWOcp-_s8pffhxw0IwPYjtAgZbgN9wQMWy9qUjf-QMvV3bjg1079HKNnaYIzYVZ5spTNe1dWvMg_Yk9F6FHdRHscij4As-RAkOoktBPJWUOI18n9zdQyOd_CntY2NAZKI2DFmv93FAh6jF43DhkD7_nTp2B8e6pRbzSeSexM27OivQ14Not0s8IoTpa118nUIUrCQ97cahUK_UB-SB', verified: false, rating: 4.7, tags: ['陶瓷材料', '3D打印', '生物医用'], projects: 6, patents: 28, papers: 52 },
-        { id: 4, name: '李明辉', title: '高级工程师', org: '华为技术有限公司', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAEaowe6oAysGjc688N7MDHf4XNthoUz6EWcliasvZqz6oLAEqQeOUKkizNqbeWOcp-_s8pffhxw0IwPYjtAgZbgN9wQMWy9qUjf-QMvV3bjg1079HKNnaYIzYVZ5spTNe1dWvMg_Yk9F6FHdRHscij4As-RAkOoktBPJWUOI18n9zdQyOd_CntY2NAZKI2DFmv93FAh6jF43DhkD7_nTp2B8e6pRbzSeSexM27OivQ14Not0s8IoTpa118nUIUrCQ97cahUK_UB-SB', verified: true, rating: 4.9, tags: ['半导体', '芯片制造', '光刻技术'], projects: 15, patents: 58, papers: 45 }
-      ],
-      achievementList: [
-        { id: 1, title: '新型固态电池电解质材料及制备方法', desc: '一种高安全性、高离子导电性的固态电解质材料，适用于下一代固态锂电池。', image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=advanced%20battery%20technology%20material%20scientific%20research%20lab&image_size=square', tags: ['固态电池', '电解质', '新能源'], org: '国家前沿材料技术联合实验室', date: '2023.06', badge: '已转化', badgeType: 'badge-success' },
-        { id: 2, title: '高效柔性光伏封装胶膜', desc: '高透光率、耐候性强的柔性封装材料，适用于柔性太阳能组件。', image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=solar%20panel%20material%20flexible%20photovoltaic%20technology&image_size=square', tags: ['光伏', '封装材料', '柔性'], org: '清华大学材料学院', date: '2022.11', badge: '可量产', badgeType: 'badge-primary' },
-        { id: 3, title: '生物活性陶瓷骨修复材料', desc: '具有良好生物相容性和骨传导性的新型陶瓷材料，用于骨科植入。', image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=biomedical%20ceramic%20material%20bone%20implant%20medical%20research&image_size=square', tags: ['生物医用', '陶瓷', '骨修复'], org: '中科院上海硅酸盐研究所', date: '2023.03', badge: '中试阶段', badgeType: 'badge-secondary' },
-        { id: 4, title: '高性能碳化硅外延生长技术', desc: '突破大尺寸SiC单晶外延生长关键技术，满足功率器件需求。', image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=silicon%20carbide%20semiconductor%20wafer%20advanced%20electronics&image_size=square', tags: ['半导体', '碳化硅', '外延'], org: '华为技术有限公司', date: '2023.09', badge: '实验室阶段', badgeType: 'badge-tertiary' }
-      ]
+      expertList: [],
+      expertLoading: false,
+      expertError: '',
+      achievementList: [],
+      achieveLoading: false,
+      achieveError: ''
     }
   },
+  onLoad() {
+    this.loadExperts(true)
+  },
   methods: {
+    switchTab(tab) {
+      this.activeTab = tab
+      if (tab === 'experts' && this.expertList.length === 0) {
+        this.loadExperts(true)
+      } else if (tab === 'achievements' && this.achievementList.length === 0) {
+        this.loadAchievements()
+      }
+    },
+    async loadExperts(reset) {
+      if (this.expertLoading) return
+      this.expertLoading = true
+      this.expertError = ''
+      try {
+        const list = await getTalentList({ page: 1, pageSize: 20, name: this.searchQuery.trim() })
+        this.expertList = list.map(normalizeTalent)
+      } catch (error) {
+        this.expertError = error && error.message ? error.message : '专家数据加载失败，请稍后重试'
+      } finally {
+        this.expertLoading = false
+      }
+    },
+    async loadAchievements() {
+      if (this.achieveLoading) return
+      this.achieveLoading = true
+      this.achieveError = ''
+      try {
+        // TODO: 接入成果库接口后替换
+        this.achievementList = []
+        this.achieveError = '成果库接口暂未开放，敬请期待'
+      } finally {
+        this.achieveLoading = false
+      }
+    },
     onSearch() {
-      uni.showToast({ title: '搜索中...', icon: 'loading' })
-      setTimeout(() => { uni.hideToast() }, 500)
+      if (this.activeTab === 'experts') {
+        this.loadExperts(true)
+      }
     },
     resetFilter() {
       this.selectedTech = ''
@@ -262,7 +343,8 @@ export default {
       uni.showToast({ title: '筛选已应用', icon: 'success' })
     },
     goDetail(item) {
-      uni.navigateTo({ url: '/pages/expert-detail/expert-detail?id=' + item.id })
+      if (!item || item.id === undefined || item.id === null) return
+      uni.navigateTo({ url: `/pages/expert-detail/expert-detail?id=${encodeURIComponent(item.id)}` })
     }
   }
 }
@@ -569,6 +651,37 @@ export default {
   color: #727785;
 }
 
+/* State Cards */
+.state-card {
+  margin-top: 24rpx;
+  padding: 80rpx 32rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  color: var(--on-surface-variant);
+  text-align: center;
+  font-size: 26rpx;
+}
+
+.error-state {
+  color: #ba1a1a;
+}
+
+.retry-btn {
+  display: inline-flex;
+  margin-top: 24rpx;
+  padding: 14rpx 30rpx;
+  border-radius: 999rpx;
+  background: #0058be;
+  color: #fff;
+}
+
+.empty {
+  text-align: center;
+  padding: 80rpx 0;
+  color: #727785;
+  font-size: 26rpx;
+}
+
 /* Expert Card List */
 .card-list {
   display: flex;
@@ -586,12 +699,27 @@ export default {
   box-shadow: 0 2rpx 4rpx rgba(26, 54, 93, 0.05);
 }
 
-.card-avatar {
+.card-avatar-wrap {
   width: 120rpx;
   height: 120rpx;
   border-radius: 50%;
-  border: 3rpx solid #dce9ff;
+  background: #e8edf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.card-avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-placeholder {
+  color: #8c93a4;
+  font-size: 32rpx;
+  font-weight: 600;
 }
 
 .card-body {
@@ -619,42 +747,6 @@ export default {
   font-weight: 600;
   line-height: 1.4;
   color: #0b1c30;
-}
-
-.verified-badge {
-  width: 32rpx;
-  height: 32rpx;
-  background: #006c49;
-  color: #ffffff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.verified-icon {
-  font-family: 'Material Symbols Outlined', sans-serif;
-  font-size: 20rpx;
-  line-height: 1;
-  font-variation-settings: 'FILL' 1;
-}
-
-.card-rating {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 28rpx;
-  font-weight: 600;
-  line-height: 1.2;
-  color: #f59e0b;
-  display: flex;
-  align-items: center;
-  gap: 4rpx;
-}
-
-.star-icon {
-  font-family: 'Material Symbols Outlined', sans-serif;
-  font-size: 24rpx;
-  line-height: 1;
-  font-variation-settings: 'FILL' 1;
 }
 
 .card-title {

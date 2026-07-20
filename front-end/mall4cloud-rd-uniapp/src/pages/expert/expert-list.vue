@@ -3,10 +3,10 @@
     <!-- 搜索 + 标题 -->
     <view class="topbar">
       <view class="page-title">专家与成果库</view>
-      <view class="page-sub">智能搜索与筛选前沿科技资源</view>
+      <view class="page-sub">智能搜索与筛选大健康科技资源</view>
     </view>
 
-    <!-- 搜索�?-->
+    <!-- 搜索栏 -->
     <view class="search-bar surface-card">
       <text class="material-icon search-icon">search</text>
       <input
@@ -16,10 +16,10 @@
         placeholder-class="ph"
         @confirm="onSearch"
       />
-      <text v-if="keyword" class="material-icon search-clear" @click="keyword = ''">close</text>
+      <text v-if="keyword" class="material-icon search-clear" @click="clearKeyword">close</text>
     </view>
 
-    <!-- 领域筛�?-->
+    <!-- 领域筛选 -->
     <view class="filter-section">
       <rd-filter-chips
         v-model="activeField"
@@ -28,8 +28,17 @@
       />
     </view>
 
+    <!-- 加载中 -->
+    <view v-if="loading" class="state-card">正在加载专家信息...</view>
+
+    <!-- 加载失败 -->
+    <view v-else-if="errorMessage" class="state-card error-state">
+      <text>{{ errorMessage }}</text>
+      <view class="retry-btn" @tap="loadExperts(true)">重新加载</view>
+    </view>
+
     <!-- 列表 -->
-    <view class="result-list">
+    <view v-else class="result-list">
       <rd-expert-card
         v-for="(e, idx) in filteredExperts"
         :key="idx"
@@ -47,9 +56,38 @@
 </template>
 
 <script>
+import { getTalentList } from '@/utils/api/talent-pool.js'
 import RdExpertCard from '../../components/rd/rd-expert-card/rd-expert-card.vue'
 import RdFilterChips from '../../components/rd/rd-filter-chips/rd-filter-chips.vue'
 import RdTabbar from '../../components/rd/rd-tabbar/rd-tabbar.vue'
+
+function parseArray(value) {
+  if (Array.isArray(value)) return value
+  if (!value) return []
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch (e) {
+    return String(value).split(/[,，、]/).map(item => item.trim()).filter(Boolean)
+  }
+}
+
+function normalizeExpert(item) {
+  const expertiseAreas = parseArray(item.expertiseAreas)
+  const skills = parseArray(item.skills)
+  const achievements = parseArray(item.achievements)
+  return {
+    name: item.name || '未填写',
+    title: item.title || '未填写',
+    org: item.region || '未填写',
+    tags: [...new Set([...expertiseAreas, ...skills])].slice(0, 4),
+    desc: item.intro || '该专家暂未填写个人简介',
+    achievements: achievements.length,
+    avatarBg: 'avatar-blue',
+    avatarIcon: 'person',
+    id: item.id
+  }
+}
 
 export default {
   components: {
@@ -63,69 +101,50 @@ export default {
       activeField: 'all',
       fieldChips: [
         { label: '全部领域', value: 'all' },
-        { label: 'AI/计算�?, value: 'ai' },
-        { label: '生物医药', value: 'bio' },
-        { label: '新材�?, value: 'mat' },
-        { label: '新能�?, value: 'energy' },
-        { label: '智能制�?, value: 'mfg' }
+        { label: '化妆品研发', value: 'cosmetics' },
+        { label: '功能性食品', value: 'food' },
+        { label: '天然原料', value: 'natural' },
+        { label: '生物医药', value: 'biomed' },
+        { label: '功效评测', value: 'efficacy' }
       ],
-      experts: [
-        {
-          name: '张教�?,
-          title: '教授 / 博士生导�?,
-          org: '清华大学 · 智能产业研究�?,
-          tags: ['人工智能', '计算机视�?, '智慧医疗'],
-          desc: '长期从事计算机视觉与机器学习研究，承担国家自然科学基金重点项�?5 项，3 项成果已实现产业化转化�?,
-          achievements: 12,
-          avatarBg: 'avatar-blue',
-          avatarIcon: 'person'
-        },
-        {
-          name: '李教�?,
-          title: '国家杰青',
-          org: '北京大学 · 化学与分子工程学�?,
-          tags: ['新材�?, '催化', '储能'],
-          desc: '聚焦新型催化材料与储能器件研发，主持国家重点研发计划项目，发�?SCI 论文 200 余篇�?,
-          achievements: 18,
-          avatarBg: 'avatar-pink',
-          avatarIcon: 'science'
-        },
-        {
-          name: '王主�?,
-          title: '研究�?/ 博导',
-          org: '中国科学�?· 自动化研究所',
-          tags: ['机器�?, '智能装备', '工业互联'],
-          desc: '致力于工业机器人与智能装备产业化，主持多�?863/重点研发计划，专利转化率行业领先�?,
-          achievements: 22,
-          avatarBg: 'avatar-green',
-          avatarIcon: 'factory'
-        },
-        {
-          name: '陈博�?,
-          title: '副教�?,
-          org: '上海交通大�?· 生物医学工程学院',
-          tags: ['生物医药', '医学影像', 'AI'],
-          desc: '从事多模态医学影像分析与AI辅助诊断系统研究，研发产品已�?30+ 医院部署应用�?,
-          achievements: 8,
-          avatarBg: 'avatar-pink',
-          avatarIcon: 'biotech'
-        }
-      ]
+      experts: [],
+      loading: false,
+      errorMessage: ''
     }
+  },
+  onLoad() {
+    this.loadExperts(true)
   },
   computed: {
     filteredExperts() {
       const kw = this.keyword.trim()
       return this.experts.filter(e => {
-        if (this.activeField && this.activeField !== 'all') {
-          // 简化：领域 chip 仅做视觉筛�?        }
         if (!kw) return true
         return [e.name, e.title, e.org, e.desc, ...(e.tags || [])].some(s => (s || '').includes(kw))
       })
     }
   },
   methods: {
-    onSearch() {},
+    async loadExperts(reset) {
+      if (this.loading) return
+      this.loading = true
+      this.errorMessage = ''
+      try {
+        const list = await getTalentList({ page: 1, pageSize: 20, name: this.keyword.trim() })
+        this.experts = list.map(normalizeExpert)
+      } catch (error) {
+        this.errorMessage = error && error.message ? error.message : '专家数据加载失败，请稍后重试'
+      } finally {
+        this.loading = false
+      }
+    },
+    onSearch() {
+      this.loadExperts(true)
+    },
+    clearKeyword() {
+      this.keyword = ''
+      this.loadExperts(true)
+    },
     onCardTap() {
       uni.navigateTo({ url: '/pages/expert-detail/expert-detail' })
     }
@@ -210,6 +229,29 @@ export default {
   flex-direction: column;
   gap: 16rpx;
   margin-top: 8rpx;
+}
+
+.state-card {
+  margin-top: 24rpx;
+  padding: 80rpx 32rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  color: var(--on-surface-variant);
+  text-align: center;
+  font-size: 26rpx;
+}
+
+.error-state {
+  color: #ba1a1a;
+}
+
+.retry-btn {
+  display: inline-flex;
+  margin-top: 24rpx;
+  padding: 14rpx 30rpx;
+  border-radius: 999rpx;
+  background: #0058be;
+  color: #fff;
 }
 
 .empty {

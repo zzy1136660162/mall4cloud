@@ -184,7 +184,7 @@ export default {
   position: relative;
   z-index: 1;
   width: 68%;
-  padding: calc(70rpx + env(safe-area-inset-top)) 34rpx 30rpx;
+  padding: calc(70rpx + env(safe-area-inset-top) + 35px) 34rpx 30rpx;
   box-sizing: border-box;
 }
 .hero-title {

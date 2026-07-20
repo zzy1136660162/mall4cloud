@@ -83,6 +83,13 @@ function setupRoutes(router: Router) {
         }
         catch (e) {
           console.error('[Guard] Route generation failed:', e)
+          // A00004 认证失败：response 拦截器已调用 requestLogout 清除 token 并跳转登录
+          // 此处返回 false 阻止当前导航，避免覆盖登录跳转
+          if (!appAccountStore.isLogin) {
+            return false
+          }
+          // token 仍存在但路由生成失败，跳转登录
+          return { name: 'login', query: { redirect: to.fullPath } }
         }
         // 动态路由生成并注册后，重新进入当前路由
         return {

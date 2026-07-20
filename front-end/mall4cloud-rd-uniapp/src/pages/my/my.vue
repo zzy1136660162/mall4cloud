@@ -10,27 +10,26 @@
             <text class="avatar-text">我</text>
           </view>
           <view class="user-info">
-            <view class="user-name">{{ userInfo.name }}</view>
-            <view class="user-title">{{ userInfo.title }}</view>
-            <view class="user-cert">证书编号：{{ userInfo.certNo }}</view>
+            <view class="user-name">未登录</view>
+            <view class="user-title">请登录后查看完整信息</view>
           </view>
-          <view class="edit" @tap="onEdit">编辑</view>
+          <view class="edit" @tap="onEdit">登录</view>
         </view>
         <view class="stats-row">
           <view class="stat">
-            <view class="stat-value">{{ userInfo.patentCount }}</view>
+            <view class="stat-value">-</view>
             <view class="stat-label">专利</view>
           </view>
           <view class="stat">
-            <view class="stat-value">{{ userInfo.paperCount }}</view>
+            <view class="stat-value">-</view>
             <view class="stat-label">论文</view>
           </view>
           <view class="stat">
-            <view class="stat-value">12</view>
+            <view class="stat-value">-</view>
             <view class="stat-label">在研项目</view>
           </view>
           <view class="stat">
-            <view class="stat-value">5</view>
+            <view class="stat-value">-</view>
             <view class="stat-label">已转化</view>
           </view>
         </view>
@@ -44,7 +43,7 @@
             <view class="menu-name">{{ m.name }}</view>
             <view class="menu-desc">{{ m.desc }}</view>
           </view>
-          <text class="menu-arrow">›</text>
+          <text class="menu-arrow">></text>
         </view>
       </view>
 
@@ -55,7 +54,7 @@
           <view class="menu-info">
             <view class="menu-name">{{ s.name }}</view>
           </view>
-          <text class="menu-arrow">›</text>
+          <text class="menu-arrow">></text>
         </view>
       </view>
     </view>
@@ -63,16 +62,13 @@
 </template>
 
 <script>
-import { userInfo } from '@/utils/data.js'
-
 export default {
   data() {
     return {
-      userInfo,
       menus: [
-        { name: '我的需求', desc: '查看我提交的研发立项申请', icon: '📝', bg: '#d8e2ff' },
+        { name: '我的需求', desc: '查看我提交的研发立项申请', icon: '📋', bg: '#d8e2ff' },
         { name: '我的成果', desc: '查看专利、论文、转化成果', icon: '🏆', bg: '#d6f5e7' },
-        { name: '联系专家', desc: '联系已对接的领域专家', icon: '👥', bg: '#e1e0ff' },
+        { name: '联系专家', desc: '联系已对接的领域专家', icon: '🤝', bg: '#e1e0ff' },
         { name: '消息通知', desc: '查看项目进度、审核消息', icon: '🔔', bg: '#fde4d2' }
       ],
       settings: [
@@ -84,13 +80,13 @@ export default {
   },
   methods: {
     onEdit() {
-      uni.showToast({ title: '编辑资料', icon: 'none' })
+      uni.showToast({ title: '登录功能开发中', icon: 'none' })
     },
     onMenuTap(m) {
-      uni.showToast({ title: m.name, icon: 'none' })
+      uni.showToast({ title: m.name + '功能开发中', icon: 'none' })
     },
     onSettingTap(s) {
-      uni.showToast({ title: s.name, icon: 'none' })
+      uni.showToast({ title: s.name + '功能开发中', icon: 'none' })
     }
   }
 }
@@ -168,11 +164,6 @@ export default {
   font-size: 24rpx;
   color: var(--on-surface-variant);
   margin-bottom: 6rpx;
-}
-
-.user-cert {
-  font-size: 22rpx;
-  color: var(--on-surface-variant);
 }
 
 .edit {

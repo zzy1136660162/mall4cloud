@@ -69,7 +69,16 @@ function setupRoutes(router: Router) {
           })
           appRouteStore.setCurrentRemoveRoutes(removeRoutes)
         }
-        catch {}
+        catch (error) {
+          console.error('[Guard] Route generation failed:', error)
+          return {
+            name: 'login',
+            query: {
+              redirect: to.fullPath !== appSettingsStore.settings.app.home.fullPath ? to.fullPath : undefined,
+            },
+            replace: true,
+          }
+        }
         // 动态路由生成并注册后，重新进入当前路由
         // 只有当路由生成成功时才重新进入，否则会无限重定向
         if (appRouteStore.isGenerate) {

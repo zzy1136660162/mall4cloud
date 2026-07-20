@@ -264,8 +264,10 @@ export const useAppRouteStore = defineStore(
         })
         routesMatcher.value = createRouterMatcher(routes, {})
         isGenerate.value = true
-      } catch (err) {
+      }
+      catch (err) {
         console.error('[DEBUG generateRoutesAtBack] error:', err)
+        throw err
       }
     }
     function setCurrentRemoveRoutes(routes: (() => void)[]) {

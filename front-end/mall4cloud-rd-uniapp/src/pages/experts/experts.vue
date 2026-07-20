@@ -430,11 +430,12 @@ export default {
   font-size: 24rpx;
 }
 .page { padding-top: 0; }
-.expert-hero { position: relative; overflow: hidden; padding-top: 40rpx; padding-bottom: 26rpx; background: #dce9ff; box-shadow: 0 10rpx 30rpx rgba(25, 70, 140, 0.06); }
+.expert-hero { position: relative; overflow: visible; margin-bottom: 35px; padding-top: 40rpx; padding-bottom: 26rpx; background: #dce9ff; box-shadow: 0 10rpx 30rpx rgba(25, 70, 140, 0.06); }
 .hero-image { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(248, 249, 255, 0) 46%, var(--bg-page) 100%), linear-gradient(90deg, rgba(244, 249, 255, 0.98) 0%, rgba(244, 249, 255, 0.9) 48%, rgba(244, 249, 255, 0.1) 100%); }
 .page-head { position: relative; z-index: 1; width: 70%; padding-bottom: 8rpx; box-sizing: border-box; }
 .search-bar { position: relative; z-index: 1; padding-top: 22rpx; background: transparent; }
+.page-head, .search-bar { transform: translateY(35px); }
 .search-box { padding: 0 10rpx 0 26rpx; }
 .search-action { height: 62rpx; padding: 0 24rpx; border-radius: 12rpx; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 23rpx; font-weight: 700; }
 .domain-filter { padding-top: 28rpx; }

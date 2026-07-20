@@ -1,11 +1,11 @@
 <template>
   <view class="page">
     <view class="topbar">
-      <view class="page-title">需求查�?/view>
+      <view class="page-title">需求查询</view>
       <view class="page-sub">实时追踪研发需求的处理进度</view>
     </view>
 
-    <!-- 搜索�?-->
+    <!-- 搜索栏 -->
     <view class="search-bar surface-card">
       <text class="material-icon search-icon">search</text>
       <input
@@ -19,7 +19,7 @@
       <view class="search-btn" @click="onSearch">查询</view>
     </view>
 
-    <!-- 状态筛�?-->
+    <!-- 状态筛选 -->
     <view class="filter-section">
       <rd-filter-chips
         v-model="activeStatus"
@@ -61,7 +61,7 @@
 
       <view v-if="filteredDemands.length === 0" class="empty">
         <text class="material-icon empty-icon">inbox</text>
-        <text class="empty-text">暂无相关需求记�?/text>
+        <text class="empty-text">暂无相关需求记录</text>
       </view>
     </view>
 
@@ -83,49 +83,12 @@ export default {
       keyword: '',
       activeStatus: 'all',
       statusChips: [
-        { label: '全部状�?, value: 'all' },
-        { label: '待处�?, value: 'pending' },
-        { label: '处理�?, value: 'processing' },
-        { label: '已完�?, value: 'done' }
+        { label: '全部状态', value: 'all' },
+        { label: '待处理', value: 'pending' },
+        { label: '处理中', value: 'processing' },
+        { label: '已完成', value: 'done' }
       ],
-      demands: [
-        {
-          no: 'RD202506001',
-          title: '面向基层医疗的肺结节智能筛查系统',
-          field: 'AI / 医学影像',
-          date: '2026-06-10',
-          status: 'processing',
-          statusLabel: '处理�?,
-          progress: 60
-        },
-        {
-          no: 'RD202506002',
-          title: '新型高效储能材料研发',
-          field: '新材�?/ 储能',
-          date: '2026-06-12',
-          status: 'pending',
-          statusLabel: '待处�?,
-          progress: 10
-        },
-        {
-          no: 'RD202506003',
-          title: '工业级协作机器人柔性产�?,
-          field: '智能制�?,
-          date: '2026-06-05',
-          status: 'done',
-          statusLabel: '已完�?,
-          progress: 100
-        },
-        {
-          no: 'RD202506004',
-          title: '面向中小企业�?SaaS 化数据中�?,
-          field: 'AI / 大数�?,
-          date: '2026-06-15',
-          status: 'processing',
-          statusLabel: '处理�?,
-          progress: 35
-        }
-      ]
+      demands: []
     }
   },
   computed: {

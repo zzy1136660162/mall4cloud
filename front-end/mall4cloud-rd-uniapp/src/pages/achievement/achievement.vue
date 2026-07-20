@@ -72,7 +72,7 @@
         <view class="section-head compact-head">
           <view>
             <view class="section-kicker">R&amp;D CAPABILITY</view>
-            <view class="section-title">公司研发能力</view>
+            <view class="section-title">平台研发能力</view>
           </view>
         </view>
         <view class="ability-grid">
@@ -164,7 +164,7 @@ export default {
   position: relative;
   z-index: 1;
   width: 72%;
-  padding: calc(54rpx + env(safe-area-inset-top)) 34rpx 40rpx;
+  padding: calc(54rpx + env(safe-area-inset-top) + 35px) 34rpx 40rpx;
   box-sizing: border-box;
 }
 .portal-kicker {

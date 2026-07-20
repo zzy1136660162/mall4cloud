@@ -47,16 +47,66 @@
           </view>
 
           <view class="form-actions">
-            <button class="btn btn-submit" @click="onSearch">
+            <button class="btn btn-submit" :disabled="loading" @click="onSearch">
               <text class="material-icon btn-icon">search</text>
-              查询进度
+              {{ loading ? '查询中...' : '查询进度' }}
             </button>
           </view>
         </view>
       </section>
 
+      <!-- 查询错误 -->
+      <section v-if="errorMessage" class="result-section">
+        <view class="result-card error-card">
+          <text class="material-icon error-icon">error_outline</text>
+          <text class="error-text">{{ errorMessage }}</text>
+        </view>
+      </section>
+
+      <!-- Query Result -->
+      <section class="result-section" v-if="result">
+        <view class="section-header">
+          <h3 class="section-title">查询结果</h3>
+        </view>
+        <view class="result-card">
+          <view class="result-header">
+            <div class="result-title-wrap">
+              <text class="result-status" :class="resultStatusClass">{{ resultStatusText }}</text>
+              <h4 class="result-title">{{ result.title || '未填写需求标题' }}</h4>
+            </div>
+          </view>
+          
+          <view class="result-info">
+            <view class="info-row">
+              <text class="info-label">申请编号</text>
+              <text class="info-value">{{ result.demandNo }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">提交时间</text>
+              <text class="info-value">{{ formatDateTime(result.submitTime || result.createTime) }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">产品品类</text>
+              <text class="info-value">{{ productCategoryText }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">预算范围</text>
+              <text class="info-value">{{ result.budgetRange || '未填写' }}</text>
+            </view>
+          </view>
+
+          <!-- Actions -->
+          <view class="result-actions">
+            <view class="action-btn action-primary" @click="onDetail">
+              <text>查看详情</text>
+              <text class="material-icon action-icon">arrow_forward</text>
+            </view>
+          </view>
+        </view>
+      </section>
+
       <!-- Recent Searches -->
-      <section class="recent-section" v-if="recentSearches.length > 0">
+      <section class="recent-section" v-if="recentSearches.length > 0 && !result">
         <view class="section-header">
           <h3 class="section-title">
             <text class="material-icon title-icon">history</text>
@@ -79,74 +129,6 @@
           </view>
         </view>
       </section>
-
-      <!-- Sample Results -->
-      <section class="result-section" v-if="showResults">
-        <view class="section-header">
-          <h3 class="section-title">查询结果</h3>
-        </view>
-        <view class="result-card">
-          <view class="result-header">
-            <div class="result-title-wrap">
-              <text class="result-status" :class="result.status">{{ result.statusText }}</text>
-              <h4 class="result-title">{{ result.title }}</h4>
-            </div>
-            <view class="result-badge" :class="result.badgeType">
-              <text class="material-icon badge-icon">{{ result.badgeIcon }}</text>
-            </view>
-          </view>
-          
-          <view class="result-info">
-            <view class="info-row">
-              <text class="info-label">申请编号</text>
-              <text class="info-value">{{ result.orderNo }}</text>
-            </view>
-            <view class="info-row">
-              <text class="info-label">提交时间</text>
-              <text class="info-value">{{ result.submitTime }}</text>
-            </view>
-            <view class="info-row">
-              <text class="info-label">预计完成</text>
-              <text class="info-value">{{ result.expectedTime }}</text>
-            </view>
-            <view class="info-row">
-              <text class="info-label">负责人</text>
-              <text class="info-value">{{ result.manager }}</text>
-            </view>
-          </view>
-
-          <!-- Timeline -->
-          <view class="timeline">
-            <view 
-              v-for="(step, idx) in result.timeline" 
-              :key="idx" 
-              class="timeline-item"
-              :class="{ active: step.active, completed: step.completed }"
-            >
-              <view class="timeline-dot">
-                <text class="material-icon dot-icon" v-if="step.completed">check</text>
-              </view>
-              <view class="timeline-content">
-                <h5 class="timeline-title">{{ step.title }}</h5>
-                <p class="timeline-desc">{{ step.desc }}</p>
-                <p class="timeline-time">{{ step.time }}</p>
-              </view>
-            </view>
-          </view>
-
-          <!-- Actions -->
-          <view class="result-actions">
-            <view class="action-btn action-outline" @click="onContact">
-              <text class="material-icon action-icon">phone</text>
-              联系客服
-            </view>
-            <view class="action-btn action-primary" @click="onDetail">
-              <text>查看详情</text>
-              <text class="material-icon action-icon">arrow_forward</text>
-            </view>
-          </view>
-        </view>
-      </section>
     </main>
 
     <!-- Tabbar -->
@@ -155,60 +137,88 @@
 </template>
 
 <script>
+import { queryDemand } from '@/utils/api/demand-query.js'
+import { PRODUCT_CATEGORY_OPTIONS } from '@/utils/dict.js'
+
+const RECENT_KEY = 'rd_query_recent'
+
 export default {
   data() {
     return {
       phone: '',
       orderNo: '',
-      showResults: false,
-      recentSearches: [
-        { orderNo: 'RD2024010001', date: '2024-01-15 10:30' },
-        { orderNo: 'RD2024010002', date: '2024-01-14 14:20' },
-        { orderNo: 'RD2024010003', date: '2024-01-13 09:45' }
-      ],
-      result: {
-        orderNo: 'RD2024010001',
-        title: '新型固态电池材料研发立项申请',
-        status: 'processing',
-        statusText: '审核中',
-        badgeType: 'badge-processing',
-        badgeIcon: 'schedule',
-        submitTime: '2024-01-15 10:30',
-        expectedTime: '2024-01-25 18:00',
-        manager: '张工 (138****8888)',
-        timeline: [
-          { title: '申请已提交', desc: '您的研发立项申请已成功提交', time: '2024-01-15 10:30', completed: true, active: false },
-          { title: '材料审核', desc: '正在审核申请材料的完整性', time: '2024-01-15 14:00', completed: true, active: false },
-          { title: '专家评审', desc: '专家正在评估技术可行性和产业化前景', time: '2024-01-16 09:00', completed: false, active: true },
-          { title: '立项决策', desc: '等待立项委员会最终决策', time: '', completed: false, active: false },
-          { title: '任务分配', desc: '匹配专家资源并启动研发工作', time: '', completed: false, active: false }
-        ]
-      }
+      result: null,
+      errorMessage: '',
+      loading: false,
+      recentSearches: []
     }
   },
-  methods: {
-    onBack() {
-      uni.navigateBack({ delta: 1, fail: () => uni.reLaunch({ url: '/pages/index/index' }) })
+  computed: {
+    resultStatusText() {
+      if (!this.result) return ''
+      const map = { 0: '待处理', 1: '确认中', 2: '研发中', 3: '样品制作', 4: '已完成', 5: '已取消' }
+      return this.result.statusText || map[this.result.status] || '状态未知'
     },
-    onSearch() {
+    resultStatusClass() {
+      if (!this.result) return ''
+      const status = Number(this.result.status)
+      if (status === 4) return 'approved'
+      if (status === 5) return 'rejected'
+      return 'processing'
+    },
+    productCategoryText() {
+      if (!this.result) return ''
+      const item = PRODUCT_CATEGORY_OPTIONS.find(opt => Number(opt.value) === Number(this.result.productCategory))
+      return item ? item.label : '未填写'
+    }
+  },
+  onLoad() {
+    this.loadRecent()
+  },
+  methods: {
+    loadRecent() {
+      try {
+        const stored = uni.getStorageSync(RECENT_KEY)
+        this.recentSearches = Array.isArray(stored) ? stored.slice(0, 5) : []
+      } catch (e) {
+        this.recentSearches = []
+      }
+    },
+    saveRecent(orderNo) {
+      if (!orderNo) return
+      const existing = this.recentSearches.find(s => s.orderNo === orderNo)
+      if (!existing) {
+        this.recentSearches.unshift({
+          orderNo,
+          date: new Date().toLocaleString('zh-CN')
+        })
+        if (this.recentSearches.length > 5) {
+          this.recentSearches.pop()
+        }
+        uni.setStorageSync(RECENT_KEY, this.recentSearches)
+      }
+    },
+    async onSearch() {
+      this.errorMessage = ''
+      this.result = null
       if (!this.phone || this.phone.length !== 11) {
-        uni.showToast({ title: '请输入正确的手机号码', icon: 'none' })
+        this.errorMessage = '请输入正确的手机号码'
         return
       }
-      uni.showToast({ title: '查询中...', icon: 'loading' })
-      setTimeout(() => {
-        uni.hideToast()
-        this.showResults = true
-        if (!this.recentSearches.find(s => s.orderNo === this.orderNo)) {
-          this.recentSearches.unshift({
-            orderNo: this.orderNo || 'RD' + Date.now().toString().slice(-8),
-            date: new Date().toLocaleString('zh-CN')
-          })
-          if (this.recentSearches.length > 5) {
-            this.recentSearches.pop()
-          }
+      this.loading = true
+      try {
+        const data = await queryDemand(this.orderNo.trim(), this.phone.trim())
+        if (!data) {
+          this.errorMessage = '未查询到需求，请核对手机号和申请编号'
+          return
         }
-      }, 800)
+        this.result = { ...data, demandNo: this.orderNo.trim() || data.demandNo }
+        this.saveRecent(this.orderNo.trim() || data.demandNo)
+      } catch (error) {
+        this.errorMessage = error && error.message ? error.message : '查询失败，请稍后重试'
+      } finally {
+        this.loading = false
+      }
     },
     searchByRecent(item) {
       this.orderNo = item.orderNo
@@ -221,16 +231,27 @@ export default {
         success: (res) => {
           if (res.confirm) {
             this.recentSearches = []
+            uni.removeStorageSync(RECENT_KEY)
             uni.showToast({ title: '已清空', icon: 'success' })
           }
         }
       })
     },
-    onContact() {
-      uni.showToast({ title: '客服电话：400-888-8888', icon: 'none' })
+    onBack() {
+      uni.navigateBack({ delta: 1, fail: () => uni.reLaunch({ url: '/pages/index/index' }) })
     },
     onDetail() {
-      uni.showToast({ title: '详情页开发中', icon: 'none' })
+      if (!this.result) return
+      uni.navigateTo({
+        url: `/pages/demand-detail/demand-detail?demandNo=${encodeURIComponent(this.result.demandNo)}&submitterPhone=${encodeURIComponent(this.phone)}`
+      })
+    },
+    formatDateTime(value) {
+      if (!value) return '未填写'
+      const date = new Date(value)
+      if (Number.isNaN(date.getTime())) return String(value)
+      const pad = n => String(n).padStart(2, '0')
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`
     }
   }
 }
@@ -350,6 +371,8 @@ export default {
   background: rgba(33, 112, 228, 0.05);
   border-radius: 8rpx;
   margin-bottom: 24rpx;
+  color: #424754;
+  font-size: 24rpx;
 }
 
 .hint-icon {
@@ -358,13 +381,6 @@ export default {
   line-height: 1;
   color: #0058be;
   flex-shrink: 0;
-}
-
-.form-hint text:last-child {
-  font-family: 'Work Sans', 'PingFang SC', sans-serif;
-  font-size: 24rpx;
-  line-height: 1.5;
-  color: #424754;
 }
 
 .form-actions {
@@ -391,10 +407,34 @@ export default {
   color: #ffffff;
 }
 
+.btn:disabled {
+  opacity: 0.6;
+}
+
 .btn-icon {
   font-family: 'Material Symbols Outlined', sans-serif;
   font-size: 32rpx;
   line-height: 1;
+}
+
+/* Error Card */
+.error-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 40rpx 24rpx;
+}
+
+.error-icon {
+  font-family: 'Material Symbols Outlined', sans-serif;
+  font-size: 40rpx;
+  color: #ba1a1a;
+}
+
+.error-text {
+  color: #ba1a1a;
+  font-size: 26rpx;
 }
 
 /* Recent Section */
@@ -483,6 +523,7 @@ export default {
 
 /* Result Section */
 .result-section {
+  margin-bottom: 24rpx;
   animation: fadeIn 0.3s ease;
 }
 
@@ -519,6 +560,7 @@ export default {
   letter-spacing: 0.05em;
   padding: 4rpx 12rpx;
   border-radius: 8rpx;
+  width: fit-content;
 }
 
 .result-status.processing {
@@ -542,29 +584,6 @@ export default {
   font-weight: 600;
   line-height: 1.4;
   color: #0b1c30;
-}
-
-.result-badge {
-  width: 72rpx;
-  height: 72rpx;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.badge-processing {
-  background: rgba(33, 112, 228, 0.15);
-}
-
-.badge-processing .badge-icon {
-  color: #0058be;
-}
-
-.badge-icon {
-  font-family: 'Material Symbols Outlined', sans-serif;
-  font-size: 36rpx;
-  line-height: 1;
 }
 
 /* Result Info */
@@ -602,95 +621,6 @@ export default {
   color: #0b1c30;
 }
 
-/* Timeline */
-.timeline {
-  margin-bottom: 20rpx;
-}
-
-.timeline-item {
-  display: flex;
-  gap: 16rpx;
-  padding-bottom: 20rpx;
-  position: relative;
-}
-
-.timeline-item:last-child {
-  padding-bottom: 0;
-}
-
-.timeline-item:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  left: 11rpx;
-  top: 36rpx;
-  width: 4rpx;
-  height: calc(100% - 36rpx);
-  background: #dce9ff;
-}
-
-.timeline-item.active::after {
-  background: linear-gradient(to bottom, #0058be, #dce9ff);
-}
-
-.timeline-dot {
-  width: 28rpx;
-  height: 28rpx;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 4rpx solid #c2c6d6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.timeline-item.completed .timeline-dot {
-  background: #006c49;
-  border-color: #006c49;
-}
-
-.timeline-item.active .timeline-dot {
-  background: #0058be;
-  border-color: #0058be;
-}
-
-.dot-icon {
-  font-family: 'Material Symbols Outlined', sans-serif;
-  font-size: 16rpx;
-  line-height: 1;
-  color: #ffffff;
-}
-
-.timeline-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4rpx;
-}
-
-.timeline-title {
-  font-family: 'Plus Jakarta Sans', 'PingFang SC', sans-serif;
-  font-size: 28rpx;
-  font-weight: 600;
-  line-height: 1.4;
-  color: #0b1c30;
-}
-
-.timeline-desc {
-  font-family: 'Work Sans', 'PingFang SC', sans-serif;
-  font-size: 24rpx;
-  line-height: 1.5;
-  color: #424754;
-}
-
-.timeline-time {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 22rpx;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  color: #727785;
-}
-
 /* Result Actions */
 .result-actions {
   display: flex;
@@ -709,11 +639,6 @@ export default {
   font-size: 26rpx;
   font-weight: 500;
   letter-spacing: 0.05em;
-}
-
-.action-outline {
-  border: 1rpx solid #0058be;
-  color: #0058be;
 }
 
 .action-primary {

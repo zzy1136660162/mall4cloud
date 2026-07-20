@@ -36,7 +36,7 @@ request.interceptors.request.use(
 )
 
 function handleError(error: any) {
-  if (error.status === 401) {
+  if ((error.response?.status ?? error.status) === 401) {
     useAppAccountStore().requestLogout()
   }
   else {
@@ -55,6 +55,10 @@ request.interceptors.response.use(
         return Promise.resolve(res.data ?? res)
       }
       else if (res.success === false) {
+        if (res.code === 'A00004') {
+          useAppAccountStore().requestLogout()
+          return Promise.reject(res)
+        }
         faToast.warning(res.msg || '请求失败', {
           description: Array.isArray(res.data) ? res.data.join(', ') : res.data,
         })

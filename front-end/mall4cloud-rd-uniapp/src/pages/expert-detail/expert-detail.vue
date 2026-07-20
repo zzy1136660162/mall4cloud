@@ -97,6 +97,7 @@
         </view>
         <view v-if="achievements.length === 0" class="empty-block">暂无成果荣誉</view>
       </view>
+      <view class="bottom-spacer"></view>
     </scroll-view>
   </view>
 </template>
@@ -226,6 +227,7 @@ export default {
 .empty-inline, .empty-block { color: var(--on-surface-variant); font-size: 24rpx; }
 .empty-block { padding: 40rpx 0; text-align: center; }
 .last-card { margin-bottom: 0; }
+.bottom-spacer { width: 100%; height: calc(48rpx + env(safe-area-inset-bottom)); }
 .state-panel { margin: 240rpx 32rpx 0; padding: 70rpx 32rpx; background: #fff; border-radius: 24rpx; text-align: center; color: var(--on-surface-variant); font-size: 26rpx; }
 .error-state { color: var(--error); }
 .retry-btn { display: inline-flex; margin-top: 24rpx; padding: 14rpx 30rpx; border-radius: 999rpx; background: var(--primary); color: #fff; }

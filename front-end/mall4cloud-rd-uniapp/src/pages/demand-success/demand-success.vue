@@ -11,17 +11,17 @@
       </view>
 
       <view class="success-title">研发需求已成功提交</view>
-      <view class="success-sub">我们将在 1-2 个工作日内完成需求评估并安排专人跟进�?/view>
+      <view class="success-sub">我们将在 1-2 个工作日内完成需求评估并安排专人跟进</view>
 
-      <!-- 需求摘�?-->
+      <!-- 需求摘要 -->
       <view class="summary surface-card">
         <view class="summary-head">
           <text class="material-icon sum-icon">description</text>
-          <text class="sum-title">需求摘�?/text>
+          <text class="sum-title">需求摘要</text>
         </view>
         <view class="summary-body">
           <view class="sum-row">
-            <text class="sum-label">需求编�?/text>
+            <text class="sum-label">需求编号</text>
             <text class="sum-value">{{ demandNo || 'RD20260629001' }}</text>
           </view>
           <view class="sum-row">
@@ -30,30 +30,30 @@
           </view>
           <view class="sum-row">
             <text class="sum-label">预计反馈</text>
-            <text class="sum-value">2 个工作日�?/text>
+            <text class="sum-value">2 个工作日</text>
           </view>
         </view>
       </view>
 
-      <!-- 下一�?-->
+      <!-- 下一步 -->
       <view class="next-card surface-card">
         <view class="next-head">
           <text class="material-icon next-icon">arrow_forward</text>
-          <text class="next-title">您可�?/text>
+          <text class="next-title">您可以</text>
         </view>
         <view class="next-list">
           <view class="next-item">
             <view class="next-bullet">1</view>
             <view class="next-text">
               <view class="next-step">在「查询」页跟踪处理进度</view>
-              <view class="next-desc">系统将实时同步需求评估、对接与立项的状态变化�?/view>
+              <view class="next-desc">系统将实时同步需求评估、对接与立项的状态变化</view>
             </view>
           </view>
           <view class="next-item">
             <view class="next-bullet">2</view>
             <view class="next-text">
               <view class="next-step">在「成果库」中浏览相关专家</view>
-              <view class="next-desc">根据您的领域筛选匹配的科研团队与项目�?/view>
+              <view class="next-desc">根据您的领域筛选匹配的科研团队与项目</view>
             </view>
           </view>
         </view>
